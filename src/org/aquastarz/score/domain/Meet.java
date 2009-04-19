@@ -20,6 +20,7 @@
 package org.aquastarz.score.domain;
 
 import java.io.Serializable;
+import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
@@ -42,33 +43,41 @@ import javax.persistence.TemporalType;
 @Table(name = "meet")
 @NamedQueries({@NamedQuery(name = "Meet.findAll", query = "SELECT m FROM Meet m"), @NamedQuery(name = "Meet.findByMeetId", query = "SELECT m FROM Meet m WHERE m.meetId = :meetId"), @NamedQuery(name = "Meet.findByDate", query = "SELECT m FROM Meet m WHERE m.date = :date"), @NamedQuery(name = "Meet.findByName", query = "SELECT m FROM Meet m WHERE m.name = :name"), @NamedQuery(name = "Meet.findByType", query = "SELECT m FROM Meet m WHERE m.type = :type")})
 public class Meet implements Serializable {
-    List<Team> opponents = new Vector();
     private static final long serialVersionUID = 1L;
     private Integer meetId;
     private Date date;
     private String name;
 
+    List<Team> opponents = new Vector();
     @ManyToMany
     public List<Team> getOpponents() {
         return opponents;
     }
-
     public void setOpponents(List<Team> opponents) {
         this.opponents = opponents;
     }
 
+    List<Swimmer> swimmers = new Vector();
+    @ManyToMany
+    public List<Swimmer> getSwimmers() {
+        return swimmers;
+    }
+    public void setSwimmers(List<Swimmer> swimmers) {
+        this.swimmers = swimmers;
+    }
+
     private char type;
-    private Figure nov3Figure;
-    private Figure nov4Figure;
+    private Team homeTeam;
     private Figure eu1Figure;
     private Figure eu2Figure;
-    private Team homeTeam;
+    private Figure nov1Figure;
+    private Figure nov2Figure;
+    private Figure nov3Figure;
+    private Figure nov4Figure;
     private Figure int1Figure;
     private Figure int2Figure;
     private Figure int3Figure;
     private Figure int4Figure;
-    private Figure nov1Figure;
-    private Figure nov2Figure;
 
     public Meet() {
     }
@@ -260,7 +269,7 @@ public class Meet implements Serializable {
 
     @Override
     public String toString() {
-        return "org.aquastarz.score.domain.Meet[meetId=" + meetId + "]";
+        return name+" ["+DateFormat.getDateInstance(DateFormat.SHORT).format(date)+"]";
     }
 
 }

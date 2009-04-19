@@ -17,22 +17,12 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 // </editor-fold>
-package org.aquastarz.score;
+package org.aquastarz.score.gui.event;
 
-import javax.persistence.EntityManager;
-import org.aquastarz.score.controller.ScoreController;
+/**
+ *
+ * @author Shayne Hughes <velocityfactor@gmail.com>
+ */
+public interface SwimmerSelectionPanelListener {
 
-public class ScoreApp {
-
-    public static EntityManager getEntityManager() {
-        return javax.persistence.Persistence.createEntityManagerFactory("synchroPU").createEntityManager();
-    }
-    
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        ScoreController sc=ScoreController.getInstance();
-        sc.init();
-    }
 }
