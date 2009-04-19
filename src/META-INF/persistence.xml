@@ -14,19 +14,4 @@
       <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/synchro"/>
     </properties>
   </persistence-unit>
-  <persistence-unit name="synchroPU" transaction-type="RESOURCE_LOCAL">
-    <provider>org.hibernate.ejb.HibernatePersistence</provider>
-    <class>org.aquastarz.score.domain.Meet</class>
-    <class>org.aquastarz.score.domain.Team</class>
-    <class>org.aquastarz.score.domain.Level</class>
-    <class>org.aquastarz.score.domain.Figure</class>
-    <class>org.aquastarz.score.domain.Swimmer</class>
-    <properties>
-      <property name="hibernate.connection.username" value="synchro"/>
-      <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
-      <property name="hibernate.connection.password" value="synchro"/>
-      <property name="hibernate.connection.url" value="jdbc:mysql://localhost/synchro"/>
-      <property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>
-    </properties>
-  </persistence-unit>
 </persistence>

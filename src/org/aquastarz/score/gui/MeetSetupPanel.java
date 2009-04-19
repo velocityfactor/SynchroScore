@@ -21,61 +21,137 @@ package org.aquastarz.score.gui;
 
 import java.awt.Component;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
+import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
-import org.aquastarz.score.ScoreApp;
-import org.aquastarz.score.controller.ScoreController;
 import org.aquastarz.score.domain.Figure;
 import org.aquastarz.score.domain.Meet;
 import org.aquastarz.score.domain.Team;
+import org.aquastarz.score.gui.event.MeetSetupPanelListener;
 
 public class MeetSetupPanel extends javax.swing.JPanel {
 
-    ScoreController controller;
+    private Meet meet;
+    
+    //Event Handling
+    private Vector<MeetSetupPanelListener> listeners=new Vector<MeetSetupPanelListener>();
+
+    public void addMeetSetupPanelListener(MeetSetupPanelListener listener) {
+        removeMeetSetupPanelListener(listener);
+        listeners.add(listener);
+    }
+
+    public void removeMeetSetupPanelListener(MeetSetupPanelListener listener) {
+        while(listeners.remove(listener)) {}
+    }
+
+    private void fireSavedEvent() {
+        for(MeetSetupPanelListener listener:listeners) {
+            listener.meetSetupSaved(meet);
+        }
+    }
 
     /** Creates new form MeetSetupPanel */
     public MeetSetupPanel() {
-        controller=ScoreController.getInstance();
         initComponents();
-        fillLists();
+//        setFormEnabled(false);
     }
 
-    private void fillLists() {
-        if (!java.beans.Beans.isDesignTime()) {
-            javax.persistence.EntityManager entityManager = ScoreApp.getEntityManager();
+    protected void fillForm(Meet meet, List<Figure> figures, List<Team> teams) {
+        this.meet = meet;
 
-            //Get the list of Teams
-            javax.persistence.Query query = java.beans.Beans.isDesignTime() ? null : entityManager.createQuery("SELECT t FROM Team t order by t.name");
-            Collection<Team> data = query.getResultList();
+        fillFigureCombo(noviceFigName1, figures);
+        fillFigureCombo(noviceFigName2, figures);
+        fillFigureCombo(noviceFigName3, figures);
+        fillFigureCombo(noviceFigName4, figures);
+        fillFigureCombo(intFigName1, figures);
+        fillFigureCombo(intFigName2, figures);
+        fillFigureCombo(intFigName3, figures);
+        fillFigureCombo(intFigName4, figures);
 
-            //Fill a Vector for the JList and a ComboBoxModel for the ComboBox
-            DefaultComboBoxModel cbm=new DefaultComboBoxModel();
-            Vector<CheckListItem<Team>> v = new Vector<CheckListItem<Team>>();
-            for (Team t : data) {
-                v.add(new CheckListItem(t, t.getName()));
-                cbm.addElement(t);
-            }
-
-            //Set up the JList as a list of checkboxes
-            opponents.setListData(v);
-            CheckListCellRenderer renderer = new CheckListCellRenderer();
-            opponents.setCellRenderer(renderer);
-            opponents.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-            CheckListener lst = new CheckListener(opponents);
-            opponents.addMouseListener(lst);
-            opponents.addKeyListener(lst);
-
-            //Set ComboBox model
-            homeTeam.setModel(cbm);
-
+        //Fill a Vector for the JList and a ComboBoxModel for the ComboBox of Teams
+        DefaultComboBoxModel cbm = new DefaultComboBoxModel();
+        Vector<CheckListItem<Team>> v = new Vector<CheckListItem<Team>>();
+        for (Team t : teams) {
+            CheckListItem cli=new CheckListItem(t, t.getName());
+            if(meet.getOpponents().contains(t)) cli.setSelected(true);
+            v.add(cli);
+            cbm.addElement(t);
         }
 
+        //Set up the JList as a list of checkboxes
+        opponents.setListData(v);
+        CheckListCellRenderer renderer = new CheckListCellRenderer();
+        opponents.setCellRenderer(renderer);
+        opponents.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        CheckListener lst = new CheckListener(opponents);
+        opponents.addMouseListener(lst);
+        opponents.addKeyListener(lst);
 
+        //Set ComboBox model
+        homeTeam.setModel(cbm);
+
+        meetName.setText(meet.getName());
+        meetDate.setDate(meet.getDate());
+        if('C' == meet.getType()) {
+            champsButton.setSelected(true);
+        }
+        else {
+            regularMeetButton.setSelected(true);
+        }
+
+        //Set Figures
+        noviceFigName1.setSelectedItem(meet.getNov1Figure());
+        noviceFigName2.setSelectedItem(meet.getNov2Figure());
+        noviceFigName3.setSelectedItem(meet.getNov3Figure());
+        noviceFigName4.setSelectedItem(meet.getNov4Figure());
+        intFigName1.setSelectedItem(meet.getInt1Figure());
+        intFigName2.setSelectedItem(meet.getInt2Figure());
+        intFigName3.setSelectedItem(meet.getInt3Figure());
+        intFigName4.setSelectedItem(meet.getInt4Figure());
+
+        //Check 8 and under boxes
+        if(meet.getEu1Figure()!=null && meet.getEu1Figure().equals(meet.getNov1Figure())) eightAndUnder1.setSelected(true);
+        if(meet.getEu1Figure()!=null && meet.getEu1Figure().equals(meet.getNov2Figure())) eightAndUnder2.setSelected(true);
+        if(meet.getEu1Figure()!=null && meet.getEu1Figure().equals(meet.getNov3Figure())) eightAndUnder3.setSelected(true);
+        if(meet.getEu1Figure()!=null && meet.getEu1Figure().equals(meet.getNov4Figure())) eightAndUnder4.setSelected(true);
+        if(meet.getEu2Figure()!=null && meet.getEu2Figure().equals(meet.getNov1Figure())) eightAndUnder1.setSelected(true);
+        if(meet.getEu2Figure()!=null && meet.getEu2Figure().equals(meet.getNov2Figure())) eightAndUnder2.setSelected(true);
+        if(meet.getEu2Figure()!=null && meet.getEu2Figure().equals(meet.getNov3Figure())) eightAndUnder3.setSelected(true);
+        if(meet.getEu2Figure()!=null && meet.getEu2Figure().equals(meet.getNov4Figure())) eightAndUnder4.setSelected(true);
+
+        homeTeam.setSelectedItem(meet.getHomeTeam());
+
+        setFormEnabled(true);
+    }
+
+    private void fillFigureCombo(JComboBox cb, List<Figure> figures) {
+        DefaultComboBoxModel cbm = new DefaultComboBoxModel();
+        for (Figure f : figures) {
+            cbm.addElement(f);
+        }
+        cb.setModel(cbm);
+    }
+
+    private void setFormEnabled(boolean enabled) {
+        meetName.setEnabled(enabled);
+        meetDate.setEnabled(enabled);
+        champsButton.setEnabled(enabled);
+        regularMeetButton.setEnabled(enabled);
+        noviceFigName1.setEnabled(enabled);
+        noviceFigName2.setEnabled(enabled);
+        noviceFigName3.setEnabled(enabled);
+        noviceFigName4.setEnabled(enabled);
+        intFigName1.setEnabled(enabled);
+        intFigName2.setEnabled(enabled);
+        intFigName3.setEnabled(enabled);
+        intFigName4.setEnabled(enabled);
+        homeTeam.setEnabled(enabled);
+        opponents.setEnabled(enabled);
     }
 
     /** This method is called from within the constructor to
@@ -86,13 +162,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        synchroPUEntityManager = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("synchroPU").createEntityManager();
-        figureQuery = java.beans.Beans.isDesignTime() ? null : synchroPUEntityManager.createQuery("SELECT f FROM Figure f");
-        figureList = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : figureQuery.getResultList();
-        teamQuery = java.beans.Beans.isDesignTime() ? null : synchroPUEntityManager.createQuery("select t from Team t");
-        teamList = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : teamQuery.getResultList();
         meetTypeButtonGroup = new javax.swing.ButtonGroup();
         jLabel1 = new javax.swing.JLabel();
         meetName = new javax.swing.JTextField();
@@ -155,8 +225,6 @@ public class MeetSetupPanel extends javax.swing.JPanel {
 
         jLabel1.setText("Title for Meet Report");
 
-        meetName.setText("Mock Meet");
-
         jLabel2.setText("Meet Date");
 
         meetDate.setMaximumSize(new java.awt.Dimension(114, 20));
@@ -174,51 +242,35 @@ public class MeetSetupPanel extends javax.swing.JPanel {
 
         jLabel8.setText("8 and Under");
 
+        noviceFigNum1.setEditable(false);
         noviceFigNum1.setFocusable(false);
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, noviceFigName1, org.jdesktop.beansbinding.ELProperty.create("${selectedItem.number}"), noviceFigNum1, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
+        noviceDD1.setEditable(false);
         noviceDD1.setFocusable(false);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, noviceFigName1, org.jdesktop.beansbinding.ELProperty.create("${selectedItem.degreeOfDifficulty}"), noviceDD1, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
 
         jLabel9.setText("Station 2 (A-2)");
 
+        noviceFigNum2.setEditable(false);
         noviceFigNum2.setFocusable(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, noviceFigName2, org.jdesktop.beansbinding.ELProperty.create("${selectedItem.number}"), noviceFigNum2, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
+        noviceDD2.setEditable(false);
         noviceDD2.setFocusable(false);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, noviceFigName2, org.jdesktop.beansbinding.ELProperty.create("${selectedItem.degreeOfDifficulty}"), noviceDD2, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
 
         jLabel10.setText("Station 3 (B-1)");
 
+        noviceFigNum3.setEditable(false);
         noviceFigNum3.setFocusable(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, noviceFigName3, org.jdesktop.beansbinding.ELProperty.create("${selectedItem.number}"), noviceFigNum3, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
+        noviceDD3.setEditable(false);
         noviceDD3.setFocusable(false);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, noviceFigName3, org.jdesktop.beansbinding.ELProperty.create("${selectedItem.degreeOfDifficulty}"), noviceDD3, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
 
         jLabel11.setText("Station 4 (B-2)");
 
+        noviceFigNum4.setEditable(false);
         noviceFigNum4.setFocusable(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, noviceFigName4, org.jdesktop.beansbinding.ELProperty.create("${selectedItem.number}"), noviceFigNum4, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
+        noviceDD4.setEditable(false);
         noviceDD4.setFocusable(false);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, noviceFigName4, org.jdesktop.beansbinding.ELProperty.create("${selectedItem.degreeOfDifficulty}"), noviceDD4, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
 
         jLabel12.setText("Station 1 (A-1)");
 
@@ -226,27 +278,19 @@ public class MeetSetupPanel extends javax.swing.JPanel {
 
         jLabel14.setText("Fig. #");
 
+        intFigNum1.setEditable(false);
         intFigNum1.setFocusable(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, intFigName1, org.jdesktop.beansbinding.ELProperty.create("${selectedItem.number}"), intFigNum1, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
+        intFigNum2.setEditable(false);
         intFigNum2.setFocusable(false);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, intFigName2, org.jdesktop.beansbinding.ELProperty.create("${selectedItem.number}"), intFigNum2, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
 
         jLabel15.setText("DD");
 
+        intDD1.setEditable(false);
         intDD1.setFocusable(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, intFigName1, org.jdesktop.beansbinding.ELProperty.create("${selectedItem.degreeOfDifficulty}"), intDD1, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
+        intDD2.setEditable(false);
         intDD2.setFocusable(false);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, intFigName2, org.jdesktop.beansbinding.ELProperty.create("${selectedItem.degreeOfDifficulty}"), intDD2, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
 
         jLabel16.setText("Figure Description");
 
@@ -254,27 +298,19 @@ public class MeetSetupPanel extends javax.swing.JPanel {
 
         jLabel19.setText("Station 4 (B-2)");
 
+        intFigNum4.setEditable(false);
         intFigNum4.setFocusable(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, intFigName4, org.jdesktop.beansbinding.ELProperty.create("${selectedItem.number}"), intFigNum4, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
+        intDD4.setEditable(false);
         intDD4.setFocusable(false);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, intFigName4, org.jdesktop.beansbinding.ELProperty.create("${selectedItem.degreeOfDifficulty}"), intDD4, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
 
         jLabel20.setText("Station 3 (B-1)");
 
+        intFigNum3.setEditable(false);
         intFigNum3.setFocusable(false);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, intFigName3, org.jdesktop.beansbinding.ELProperty.create("${selectedItem.number}"), intFigNum3, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
+        intDD3.setEditable(false);
         intDD3.setFocusable(false);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, intFigName3, org.jdesktop.beansbinding.ELProperty.create("${selectedItem.degreeOfDifficulty}"), intDD3, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
 
         homeTeam.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -303,9 +339,11 @@ public class MeetSetupPanel extends javax.swing.JPanel {
                 return this;
             }
         });
-
-        org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureList, noviceFigName1);
-        bindingGroup.addBinding(jComboBoxBinding);
+        noviceFigName1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                noviceFigName1ActionPerformed(evt);
+            }
+        });
 
         noviceFigName2.setRenderer(new DefaultListCellRenderer() {
             @Override
@@ -319,9 +357,11 @@ public class MeetSetupPanel extends javax.swing.JPanel {
                 return this;
             }
         });
-
-        jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureList, noviceFigName2);
-        bindingGroup.addBinding(jComboBoxBinding);
+        noviceFigName2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                noviceFigName2ActionPerformed(evt);
+            }
+        });
 
         noviceFigName3.setRenderer(new DefaultListCellRenderer() {
             @Override
@@ -335,9 +375,11 @@ public class MeetSetupPanel extends javax.swing.JPanel {
                 return this;
             }
         });
-
-        jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureList, noviceFigName3);
-        bindingGroup.addBinding(jComboBoxBinding);
+        noviceFigName3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                noviceFigName3ActionPerformed(evt);
+            }
+        });
 
         noviceFigName4.setRenderer(new DefaultListCellRenderer() {
             @Override
@@ -351,9 +393,11 @@ public class MeetSetupPanel extends javax.swing.JPanel {
                 return this;
             }
         });
-
-        jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureList, noviceFigName4);
-        bindingGroup.addBinding(jComboBoxBinding);
+        noviceFigName4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                noviceFigName4ActionPerformed(evt);
+            }
+        });
 
         intFigName1.setRenderer(new DefaultListCellRenderer() {
             @Override
@@ -367,9 +411,11 @@ public class MeetSetupPanel extends javax.swing.JPanel {
                 return this;
             }
         });
-
-        jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureList, intFigName1);
-        bindingGroup.addBinding(jComboBoxBinding);
+        intFigName1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                intFigName1ActionPerformed(evt);
+            }
+        });
 
         intFigName2.setRenderer(new DefaultListCellRenderer() {
             @Override
@@ -383,9 +429,11 @@ public class MeetSetupPanel extends javax.swing.JPanel {
                 return this;
             }
         });
-
-        jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureList, intFigName2);
-        bindingGroup.addBinding(jComboBoxBinding);
+        intFigName2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                intFigName2ActionPerformed(evt);
+            }
+        });
 
         intFigName3.setRenderer(new DefaultListCellRenderer() {
             @Override
@@ -399,9 +447,11 @@ public class MeetSetupPanel extends javax.swing.JPanel {
                 return this;
             }
         });
-
-        jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureList, intFigName3);
-        bindingGroup.addBinding(jComboBoxBinding);
+        intFigName3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                intFigName3ActionPerformed(evt);
+            }
+        });
 
         intFigName4.setRenderer(new DefaultListCellRenderer() {
             @Override
@@ -415,9 +465,11 @@ public class MeetSetupPanel extends javax.swing.JPanel {
                 return this;
             }
         });
-
-        jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureList, intFigName4);
-        bindingGroup.addBinding(jComboBoxBinding);
+        intFigName4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                intFigName4ActionPerformed(evt);
+            }
+        });
 
         jLabel22.setText("Meet type:");
 
@@ -535,7 +587,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(meetName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(meetDate, 0, 0, Short.MAX_VALUE)))
+                            .addComponent(meetDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jLabel2))
                 .addGap(2, 2, 2)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -628,25 +680,23 @@ public class MeetSetupPanel extends javax.swing.JPanel {
                             .addComponent(intFigNum4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(intDD4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(intFigName4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                 .addComponent(saveButton)
                 .addContainerGap())
         );
-
-        bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
-        //Create a Meet object and pass it to the controller
-        Meet meet = new Meet();
+
+        //Update Meet object and pass it to the controller
         meet.setName(meetName.getText());
         meet.setDate(meetDate.getDate());
-        meet.setType(champsButton.isSelected()?'C':'R');
-        meet.setHomeTeam((Team)homeTeam.getSelectedItem());
+        meet.setType(champsButton.isSelected() ? 'C' : 'R');
+        meet.setHomeTeam((Team) homeTeam.getSelectedItem());
         List<Team> op = new ArrayList<Team>();
-        for(Object obj:opponents.getSelectedValues()) {
-            CheckListItem cli = (CheckListItem) obj;
-            op.add((Team)cli.getItem());
+        for (int i=0; i<opponents.getModel().getSize();i++) {
+            CheckListItem cli = (CheckListItem) opponents.getModel().getElementAt(i);
+            if(cli.isSelected()) op.add((Team) cli.getItem());
         }
         meet.setOpponents(op);
         meet.setNov1Figure((Figure)noviceFigName1.getSelectedItem());
@@ -657,42 +707,104 @@ public class MeetSetupPanel extends javax.swing.JPanel {
         meet.setInt2Figure((Figure)intFigName2.getSelectedItem());
         meet.setInt3Figure((Figure)intFigName3.getSelectedItem());
         meet.setInt4Figure((Figure)intFigName4.getSelectedItem());
+        
         meet.setEu1Figure(null);
         meet.setEu2Figure(null);
-        if(eightAndUnder1.isSelected()) {
-            if(meet.getEu1Figure()==null) {
+        if (eightAndUnder1.isSelected()) {
+            if (meet.getEu1Figure() == null) {
                 meet.setEu1Figure(meet.getNov1Figure());
-            }
-            else {
+            } else {
                 meet.setEu2Figure(meet.getNov1Figure());
             }
         }
-        if(eightAndUnder2.isSelected()) {
-            if(meet.getEu1Figure()==null) {
+        if (eightAndUnder2.isSelected()) {
+            if (meet.getEu1Figure() == null) {
                 meet.setEu1Figure(meet.getNov2Figure());
-            }
-            else {
+            } else {
                 meet.setEu2Figure(meet.getNov2Figure());
             }
         }
-        if(eightAndUnder3.isSelected()) {
-            if(meet.getEu1Figure()==null) {
+        if (eightAndUnder3.isSelected()) {
+            if (meet.getEu1Figure() == null) {
                 meet.setEu1Figure(meet.getNov3Figure());
-            }
-            else {
+            } else {
                 meet.setEu2Figure(meet.getNov3Figure());
             }
         }
-        if(eightAndUnder4.isSelected()) {
-            if(meet.getEu1Figure()==null) {
+        if (eightAndUnder4.isSelected()) {
+            if (meet.getEu1Figure() == null) {
                 meet.setEu1Figure(meet.getNov4Figure());
-            }
-            else {
+            } else {
                 meet.setEu2Figure(meet.getNov4Figure());
             }
         }
-        controller.meetSetupSaved(meet);
+        fireSavedEvent();
     }//GEN-LAST:event_saveButtonActionPerformed
+
+    private void noviceFigName2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noviceFigName2ActionPerformed
+        Figure f=(Figure)noviceFigName2.getSelectedItem();
+        if(f!=null) {
+            noviceDD2.setText(f.getDegreeOfDifficulty().toPlainString());
+            noviceFigNum2.setText(f.getFigureId());
+        }
+    }//GEN-LAST:event_noviceFigName2ActionPerformed
+
+    private void noviceFigName1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noviceFigName1ActionPerformed
+        Figure f=(Figure)noviceFigName1.getSelectedItem();
+        if(f!=null) {
+            noviceDD1.setText(f.getDegreeOfDifficulty().toPlainString());
+            noviceFigNum1.setText(f.getFigureId());
+        }
+    }//GEN-LAST:event_noviceFigName1ActionPerformed
+
+    private void noviceFigName3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noviceFigName3ActionPerformed
+        Figure f=(Figure)noviceFigName3.getSelectedItem();
+        if(f!=null) {
+            noviceDD3.setText(f.getDegreeOfDifficulty().toPlainString());
+            noviceFigNum3.setText(f.getFigureId());
+        }
+
+    }//GEN-LAST:event_noviceFigName3ActionPerformed
+
+    private void noviceFigName4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noviceFigName4ActionPerformed
+        Figure f=(Figure)noviceFigName4.getSelectedItem();
+        if(f!=null) {
+            noviceDD4.setText(f.getDegreeOfDifficulty().toPlainString());
+            noviceFigNum4.setText(f.getFigureId());
+        }
+    }//GEN-LAST:event_noviceFigName4ActionPerformed
+
+    private void intFigName1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_intFigName1ActionPerformed
+        Figure f=(Figure)intFigName1.getSelectedItem();
+        if(f!=null) {
+            intDD1.setText(f.getDegreeOfDifficulty().toPlainString());
+            intFigNum1.setText(f.getFigureId());
+        }
+    }//GEN-LAST:event_intFigName1ActionPerformed
+
+    private void intFigName2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_intFigName2ActionPerformed
+        Figure f=(Figure)intFigName2.getSelectedItem();
+        if(f!=null) {
+            intDD2.setText(f.getDegreeOfDifficulty().toPlainString());
+            intFigNum2.setText(f.getFigureId());
+        }
+    }//GEN-LAST:event_intFigName2ActionPerformed
+
+    private void intFigName3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_intFigName3ActionPerformed
+        Figure f=(Figure)intFigName3.getSelectedItem();
+        if(f!=null) {
+            intDD3.setText(f.getDegreeOfDifficulty().toPlainString());
+            intFigNum3.setText(f.getFigureId());
+        }
+    }//GEN-LAST:event_intFigName3ActionPerformed
+
+    private void intFigName4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_intFigName4ActionPerformed
+        Figure f=(Figure)intFigName4.getSelectedItem();
+        if(f!=null) {
+            intDD4.setText(f.getDegreeOfDifficulty().toPlainString());
+            intFigNum4.setText(f.getFigureId());
+        }
+    }//GEN-LAST:event_intFigName4ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton champsButton;
@@ -700,8 +812,6 @@ public class MeetSetupPanel extends javax.swing.JPanel {
     private javax.swing.JCheckBox eightAndUnder2;
     private javax.swing.JCheckBox eightAndUnder3;
     private javax.swing.JCheckBox eightAndUnder4;
-    private java.util.List<org.aquastarz.score.domain.Figure> figureList;
-    private javax.persistence.Query figureQuery;
     private javax.swing.JComboBox homeTeam;
     private javax.swing.JTextField intDD1;
     private javax.swing.JTextField intDD2;
@@ -756,9 +866,5 @@ public class MeetSetupPanel extends javax.swing.JPanel {
     private javax.swing.JList opponents;
     private javax.swing.JRadioButton regularMeetButton;
     private javax.swing.JButton saveButton;
-    private javax.persistence.EntityManager synchroPUEntityManager;
-    private java.util.List teamList;
-    private javax.persistence.Query teamQuery;
-    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }

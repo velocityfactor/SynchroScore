@@ -23,15 +23,12 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -52,26 +49,6 @@ public class Figure implements Serializable {
     @Basic(optional = false)
     @Column(name = "name", nullable = false, length = 45)
     private String name;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "nov3Figure")
-    private Collection<Meet> meetCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "nov4Figure")
-    private Collection<Meet> meetCollection1;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "eu1Figure")
-    private Collection<Meet> meetCollection2;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "eu2Figure")
-    private Collection<Meet> meetCollection3;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "int1Figure")
-    private Collection<Meet> meetCollection4;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "int2Figure")
-    private Collection<Meet> meetCollection5;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "int3Figure")
-    private Collection<Meet> meetCollection6;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "int4Figure")
-    private Collection<Meet> meetCollection7;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "nov1Figure")
-    private Collection<Meet> meetCollection8;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "nov2Figure")
-    private Collection<Meet> meetCollection9;
 
     public Figure() {
     }
@@ -114,86 +91,6 @@ public class Figure implements Serializable {
         String oldName = this.name;
         this.name = name;
         changeSupport.firePropertyChange("name", oldName, name);
-    }
-
-    public Collection<Meet> getMeetCollection() {
-        return meetCollection;
-    }
-
-    public void setMeetCollection(Collection<Meet> meetCollection) {
-        this.meetCollection = meetCollection;
-    }
-
-    public Collection<Meet> getMeetCollection1() {
-        return meetCollection1;
-    }
-
-    public void setMeetCollection1(Collection<Meet> meetCollection1) {
-        this.meetCollection1 = meetCollection1;
-    }
-
-    public Collection<Meet> getMeetCollection2() {
-        return meetCollection2;
-    }
-
-    public void setMeetCollection2(Collection<Meet> meetCollection2) {
-        this.meetCollection2 = meetCollection2;
-    }
-
-    public Collection<Meet> getMeetCollection3() {
-        return meetCollection3;
-    }
-
-    public void setMeetCollection3(Collection<Meet> meetCollection3) {
-        this.meetCollection3 = meetCollection3;
-    }
-
-    public Collection<Meet> getMeetCollection4() {
-        return meetCollection4;
-    }
-
-    public void setMeetCollection4(Collection<Meet> meetCollection4) {
-        this.meetCollection4 = meetCollection4;
-    }
-
-    public Collection<Meet> getMeetCollection5() {
-        return meetCollection5;
-    }
-
-    public void setMeetCollection5(Collection<Meet> meetCollection5) {
-        this.meetCollection5 = meetCollection5;
-    }
-
-    public Collection<Meet> getMeetCollection6() {
-        return meetCollection6;
-    }
-
-    public void setMeetCollection6(Collection<Meet> meetCollection6) {
-        this.meetCollection6 = meetCollection6;
-    }
-
-    public Collection<Meet> getMeetCollection7() {
-        return meetCollection7;
-    }
-
-    public void setMeetCollection7(Collection<Meet> meetCollection7) {
-        this.meetCollection7 = meetCollection7;
-    }
-
-    public Collection<Meet> getMeetCollection8() {
-        return meetCollection8;
-    }
-
-    public void setMeetCollection8(Collection<Meet> meetCollection8) {
-        this.meetCollection8 = meetCollection8;
-    }
-
-    public Collection<Meet> getMeetCollection9() {
-        return meetCollection9;
-    }
-
-    public void setMeetCollection9(Collection<Meet> meetCollection9) {
-        this.meetCollection9 = meetCollection9;
     }
 
     @Override

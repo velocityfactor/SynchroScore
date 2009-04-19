@@ -2,44 +2,6 @@
 
 <Form version="1.5" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
   <NonVisualComponents>
-    <Component class="javax.persistence.EntityManager" name="synchroPUEntityManager">
-      <Properties>
-        <Property name="persistenceUnit" type="java.lang.String" value="synchroPU"/>
-      </Properties>
-    </Component>
-    <Component class="javax.persistence.Query" name="figureQuery">
-      <Properties>
-        <Property name="query" type="java.lang.String" value="SELECT f FROM Figure f"/>
-        <Property name="entityManager" type="java.lang.Object" editor="org.netbeans.modules.form.j2ee.J2EEPropertyModifier$EMProperty$EntityManagerEditor">
-          <ComponentRef name="synchroPUEntityManager"/>
-        </Property>
-      </Properties>
-    </Component>
-    <Component class="java.util.List" name="figureList">
-      <Properties>
-        <Property name="query" type="java.lang.Object" editor="org.netbeans.modules.form.j2ee.J2EEPropertyModifier$QueryBeanProperty$QueryEditor">
-          <ComponentRef name="figureQuery"/>
-        </Property>
-      </Properties>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;org.aquastarz.score.domain.Figure&gt;"/>
-      </AuxValues>
-    </Component>
-    <Component class="javax.persistence.Query" name="teamQuery">
-      <Properties>
-        <Property name="query" type="java.lang.String" value="select t from Team t"/>
-        <Property name="entityManager" type="java.lang.Object" editor="org.netbeans.modules.form.j2ee.J2EEPropertyModifier$EMProperty$EntityManagerEditor">
-          <ComponentRef name="synchroPUEntityManager"/>
-        </Property>
-      </Properties>
-    </Component>
-    <Component class="java.util.List" name="teamList">
-      <Properties>
-        <Property name="query" type="java.lang.Object" editor="org.netbeans.modules.form.j2ee.J2EEPropertyModifier$QueryBeanProperty$QueryEditor">
-          <ComponentRef name="teamQuery"/>
-        </Property>
-      </Properties>
-    </Component>
     <Component class="javax.swing.ButtonGroup" name="meetTypeButtonGroup">
     </Component>
   </NonVisualComponents>
@@ -181,7 +143,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="meetName" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="meetDate" alignment="3" min="0" pref="0" max="32767" attributes="0"/>
+                          <Component id="meetDate" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -297,7 +259,7 @@
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace pref="29" max="32767" attributes="0"/>
+              <EmptySpace pref="27" max="32767" attributes="0"/>
               <Component id="saveButton" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -311,9 +273,6 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="meetName">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Mock Meet"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
@@ -362,23 +321,15 @@
     </Component>
     <Component class="javax.swing.JTextField" name="noviceFigNum1">
       <Properties>
+        <Property name="editable" type="boolean" value="false"/>
         <Property name="focusable" type="boolean" value="false"/>
       </Properties>
-      <BindingProperties>
-        <BindingProperty name="text" source="noviceFigName1" sourcePath="${selectedItem.number}" target="noviceFigNum1" targetPath="text" updateStrategy="0" immediately="false">
-          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-        </BindingProperty>
-      </BindingProperties>
     </Component>
     <Component class="javax.swing.JTextField" name="noviceDD1">
       <Properties>
+        <Property name="editable" type="boolean" value="false"/>
         <Property name="focusable" type="boolean" value="false"/>
       </Properties>
-      <BindingProperties>
-        <BindingProperty name="text" source="noviceFigName1" sourcePath="${selectedItem.degreeOfDifficulty}" target="noviceDD1" targetPath="text" updateStrategy="0" immediately="false">
-          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-        </BindingProperty>
-      </BindingProperties>
     </Component>
     <Component class="javax.swing.JCheckBox" name="eightAndUnder1">
     </Component>
@@ -389,23 +340,15 @@
     </Component>
     <Component class="javax.swing.JTextField" name="noviceFigNum2">
       <Properties>
+        <Property name="editable" type="boolean" value="false"/>
         <Property name="focusable" type="boolean" value="false"/>
       </Properties>
-      <BindingProperties>
-        <BindingProperty name="text" source="noviceFigName2" sourcePath="${selectedItem.number}" target="noviceFigNum2" targetPath="text" updateStrategy="0" immediately="false">
-          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-        </BindingProperty>
-      </BindingProperties>
     </Component>
     <Component class="javax.swing.JTextField" name="noviceDD2">
       <Properties>
+        <Property name="editable" type="boolean" value="false"/>
         <Property name="focusable" type="boolean" value="false"/>
       </Properties>
-      <BindingProperties>
-        <BindingProperty name="text" source="noviceFigName2" sourcePath="${selectedItem.degreeOfDifficulty}" target="noviceDD2" targetPath="text" updateStrategy="0" immediately="false">
-          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-        </BindingProperty>
-      </BindingProperties>
     </Component>
     <Component class="javax.swing.JCheckBox" name="eightAndUnder2">
     </Component>
@@ -416,23 +359,15 @@
     </Component>
     <Component class="javax.swing.JTextField" name="noviceFigNum3">
       <Properties>
+        <Property name="editable" type="boolean" value="false"/>
         <Property name="focusable" type="boolean" value="false"/>
       </Properties>
-      <BindingProperties>
-        <BindingProperty name="text" source="noviceFigName3" sourcePath="${selectedItem.number}" target="noviceFigNum3" targetPath="text" updateStrategy="0" immediately="false">
-          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-        </BindingProperty>
-      </BindingProperties>
     </Component>
     <Component class="javax.swing.JTextField" name="noviceDD3">
       <Properties>
+        <Property name="editable" type="boolean" value="false"/>
         <Property name="focusable" type="boolean" value="false"/>
       </Properties>
-      <BindingProperties>
-        <BindingProperty name="text" source="noviceFigName3" sourcePath="${selectedItem.degreeOfDifficulty}" target="noviceDD3" targetPath="text" updateStrategy="0" immediately="false">
-          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-        </BindingProperty>
-      </BindingProperties>
     </Component>
     <Component class="javax.swing.JCheckBox" name="eightAndUnder3">
     </Component>
@@ -443,23 +378,15 @@
     </Component>
     <Component class="javax.swing.JTextField" name="noviceFigNum4">
       <Properties>
+        <Property name="editable" type="boolean" value="false"/>
         <Property name="focusable" type="boolean" value="false"/>
       </Properties>
-      <BindingProperties>
-        <BindingProperty name="text" source="noviceFigName4" sourcePath="${selectedItem.number}" target="noviceFigNum4" targetPath="text" updateStrategy="0" immediately="false">
-          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-        </BindingProperty>
-      </BindingProperties>
     </Component>
     <Component class="javax.swing.JTextField" name="noviceDD4">
       <Properties>
+        <Property name="editable" type="boolean" value="false"/>
         <Property name="focusable" type="boolean" value="false"/>
       </Properties>
-      <BindingProperties>
-        <BindingProperty name="text" source="noviceFigName4" sourcePath="${selectedItem.degreeOfDifficulty}" target="noviceDD4" targetPath="text" updateStrategy="0" immediately="false">
-          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-        </BindingProperty>
-      </BindingProperties>
     </Component>
     <Component class="javax.swing.JCheckBox" name="eightAndUnder4">
     </Component>
@@ -480,23 +407,15 @@
     </Component>
     <Component class="javax.swing.JTextField" name="intFigNum1">
       <Properties>
+        <Property name="editable" type="boolean" value="false"/>
         <Property name="focusable" type="boolean" value="false"/>
       </Properties>
-      <BindingProperties>
-        <BindingProperty name="text" source="intFigName1" sourcePath="${selectedItem.number}" target="intFigNum1" targetPath="text" updateStrategy="0" immediately="false">
-          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-        </BindingProperty>
-      </BindingProperties>
     </Component>
     <Component class="javax.swing.JTextField" name="intFigNum2">
       <Properties>
+        <Property name="editable" type="boolean" value="false"/>
         <Property name="focusable" type="boolean" value="false"/>
       </Properties>
-      <BindingProperties>
-        <BindingProperty name="text" source="intFigName2" sourcePath="${selectedItem.number}" target="intFigNum2" targetPath="text" updateStrategy="0" immediately="false">
-          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-        </BindingProperty>
-      </BindingProperties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel15">
       <Properties>
@@ -505,23 +424,15 @@
     </Component>
     <Component class="javax.swing.JTextField" name="intDD1">
       <Properties>
+        <Property name="editable" type="boolean" value="false"/>
         <Property name="focusable" type="boolean" value="false"/>
       </Properties>
-      <BindingProperties>
-        <BindingProperty name="text" source="intFigName1" sourcePath="${selectedItem.degreeOfDifficulty}" target="intDD1" targetPath="text" updateStrategy="0" immediately="false">
-          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-        </BindingProperty>
-      </BindingProperties>
     </Component>
     <Component class="javax.swing.JTextField" name="intDD2">
       <Properties>
+        <Property name="editable" type="boolean" value="false"/>
         <Property name="focusable" type="boolean" value="false"/>
       </Properties>
-      <BindingProperties>
-        <BindingProperty name="text" source="intFigName2" sourcePath="${selectedItem.degreeOfDifficulty}" target="intDD2" targetPath="text" updateStrategy="0" immediately="false">
-          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-        </BindingProperty>
-      </BindingProperties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel16">
       <Properties>
@@ -540,23 +451,15 @@
     </Component>
     <Component class="javax.swing.JTextField" name="intFigNum4">
       <Properties>
+        <Property name="editable" type="boolean" value="false"/>
         <Property name="focusable" type="boolean" value="false"/>
       </Properties>
-      <BindingProperties>
-        <BindingProperty name="text" source="intFigName4" sourcePath="${selectedItem.number}" target="intFigNum4" targetPath="text" updateStrategy="0" immediately="false">
-          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-        </BindingProperty>
-      </BindingProperties>
     </Component>
     <Component class="javax.swing.JTextField" name="intDD4">
       <Properties>
+        <Property name="editable" type="boolean" value="false"/>
         <Property name="focusable" type="boolean" value="false"/>
       </Properties>
-      <BindingProperties>
-        <BindingProperty name="text" source="intFigName4" sourcePath="${selectedItem.degreeOfDifficulty}" target="intDD4" targetPath="text" updateStrategy="0" immediately="false">
-          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-        </BindingProperty>
-      </BindingProperties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel20">
       <Properties>
@@ -565,23 +468,15 @@
     </Component>
     <Component class="javax.swing.JTextField" name="intFigNum3">
       <Properties>
+        <Property name="editable" type="boolean" value="false"/>
         <Property name="focusable" type="boolean" value="false"/>
       </Properties>
-      <BindingProperties>
-        <BindingProperty name="text" source="intFigName3" sourcePath="${selectedItem.number}" target="intFigNum3" targetPath="text" updateStrategy="0" immediately="false">
-          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-        </BindingProperty>
-      </BindingProperties>
     </Component>
     <Component class="javax.swing.JTextField" name="intDD3">
       <Properties>
+        <Property name="editable" type="boolean" value="false"/>
         <Property name="focusable" type="boolean" value="false"/>
       </Properties>
-      <BindingProperties>
-        <BindingProperty name="text" source="intFigName3" sourcePath="${selectedItem.degreeOfDifficulty}" target="intDD3" targetPath="text" updateStrategy="0" immediately="false">
-          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
-        </BindingProperty>
-      </BindingProperties>
     </Component>
     <Component class="javax.swing.JComboBox" name="homeTeam">
       <Properties>
@@ -627,9 +522,9 @@
           <Connection code="new DefaultListCellRenderer() {&#xd;&#xa;           @Override&#xd;&#xa;           public Component getListCellRendererComponent(&#xd;&#xa;                   JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {&#xd;&#xa;               super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);&#xd;&#xa;               if (value instanceof Figure) {&#xd;&#xa;                   Figure mec = (Figure)value;&#xd;&#xa;                   setText(mec.getName());&#xd;&#xa;               }&#xd;&#xa;               return this;&#xd;&#xa;           }&#xd;&#xa;            }" type="code"/>
         </Property>
       </Properties>
-      <BindingProperties>
-        <BindingProperty name="elements" source="figureList" target="noviceFigName1" targetPath="elements" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="noviceFigName1ActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JComboBox" name="noviceFigName2">
       <Properties>
@@ -637,9 +532,9 @@
           <Connection code="new DefaultListCellRenderer() {&#xd;&#xa;           @Override&#xd;&#xa;           public Component getListCellRendererComponent(&#xd;&#xa;                   JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {&#xd;&#xa;               super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);&#xd;&#xa;               if (value instanceof Figure) {&#xd;&#xa;                   Figure mec = (Figure)value;&#xd;&#xa;                   setText(mec.getName());&#xd;&#xa;               }&#xd;&#xa;               return this;&#xd;&#xa;           }&#xd;&#xa;            }" type="code"/>
         </Property>
       </Properties>
-      <BindingProperties>
-        <BindingProperty name="elements" source="figureList" target="noviceFigName2" targetPath="elements" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="noviceFigName2ActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JComboBox" name="noviceFigName3">
       <Properties>
@@ -647,9 +542,9 @@
           <Connection code="new DefaultListCellRenderer() {&#xd;&#xa;           @Override&#xd;&#xa;           public Component getListCellRendererComponent(&#xd;&#xa;                   JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {&#xd;&#xa;               super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);&#xd;&#xa;               if (value instanceof Figure) {&#xd;&#xa;                   Figure mec = (Figure)value;&#xd;&#xa;                   setText(mec.getName());&#xd;&#xa;               }&#xd;&#xa;               return this;&#xd;&#xa;           }&#xd;&#xa;            }" type="code"/>
         </Property>
       </Properties>
-      <BindingProperties>
-        <BindingProperty name="elements" source="figureList" target="noviceFigName3" targetPath="elements" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="noviceFigName3ActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JComboBox" name="noviceFigName4">
       <Properties>
@@ -657,9 +552,9 @@
           <Connection code="new DefaultListCellRenderer() {&#xd;&#xa;           @Override&#xd;&#xa;           public Component getListCellRendererComponent(&#xd;&#xa;                   JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {&#xd;&#xa;               super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);&#xd;&#xa;               if (value instanceof Figure) {&#xd;&#xa;                   Figure mec = (Figure)value;&#xd;&#xa;                   setText(mec.getName());&#xd;&#xa;               }&#xd;&#xa;               return this;&#xd;&#xa;           }&#xd;&#xa;            }" type="code"/>
         </Property>
       </Properties>
-      <BindingProperties>
-        <BindingProperty name="elements" source="figureList" target="noviceFigName4" targetPath="elements" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="noviceFigName4ActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JComboBox" name="intFigName1">
       <Properties>
@@ -667,9 +562,9 @@
           <Connection code="new DefaultListCellRenderer() {&#xd;&#xa;           @Override&#xd;&#xa;           public Component getListCellRendererComponent(&#xd;&#xa;                   JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {&#xd;&#xa;               super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);&#xd;&#xa;               if (value instanceof Figure) {&#xd;&#xa;                   Figure mec = (Figure)value;&#xd;&#xa;                   setText(mec.getName());&#xd;&#xa;               }&#xd;&#xa;               return this;&#xd;&#xa;           }&#xd;&#xa;            }" type="code"/>
         </Property>
       </Properties>
-      <BindingProperties>
-        <BindingProperty name="elements" source="figureList" target="intFigName1" targetPath="elements" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="intFigName1ActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JComboBox" name="intFigName2">
       <Properties>
@@ -677,9 +572,9 @@
           <Connection code="new DefaultListCellRenderer() {&#xd;&#xa;           @Override&#xd;&#xa;           public Component getListCellRendererComponent(&#xd;&#xa;                   JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {&#xd;&#xa;               super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);&#xd;&#xa;               if (value instanceof Figure) {&#xd;&#xa;                   Figure mec = (Figure)value;&#xd;&#xa;                   setText(mec.getName());&#xd;&#xa;               }&#xd;&#xa;               return this;&#xd;&#xa;           }&#xd;&#xa;            }" type="code"/>
         </Property>
       </Properties>
-      <BindingProperties>
-        <BindingProperty name="elements" source="figureList" target="intFigName2" targetPath="elements" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="intFigName2ActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JComboBox" name="intFigName3">
       <Properties>
@@ -687,9 +582,9 @@
           <Connection code="new DefaultListCellRenderer() {&#xd;&#xa;           @Override&#xd;&#xa;           public Component getListCellRendererComponent(&#xd;&#xa;                   JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {&#xd;&#xa;               super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);&#xd;&#xa;               if (value instanceof Figure) {&#xd;&#xa;                   Figure mec = (Figure)value;&#xd;&#xa;                   setText(mec.getName());&#xd;&#xa;               }&#xd;&#xa;               return this;&#xd;&#xa;           }&#xd;&#xa;            }" type="code"/>
         </Property>
       </Properties>
-      <BindingProperties>
-        <BindingProperty name="elements" source="figureList" target="intFigName3" targetPath="elements" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="intFigName3ActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JComboBox" name="intFigName4">
       <Properties>
@@ -697,9 +592,9 @@
           <Connection code="new DefaultListCellRenderer() {&#xd;&#xa;           @Override&#xd;&#xa;           public Component getListCellRendererComponent(&#xd;&#xa;                   JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {&#xd;&#xa;               super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);&#xd;&#xa;               if (value instanceof Figure) {&#xd;&#xa;                   Figure mec = (Figure)value;&#xd;&#xa;                   setText(mec.getName());&#xd;&#xa;               }&#xd;&#xa;               return this;&#xd;&#xa;           }&#xd;&#xa;            }" type="code"/>
         </Property>
       </Properties>
-      <BindingProperties>
-        <BindingProperty name="elements" source="figureList" target="intFigName4" targetPath="elements" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="intFigName4ActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel22">
       <Properties>
