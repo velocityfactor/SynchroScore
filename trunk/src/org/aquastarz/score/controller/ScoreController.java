@@ -23,12 +23,16 @@ import java.awt.Color;
 import java.util.List;
 import javax.persistence.Query;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import org.aquastarz.score.ScoreApp;
+import org.aquastarz.score.domain.Figure;
 import org.aquastarz.score.domain.Meet;
 import org.aquastarz.score.domain.Swimmer;
 import org.aquastarz.score.domain.Team;
+import org.aquastarz.score.gui.MeetSelectionDialog;
 import org.aquastarz.score.gui.SwimmerSelectionPanel;
 import org.aquastarz.score.gui.SynchroFrame;
+import org.aquastarz.score.gui.event.SynchroFrameListener;
 
 /**
  *
@@ -39,23 +43,35 @@ public class ScoreController {
     EntityManager entityManager = ScoreApp.getEntityManager();
     private static ScoreController instance = null;
     private SynchroFrame mainFrame;
+    private Meet meet;
 
     protected ScoreController() {
-        //Controller created, create the gui
-        java.awt.EventQueue.invokeLater(new Runnable() {
+    }
 
-            public void run() {
-                mainFrame=new SynchroFrame();
-                initMainFrame();
-                mainFrame.setVisible(true);
-            }
-        });
+    public void init() {
+        meet = selectMeetFromList();
+        if (meet != null) {
+            java.awt.EventQueue.invokeLater(new Runnable() {
+
+                public void run() {
+                    mainFrame = new SynchroFrame();
+                    initMainFrame();
+                    mainFrame.setVisible(true);
+                    mainFrame.fillMeetSetupForm(meet, getFigureList(), getTeamList());
+                }
+            });
+        } else {
+            System.exit(0);
+        }
+    }
+
+    private Meet selectMeetFromList() {
+        return MeetSelectionDialog.selectMeet(getMeetList());
     }
 
     public static synchronized ScoreController getInstance() {
         if (instance == null) {
             instance = new ScoreController();
-
         }
         return instance;
     }
@@ -63,17 +79,51 @@ public class ScoreController {
     private void initMainFrame() {
         mainFrame.disableAllTabs();
         mainFrame.setTabEnabled(SynchroFrame.Tab.MEET_SETUP, true);
+        mainFrame.addSynchroFrameListener(new SynchroFrameListener() {
+
+            public void meetSetupSaved(Meet meet) {
+                saveMeet(meet);
+            }
+        });
     }
 
-    public void meetSetupSaved(Meet meet) {
-        ScoreApp.getEntityManager().persist(meet);
-        System.out.println("meetId="+meet.getMeetId());
-        mainFrame.setSetupStatus(Color.GREEN, 50);
+    public Meet getMeet() {
+        return meet;
+    }
+
+    public List<Team> getTeamList() {
+        javax.persistence.Query query = entityManager.createQuery("SELECT t FROM Team t order by t.name");
+        return query.getResultList();
+    }
+
+    public List<Figure> getFigureList() {
+        javax.persistence.Query query = entityManager.createQuery("SELECT f FROM Figure f order by f.figureId");
+        return query.getResultList();
+    }
+
+    public List<Meet> getMeetList() {
+        javax.persistence.Query query = entityManager.createQuery("SELECT m FROM Meet m order by m.date desc");
+        return query.getResultList();
+    }
+
+    public void saveMeet(Meet meet) {
+        EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        try {
+            meet=entityManager.merge(meet);
+            transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
+            e.printStackTrace();
+        }
+        if(mainFrame.getSetupStatusPercent()<50) {
+            mainFrame.setSetupStatus(Color.GREEN, 50);
+        }
         mainFrame.setTabEnabled(SynchroFrame.Tab.SWIMMERS, true);
     }
 
     public void tabChanged(SynchroFrame.Tab tab) {
-        if(tab==SynchroFrame.Tab.SWIMMERS) {
+        if (tab == SynchroFrame.Tab.SWIMMERS) {
             initSwimmersTab();
         }
     }
@@ -81,10 +131,10 @@ public class ScoreController {
     private void initSwimmersTab() {
         Query teamQuery = entityManager.createQuery("SELECT t FROM Team t");
         List<Team> teams = teamQuery.getResultList();
-        for(Team team:teams) {
-            Query swimmerQuery = entityManager.createQuery("SELECT s from Swimmer s WHERE s.team='"+team.getTeamId()+"' ORDER BY s.lastName,s.firstName");
+        for (Team team : teams) {
+            Query swimmerQuery = entityManager.createQuery("SELECT s from Swimmer s WHERE s.team='" + team.getTeamId() + "' ORDER BY s.lastName,s.firstName");
             List<Swimmer> swimmers = swimmerQuery.getResultList();
-            SwimmerSelectionPanel ssp=new SwimmerSelectionPanel(team,swimmers);
+            SwimmerSelectionPanel ssp = new SwimmerSelectionPanel(team, swimmers);
             mainFrame.addSwimmerTab(ssp);
         }
     }

@@ -21,20 +21,57 @@ package org.aquastarz.score.gui;
 
 import java.awt.Color;
 import java.awt.Cursor;
-import org.aquastarz.score.controller.ScoreController;
+import java.util.List;
+import java.util.Vector;
+import org.aquastarz.score.domain.*;
+import org.aquastarz.score.gui.event.MeetSetupPanelListener;
+import org.aquastarz.score.gui.event.SynchroFrameListener;
 
 public class SynchroFrame extends javax.swing.JFrame {
 
     public enum Tab { MEET_SETUP, SWIMMERS, FIGURES, ROUTINES, REPORTS};
+    private Vector<SynchroFrameListener> listeners = new Vector<SynchroFrameListener>();
 
     /** Creates new form Synchro */
     public SynchroFrame() {
         initComponents();
+        registerListeners();
+    }
+
+    public void addSynchroFrameListener(SynchroFrameListener listener) {
+        removeSynchroFrameListener(listener);
+        listeners.add(listener);
+    }
+
+    public void removeSynchroFrameListener(SynchroFrameListener listener) {
+        while(listeners.remove(listener)) {}
+    }
+
+    private void fireMeetSetupSaved(Meet meet) {
+        for(SynchroFrameListener listener:listeners) {
+            listener.meetSetupSaved(meet);
+        }
+    }
+
+    private void fireTabChanged() {
+        //TODO event
+    }
+
+    private void fireSwimmersSaved() {
+        //TODO event
+    }
+
+    public void fillMeetSetupForm(Meet meet, List<Figure> figures, List<Team> teams) {
+        meetSetup.fillForm(meet, figures, teams);
     }
 
     public void setSetupStatus(Color color, int percent) {
         setupProgress.setForeground(color);
         setupProgress.setValue(percent);
+    }
+
+    public int getSetupStatusPercent() {
+        return setupProgress.getValue();
     }
 
     public void disableAllTabs() {
@@ -49,6 +86,14 @@ public class SynchroFrame extends javax.swing.JFrame {
 
     public void addSwimmerTab(SwimmerSelectionPanel ssp) {
         teamTabs.addTab(ssp.getTitle(), ssp);
+    }
+
+    private void registerListeners() {
+        meetSetup.addMeetSetupPanelListener(new MeetSetupPanelListener() {
+            public void meetSetupSaved(Meet meet) {
+                fireMeetSetupSaved(meet);
+            }
+        });
     }
 
     /** This method is called from within the constructor to
@@ -322,11 +367,11 @@ public class SynchroFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_maintenanceMenuItemActionPerformed
 
     private void tabPaneStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabPaneStateChanged
-        ScoreController.getInstance().tabChanged(Tab.values()[tabPane.getSelectedIndex()]);
+        fireTabChanged();
     }//GEN-LAST:event_tabPaneStateChanged
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
-        ScoreController.getInstance().swimmersSaved();
+        fireSwimmersSaved();
     }//GEN-LAST:event_saveButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
