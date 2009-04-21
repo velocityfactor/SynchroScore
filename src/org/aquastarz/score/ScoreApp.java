@@ -19,20 +19,49 @@
 // </editor-fold>
 package org.aquastarz.score;
 
+import java.io.File;
+import java.util.Map;
+import java.util.TreeMap;
 import javax.persistence.EntityManager;
+import org.aquastarz.score.config.Bootstrap;
 import org.aquastarz.score.controller.ScoreController;
 
 public class ScoreApp {
 
+    private static String url = "jdbc:hsqldb:file:"+System.getProperty("user.home")+"/.SynchroScore/Data";
+    private static Map props=null;
+
     public static EntityManager getEntityManager() {
-        return javax.persistence.Persistence.createEntityManagerFactory("synchroPU").createEntityManager();
+        if(props==null) {
+            props=new TreeMap();
+            props.put("hibernate.connection.url",url);
+        }
+        return javax.persistence.Persistence.createEntityManagerFactory("synchroPU",props).createEntityManager();
     }
     
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        ScoreController sc=ScoreController.getInstance();
-        sc.init();
+        initDB();
+        ScoreController sc=new ScoreController();
+    }
+
+    public static void initDB() {
+        //TODO check db for adequate data, delete and recreate if not.
+        File db=new File(System.getProperty("user.home"),"/.SynchroScore");
+        if(!db.exists()) {
+            System.out.println("No db file found, create...");
+            db.mkdir();
+            Map props=new TreeMap();
+            props.put("hibernate.hbm2ddl.auto","update");
+            props.put("hibernate.connection.url",url);
+            EntityManager entityManager = javax.persistence.Persistence.createEntityManagerFactory("synchroPU", props).createEntityManager();
+            entityManager.close();
+            System.out.println("Load sample data...");
+            Bootstrap.loadLeagueData();
+            Bootstrap.loadSampleSwimmers();
+            System.out.println("DB init done.");
+        }
     }
 }

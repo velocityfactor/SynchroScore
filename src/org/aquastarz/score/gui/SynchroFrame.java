@@ -21,79 +21,68 @@ package org.aquastarz.score.gui;
 
 import java.awt.Color;
 import java.awt.Cursor;
-import java.util.List;
-import java.util.Vector;
-import org.aquastarz.score.domain.*;
+import org.aquastarz.score.controller.ScoreController;
+import org.aquastarz.score.domain.Meet;
+import org.aquastarz.score.domain.Team;
 import org.aquastarz.score.gui.event.MeetSetupPanelListener;
-import org.aquastarz.score.gui.event.SynchroFrameListener;
 
 public class SynchroFrame extends javax.swing.JFrame {
 
-    public enum Tab { MEET_SETUP, SWIMMERS, FIGURES, ROUTINES, REPORTS};
-    private Vector<SynchroFrameListener> listeners = new Vector<SynchroFrameListener>();
+    public enum Tab {
+
+        MEET_SETUP, SWIMMERS, FIGURES, ROUTINES, REPORTS
+    };
+    ScoreController controller = null;
 
     /** Creates new form Synchro */
-    public SynchroFrame() {
+    public SynchroFrame(ScoreController controller, Meet meet) {
+        this.controller = controller;
         initComponents();
         registerListeners();
+        meetSetup.fillForm(meet, controller.getFigures(), controller.getTeams());
+        disableAllTabs();
+        setTabEnabled(SynchroFrame.Tab.MEET_SETUP, true);
     }
 
-    public void addSynchroFrameListener(SynchroFrameListener listener) {
-        removeSynchroFrameListener(listener);
-        listeners.add(listener);
-    }
-
-    public void removeSynchroFrameListener(SynchroFrameListener listener) {
-        while(listeners.remove(listener)) {}
-    }
-
-    private void fireMeetSetupSaved(Meet meet) {
-        for(SynchroFrameListener listener:listeners) {
-            listener.meetSetupSaved(meet);
-        }
-    }
-
-    private void fireTabChanged() {
-        //TODO event
-    }
-
-    private void fireSwimmersSaved() {
-        //TODO event
-    }
-
-    public void fillMeetSetupForm(Meet meet, List<Figure> figures, List<Team> teams) {
-        meetSetup.fillForm(meet, figures, teams);
-    }
-
-    public void setSetupStatus(Color color, int percent) {
+    private void setSetupStatus(Color color, int percent) {
         setupProgress.setForeground(color);
         setupProgress.setValue(percent);
     }
 
-    public int getSetupStatusPercent() {
+    private int getSetupStatusPercent() {
         return setupProgress.getValue();
     }
 
-    public void disableAllTabs() {
-        for(Tab tab:Tab.values()) {
-            setTabEnabled(tab,false);
+    private void disableAllTabs() {
+        for (Tab tab : Tab.values()) {
+            setTabEnabled(tab, false);
         }
     }
-    
-    public void setTabEnabled(Tab tab, boolean enabled) {
-        tabPane.setEnabledAt(tab.ordinal(), enabled);
-    }
 
-    public void addSwimmerTab(SwimmerSelectionPanel ssp) {
-        teamTabs.addTab(ssp.getTitle(), ssp);
+    private void setTabEnabled(Tab tab, boolean enabled) {
+        tabPane.setEnabledAt(tab.ordinal(), enabled);
     }
 
     private void registerListeners() {
         meetSetup.addMeetSetupPanelListener(new MeetSetupPanelListener() {
+
             public void meetSetupSaved(Meet meet) {
-                fireMeetSetupSaved(meet);
+                controller.saveMeet(meet);
+                if (getSetupStatusPercent() < 50) {
+                    setSetupStatus(Color.GREEN, 50);
+                }
+                setTabEnabled(SynchroFrame.Tab.SWIMMERS, true);
+                updateSwimmerTab(meet);
             }
         });
+    }
+
+    private void updateSwimmerTab(Meet meet) {
+        teamTabs.removeAll();
+        teamTabs.add(meet.getHomeTeam().getTeamId(),new SwimmerSelectionPanel(meet.getHomeTeam(),controller.getSwimmers(meet.getHomeTeam())));
+        for(Team opponent:meet.getOpponents()) {
+            teamTabs.add(opponent.getTeamId(),new SwimmerSelectionPanel(opponent,controller.getSwimmers(opponent)));
+        }
     }
 
     /** This method is called from within the constructor to
@@ -177,7 +166,7 @@ public class SynchroFrame extends javax.swing.JFrame {
                 .addGroup(swimmersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(swimmersLayout.createSequentialGroup()
                         .addComponent(saveButton)
-                        .addContainerGap(882, Short.MAX_VALUE))
+                        .addContainerGap(745, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, swimmersLayout.createSequentialGroup()
                         .addComponent(teamTabs, javax.swing.GroupLayout.DEFAULT_SIZE, 733, Short.MAX_VALUE)
                         .addGap(208, 208, 208))))
@@ -217,7 +206,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 951, Short.MAX_VALUE)
+            .addGap(0, 814, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -238,7 +227,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         routineScore.setLayout(routineScoreLayout);
         routineScoreLayout.setHorizontalGroup(
             routineScoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 951, Short.MAX_VALUE)
+            .addGap(0, 814, Short.MAX_VALUE)
         );
         routineScoreLayout.setVerticalGroup(
             routineScoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -251,7 +240,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         reportPanel.setLayout(reportPanelLayout);
         reportPanelLayout.setHorizontalGroup(
             reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 951, Short.MAX_VALUE)
+            .addGap(0, 814, Short.MAX_VALUE)
         );
         reportPanelLayout.setVerticalGroup(
             reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -260,7 +249,7 @@ public class SynchroFrame extends javax.swing.JFrame {
 
         tabPane.addTab("Reports", reportPanel);
 
-        getContentPane().add(tabPane, java.awt.BorderLayout.LINE_START);
+        getContentPane().add(tabPane, java.awt.BorderLayout.CENTER);
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
@@ -367,13 +356,15 @@ public class SynchroFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_maintenanceMenuItemActionPerformed
 
     private void tabPaneStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabPaneStateChanged
-        fireTabChanged();
     }//GEN-LAST:event_tabPaneStateChanged
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
-        fireSwimmersSaved();
-    }//GEN-LAST:event_saveButtonActionPerformed
+        setSetupStatus(Color.GREEN, 100);
+        setTabEnabled(SynchroFrame.Tab.FIGURES, true);
+        setTabEnabled(SynchroFrame.Tab.ROUTINES, true);
+        setTabEnabled(SynchroFrame.Tab.REPORTS, true);
 
+    }//GEN-LAST:event_saveButtonActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.JMenuItem contentsMenuItem;
@@ -415,5 +406,4 @@ public class SynchroFrame extends javax.swing.JFrame {
     private javax.swing.JTabbedPane tabPane;
     private javax.swing.JTabbedPane teamTabs;
     // End of variables declaration//GEN-END:variables
-
 }

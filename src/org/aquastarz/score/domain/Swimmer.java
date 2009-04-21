@@ -37,6 +37,7 @@ import javax.persistence.Transient;
 @Table(name = "swimmer")
 @NamedQueries({@NamedQuery(name = "Swimmer.findAll", query = "SELECT s FROM Swimmer s"), @NamedQuery(name = "Swimmer.findBySwimmerId", query = "SELECT s FROM Swimmer s WHERE s.swimmerId = :swimmerId"), @NamedQuery(name = "Swimmer.findByFirstName", query = "SELECT s FROM Swimmer s WHERE s.firstName = :firstName"), @NamedQuery(name = "Swimmer.findByLastName", query = "SELECT s FROM Swimmer s WHERE s.lastName = :lastName")})
 public class Swimmer implements Serializable {
+
     @Transient
     private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
     private static final long serialVersionUID = 1L;
@@ -142,7 +143,7 @@ public class Swimmer implements Serializable {
 
     @Override
     public String toString() {
-        return "org.aquastarz.score.domain.Swimmer[swimmerId=" + swimmerId + "]";
+        return "#" + swimmerId + " " + lastName + ", " + firstName + " (" + level.getLevelId() + ")";
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -152,5 +153,4 @@ public class Swimmer implements Serializable {
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         changeSupport.removePropertyChangeListener(listener);
     }
-
 }

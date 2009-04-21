@@ -22,9 +22,10 @@
  *
  * Created on Apr 18, 2009, 2:19:57 PM
  */
-
 package org.aquastarz.score.gui;
 
+import java.awt.Dimension;
+import java.awt.Rectangle;
 import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -37,13 +38,13 @@ import org.aquastarz.score.domain.Meet;
  */
 public class MeetSelectionDialog extends javax.swing.JDialog {
 
-    boolean cancelled=false;
+    boolean cancelled = false;
 
     /** Creates new form MeetSelectionDialog */
     public MeetSelectionDialog(List<Meet> meets, java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        fillCombo(meetCombo,meets);
+        fillCombo(meetCombo, meets);
     }
 
     /** This method is called from within the constructor to
@@ -63,6 +64,17 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
         cancelButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("SynchroScore");
+        setAlwaysOnTop(true);
+        setLocationByPlatform(true);
+        setModal(true);
+        setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL);
+        setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         buttonGroup1.add(newMeetButton);
         newMeetButton.setText("New Meet");
@@ -126,32 +138,37 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_okButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        cancelled = true;
         setVisible(false);
-        cancelled=true;
     }//GEN-LAST:event_cancelButtonActionPerformed
 
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        cancelled = true;
+    }//GEN-LAST:event_formWindowClosing
+
     /**
-    * @param args the command line arguments
-    */
+     * @param args the command line arguments
+     */
     public static Meet selectMeet(final List<Meet> meets) {
-    //    java.awt.EventQueue.invokeLater(new Runnable() {
-    //        public void run() {
-                MeetSelectionDialog dialog = new MeetSelectionDialog(meets,new javax.swing.JFrame(), true);
-                dialog.setVisible(true);
-    //        }
-    //    });
+        //    java.awt.EventQueue.invokeLater(new Runnable() {
+        //        public void run() {
+        MeetSelectionDialog dialog = new MeetSelectionDialog(meets, new javax.swing.JFrame(), true);
+        //dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+        //        }
+        //    });
         return dialog.getSelectedMeet();
     }
 
     private Meet getSelectedMeet() {
-        if(cancelled) return null;
-        else if(newMeetButton.isSelected()) {
-            Meet selectedMeet=new Meet();
+        if (cancelled) {
+            return null;
+        } else if (newMeetButton.isSelected()) {
+            Meet selectedMeet = new Meet();
             selectedMeet.setName("Mock Meet");
             selectedMeet.setDate(new Date());
             return selectedMeet;
-        }
-        else if(existingMeetButton.isSelected()) {
+        } else if (existingMeetButton.isSelected()) {
             return (Meet) meetCombo.getSelectedItem();
         }
 
@@ -164,17 +181,15 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
             cbm.addElement(m);
         }
         cb.setModel(cbm);
-        if(meets.size()==0) {
+        if (meets.size() == 0) {
             cb.setEnabled(false);
             existingMeetButton.setEnabled(false);
             newMeetButton.setSelected(true);
-        }
-        else {
+        } else {
             cb.setSelectedItem(meets.get(0));
             existingMeetButton.setSelected(true);
         }
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton cancelButton;
@@ -183,5 +198,4 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
     private javax.swing.JRadioButton newMeetButton;
     private javax.swing.JButton okButton;
     // End of variables declaration//GEN-END:variables
-
 }
