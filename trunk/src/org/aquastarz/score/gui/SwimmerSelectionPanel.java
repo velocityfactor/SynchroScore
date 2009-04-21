@@ -41,7 +41,7 @@ public class SwimmerSelectionPanel extends javax.swing.JPanel {
 
         checkListItems = new Vector<CheckListItem<Swimmer>>();
         for (Swimmer swimmer : roster) {
-            checkListItems.add(new CheckListItem(swimmer, swimmer.getLastName()+", "+swimmer.getFirstName()+" ("+swimmer.getLevel()+")"));
+            checkListItems.add(new CheckListItem<Swimmer>(swimmer, swimmer.toString()));
         }
         swimmerList.setListData(checkListItems);
 
