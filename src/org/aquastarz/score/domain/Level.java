@@ -113,7 +113,7 @@ public class Level implements Serializable {
 
     @Override
     public String toString() {
-        return "org.aquastarz.score.domain.Level[levelId=" + levelId + "]";
+        return levelId;
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
