@@ -51,7 +51,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
 
     private void fireSavedEvent() {
         for(MeetSetupPanelListener listener:listeners) {
-            listener.meetSetupSaved(meet);
+            listener.meetSetupSaved();
         }
     }
 
