@@ -24,9 +24,9 @@
  */
 package org.aquastarz.score.gui;
 
-import java.awt.Dimension;
-import java.awt.Rectangle;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
@@ -187,9 +187,27 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
             newMeetButton.setSelected(true);
         } else {
             cb.setSelectedItem(meets.get(0));
-            existingMeetButton.setSelected(true);
+            if (isToday(meets.get(0).getDate())) {
+                existingMeetButton.setSelected(true);
+            }
+            else {
+                newMeetButton.setSelected(true);
+            }
         }
     }
+
+    private boolean isToday(Date inp) {
+
+        Calendar cal1 = new GregorianCalendar();
+        Calendar cal2 = new GregorianCalendar();
+
+        cal1.setTime(new Date());
+        cal2.setTime(inp);
+
+        return ((cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)) &&
+                (cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)));
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton cancelButton;

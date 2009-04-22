@@ -20,109 +20,107 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="saveButton" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="882" max="32767" attributes="0"/>
-          </Group>
           <Group type="102" attributes="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="10" pref="10" max="10" attributes="0"/>
-                      <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="saveButton" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="meetName" min="-2" pref="564" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel9" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel11" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel10" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel12" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel13" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel19" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel20" alignment="0" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jLabel7" alignment="0" min="-2" max="-2" attributes="1"/>
-                          <Component id="noviceFigNum1" alignment="0" min="-2" pref="39" max="-2" attributes="1"/>
-                          <Component id="noviceFigNum2" alignment="0" min="-2" pref="39" max="-2" attributes="1"/>
-                          <Component id="noviceFigNum4" alignment="0" min="-2" pref="39" max="-2" attributes="1"/>
-                          <Component id="noviceFigNum3" alignment="0" min="-2" pref="39" max="-2" attributes="1"/>
-                          <Component id="jLabel14" alignment="0" min="-2" max="-2" attributes="1"/>
-                          <Component id="intFigNum1" alignment="0" min="-2" pref="39" max="-2" attributes="1"/>
-                          <Component id="intFigNum2" alignment="0" min="-2" pref="39" max="-2" attributes="1"/>
-                          <Component id="intFigNum4" alignment="0" min="-2" pref="39" max="-2" attributes="1"/>
-                          <Component id="intFigNum3" alignment="0" min="-2" pref="39" max="-2" attributes="1"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jLabel6" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="noviceDD1" alignment="0" min="-2" pref="36" max="-2" attributes="0"/>
-                          <Component id="noviceDD2" alignment="0" min="-2" pref="36" max="-2" attributes="0"/>
-                          <Component id="noviceDD4" alignment="0" min="-2" pref="36" max="-2" attributes="0"/>
-                          <Component id="noviceDD3" alignment="0" min="-2" pref="36" max="-2" attributes="0"/>
-                          <Component id="jLabel15" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="intDD1" alignment="0" min="-2" pref="36" max="-2" attributes="0"/>
-                          <Component id="intDD2" alignment="0" min="-2" pref="36" max="-2" attributes="0"/>
-                          <Component id="intDD4" alignment="0" min="-2" pref="36" max="-2" attributes="0"/>
-                          <Component id="intDD3" alignment="0" min="-2" pref="36" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="intFigName4" max="32767" attributes="1"/>
-                          <Component id="intFigName3" alignment="0" max="32767" attributes="1"/>
-                          <Component id="intFigName2" alignment="0" max="32767" attributes="1"/>
-                          <Component id="intFigName1" alignment="0" max="32767" attributes="1"/>
-                          <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel16" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel17" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="noviceFigName1" alignment="0" max="32767" attributes="1"/>
-                          <Component id="noviceFigName4" alignment="0" pref="186" max="32767" attributes="1"/>
-                          <Component id="noviceFigName3" alignment="0" max="32767" attributes="1"/>
-                          <Component id="noviceFigName2" alignment="0" max="32767" attributes="1"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jLabel8" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="eightAndUnder1" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="eightAndUnder2" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="eightAndUnder4" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="eightAndUnder3" alignment="0" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jLabel22" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="regularMeetButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="champsButton" min="-2" max="-2" attributes="0"/>
-                  </Group>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Component id="meetDate" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="jLabel21" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="homeTeam" alignment="0" pref="215" max="32767" attributes="1"/>
-                          <Component id="jLabel18" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jScrollPane1" alignment="0" min="0" pref="0" max="32767" attributes="1"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="10" pref="10" max="10" attributes="0"/>
+                              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="meetName" min="-2" pref="564" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel9" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel11" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel10" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel12" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel13" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel19" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel20" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jLabel7" alignment="0" min="-2" max="-2" attributes="1"/>
+                                  <Component id="noviceFigNum1" alignment="0" min="-2" pref="39" max="-2" attributes="1"/>
+                                  <Component id="noviceFigNum2" alignment="0" min="-2" pref="39" max="-2" attributes="1"/>
+                                  <Component id="noviceFigNum4" alignment="0" min="-2" pref="39" max="-2" attributes="1"/>
+                                  <Component id="noviceFigNum3" alignment="0" min="-2" pref="39" max="-2" attributes="1"/>
+                                  <Component id="jLabel14" alignment="0" min="-2" max="-2" attributes="1"/>
+                                  <Component id="intFigNum1" alignment="0" min="-2" pref="39" max="-2" attributes="1"/>
+                                  <Component id="intFigNum2" alignment="0" min="-2" pref="39" max="-2" attributes="1"/>
+                                  <Component id="intFigNum4" alignment="0" min="-2" pref="39" max="-2" attributes="1"/>
+                                  <Component id="intFigNum3" alignment="0" min="-2" pref="39" max="-2" attributes="1"/>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jLabel6" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="noviceDD1" alignment="0" min="-2" pref="36" max="-2" attributes="0"/>
+                                  <Component id="noviceDD2" alignment="0" min="-2" pref="36" max="-2" attributes="0"/>
+                                  <Component id="noviceDD4" alignment="0" min="-2" pref="36" max="-2" attributes="0"/>
+                                  <Component id="noviceDD3" alignment="0" min="-2" pref="36" max="-2" attributes="0"/>
+                                  <Component id="jLabel15" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="intDD1" alignment="0" min="-2" pref="36" max="-2" attributes="0"/>
+                                  <Component id="intDD2" alignment="0" min="-2" pref="36" max="-2" attributes="0"/>
+                                  <Component id="intDD4" alignment="0" min="-2" pref="36" max="-2" attributes="0"/>
+                                  <Component id="intDD3" alignment="0" min="-2" pref="36" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="intFigName4" max="32767" attributes="1"/>
+                                  <Component id="intFigName3" alignment="0" max="32767" attributes="1"/>
+                                  <Component id="intFigName2" alignment="0" max="32767" attributes="1"/>
+                                  <Component id="intFigName1" alignment="0" max="32767" attributes="1"/>
+                                  <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel16" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel17" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="noviceFigName1" alignment="0" max="32767" attributes="1"/>
+                                  <Component id="noviceFigName4" alignment="0" pref="186" max="32767" attributes="1"/>
+                                  <Component id="noviceFigName3" alignment="0" max="32767" attributes="1"/>
+                                  <Component id="noviceFigName2" alignment="0" max="32767" attributes="1"/>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jLabel8" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="eightAndUnder1" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="eightAndUnder2" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="eightAndUnder4" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="eightAndUnder3" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jLabel22" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="regularMeetButton" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="champsButton" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
-                      <EmptySpace min="-2" pref="156" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="meetDate" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="jLabel21" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="homeTeam" alignment="0" pref="215" max="32767" attributes="1"/>
+                              <Component id="jLabel18" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jScrollPane1" alignment="0" min="0" pref="0" max="32767" attributes="1"/>
+                          </Group>
+                      </Group>
                   </Group>
               </Group>
+              <EmptySpace pref="156" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
