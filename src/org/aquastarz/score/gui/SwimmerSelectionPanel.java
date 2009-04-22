@@ -19,6 +19,8 @@
 // </editor-fold>
 package org.aquastarz.score.gui;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 import javax.swing.ListSelectionModel;
@@ -27,21 +29,17 @@ import org.aquastarz.score.domain.Team;
 
 public class SwimmerSelectionPanel extends javax.swing.JPanel {
 
-    Team team;
-    List<Swimmer> roster;
-    Vector<CheckListItem<Swimmer>> checkListItems;
     /** Creates new form SwimmerSelectionPanel */
-    public SwimmerSelectionPanel(Team team, List<Swimmer> roster) {
-        this.team=team;
-        this.roster=roster;
-
+    public SwimmerSelectionPanel(Team team, List<Swimmer> roster, Collection<Swimmer> participatingSwimmers) {
         initComponents();
 
-        teamNameLabel.setText("Swimmers for "+team.getName());
+        teamNameLabel.setText("Participating swimmers for "+team.getName()+":");
 
-        checkListItems = new Vector<CheckListItem<Swimmer>>();
+        Vector<CheckListItem<Swimmer>> checkListItems = new Vector<CheckListItem<Swimmer>>();
         for (Swimmer swimmer : roster) {
-            checkListItems.add(new CheckListItem<Swimmer>(swimmer, swimmer.toString()));
+            CheckListItem<Swimmer> item = new CheckListItem<Swimmer>(swimmer, swimmer.toString());
+            if(participatingSwimmers==null || participatingSwimmers.contains(swimmer)) item.setSelected(true);
+            checkListItems.add(item);
         }
         swimmerList.setListData(checkListItems);
 
@@ -53,12 +51,18 @@ public class SwimmerSelectionPanel extends javax.swing.JPanel {
         swimmerList.addKeyListener(lst);
     }
 
-    public String getTitle() {
-        return team.getTeamId();
+    public Collection<Swimmer> getSelectedSwimmers() {
+        ArrayList<Swimmer> swimmers=new ArrayList<Swimmer>();
+        for(int i=0;i<swimmerList.getModel().getSize();i++) {
+            CheckListItem<Swimmer> item = (CheckListItem<Swimmer>)swimmerList.getModel().getElementAt(i);
+            if(item.isSelected()) swimmers.add(item.getItem());
+        }
+        return swimmers;
     }
 
     private void setAll(boolean selected) {
-        for(CheckListItem<Swimmer> item:checkListItems) {
+        for(int i=0;i<swimmerList.getModel().getSize();i++) {
+            CheckListItem<Swimmer> item = (CheckListItem<Swimmer>)swimmerList.getModel().getElementAt(i);
             item.setSelected(selected);
         }
         swimmerList.invalidate();

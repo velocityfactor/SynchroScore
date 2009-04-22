@@ -26,5 +26,5 @@ import org.aquastarz.score.domain.Meet;
  * @author Shayne Hughes <velocityfactor@gmail.com>
  */
 public interface MeetSetupPanelListener {
-    public void meetSetupSaved(Meet meet);
+    public void meetSetupSaved();
 }

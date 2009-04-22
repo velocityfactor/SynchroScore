@@ -90,4 +90,28 @@ public class ScoreController {
         List<Swimmer> swimmers = swimmerQuery.getResultList();
         return swimmers;
     }
+
+    public boolean isMeetSetupValid(Meet meet) {
+        boolean valid=true;
+        if(meet.getName()==null || meet.getName().length()<1) valid=false;
+        if(meet.getDate()==null) valid=false;
+        if(meet.getType()!='R' && meet.getType()!='C') valid=false;
+        if(meet.getHomeTeam()==null) valid=false;
+        if(meet.getOpponents()==null || meet.getOpponents().size()<1) valid=false;
+        if(meet.getNov1Figure()==null) valid=false;
+        if(meet.getNov2Figure()==null) valid=false;
+        if(meet.getNov3Figure()==null) valid=false;
+        if(meet.getNov4Figure()==null) valid=false;
+        if(meet.getInt1Figure()==null) valid=false;
+        if(meet.getInt2Figure()==null) valid=false;
+        if(meet.getInt3Figure()==null) valid=false;
+        if(meet.getInt4Figure()==null) valid=false;
+        if(meet.getEu1Figure()==null) valid=false;
+        if(meet.getEu2Figure()==null) valid=false;
+        return valid;
+    }
+
+    public boolean hasSwimmers(Meet meet) {
+        return meet.getSwimmers()!=null && meet.getSwimmers().size()>0;
+    }
 }
