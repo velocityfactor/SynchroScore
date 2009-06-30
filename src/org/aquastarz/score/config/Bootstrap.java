@@ -21,9 +21,7 @@ package org.aquastarz.score.config;
 
 import org.aquastarz.score.domain.*;
 import java.math.BigDecimal;
-import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import org.aquastarz.score.ScoreApp;
 
 public class Bootstrap {
@@ -33,6 +31,8 @@ public class Bootstrap {
 
         entityManager.getTransaction().begin();
 
+        entityManager.createQuery("delete from FigureScore").executeUpdate();
+        entityManager.createQuery("delete from Meet").executeUpdate();
         entityManager.createQuery("delete from Swimmer").executeUpdate();
         entityManager.createQuery("delete from Level").executeUpdate();
         entityManager.createQuery("delete from Team").executeUpdate();
@@ -70,16 +70,16 @@ public class Bootstrap {
         entityManager.persist(ros);
         entityManager.persist(sun);
 
-        entityManager.persist(new Figure("101", new BigDecimal(1.6), "Ballet Leg, R/L"));
-        entityManager.persist(new Figure("311", new BigDecimal(1.8), "Kip"));
-        entityManager.persist(new Figure("360", new BigDecimal(2.1), "Walkover, Front"));
-        entityManager.persist(new Figure("349", new BigDecimal(1.8), "Tower"));
-        entityManager.persist(new Figure("342", new BigDecimal(2.1), "Heron"));
-        entityManager.persist(new Figure("316", new BigDecimal(2.4), "Kip, Split, Walkout"));
-        entityManager.persist(new Figure("140d", new BigDecimal(2.5), "Flamingo, Bent Knee, Spin 180"));
-        entityManager.persist(new Figure("345", new BigDecimal(2.2), "Ariana"));
-        entityManager.persist(new Figure("350", new BigDecimal(2.2), "Minerva"));
-        entityManager.persist(new Figure("240", new BigDecimal(2.2), "Albatross"));
+        entityManager.persist(new Figure("101", new BigDecimal("1.6"), "Ballet Leg, R/L"));
+        entityManager.persist(new Figure("311", new BigDecimal("1.8"), "Kip"));
+        entityManager.persist(new Figure("360", new BigDecimal("2.1"), "Walkover, Front"));
+        entityManager.persist(new Figure("349", new BigDecimal("1.8"), "Tower"));
+        entityManager.persist(new Figure("342", new BigDecimal("2.1"), "Heron"));
+        entityManager.persist(new Figure("316", new BigDecimal("2.4"), "Kip, Split, Walkout"));
+        entityManager.persist(new Figure("140d", new BigDecimal("2.5"), "Flamingo, Bent Knee, Spin 180"));
+        entityManager.persist(new Figure("345", new BigDecimal("2.2"), "Ariana"));
+        entityManager.persist(new Figure("350", new BigDecimal("2.2"), "Minerva"));
+        entityManager.persist(new Figure("240", new BigDecimal("2.2"), "Albatross"));
 
         entityManager.getTransaction().commit();
     }
@@ -87,7 +87,6 @@ public class Bootstrap {
     public static void loadSampleSwimmers() {
         EntityManager entityManager = ScoreApp.getEntityManager();
 
-        entityManager.getTransaction().begin();
 
         saveSwimmer(entityManager,1, "Peauroi", "Elise", "I15-16", "DAV");
         saveSwimmer(entityManager,2, "Eernisse", "Jessylyn", "I15-16", "DAV");
@@ -276,7 +275,6 @@ public class Bootstrap {
         saveSwimmer(entityManager,185, "Leash", "Danielle", "N13-14", "FEC");
         saveSwimmer(entityManager,186, "Frazier", "Helena", "N9-10", "DAV");
 
-        entityManager.getTransaction().commit();
     }
 
     private static void saveSwimmer(EntityManager entityManager, Integer swimmerId, String lastName, String firstName, String levelId, String teamId) {
@@ -288,6 +286,8 @@ public class Bootstrap {
         Level level=(Level)entityManager.createNamedQuery("Level.findByLevelId").setParameter("levelId", levelId).getSingleResult();
         swimmer.setLevel(level);
 
+        entityManager.getTransaction().begin();
         entityManager.persist(swimmer);
+        entityManager.getTransaction().commit();
     }
 }

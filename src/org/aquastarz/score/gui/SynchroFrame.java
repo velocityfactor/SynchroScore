@@ -95,6 +95,7 @@ public class SynchroFrame extends javax.swing.JFrame {
             public void meetSetupSaved() {
                 controller.saveMeet(meet);
                 updateStatus();
+                //TODO show error if meet set not complete
             }
         });
     }
@@ -394,6 +395,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         meet.setSwimmers(participatingSwimmers);
         controller.saveMeet(meet);
         updateStatus();
+        //TODO show errors if no swimmers selected
     }//GEN-LAST:event_saveSwimmersButtonActionPerformed
 
     private void saveFigureScoreButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFigureScoreButtonActionPerformed

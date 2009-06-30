@@ -21,6 +21,7 @@ package org.aquastarz.score.domain;
 
 import java.io.Serializable;
 import java.text.DateFormat;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
@@ -35,6 +36,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -57,7 +59,7 @@ public class Meet implements Serializable {
         this.opponents = opponents;
     }
 
-    List<Swimmer> swimmers = new Vector();
+    List<Swimmer> swimmers = new Vector<Swimmer>();
     @ManyToMany
     public List<Swimmer> getSwimmers() {
         return swimmers;
@@ -245,6 +247,16 @@ public class Meet implements Serializable {
 
     public void setNov2Figure(Figure nov2Figure) {
         this.nov2Figure = nov2Figure;
+    }
+
+    private Collection<FigureScore> figureScores = new Vector<FigureScore>();
+    @OneToMany(mappedBy = "meet", targetEntity = FigureScore.class)
+    public Collection<FigureScore> getFigureScores() {
+        return figureScores;
+    }
+
+    public void setFigureScores(Collection<FigureScore> figureScores) {
+        this.figureScores = figureScores;
     }
 
     @Override
