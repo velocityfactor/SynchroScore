@@ -19,12 +19,21 @@
 // </editor-fold>
 package org.aquastarz.score.gui;
 
+import java.util.Collection;
+import java.util.List;
+import org.aquastarz.score.domain.Figure;
+import org.aquastarz.score.domain.FigureScore;
+
 public class FigureScorePanel extends javax.swing.JPanel {
 
     /** Creates new form FigureScorePanel */
     public FigureScorePanel() {
         initComponents();
         setEditableRow(0);
+    }
+
+    public void setData(List<Figure> figures, Collection<FigureScore> figureScores) {
+        
     }
 
     /** This method is called from within the constructor to
@@ -36,10 +45,8 @@ public class FigureScorePanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
-        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         stationSelected = new javax.swing.ButtonGroup();
-        figureScoreHolder = new org.aquastarz.score.gui.FigureScoreBean();
         station1Button = new javax.swing.JRadioButton();
         station2Button = new javax.swing.JRadioButton();
         station3Button = new javax.swing.JRadioButton();
@@ -157,18 +164,11 @@ public class FigureScorePanel extends javax.swing.JPanel {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         add(station4Button, gridBagConstraints);
-
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureScoreHolder, org.jdesktop.beansbinding.ELProperty.create("${scoreS1J1}"), scoreS1J1, org.jdesktop.beansbinding.BeanProperty.create("text_ON_ACTION_OR_FOCUS_LOST"));
-        bindingGroup.addBinding(binding);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         add(scoreS1J1, gridBagConstraints);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureScoreHolder, org.jdesktop.beansbinding.ELProperty.create("${scoreS1J2}"), scoreS1J2, org.jdesktop.beansbinding.BeanProperty.create("text_ON_ACTION_OR_FOCUS_LOST"));
-        bindingGroup.addBinding(binding);
 
         scoreS1J2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -180,27 +180,16 @@ public class FigureScorePanel extends javax.swing.JPanel {
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         add(scoreS1J2, gridBagConstraints);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureScoreHolder, org.jdesktop.beansbinding.ELProperty.create("${scoreS1J3}"), scoreS1J3, org.jdesktop.beansbinding.BeanProperty.create("text_ON_ACTION_OR_FOCUS_LOST"));
-        bindingGroup.addBinding(binding);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         add(scoreS1J3, gridBagConstraints);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureScoreHolder, org.jdesktop.beansbinding.ELProperty.create("${scoreS1J4}"), scoreS1J4, org.jdesktop.beansbinding.BeanProperty.create("text_ON_ACTION_OR_FOCUS_LOST"));
-        bindingGroup.addBinding(binding);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         add(scoreS1J4, gridBagConstraints);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureScoreHolder, org.jdesktop.beansbinding.ELProperty.create("${scoreS1J5}"), scoreS1J5, org.jdesktop.beansbinding.BeanProperty.create("text_ON_ACTION_OR_FOCUS_LOST"));
-        bindingGroup.addBinding(binding);
 
         scoreS1J5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -214,10 +203,6 @@ public class FigureScorePanel extends javax.swing.JPanel {
         add(scoreS1J5, gridBagConstraints);
 
         penalty2S1.setText("2 Point");
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureScoreHolder, org.jdesktop.beansbinding.ELProperty.create("${penalty2S1}"), penalty2S1, org.jdesktop.beansbinding.BeanProperty.create("selected"));
-        bindingGroup.addBinding(binding);
-
         penalty2S1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 penalty2S1ActionPerformed(evt);
@@ -230,10 +215,6 @@ public class FigureScorePanel extends javax.swing.JPanel {
         add(penalty2S1, gridBagConstraints);
 
         penalty1S1.setText("1 Point");
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureScoreHolder, org.jdesktop.beansbinding.ELProperty.create("${penalty1S1}"), penalty1S1, org.jdesktop.beansbinding.BeanProperty.create("selected"));
-        bindingGroup.addBinding(binding);
-
         penalty1S1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 penalty1S1ActionPerformed(evt);
@@ -245,10 +226,6 @@ public class FigureScorePanel extends javax.swing.JPanel {
         add(penalty1S1, gridBagConstraints);
 
         penaltyHS1.setText("1/2 Point");
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureScoreHolder, org.jdesktop.beansbinding.ELProperty.create("${penaltyHS1}"), penaltyHS1, org.jdesktop.beansbinding.BeanProperty.create("selected"));
-        bindingGroup.addBinding(binding);
-
         penaltyHS1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 penaltyHS1ActionPerformed(evt);
@@ -259,41 +236,29 @@ public class FigureScorePanel extends javax.swing.JPanel {
         gridBagConstraints.gridy = 1;
         add(penaltyHS1, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureScoreHolder, org.jdesktop.beansbinding.ELProperty.create("${raw1}"), raw1, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
+        raw1.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 9;
         gridBagConstraints.gridy = 1;
         add(raw1, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureScoreHolder, org.jdesktop.beansbinding.ELProperty.create("${dd1}"), dd1, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
+        dd1.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 10;
         gridBagConstraints.gridy = 1;
         add(dd1, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureScoreHolder, org.jdesktop.beansbinding.ELProperty.create("${total1}"), total1, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
+        total1.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 11;
         gridBagConstraints.gridy = 1;
         add(total1, gridBagConstraints);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureScoreHolder, org.jdesktop.beansbinding.ELProperty.create("${figure1}"), fig1, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 12;
         gridBagConstraints.gridy = 1;
         add(fig1, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureScoreHolder, org.jdesktop.beansbinding.ELProperty.create("${penalty1}"), pen1, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
+        pen1.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 13;
         gridBagConstraints.gridy = 1;
@@ -331,10 +296,6 @@ public class FigureScorePanel extends javax.swing.JPanel {
         add(scoreS2J5, gridBagConstraints);
 
         penalty2S2.setText("2 Point");
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureScoreHolder, org.jdesktop.beansbinding.ELProperty.create("${penalty2S2}"), penalty2S2, org.jdesktop.beansbinding.BeanProperty.create("selected"));
-        bindingGroup.addBinding(binding);
-
         penalty2S2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 penalty2S2ActionPerformed(evt);
@@ -347,10 +308,6 @@ public class FigureScorePanel extends javax.swing.JPanel {
         add(penalty2S2, gridBagConstraints);
 
         penalty1S2.setText("1 Point");
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureScoreHolder, org.jdesktop.beansbinding.ELProperty.create("${penalty1S2}"), penalty1S2, org.jdesktop.beansbinding.BeanProperty.create("selected"));
-        bindingGroup.addBinding(binding);
-
         penalty1S2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 penalty1S2ActionPerformed(evt);
@@ -362,10 +319,6 @@ public class FigureScorePanel extends javax.swing.JPanel {
         add(penalty1S2, gridBagConstraints);
 
         penaltyHS2.setText("1/2 Point");
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureScoreHolder, org.jdesktop.beansbinding.ELProperty.create("${penaltyHS2}"), penaltyHS2, org.jdesktop.beansbinding.BeanProperty.create("selected"));
-        bindingGroup.addBinding(binding);
-
         penaltyHS2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 penaltyHS2ActionPerformed(evt);
@@ -376,41 +329,29 @@ public class FigureScorePanel extends javax.swing.JPanel {
         gridBagConstraints.gridy = 2;
         add(penaltyHS2, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureScoreHolder, org.jdesktop.beansbinding.ELProperty.create("${raw2}"), raw2, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
+        raw2.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 9;
         gridBagConstraints.gridy = 2;
         add(raw2, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureScoreHolder, org.jdesktop.beansbinding.ELProperty.create("${dd2}"), dd2, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
+        dd2.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 10;
         gridBagConstraints.gridy = 2;
         add(dd2, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureScoreHolder, org.jdesktop.beansbinding.ELProperty.create("${total2}"), total2, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
+        total2.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 11;
         gridBagConstraints.gridy = 2;
         add(total2, gridBagConstraints);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureScoreHolder, org.jdesktop.beansbinding.ELProperty.create("${figure2}"), fig2, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 12;
         gridBagConstraints.gridy = 2;
         add(fig2, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureScoreHolder, org.jdesktop.beansbinding.ELProperty.create("${penalty2}"), pen2, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
+        pen2.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 13;
         gridBagConstraints.gridy = 2;
@@ -448,10 +389,6 @@ public class FigureScorePanel extends javax.swing.JPanel {
         add(scoreS3J5, gridBagConstraints);
 
         penalty2S3.setText("2 Point");
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureScoreHolder, org.jdesktop.beansbinding.ELProperty.create("${penalty2S3}"), penalty2S3, org.jdesktop.beansbinding.BeanProperty.create("selected"));
-        bindingGroup.addBinding(binding);
-
         penalty2S3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 penalty2S3ActionPerformed(evt);
@@ -464,10 +401,6 @@ public class FigureScorePanel extends javax.swing.JPanel {
         add(penalty2S3, gridBagConstraints);
 
         penalty1S3.setText("1 Point");
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureScoreHolder, org.jdesktop.beansbinding.ELProperty.create("${penalty1S3}"), penalty1S3, org.jdesktop.beansbinding.BeanProperty.create("selected"));
-        bindingGroup.addBinding(binding);
-
         penalty1S3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 penalty1S3ActionPerformed(evt);
@@ -479,10 +412,6 @@ public class FigureScorePanel extends javax.swing.JPanel {
         add(penalty1S3, gridBagConstraints);
 
         penaltyHS3.setText("1/2 Point");
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureScoreHolder, org.jdesktop.beansbinding.ELProperty.create("${penaltyHS3}"), penaltyHS3, org.jdesktop.beansbinding.BeanProperty.create("selected"));
-        bindingGroup.addBinding(binding);
-
         penaltyHS3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 penaltyHS3ActionPerformed(evt);
@@ -493,41 +422,29 @@ public class FigureScorePanel extends javax.swing.JPanel {
         gridBagConstraints.gridy = 3;
         add(penaltyHS3, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureScoreHolder, org.jdesktop.beansbinding.ELProperty.create("${raw3}"), raw3, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
+        raw3.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 9;
         gridBagConstraints.gridy = 3;
         add(raw3, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureScoreHolder, org.jdesktop.beansbinding.ELProperty.create("${dd3}"), dd3, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
+        dd3.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 10;
         gridBagConstraints.gridy = 3;
         add(dd3, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureScoreHolder, org.jdesktop.beansbinding.ELProperty.create("${total3}"), total3, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
+        total3.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 11;
         gridBagConstraints.gridy = 3;
         add(total3, gridBagConstraints);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureScoreHolder, org.jdesktop.beansbinding.ELProperty.create("${figure3}"), fig3, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 12;
         gridBagConstraints.gridy = 3;
         add(fig3, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureScoreHolder, org.jdesktop.beansbinding.ELProperty.create("${penalty3}"), pen3, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
+        pen3.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 13;
         gridBagConstraints.gridy = 3;
@@ -571,10 +488,6 @@ public class FigureScorePanel extends javax.swing.JPanel {
         add(scoreS4J5, gridBagConstraints);
 
         penalty2S4.setText("2 Point");
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureScoreHolder, org.jdesktop.beansbinding.ELProperty.create("${penalty2S4}"), penalty2S4, org.jdesktop.beansbinding.BeanProperty.create("selected"));
-        bindingGroup.addBinding(binding);
-
         penalty2S4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 penalty2S4ActionPerformed(evt);
@@ -587,10 +500,6 @@ public class FigureScorePanel extends javax.swing.JPanel {
         add(penalty2S4, gridBagConstraints);
 
         penalty1S4.setText("1 Point");
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureScoreHolder, org.jdesktop.beansbinding.ELProperty.create("${penalty1S4}"), penalty1S4, org.jdesktop.beansbinding.BeanProperty.create("selected"));
-        bindingGroup.addBinding(binding);
-
         penalty1S4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 penalty1S4ActionPerformed(evt);
@@ -602,10 +511,6 @@ public class FigureScorePanel extends javax.swing.JPanel {
         add(penalty1S4, gridBagConstraints);
 
         penaltyHS4.setText("1/2 Point");
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureScoreHolder, org.jdesktop.beansbinding.ELProperty.create("${penaltyHS4}"), penaltyHS4, org.jdesktop.beansbinding.BeanProperty.create("selected"));
-        bindingGroup.addBinding(binding);
-
         penaltyHS4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 penaltyHS4ActionPerformed(evt);
@@ -616,41 +521,29 @@ public class FigureScorePanel extends javax.swing.JPanel {
         gridBagConstraints.gridy = 4;
         add(penaltyHS4, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureScoreHolder, org.jdesktop.beansbinding.ELProperty.create("${raw4}"), raw4, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
+        raw4.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 9;
         gridBagConstraints.gridy = 4;
         add(raw4, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureScoreHolder, org.jdesktop.beansbinding.ELProperty.create("${dd4}"), dd4, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
+        dd4.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 10;
         gridBagConstraints.gridy = 4;
         add(dd4, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureScoreHolder, org.jdesktop.beansbinding.ELProperty.create("${total4}"), total4, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
+        total4.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 11;
         gridBagConstraints.gridy = 4;
         add(total4, gridBagConstraints);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureScoreHolder, org.jdesktop.beansbinding.ELProperty.create("${figure4}"), fig4, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 12;
         gridBagConstraints.gridy = 4;
         add(fig4, gridBagConstraints);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, figureScoreHolder, org.jdesktop.beansbinding.ELProperty.create("${penalty4}"), pen4, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
+        pen4.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 13;
         gridBagConstraints.gridy = 4;
@@ -748,8 +641,6 @@ public class FigureScorePanel extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 0);
         add(penaltyLabel, gridBagConstraints);
-
-        bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
 
     private void scoreS1J2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scoreS1J2ActionPerformed
@@ -930,7 +821,6 @@ public class FigureScorePanel extends javax.swing.JPanel {
     private javax.swing.JLabel fig3;
     private javax.swing.JLabel fig4;
     private javax.swing.JLabel figLabel;
-    private org.aquastarz.score.gui.FigureScoreBean figureScoreHolder;
     private javax.swing.JLabel judge1Label;
     private javax.swing.JLabel judge2Label;
     private javax.swing.JLabel judge3Label;
@@ -989,7 +879,6 @@ public class FigureScorePanel extends javax.swing.JPanel {
     private javax.swing.JLabel total3;
     private javax.swing.JLabel total4;
     private javax.swing.JLabel totalLabel;
-    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
 }
