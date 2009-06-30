@@ -4,8 +4,6 @@
   <NonVisualComponents>
     <Component class="javax.swing.ButtonGroup" name="stationSelected">
     </Component>
-    <Component class="org.aquastarz.score.gui.FigureScoreBean" name="figureScoreHolder">
-    </Component>
   </NonVisualComponents>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
@@ -87,11 +85,6 @@
       </Constraints>
     </Component>
     <Component class="javax.swing.JTextField" name="scoreS1J1">
-      <BindingProperties>
-        <BindingProperty name="text" source="figureScoreHolder" sourcePath="${scoreS1J1}" target="scoreS1J1" targetPath="text" updateStrategy="0" immediately="false">
-          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_ACTION_OR_FOCUS_LOST"/>
-        </BindingProperty>
-      </BindingProperties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
           <GridBagConstraints gridX="1" gridY="1" gridWidth="1" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -99,11 +92,6 @@
       </Constraints>
     </Component>
     <Component class="javax.swing.JTextField" name="scoreS1J2">
-      <BindingProperties>
-        <BindingProperty name="text" source="figureScoreHolder" sourcePath="${scoreS1J2}" target="scoreS1J2" targetPath="text" updateStrategy="0" immediately="false">
-          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_ACTION_OR_FOCUS_LOST"/>
-        </BindingProperty>
-      </BindingProperties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="scoreS1J2ActionPerformed"/>
       </Events>
@@ -114,11 +102,6 @@
       </Constraints>
     </Component>
     <Component class="javax.swing.JTextField" name="scoreS1J3">
-      <BindingProperties>
-        <BindingProperty name="text" source="figureScoreHolder" sourcePath="${scoreS1J3}" target="scoreS1J3" targetPath="text" updateStrategy="0" immediately="false">
-          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_ACTION_OR_FOCUS_LOST"/>
-        </BindingProperty>
-      </BindingProperties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
           <GridBagConstraints gridX="3" gridY="1" gridWidth="1" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -126,11 +109,6 @@
       </Constraints>
     </Component>
     <Component class="javax.swing.JTextField" name="scoreS1J4">
-      <BindingProperties>
-        <BindingProperty name="text" source="figureScoreHolder" sourcePath="${scoreS1J4}" target="scoreS1J4" targetPath="text" updateStrategy="0" immediately="false">
-          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_ACTION_OR_FOCUS_LOST"/>
-        </BindingProperty>
-      </BindingProperties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
           <GridBagConstraints gridX="4" gridY="1" gridWidth="1" gridHeight="1" fill="2" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -138,11 +116,6 @@
       </Constraints>
     </Component>
     <Component class="javax.swing.JTextField" name="scoreS1J5">
-      <BindingProperties>
-        <BindingProperty name="text" source="figureScoreHolder" sourcePath="${scoreS1J5}" target="scoreS1J5" targetPath="text" updateStrategy="0" immediately="false">
-          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_ACTION_OR_FOCUS_LOST"/>
-        </BindingProperty>
-      </BindingProperties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="scoreS1J5ActionPerformed"/>
       </Events>
@@ -156,9 +129,6 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="2 Point"/>
       </Properties>
-      <BindingProperties>
-        <BindingProperty name="selected" source="figureScoreHolder" sourcePath="${penalty2S1}" target="penalty2S1" targetPath="selected" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="penalty2S1ActionPerformed"/>
       </Events>
@@ -172,9 +142,6 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="1 Point"/>
       </Properties>
-      <BindingProperties>
-        <BindingProperty name="selected" source="figureScoreHolder" sourcePath="${penalty1S1}" target="penalty1S1" targetPath="selected" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="penalty1S1ActionPerformed"/>
       </Events>
@@ -188,9 +155,6 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="1/2 Point"/>
       </Properties>
-      <BindingProperties>
-        <BindingProperty name="selected" source="figureScoreHolder" sourcePath="${penaltyHS1}" target="penaltyHS1" targetPath="selected" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="penaltyHS1ActionPerformed"/>
       </Events>
@@ -201,9 +165,9 @@
       </Constraints>
     </Component>
     <Component class="javax.swing.JLabel" name="raw1">
-      <BindingProperties>
-        <BindingProperty name="text" source="figureScoreHolder" sourcePath="${raw1}" target="raw1" targetPath="text" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
+      <Properties>
+        <Property name="text" type="java.lang.String" value="0"/>
+      </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
           <GridBagConstraints gridX="9" gridY="1" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -211,9 +175,9 @@
       </Constraints>
     </Component>
     <Component class="javax.swing.JLabel" name="dd1">
-      <BindingProperties>
-        <BindingProperty name="text" source="figureScoreHolder" sourcePath="${dd1}" target="dd1" targetPath="text" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
+      <Properties>
+        <Property name="text" type="java.lang.String" value="0"/>
+      </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
           <GridBagConstraints gridX="10" gridY="1" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -221,9 +185,9 @@
       </Constraints>
     </Component>
     <Component class="javax.swing.JLabel" name="total1">
-      <BindingProperties>
-        <BindingProperty name="text" source="figureScoreHolder" sourcePath="${total1}" target="total1" targetPath="text" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
+      <Properties>
+        <Property name="text" type="java.lang.String" value="0"/>
+      </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
           <GridBagConstraints gridX="11" gridY="1" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -231,9 +195,6 @@
       </Constraints>
     </Component>
     <Component class="javax.swing.JLabel" name="fig1">
-      <BindingProperties>
-        <BindingProperty name="text" source="figureScoreHolder" sourcePath="${figure1}" target="fig1" targetPath="text" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
           <GridBagConstraints gridX="12" gridY="1" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -241,9 +202,9 @@
       </Constraints>
     </Component>
     <Component class="javax.swing.JLabel" name="pen1">
-      <BindingProperties>
-        <BindingProperty name="text" source="figureScoreHolder" sourcePath="${penalty1}" target="pen1" targetPath="text" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
+      <Properties>
+        <Property name="text" type="java.lang.String" value="0"/>
+      </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
           <GridBagConstraints gridX="13" gridY="1" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -292,9 +253,6 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="2 Point"/>
       </Properties>
-      <BindingProperties>
-        <BindingProperty name="selected" source="figureScoreHolder" sourcePath="${penalty2S2}" target="penalty2S2" targetPath="selected" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="penalty2S2ActionPerformed"/>
       </Events>
@@ -308,9 +266,6 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="1 Point"/>
       </Properties>
-      <BindingProperties>
-        <BindingProperty name="selected" source="figureScoreHolder" sourcePath="${penalty1S2}" target="penalty1S2" targetPath="selected" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="penalty1S2ActionPerformed"/>
       </Events>
@@ -324,9 +279,6 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="1/2 Point"/>
       </Properties>
-      <BindingProperties>
-        <BindingProperty name="selected" source="figureScoreHolder" sourcePath="${penaltyHS2}" target="penaltyHS2" targetPath="selected" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="penaltyHS2ActionPerformed"/>
       </Events>
@@ -337,9 +289,9 @@
       </Constraints>
     </Component>
     <Component class="javax.swing.JLabel" name="raw2">
-      <BindingProperties>
-        <BindingProperty name="text" source="figureScoreHolder" sourcePath="${raw2}" target="raw2" targetPath="text" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
+      <Properties>
+        <Property name="text" type="java.lang.String" value="0"/>
+      </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
           <GridBagConstraints gridX="9" gridY="2" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -347,9 +299,9 @@
       </Constraints>
     </Component>
     <Component class="javax.swing.JLabel" name="dd2">
-      <BindingProperties>
-        <BindingProperty name="text" source="figureScoreHolder" sourcePath="${dd2}" target="dd2" targetPath="text" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
+      <Properties>
+        <Property name="text" type="java.lang.String" value="0"/>
+      </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
           <GridBagConstraints gridX="10" gridY="2" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -357,9 +309,9 @@
       </Constraints>
     </Component>
     <Component class="javax.swing.JLabel" name="total2">
-      <BindingProperties>
-        <BindingProperty name="text" source="figureScoreHolder" sourcePath="${total2}" target="total2" targetPath="text" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
+      <Properties>
+        <Property name="text" type="java.lang.String" value="0"/>
+      </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
           <GridBagConstraints gridX="11" gridY="2" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -367,9 +319,6 @@
       </Constraints>
     </Component>
     <Component class="javax.swing.JLabel" name="fig2">
-      <BindingProperties>
-        <BindingProperty name="text" source="figureScoreHolder" sourcePath="${figure2}" target="fig2" targetPath="text" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
           <GridBagConstraints gridX="12" gridY="2" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -377,9 +326,9 @@
       </Constraints>
     </Component>
     <Component class="javax.swing.JLabel" name="pen2">
-      <BindingProperties>
-        <BindingProperty name="text" source="figureScoreHolder" sourcePath="${penalty2}" target="pen2" targetPath="text" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
+      <Properties>
+        <Property name="text" type="java.lang.String" value="0"/>
+      </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
           <GridBagConstraints gridX="13" gridY="2" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -428,9 +377,6 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="2 Point"/>
       </Properties>
-      <BindingProperties>
-        <BindingProperty name="selected" source="figureScoreHolder" sourcePath="${penalty2S3}" target="penalty2S3" targetPath="selected" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="penalty2S3ActionPerformed"/>
       </Events>
@@ -444,9 +390,6 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="1 Point"/>
       </Properties>
-      <BindingProperties>
-        <BindingProperty name="selected" source="figureScoreHolder" sourcePath="${penalty1S3}" target="penalty1S3" targetPath="selected" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="penalty1S3ActionPerformed"/>
       </Events>
@@ -460,9 +403,6 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="1/2 Point"/>
       </Properties>
-      <BindingProperties>
-        <BindingProperty name="selected" source="figureScoreHolder" sourcePath="${penaltyHS3}" target="penaltyHS3" targetPath="selected" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="penaltyHS3ActionPerformed"/>
       </Events>
@@ -473,9 +413,9 @@
       </Constraints>
     </Component>
     <Component class="javax.swing.JLabel" name="raw3">
-      <BindingProperties>
-        <BindingProperty name="text" source="figureScoreHolder" sourcePath="${raw3}" target="raw3" targetPath="text" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
+      <Properties>
+        <Property name="text" type="java.lang.String" value="0"/>
+      </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
           <GridBagConstraints gridX="9" gridY="3" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -483,9 +423,9 @@
       </Constraints>
     </Component>
     <Component class="javax.swing.JLabel" name="dd3">
-      <BindingProperties>
-        <BindingProperty name="text" source="figureScoreHolder" sourcePath="${dd3}" target="dd3" targetPath="text" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
+      <Properties>
+        <Property name="text" type="java.lang.String" value="0"/>
+      </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
           <GridBagConstraints gridX="10" gridY="3" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -493,9 +433,9 @@
       </Constraints>
     </Component>
     <Component class="javax.swing.JLabel" name="total3">
-      <BindingProperties>
-        <BindingProperty name="text" source="figureScoreHolder" sourcePath="${total3}" target="total3" targetPath="text" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
+      <Properties>
+        <Property name="text" type="java.lang.String" value="0"/>
+      </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
           <GridBagConstraints gridX="11" gridY="3" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -503,9 +443,6 @@
       </Constraints>
     </Component>
     <Component class="javax.swing.JLabel" name="fig3">
-      <BindingProperties>
-        <BindingProperty name="text" source="figureScoreHolder" sourcePath="${figure3}" target="fig3" targetPath="text" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
           <GridBagConstraints gridX="12" gridY="3" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -513,9 +450,9 @@
       </Constraints>
     </Component>
     <Component class="javax.swing.JLabel" name="pen3">
-      <BindingProperties>
-        <BindingProperty name="text" source="figureScoreHolder" sourcePath="${penalty3}" target="pen3" targetPath="text" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
+      <Properties>
+        <Property name="text" type="java.lang.String" value="0"/>
+      </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
           <GridBagConstraints gridX="13" gridY="3" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -567,9 +504,6 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="2 Point"/>
       </Properties>
-      <BindingProperties>
-        <BindingProperty name="selected" source="figureScoreHolder" sourcePath="${penalty2S4}" target="penalty2S4" targetPath="selected" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="penalty2S4ActionPerformed"/>
       </Events>
@@ -583,9 +517,6 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="1 Point"/>
       </Properties>
-      <BindingProperties>
-        <BindingProperty name="selected" source="figureScoreHolder" sourcePath="${penalty1S4}" target="penalty1S4" targetPath="selected" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="penalty1S4ActionPerformed"/>
       </Events>
@@ -599,9 +530,6 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="1/2 Point"/>
       </Properties>
-      <BindingProperties>
-        <BindingProperty name="selected" source="figureScoreHolder" sourcePath="${penaltyHS4}" target="penaltyHS4" targetPath="selected" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="penaltyHS4ActionPerformed"/>
       </Events>
@@ -612,9 +540,9 @@
       </Constraints>
     </Component>
     <Component class="javax.swing.JLabel" name="raw4">
-      <BindingProperties>
-        <BindingProperty name="text" source="figureScoreHolder" sourcePath="${raw4}" target="raw4" targetPath="text" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
+      <Properties>
+        <Property name="text" type="java.lang.String" value="0"/>
+      </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
           <GridBagConstraints gridX="9" gridY="4" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -622,9 +550,9 @@
       </Constraints>
     </Component>
     <Component class="javax.swing.JLabel" name="dd4">
-      <BindingProperties>
-        <BindingProperty name="text" source="figureScoreHolder" sourcePath="${dd4}" target="dd4" targetPath="text" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
+      <Properties>
+        <Property name="text" type="java.lang.String" value="0"/>
+      </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
           <GridBagConstraints gridX="10" gridY="4" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -632,9 +560,9 @@
       </Constraints>
     </Component>
     <Component class="javax.swing.JLabel" name="total4">
-      <BindingProperties>
-        <BindingProperty name="text" source="figureScoreHolder" sourcePath="${total4}" target="total4" targetPath="text" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
+      <Properties>
+        <Property name="text" type="java.lang.String" value="0"/>
+      </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
           <GridBagConstraints gridX="11" gridY="4" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -642,9 +570,6 @@
       </Constraints>
     </Component>
     <Component class="javax.swing.JLabel" name="fig4">
-      <BindingProperties>
-        <BindingProperty name="text" source="figureScoreHolder" sourcePath="${figure4}" target="fig4" targetPath="text" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
           <GridBagConstraints gridX="12" gridY="4" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>
@@ -652,9 +577,9 @@
       </Constraints>
     </Component>
     <Component class="javax.swing.JLabel" name="pen4">
-      <BindingProperties>
-        <BindingProperty name="text" source="figureScoreHolder" sourcePath="${penalty4}" target="pen4" targetPath="text" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
+      <Properties>
+        <Property name="text" type="java.lang.String" value="0"/>
+      </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
           <GridBagConstraints gridX="13" gridY="4" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>

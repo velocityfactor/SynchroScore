@@ -24,15 +24,18 @@ import java.awt.EventQueue;
 import java.beans.Beans;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.EntityManager;
 import javax.persistence.RollbackException;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import org.aquastarz.score.ScoreApp;
 import org.aquastarz.score.domain.Level;
 import org.aquastarz.score.domain.Team;
 
 public class SwimmerForm extends JPanel {
+    EntityManager entityManager = ScoreApp.getEntityManager();
     
     public SwimmerForm() {
         initComponents();
@@ -51,7 +54,6 @@ public class SwimmerForm extends JPanel {
     private void initComponents() {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        entityManager = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("synchroPU").createEntityManager();
         swimmerQuery = java.beans.Beans.isDesignTime() ? null : entityManager.createQuery("SELECT s FROM Swimmer s");
         swimmerList = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : swimmerQuery.getResultList();
         levelQuery = java.beans.Beans.isDesignTime() ? null : entityManager.createQuery("SELECT l FROM Level l");
@@ -328,7 +330,6 @@ public class SwimmerForm extends JPanel {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton deleteButton;
-    private javax.persistence.EntityManager entityManager;
     private javax.swing.JTextField firstNameField;
     private javax.swing.JLabel firstNameLabel;
     private javax.swing.JComboBox jComboBox1;
