@@ -23,31 +23,27 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
-@Table(name = "figure")
 @NamedQueries({@NamedQuery(name = "Figure.findAll", query = "SELECT f FROM Figure f"), @NamedQuery(name = "Figure.findByFigureId", query = "SELECT f FROM Figure f WHERE f.figureId = :figureId"), @NamedQuery(name = "Figure.findByDegreeOfDifficulty", query = "SELECT f FROM Figure f WHERE f.degreeOfDifficulty = :degreeOfDifficulty"), @NamedQuery(name = "Figure.findByName", query = "SELECT f FROM Figure f WHERE f.name = :name")})
 public class Figure implements Serializable {
     @Transient
     private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
     private static final long serialVersionUID = 1L;
+
     @Id
-    @Basic(optional = false)
-    @Column(name = "figureId", nullable = false, length = 10)
     private String figureId;
-    @Basic(optional = false)
-    @Column(name = "degreeOfDifficulty", nullable = false, precision = 2, scale = 1)
+
+    @Column(precision = 2, scale = 1)
     private BigDecimal degreeOfDifficulty;
-    @Basic(optional = false)
-    @Column(name = "name", nullable = false, length = 45)
+
+    @Column(length = 45)
     private String name;
 
     public Figure() {

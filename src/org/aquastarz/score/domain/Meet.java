@@ -21,12 +21,10 @@ package org.aquastarz.score.domain;
 
 import java.io.Serializable;
 import java.text.DateFormat;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
-import javax.persistence.Basic;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -37,38 +35,23 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 @Entity
-@Table(name = "meet")
-@NamedQueries({@NamedQuery(name = "Meet.findAll", query = "SELECT m FROM Meet m"), @NamedQuery(name = "Meet.findByMeetId", query = "SELECT m FROM Meet m WHERE m.meetId = :meetId"), @NamedQuery(name = "Meet.findByDate", query = "SELECT m FROM Meet m WHERE m.date = :date"), @NamedQuery(name = "Meet.findByName", query = "SELECT m FROM Meet m WHERE m.name = :name"), @NamedQuery(name = "Meet.findByType", query = "SELECT m FROM Meet m WHERE m.type = :type")})
+//@NamedQueries({@NamedQuery(name = "Meet.findAll", query = "SELECT m FROM Meet m"), @NamedQuery(name = "Meet.findByMeetId", query = "SELECT m FROM Meet m WHERE m.meetId = :meetId"), @NamedQuery(name = "Meet.findByMeetDate", query = "SELECT m FROM Meet m WHERE m.meetDate = :meetDate"), @NamedQuery(name = "Meet.findByName", query = "SELECT m FROM Meet m WHERE m.name = :name"), @NamedQuery(name = "Meet.findByType", query = "SELECT m FROM Meet m WHERE m.type = :type")})
+@NamedQueries({@NamedQuery(name = "Meet.findAllMeetsDescendingDate", query = "SELECT m FROM Meet m order by m.meetDate desc")})
 public class Meet implements Serializable {
     private static final long serialVersionUID = 1L;
+
     private Integer meetId;
-    private Date date;
+    private Date meetDate;
     private String name;
-
-    List<Team> opponents = new Vector();
-    @ManyToMany
-    public List<Team> getOpponents() {
-        return opponents;
-    }
-    public void setOpponents(List<Team> opponents) {
-        this.opponents = opponents;
-    }
-
-    List<Swimmer> swimmers = new Vector<Swimmer>();
-    @ManyToMany
-    public List<Swimmer> getSwimmers() {
-        return swimmers;
-    }
-    public void setSwimmers(List<Swimmer> swimmers) {
-        this.swimmers = swimmers;
-    }
-
+    private List<Team> opponents = new Vector();
+    private List<FiguresParticipant> figuresParticipants = new Vector<FiguresParticipant>();
     private char type;
+    private boolean figuresOrderGenerated = false;
     private Team homeTeam;
     private Figure eu1Figure;
     private Figure eu2Figure;
@@ -88,18 +71,15 @@ public class Meet implements Serializable {
         this.meetId = meetId;
     }
 
-    public Meet(Integer meetId, Date date, String name, char type) {
+    public Meet(Integer meetId, Date meetDate, String name, char type) {
         this.meetId = meetId;
-        this.date = date;
+        this.meetDate = meetDate;
         this.name = name;
         this.type = type;
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "meetId", nullable = false)
-    //@Id
     public Integer getMeetId() {
         return meetId;
     }
@@ -108,19 +88,32 @@ public class Meet implements Serializable {
         this.meetId = meetId;
     }
 
-    @Basic(optional = false)
-    @Column(name = "date", nullable = false)
+    @Transient
+    public List<Swimmer> getSwimmers() {
+        ArrayList<Swimmer> swimmers = new ArrayList<Swimmer>();
+        for(FiguresParticipant fp:figuresParticipants) {
+            swimmers.add(fp.getSwimmer());
+        }
+        return swimmers;
+    }
+
+    @ManyToMany
+    public List<Team> getOpponents() {
+        return opponents;
+    }
+    public void setOpponents(List<Team> opponents) {
+        this.opponents = opponents;
+    }
+
     @Temporal(value = TemporalType.TIMESTAMP)
-    public Date getDate() {
-        return date;
+    public Date getMeetDate() {
+        return meetDate;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setMeetDate(Date meetDate) {
+        this.meetDate = meetDate;
     }
 
-    @Basic(optional = false)
-    @Column(name = "name", nullable = false, length = 100)
     public String getName() {
         return name;
     }
@@ -129,8 +122,15 @@ public class Meet implements Serializable {
         this.name = name;
     }
 
-    @Basic(optional = false)
-    @Column(name = "type", nullable = false)
+    @OneToMany(mappedBy = "meet")
+    public List<FiguresParticipant> getFiguresParticipants() {
+        return figuresParticipants;
+    }
+
+    public void setFiguresParticipants(List<FiguresParticipant> figuresParticipants) {
+        this.figuresParticipants = figuresParticipants;
+    }
+
     public char getType() {
         return type;
     }
@@ -139,8 +139,16 @@ public class Meet implements Serializable {
         this.type = type;
     }
 
-    @JoinColumn(name = "nov3Figure", referencedColumnName = "figureId", nullable = false)
-    @ManyToOne(optional = false)
+    public boolean getFiguresOrderGenerated() {
+        return figuresOrderGenerated;
+    }
+
+    public void setFiguresOrderGenerated(boolean figuresOrderGenerated) {
+        this.figuresOrderGenerated = figuresOrderGenerated;
+    }
+
+    @ManyToOne
+    @JoinColumn(name="nov3Figure")
     public Figure getNov3Figure() {
         return nov3Figure;
     }
@@ -149,8 +157,8 @@ public class Meet implements Serializable {
         this.nov3Figure = nov3Figure;
     }
 
-    @JoinColumn(name = "nov4Figure", referencedColumnName = "figureId", nullable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne
+    @JoinColumn(name="nov4Figure")
     public Figure getNov4Figure() {
         return nov4Figure;
     }
@@ -159,8 +167,8 @@ public class Meet implements Serializable {
         this.nov4Figure = nov4Figure;
     }
 
-    @JoinColumn(name = "eu1Figure", referencedColumnName = "figureId", nullable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne
+    @JoinColumn(name="eu1Figure")
     public Figure getEu1Figure() {
         return eu1Figure;
     }
@@ -169,8 +177,8 @@ public class Meet implements Serializable {
         this.eu1Figure = eu1Figure;
     }
 
-    @JoinColumn(name = "eu2Figure", referencedColumnName = "figureId", nullable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne
+    @JoinColumn(name="eu2Figure")
     public Figure getEu2Figure() {
         return eu2Figure;
     }
@@ -179,8 +187,8 @@ public class Meet implements Serializable {
         this.eu2Figure = eu2Figure;
     }
 
-    @JoinColumn(name = "homeTeam", referencedColumnName = "teamId", nullable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne
+    @JoinColumn(name="homeTeam")
     public Team getHomeTeam() {
         return homeTeam;
     }
@@ -189,8 +197,8 @@ public class Meet implements Serializable {
         this.homeTeam = homeTeam;
     }
 
-    @JoinColumn(name = "int1Figure", referencedColumnName = "figureId", nullable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne
+    @JoinColumn(name="int1Figure")
     public Figure getInt1Figure() {
         return int1Figure;
     }
@@ -199,8 +207,8 @@ public class Meet implements Serializable {
         this.int1Figure = int1Figure;
     }
 
-    @JoinColumn(name = "int2Figure", referencedColumnName = "figureId", nullable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne
+    @JoinColumn(name="int2Figure")
     public Figure getInt2Figure() {
         return int2Figure;
     }
@@ -209,8 +217,8 @@ public class Meet implements Serializable {
         this.int2Figure = int2Figure;
     }
 
-    @JoinColumn(name = "int3Figure", referencedColumnName = "figureId", nullable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne
+    @JoinColumn(name="int3Figure")
     public Figure getInt3Figure() {
         return int3Figure;
     }
@@ -219,8 +227,8 @@ public class Meet implements Serializable {
         this.int3Figure = int3Figure;
     }
 
-    @JoinColumn(name = "int4Figure", referencedColumnName = "figureId", nullable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne
+    @JoinColumn(name="int4Figure")
     public Figure getInt4Figure() {
         return int4Figure;
     }
@@ -229,8 +237,8 @@ public class Meet implements Serializable {
         this.int4Figure = int4Figure;
     }
 
-    @JoinColumn(name = "nov1Figure", referencedColumnName = "figureId", nullable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne
+    @JoinColumn(name="nov1Figure")
     public Figure getNov1Figure() {
         return nov1Figure;
     }
@@ -239,24 +247,14 @@ public class Meet implements Serializable {
         this.nov1Figure = nov1Figure;
     }
 
-    @JoinColumn(name = "nov2Figure", referencedColumnName = "figureId", nullable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne
+    @JoinColumn(name="nov2Figure")
     public Figure getNov2Figure() {
         return nov2Figure;
     }
 
     public void setNov2Figure(Figure nov2Figure) {
         this.nov2Figure = nov2Figure;
-    }
-
-    private Collection<FigureScore> figureScores = new Vector<FigureScore>();
-    @OneToMany(mappedBy = "meet", targetEntity = FigureScore.class)
-    public Collection<FigureScore> getFigureScores() {
-        return figureScores;
-    }
-
-    public void setFigureScores(Collection<FigureScore> figureScores) {
-        this.figureScores = figureScores;
     }
 
     @Override
@@ -281,7 +279,7 @@ public class Meet implements Serializable {
 
     @Override
     public String toString() {
-        return name+" ["+DateFormat.getDateInstance(DateFormat.SHORT).format(date)+"]";
+        return name+" ["+DateFormat.getDateInstance(DateFormat.SHORT).format(meetDate)+"]";
     }
 
 }

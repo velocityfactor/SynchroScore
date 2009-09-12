@@ -96,7 +96,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
         homeTeam.setModel(cbm);
 
         meetName.setText(meet.getName());
-        meetDate.setDate(meet.getDate());
+        meetDate.setDate(meet.getMeetDate());
         if('C' == meet.getType()) {
             champsButton.setSelected(true);
         }
@@ -223,103 +223,154 @@ public class MeetSetupPanel extends javax.swing.JPanel {
         regularMeetButton = new javax.swing.JRadioButton();
         champsButton = new javax.swing.JRadioButton();
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Title for Meet Report");
 
+        meetName.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel2.setText("Meet Date");
 
+        meetDate.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         meetDate.setMaximumSize(new java.awt.Dimension(114, 20));
         meetDate.setMinimumSize(new java.awt.Dimension(114, 20));
 
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel3.setText("Novice Figures");
 
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setText("Station 1 (A-1)");
 
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel5.setText("Figure Description");
 
+        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel6.setText("DD");
 
+        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel7.setText("Fig. #");
 
+        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel8.setText("8 and Under");
 
         noviceFigNum1.setEditable(false);
+        noviceFigNum1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         noviceFigNum1.setFocusable(false);
 
         noviceDD1.setEditable(false);
+        noviceDD1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         noviceDD1.setFocusable(false);
 
+        eightAndUnder1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
+        jLabel9.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel9.setText("Station 2 (A-2)");
 
         noviceFigNum2.setEditable(false);
+        noviceFigNum2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         noviceFigNum2.setFocusable(false);
 
         noviceDD2.setEditable(false);
+        noviceDD2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         noviceDD2.setFocusable(false);
 
+        eightAndUnder2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
+        jLabel10.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel10.setText("Station 3 (B-1)");
 
         noviceFigNum3.setEditable(false);
+        noviceFigNum3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         noviceFigNum3.setFocusable(false);
 
         noviceDD3.setEditable(false);
+        noviceDD3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         noviceDD3.setFocusable(false);
 
+        eightAndUnder3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
+        jLabel11.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel11.setText("Station 4 (B-2)");
 
         noviceFigNum4.setEditable(false);
+        noviceFigNum4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         noviceFigNum4.setFocusable(false);
 
         noviceDD4.setEditable(false);
+        noviceDD4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         noviceDD4.setFocusable(false);
 
+        eightAndUnder4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
+        jLabel12.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel12.setText("Station 1 (A-1)");
 
+        jLabel13.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel13.setText("Station 2 (A-2)");
 
+        jLabel14.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel14.setText("Fig. #");
 
         intFigNum1.setEditable(false);
+        intFigNum1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         intFigNum1.setFocusable(false);
 
         intFigNum2.setEditable(false);
+        intFigNum2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         intFigNum2.setFocusable(false);
 
+        jLabel15.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel15.setText("DD");
 
         intDD1.setEditable(false);
+        intDD1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         intDD1.setFocusable(false);
 
         intDD2.setEditable(false);
+        intDD2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         intDD2.setFocusable(false);
 
+        jLabel16.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel16.setText("Figure Description");
 
+        jLabel17.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel17.setText("Intermediate Figures");
 
+        jLabel19.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel19.setText("Station 4 (B-2)");
 
         intFigNum4.setEditable(false);
+        intFigNum4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         intFigNum4.setFocusable(false);
 
         intDD4.setEditable(false);
+        intDD4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         intDD4.setFocusable(false);
 
+        jLabel20.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel20.setText("Station 3 (B-1)");
 
         intFigNum3.setEditable(false);
+        intFigNum3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         intFigNum3.setFocusable(false);
 
         intDD3.setEditable(false);
+        intDD3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         intDD3.setFocusable(false);
 
+        homeTeam.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         homeTeam.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
+        jLabel18.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel18.setText("Home Team");
 
+        jLabel21.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel21.setText("Opponents");
 
+        opponents.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jScrollPane1.setViewportView(opponents);
 
+        saveButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         saveButton.setText("Save");
         saveButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -327,6 +378,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
             }
         });
 
+        noviceFigName1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         noviceFigName1.setRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(
@@ -345,6 +397,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
             }
         });
 
+        noviceFigName2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         noviceFigName2.setRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(
@@ -363,6 +416,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
             }
         });
 
+        noviceFigName3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         noviceFigName3.setRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(
@@ -381,6 +435,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
             }
         });
 
+        noviceFigName4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         noviceFigName4.setRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(
@@ -399,6 +454,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
             }
         });
 
+        intFigName1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         intFigName1.setRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(
@@ -417,6 +473,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
             }
         });
 
+        intFigName2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         intFigName2.setRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(
@@ -435,6 +492,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
             }
         });
 
+        intFigName3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         intFigName3.setRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(
@@ -453,6 +511,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
             }
         });
 
+        intFigName4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         intFigName4.setRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(
@@ -471,13 +530,16 @@ public class MeetSetupPanel extends javax.swing.JPanel {
             }
         });
 
+        jLabel22.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel22.setText("Meet type:");
 
         meetTypeButtonGroup.add(regularMeetButton);
+        regularMeetButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         regularMeetButton.setSelected(true);
         regularMeetButton.setText("Regular");
 
         meetTypeButtonGroup.add(champsButton);
+        champsButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         champsButton.setText("Championship");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -485,93 +547,91 @@ public class MeetSetupPanel extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(saveButton)
-                .addContainerGap(882, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(meetName, javax.swing.GroupLayout.PREFERRED_SIZE, 564, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(saveButton))
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel9)
-                            .addComponent(jLabel11)
-                            .addComponent(jLabel10)
-                            .addComponent(jLabel12)
-                            .addComponent(jLabel13)
-                            .addComponent(jLabel19)
-                            .addComponent(jLabel20))
-                        .addGap(26, 26, 26)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel7)
-                            .addComponent(noviceFigNum1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(noviceFigNum2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(noviceFigNum4, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(noviceFigNum3, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel14)
-                            .addComponent(intFigNum1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(intFigNum2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(intFigNum4, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(intFigNum3, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(jLabel1))
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(meetName, javax.swing.GroupLayout.PREFERRED_SIZE, 564, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel9)
+                                    .addComponent(jLabel11)
+                                    .addComponent(jLabel10)
+                                    .addComponent(jLabel12)
+                                    .addComponent(jLabel13)
+                                    .addComponent(jLabel19)
+                                    .addComponent(jLabel20))
+                                .addGap(26, 26, 26)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel7)
+                                    .addComponent(noviceFigNum1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(noviceFigNum2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(noviceFigNum4, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(noviceFigNum3, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel14)
+                                    .addComponent(intFigNum1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(intFigNum2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(intFigNum4, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(intFigNum3, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel6)
+                                    .addComponent(noviceDD1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(noviceDD2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(noviceDD4, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(noviceDD3, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel15)
+                                    .addComponent(intDD1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(intDD2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(intDD4, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(intDD3, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(intFigName4, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(intFigName3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(intFigName2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(intFigName1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel16)
+                                    .addComponent(jLabel17)
+                                    .addComponent(noviceFigName1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(noviceFigName4, 0, 186, Short.MAX_VALUE)
+                                    .addComponent(noviceFigName3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(noviceFigName2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel8)
+                                    .addComponent(eightAndUnder1)
+                                    .addComponent(eightAndUnder2)
+                                    .addComponent(eightAndUnder4)
+                                    .addComponent(eightAndUnder3)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel22)
+                                .addGap(18, 18, 18)
+                                .addComponent(regularMeetButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(champsButton)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6)
-                            .addComponent(noviceDD1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(noviceDD2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(noviceDD4, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(noviceDD3, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel15)
-                            .addComponent(intDD1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(intDD2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(intDD4, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(intDD3, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(intFigName4, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(intFigName3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(intFigName2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(intFigName1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel16)
-                            .addComponent(jLabel17)
-                            .addComponent(noviceFigName1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(noviceFigName4, 0, 186, Short.MAX_VALUE)
-                            .addComponent(noviceFigName3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(noviceFigName2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel8)
-                            .addComponent(eightAndUnder1)
-                            .addComponent(eightAndUnder2)
-                            .addComponent(eightAndUnder4)
-                            .addComponent(eightAndUnder3)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel22)
-                        .addGap(18, 18, 18)
-                        .addComponent(regularMeetButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(champsButton)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(meetDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel21)
-                            .addComponent(homeTeam, 0, 215, Short.MAX_VALUE)
-                            .addComponent(jLabel18)
-                            .addComponent(jLabel2)
-                            .addComponent(jScrollPane1, 0, 0, Short.MAX_VALUE))
-                        .addGap(156, 156, 156))))
+                            .addComponent(meetDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabel21)
+                                .addComponent(homeTeam, 0, 215, Short.MAX_VALUE)
+                                .addComponent(jLabel18)
+                                .addComponent(jLabel2)
+                                .addComponent(jScrollPane1, 0, 0, Short.MAX_VALUE)))))
+                .addContainerGap(156, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -676,7 +736,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
                             .addComponent(intFigNum4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(intDD4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(intFigName4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
                 .addComponent(saveButton)
                 .addContainerGap())
         );
@@ -686,7 +746,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
 
         //Update Meet object and pass it to the controller
         meet.setName(meetName.getText());
-        meet.setDate(meetDate.getDate());
+        meet.setMeetDate(meetDate.getDate());
         meet.setType(champsButton.isSelected() ? 'C' : 'R');
         meet.setHomeTeam((Team) homeTeam.getSelectedItem());
         List<Team> op = new ArrayList<Team>();

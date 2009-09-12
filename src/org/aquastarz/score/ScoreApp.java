@@ -44,19 +44,22 @@ public class ScoreApp {
      */
     public static void main(String[] args) {
         initDB();
-        ScoreController sc=new ScoreController();
+        new ScoreController();
     }
 
     public static void initDB() {
         //TODO check db for adequate data, delete and recreate if not.
         File db=new File(System.getProperty("user.home"),"/.SynchroScore");
+        
+        //TODO new db each run
+        db.delete();
         if(!db.exists()) {
             System.out.println("No db file found, create...");
             db.mkdir();
-            Map props=new TreeMap();
-            props.put("hibernate.hbm2ddl.auto","update");
-            props.put("hibernate.connection.url",url);
-            EntityManager entityManager = javax.persistence.Persistence.createEntityManagerFactory("synchroPU", props).createEntityManager();
+            Map initProps=new TreeMap();
+            initProps.put("hibernate.hbm2ddl.auto","update");
+            initProps.put("hibernate.connection.url",url);
+            EntityManager entityManager = javax.persistence.Persistence.createEntityManagerFactory("synchroPU", initProps).createEntityManager();
             entityManager.close();
             System.out.println("Load sample data...");
             Bootstrap.loadLeagueData();
