@@ -21,12 +21,20 @@ package org.aquastarz.score.gui;
 
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JComponent;
+import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
 import org.aquastarz.score.controller.ScoreController;
+import org.aquastarz.score.domain.FiguresParticipant;
 import org.aquastarz.score.domain.Meet;
 import org.aquastarz.score.domain.Swimmer;
 import org.aquastarz.score.domain.Team;
 import org.aquastarz.score.gui.event.MeetSetupPanelListener;
+import org.aquastarz.score.gui.event.FiguresParticipantSearchPanelListener;
 
 public class SynchroFrame extends javax.swing.JFrame {
 
@@ -42,6 +50,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         this.controller = controller;
         this.meet = meet;
         initComponents();
+        listenForHotKeys();
         registerListeners();
         meetSetup.fillForm(meet, controller.getFigures(), controller.getTeams());
         disableAllTabs();
@@ -49,13 +58,30 @@ public class SynchroFrame extends javax.swing.JFrame {
         updateStatus();
     }
 
+    private void listenForHotKeys() {
+
+        //Pressing period or decimal on the keypad moves to swimmer search
+        // when on figure score tab
+        Action action = new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                if(tabPane.getSelectedComponent()==figureScore) {
+                    swimmerSearchPanel.requestFocus();
+                }
+            }
+        };
+        String keyStrokeAndKey = "PERIOD";
+        KeyStroke keyStroke = KeyStroke.getKeyStroke(keyStrokeAndKey);
+        tabPane.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(keyStroke, keyStrokeAndKey);
+        tabPane.getActionMap().put(keyStrokeAndKey, action);
+        keyStrokeAndKey = "DECIMAL";
+        keyStroke = KeyStroke.getKeyStroke(keyStrokeAndKey);
+        tabPane.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(keyStroke, keyStrokeAndKey);
+        tabPane.getActionMap().put(keyStrokeAndKey, action);
+    }
+
     private void setSetupStatus(Color color, int percent) {
         setupProgress.setForeground(color);
         setupProgress.setValue(percent);
-    }
-
-    private int getSetupStatusPercent() {
-        return setupProgress.getValue();
     }
 
     private void disableAllTabs() {
@@ -68,18 +94,24 @@ public class SynchroFrame extends javax.swing.JFrame {
         if (controller.isMeetSetupValid(meet)) {
             setTabEnabled(SynchroFrame.Tab.SWIMMERS, true);
             updateSwimmerTab();
-            if (controller.hasSwimmers(meet)) {
-                setSetupStatus(Color.GREEN, 100);
+            if (controller.hasFiguresParticipants(meet)) {
+                if(meet.getFiguresOrderGenerated()) {
+                    setSetupStatus(Color.GREEN, 100);
+                }
+                else {
+                    setSetupStatus(Color.YELLOW, 90);
+                }
                 setTabEnabled(SynchroFrame.Tab.FIGURES, true);
                 setTabEnabled(SynchroFrame.Tab.ROUTINES, true);
                 setTabEnabled(SynchroFrame.Tab.REPORTS, true);
             } else {
-                setSetupStatus(Color.GREEN, 50);
+                setSetupStatus(Color.YELLOW, 45);
                 setTabEnabled(SynchroFrame.Tab.FIGURES, false);
                 setTabEnabled(SynchroFrame.Tab.ROUTINES, false);
                 setTabEnabled(SynchroFrame.Tab.REPORTS, false);
             }
         } else {
+            setSetupStatus(Color.RED, 5);
             setTabEnabled(SynchroFrame.Tab.SWIMMERS, false);
         }
 
@@ -95,19 +127,37 @@ public class SynchroFrame extends javax.swing.JFrame {
             public void meetSetupSaved() {
                 controller.saveMeet(meet);
                 updateStatus();
-                //TODO show error if meet set not complete
+                //TODO show error if meet setup not complete
+            }
+        });
+
+        swimmerSearchPanel.addFiguresParticipantSearchPanelListener(new FiguresParticipantSearchPanelListener() {
+            public void figuresParticipantSearchRequested(String figureOrder) {
+                FiguresParticipant figuresParticipant = controller.findFiguresParticipantByFigureOrder(meet,figureOrder);
+                //TODO if null returned, show feedback
+                if(figuresParticipant!=null) {
+                    swimmerSearchPanel.setFiguresParticipant(figuresParticipant);
+                }
+            }
+
+            public void figuresParticipantSet() {
+                figureScorePanel.requestFocus();
             }
         });
     }
 
     private void updateSwimmerTab() {
         teamTabs.removeAll();
-        teamTabs.add(meet.getHomeTeam().getTeamId(), new SwimmerSelectionPanel(meet.getHomeTeam(), controller.getSwimmers(meet.getHomeTeam()), meet.getSwimmers()));
+        SwimmerSelectionPanel panel=new SwimmerSelectionPanel(meet.getHomeTeam());
+        teamTabs.add(meet.getHomeTeam().getTeamId(), panel);
+        panel.setSwimmers(controller.getSwimmers(meet.getHomeTeam()), meet.getSwimmers());
         for (Team opponent : meet.getOpponents()) {
-            teamTabs.add(opponent.getTeamId(), new SwimmerSelectionPanel(opponent, controller.getSwimmers(opponent), meet.getSwimmers()));
+            panel=new SwimmerSelectionPanel(opponent);
+            teamTabs.add(opponent.getTeamId(), panel);
+            panel.setSwimmers(controller.getSwimmers(opponent), meet.getSwimmers());
         }
     }
-
+    
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -123,8 +173,9 @@ public class SynchroFrame extends javax.swing.JFrame {
         swimmers = new javax.swing.JPanel();
         saveSwimmersButton = new javax.swing.JButton();
         teamTabs = new javax.swing.JTabbedPane();
+        generateRandomFiguresOrderButton = new javax.swing.JButton();
         figureScore = new javax.swing.JPanel();
-        swimmerSearchPanel = new org.aquastarz.score.gui.SwimmerSearchPanel();
+        swimmerSearchPanel = new org.aquastarz.score.gui.FiguresParticipantSearchPanel();
         figureScorePanel = new org.aquastarz.score.gui.FigureScorePanel();
         saveFigureScoreButton = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
@@ -163,6 +214,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         setMinimumSize(new java.awt.Dimension(603, 200));
         setName(""); // NOI18N
 
+        tabPane.setFont(new java.awt.Font("Tahoma", 0, 14));
         tabPane.setMinimumSize(new java.awt.Dimension(603, 200));
         tabPane.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -171,6 +223,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         });
         tabPane.addTab("Meet Setup", meetSetup);
 
+        saveSwimmersButton.setFont(new java.awt.Font("Tahoma", 0, 14));
         saveSwimmersButton.setText("Save");
         saveSwimmersButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -179,6 +232,15 @@ public class SynchroFrame extends javax.swing.JFrame {
         });
 
         teamTabs.setTabPlacement(javax.swing.JTabbedPane.LEFT);
+        teamTabs.setFont(new java.awt.Font("Tahoma", 0, 14));
+
+        generateRandomFiguresOrderButton.setFont(new java.awt.Font("Tahoma", 0, 14));
+        generateRandomFiguresOrderButton.setText("Generate Random Figures Order");
+        generateRandomFiguresOrderButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                generateRandomFiguresOrderButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout swimmersLayout = new javax.swing.GroupLayout(swimmers);
         swimmers.setLayout(swimmersLayout);
@@ -189,18 +251,22 @@ public class SynchroFrame extends javax.swing.JFrame {
                 .addGroup(swimmersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(swimmersLayout.createSequentialGroup()
                         .addComponent(saveSwimmersButton)
-                        .addContainerGap(745, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(generateRandomFiguresOrderButton)
+                        .addContainerGap(502, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, swimmersLayout.createSequentialGroup()
-                        .addComponent(teamTabs, javax.swing.GroupLayout.DEFAULT_SIZE, 733, Short.MAX_VALUE)
+                        .addComponent(teamTabs, javax.swing.GroupLayout.DEFAULT_SIZE, 596, Short.MAX_VALUE)
                         .addGap(208, 208, 208))))
         );
         swimmersLayout.setVerticalGroup(
             swimmersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, swimmersLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(teamTabs, javax.swing.GroupLayout.DEFAULT_SIZE, 457, Short.MAX_VALUE)
+                .addComponent(teamTabs, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(saveSwimmersButton)
+                .addGroup(swimmersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(saveSwimmersButton)
+                    .addComponent(generateRandomFiguresOrderButton))
                 .addContainerGap())
         );
 
@@ -208,15 +274,18 @@ public class SynchroFrame extends javax.swing.JFrame {
 
         figureScore.setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         figureScore.add(swimmerSearchPanel, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
         figureScore.add(figureScorePanel, gridBagConstraints);
 
+        saveFigureScoreButton.setFont(new java.awt.Font("Tahoma", 0, 14));
         saveFigureScoreButton.setText("Save");
         saveFigureScoreButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -238,7 +307,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 321, Short.MAX_VALUE)
+            .addGap(0, 270, Short.MAX_VALUE)
         );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -259,7 +328,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         );
         routineScoreLayout.setVerticalGroup(
             routineScoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 508, Short.MAX_VALUE)
+            .addGap(0, 502, Short.MAX_VALUE)
         );
 
         tabPane.addTab("Routines", routineScore);
@@ -272,7 +341,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         );
         reportPanelLayout.setVerticalGroup(
             reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 508, Short.MAX_VALUE)
+            .addGap(0, 502, Short.MAX_VALUE)
         );
 
         tabPane.addTab("Reports", reportPanel);
@@ -282,6 +351,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel1.setText("Setup");
         jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jToolBar1.add(jLabel1);
@@ -290,6 +360,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         jSeparator1.setPreferredSize(new java.awt.Dimension(12, 0));
         jToolBar1.add(jSeparator1);
 
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel2.setText("Nov. Figures");
         jLabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jToolBar1.add(jLabel2);
@@ -298,6 +369,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         jSeparator2.setPreferredSize(new java.awt.Dimension(12, 0));
         jToolBar1.add(jSeparator2);
 
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel3.setText("Int. Figures");
         jLabel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jToolBar1.add(jLabel3);
@@ -306,6 +378,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         jSeparator3.setPreferredSize(new java.awt.Dimension(12, 0));
         jToolBar1.add(jSeparator3);
 
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel4.setText("Routines");
         jLabel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jToolBar1.add(jLabel4);
@@ -392,7 +465,7 @@ public class SynchroFrame extends javax.swing.JFrame {
             SwimmerSelectionPanel ssp = (SwimmerSelectionPanel) teamTabs.getComponentAt(i);
             participatingSwimmers.addAll(ssp.getSelectedSwimmers());
         }
-        meet.setSwimmers(participatingSwimmers);
+        controller.updateFiguresSwimmers(meet,participatingSwimmers);
         controller.saveMeet(meet);
         updateStatus();
         //TODO show errors if no swimmers selected
@@ -401,6 +474,17 @@ public class SynchroFrame extends javax.swing.JFrame {
     private void saveFigureScoreButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFigureScoreButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_saveFigureScoreButtonActionPerformed
+
+    private void generateRandomFiguresOrderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateRandomFiguresOrderButtonActionPerformed
+        if(meet.getFiguresOrderGenerated()) {
+            int confirm = JOptionPane.showConfirmDialog(this, "You have already generated the random meet order.  Shall I do it again and overwrite the current ordering?", "Warning", JOptionPane.OK_CANCEL_OPTION);
+            if(confirm != JOptionPane.OK_OPTION) return;
+        }
+
+        controller.generateRandomFiguresOrder(meet);
+        updateStatus();
+        //TODO give some feedback
+    }//GEN-LAST:event_generateRandomFiguresOrderButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;
@@ -413,6 +497,7 @@ public class SynchroFrame extends javax.swing.JFrame {
     private javax.swing.JPanel figureScore;
     private org.aquastarz.score.gui.FigureScorePanel figureScorePanel;
     private javax.swing.JMenu fileMenu;
+    private javax.swing.JButton generateRandomFiguresOrderButton;
     private javax.swing.JMenu helpMenu;
     private javax.swing.JProgressBar intFiguresProgress;
     private javax.swing.JLabel jLabel1;
@@ -438,7 +523,7 @@ public class SynchroFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem saveMenuItem;
     private javax.swing.JButton saveSwimmersButton;
     private javax.swing.JProgressBar setupProgress;
-    private org.aquastarz.score.gui.SwimmerSearchPanel swimmerSearchPanel;
+    private org.aquastarz.score.gui.FiguresParticipantSearchPanel swimmerSearchPanel;
     private javax.swing.JPanel swimmers;
     private javax.swing.JTabbedPane tabPane;
     private javax.swing.JTabbedPane teamTabs;

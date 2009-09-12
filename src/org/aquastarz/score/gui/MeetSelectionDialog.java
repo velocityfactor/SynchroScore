@@ -68,7 +68,6 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
         setAlwaysOnTop(true);
         setLocationByPlatform(true);
         setModal(true);
-        setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL);
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -77,13 +76,17 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
         });
 
         buttonGroup1.add(newMeetButton);
+        newMeetButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         newMeetButton.setText("New Meet");
 
         buttonGroup1.add(existingMeetButton);
+        existingMeetButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         existingMeetButton.setText("Existing Meet");
 
+        meetCombo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         meetCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
+        okButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         okButton.setText("OK");
         okButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -91,6 +94,7 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
             }
         });
 
+        cancelButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         cancelButton.setText("Cancel");
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -124,7 +128,7 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
                 .addComponent(existingMeetButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(meetCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(okButton)
                     .addComponent(cancelButton)))
@@ -149,7 +153,7 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
     /**
      * @param args the command line arguments
      */
-    public static Meet selectMeet(final List<Meet> meets) {
+    public static Meet selectMeet(final List<Meet> meets) throws MeetSelectionCanceledException {
         //    java.awt.EventQueue.invokeLater(new Runnable() {
         //        public void run() {
         MeetSelectionDialog dialog = new MeetSelectionDialog(meets, new javax.swing.JFrame(), true);
@@ -160,14 +164,15 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
         return dialog.getSelectedMeet();
     }
 
+    public class MeetSelectionCanceledException extends Exception {
+
+    }
+
     private Meet getSelectedMeet() {
         if (cancelled) {
             return null;
         } else if (newMeetButton.isSelected()) {
-            Meet selectedMeet = new Meet();
-            selectedMeet.setName("Mock Meet");
-            selectedMeet.setDate(new Date());
-            return selectedMeet;
+            return null;
         } else if (existingMeetButton.isSelected()) {
             return (Meet) meetCombo.getSelectedItem();
         }
@@ -187,7 +192,7 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
             newMeetButton.setSelected(true);
         } else {
             cb.setSelectedItem(meets.get(0));
-            if (isToday(meets.get(0).getDate())) {
+            if (isToday(meets.get(0).getMeetDate())) {
                 existingMeetButton.setSelected(true);
             }
             else {

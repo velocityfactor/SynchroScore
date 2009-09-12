@@ -57,10 +57,10 @@ public class MaintenanceFrame extends javax.swing.JFrame {
         setName("maintenanceFrame"); // NOI18N
 
         maintenanceTab.setTabPlacement(javax.swing.JTabbedPane.LEFT);
+        maintenanceTab.addTab("Swimmers", swimmerForm1);
         maintenanceTab.addTab("Teams", teamForm1);
         maintenanceTab.addTab("Figures", figureForm1);
         maintenanceTab.addTab("Levels", levelForm1);
-        maintenanceTab.addTab("Swimmers", swimmerForm1);
 
         loadDBButton.setText("Load Team, Level, Figure");
         loadDBButton.addActionListener(new java.awt.event.ActionListener() {

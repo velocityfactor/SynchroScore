@@ -31,6 +31,7 @@ public class Bootstrap {
 
         entityManager.getTransaction().begin();
 
+        entityManager.createQuery("delete from FiguresParticipant").executeUpdate();
         entityManager.createQuery("delete from FigureScore").executeUpdate();
         entityManager.createQuery("delete from Meet").executeUpdate();
         entityManager.createQuery("delete from Swimmer").executeUpdate();

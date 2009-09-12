@@ -22,6 +22,7 @@ package org.aquastarz.score.gui;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.TreeMap;
 import java.util.Vector;
 import javax.swing.ListSelectionModel;
 import org.aquastarz.score.domain.Swimmer;
@@ -29,19 +30,24 @@ import org.aquastarz.score.domain.Team;
 
 public class SwimmerSelectionPanel extends javax.swing.JPanel {
 
+    private Vector<CheckListItem<Swimmer>> checkListItems=null;
+
+
     /** Creates new form SwimmerSelectionPanel */
-    public SwimmerSelectionPanel(Team team, List<Swimmer> roster, Collection<Swimmer> participatingSwimmers) {
+    public SwimmerSelectionPanel(Team team) {
         initComponents();
-
         teamNameLabel.setText("Participating swimmers for "+team.getName()+":");
+    }
 
-        Vector<CheckListItem<Swimmer>> checkListItems = new Vector<CheckListItem<Swimmer>>();
+    public void setSwimmers(List<Swimmer> roster, List<Swimmer> participatingSwimmers) {
+        swimmerList.removeAll();
+        checkListItems = new Vector<CheckListItem<Swimmer>>();
         for (Swimmer swimmer : roster) {
             CheckListItem<Swimmer> item = new CheckListItem<Swimmer>(swimmer, swimmer.toString());
             if(participatingSwimmers==null || participatingSwimmers.contains(swimmer)) item.setSelected(true);
             checkListItems.add(item);
         }
-        swimmerList.setListData(checkListItems);
+        updateCheckList();
 
         CheckListCellRenderer renderer = new CheckListCellRenderer();
         swimmerList.setCellRenderer(renderer);
@@ -49,6 +55,26 @@ public class SwimmerSelectionPanel extends javax.swing.JPanel {
         CheckListener lst = new CheckListener(swimmerList);
         swimmerList.addMouseListener(lst);
         swimmerList.addKeyListener(lst);
+    }
+
+    private void updateCheckList() {
+        checkListItems=sortList(checkListItems);
+        swimmerList.setListData(checkListItems);
+    }
+
+    private Vector<CheckListItem<Swimmer>> sortList(Vector<CheckListItem<Swimmer>> list) {
+        TreeMap<Object,CheckListItem<Swimmer>> map = new TreeMap<Object,CheckListItem<Swimmer>>();
+        for(CheckListItem<Swimmer> item : list) {
+            if(sortByName.isSelected()) {
+                map.put(item.getItem().getLastName(), item);
+            }
+            else {
+                map.put(item.getItem().getSwimmerId(), item);
+            }
+        }
+        Vector<CheckListItem<Swimmer>> result = new Vector<CheckListItem<Swimmer>>();
+        result.addAll(map.values());
+        return result;
     }
 
     public Collection<Swimmer> getSelectedSwimmers() {
@@ -78,14 +104,20 @@ public class SwimmerSelectionPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        sortByGroup = new javax.swing.ButtonGroup();
         teamNameLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         swimmerList = new javax.swing.JList();
         selectAllButton = new javax.swing.JButton();
         selectNoneButton = new javax.swing.JButton();
+        sortByNumber = new javax.swing.JRadioButton();
+        sortByName = new javax.swing.JRadioButton();
+        jLabel1 = new javax.swing.JLabel();
 
+        teamNameLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         teamNameLabel.setText("Swimmers for Team Name");
 
+        swimmerList.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         swimmerList.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
@@ -93,6 +125,7 @@ public class SwimmerSelectionPanel extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(swimmerList);
 
+        selectAllButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         selectAllButton.setText("Select All");
         selectAllButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -100,12 +133,35 @@ public class SwimmerSelectionPanel extends javax.swing.JPanel {
             }
         });
 
+        selectNoneButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         selectNoneButton.setText("Select None");
         selectNoneButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 selectNoneButtonActionPerformed(evt);
             }
         });
+
+        sortByGroup.add(sortByNumber);
+        sortByNumber.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        sortByNumber.setSelected(true);
+        sortByNumber.setText("Number");
+        sortByNumber.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sortByNumberActionPerformed(evt);
+            }
+        });
+
+        sortByGroup.add(sortByName);
+        sortByName.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        sortByName.setText("Name");
+        sortByName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sortByNameActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel1.setText("Sort by:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -114,14 +170,18 @@ public class SwimmerSelectionPanel extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(teamNameLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE)
+                    .addComponent(teamNameLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(selectAllButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(selectNoneButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap())
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(selectAllButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(selectNoneButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel1)
+                            .addComponent(sortByNumber)
+                            .addComponent(sortByName))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -133,8 +193,14 @@ public class SwimmerSelectionPanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(selectAllButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(selectNoneButton))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 298, Short.MAX_VALUE))
+                        .addComponent(selectNoneButton)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel1)
+                        .addGap(1, 1, 1)
+                        .addComponent(sortByNumber)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(sortByName))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 295, Short.MAX_VALUE))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -147,11 +213,23 @@ public class SwimmerSelectionPanel extends javax.swing.JPanel {
         setAll(false);
     }//GEN-LAST:event_selectNoneButtonActionPerformed
 
+    private void sortByNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sortByNameActionPerformed
+        updateCheckList();
+    }//GEN-LAST:event_sortByNameActionPerformed
+
+    private void sortByNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sortByNumberActionPerformed
+        updateCheckList();
+    }//GEN-LAST:event_sortByNumberActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton selectAllButton;
     private javax.swing.JButton selectNoneButton;
+    private javax.swing.ButtonGroup sortByGroup;
+    private javax.swing.JRadioButton sortByName;
+    private javax.swing.JRadioButton sortByNumber;
     private javax.swing.JList swimmerList;
     private javax.swing.JLabel teamNameLabel;
     // End of variables declaration//GEN-END:variables
