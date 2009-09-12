@@ -21,8 +21,6 @@ package org.aquastarz.score.domain;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Vector;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,7 +28,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -40,16 +37,19 @@ import javax.persistence.Table;
 @Table(name = "figurescore")
 @NamedQueries({@NamedQuery(name = "FigureScore.findAll", query = "SELECT s FROM FigureScore s"), @NamedQuery(name = "FigureScore.findByFigureScoreId", query = "SELECT s FROM FigureScore s WHERE s.figureScoreId = :figureScoreId")})
 public class FigureScore implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
-   public FigureScore() {
+    public FigureScore() {
     }
 
-    public FigureScore(Integer figureScoreId) {
-        this.figureScoreId = figureScoreId;
+    public FigureScore(FiguresParticipant figuresParticipant, Figure figure) {
+        this.figuresParticipant = figuresParticipant;
+        this.figure = figure;
     }
-
+    
     private Integer figureScoreId;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -57,24 +57,87 @@ public class FigureScore implements Serializable {
     public Integer getFigureScoreId() {
         return figureScoreId;
     }
+
     public void setFigureScoreId(Integer figureScoreId) {
         this.figureScoreId = figureScoreId;
     }
 
-    private BigDecimal score;
+    private BigDecimal score1;
+
     @Basic(optional = false)
-    @Column(name = "score", nullable = false, precision=2, scale=1)
-    public BigDecimal getScore() {
-        return score;
+    @Column(name = "score1", nullable = false, precision = 2, scale = 1)
+    public BigDecimal getScore1() {
+        return score1;
     }
 
-    public void setScore(BigDecimal score) {
-        this.score = score;
+    public void setScore1(BigDecimal score1) {
+        this.score1 = score1;
+    }
+
+    private BigDecimal score2;
+
+    @Basic(optional = false)
+    @Column(name = "score2", nullable = false, precision = 2, scale = 1)
+    public BigDecimal getScore2() {
+        return score2;
+    }
+
+    public void setScore2(BigDecimal score2) {
+        this.score2 = score2;
+    }
+
+    private BigDecimal score3;
+
+    @Basic(optional = false)
+    @Column(name = "score3", nullable = false, precision = 2, scale = 1)
+    public BigDecimal getScore3() {
+        return score3;
+    }
+
+    public void setScore3(BigDecimal score3) {
+        this.score3 = score3;
+    }
+
+    private BigDecimal score4;
+
+    @Basic(optional = false)
+    @Column(name = "score4", nullable = false, precision = 2, scale = 1)
+    public BigDecimal getScore4() {
+        return score4;
+    }
+
+    public void setScore4(BigDecimal score4) {
+        this.score4 = score4;
+    }
+
+    private BigDecimal score5;
+
+    @Basic(optional = false)
+    @Column(name = "score5", nullable = false, precision = 2, scale = 1)
+    public BigDecimal getScore5() {
+        return score5;
+    }
+
+    public void setScore5(BigDecimal score5) {
+        this.score5 = score5;
+    }
+
+    private BigDecimal totalScore;
+
+    @Basic(optional = false)
+    @Column(name = "totalScore", nullable = false, precision = 2, scale = 1)
+    public BigDecimal getTotalScore() {
+        return totalScore;
+    }
+
+    public void setTotalScore(BigDecimal totalScore) {
+        this.totalScore = totalScore;
     }
 
     private BigDecimal penalty;
+
     @Basic(optional = false)
-    @Column(name = "penalty", nullable = false, precision=2, scale=1)
+    @Column(name = "penalty", nullable = false, precision = 2, scale = 1)
     public BigDecimal getPenalty() {
         return penalty;
     }
@@ -83,29 +146,8 @@ public class FigureScore implements Serializable {
         this.penalty = penalty;
     }
 
-    private int judge;
-    @Basic(optional = false)
-    @Column(name = "judge", nullable = false)
-    public int getJudge() {
-        return judge;
-    }
-
-    public void setJudge(int judge) {
-        this.judge = judge;
-    }
-
-    private Meet meet;
-    @JoinColumn(name = "meetId", referencedColumnName = "meetId", nullable = false)
-    @ManyToOne(optional = false)
-    public Meet getMeet() {
-        return meet;
-    }
-
-    public void setMeet(Meet meet) {
-        this.meet = meet;
-    }
-
     private Figure figure;
+
     @JoinColumn(name = "figureId", referencedColumnName = "figureId", nullable = false)
     @ManyToOne(optional = false)
     public Figure getFigure() {
@@ -116,15 +158,16 @@ public class FigureScore implements Serializable {
         this.figure = figure;
     }
 
-    private Swimmer swimmer;
-    @JoinColumn(name = "swimmerId", referencedColumnName = "swimmerId", nullable = false)
+    private FiguresParticipant figuresParticipant;
+
+//    @JoinColumn(name = "figuresParticipantId", referencedColumnName = "figuresParticipantId", nullable = false)
     @ManyToOne(optional = false)
-    public Swimmer getSwimmer() {
-        return swimmer;
+    public FiguresParticipant getFiguresParticipant() {
+        return figuresParticipant;
     }
 
-    public void setSwimmer(Swimmer swimmer) {
-        this.swimmer = swimmer;
+    public void setFiguresParticipant(FiguresParticipant figuresParticipant) {
+        this.figuresParticipant = figuresParticipant;
     }
 
     @Override
@@ -149,7 +192,6 @@ public class FigureScore implements Serializable {
 
     @Override
     public String toString() {
-        return "FigureScore #"+figureScoreId;
+        return "FigureScore #" + figureScoreId;
     }
-
 }
