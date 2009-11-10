@@ -24,9 +24,6 @@
  */
 package org.aquastarz.score.gui;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
@@ -38,7 +35,7 @@ import org.aquastarz.score.domain.Meet;
  */
 public class MeetSelectionDialog extends javax.swing.JDialog {
 
-    boolean cancelled = false;
+    public boolean canceled = false;
 
     /** Creates new form MeetSelectionDialog */
     public MeetSelectionDialog(List<Meet> meets, java.awt.Frame parent, boolean modal) {
@@ -142,34 +139,32 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_okButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        cancelled = true;
+        canceled = true;
         setVisible(false);
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        cancelled = true;
+        canceled = true;
     }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
      */
     public static Meet selectMeet(final List<Meet> meets) throws MeetSelectionCanceledException {
-        //    java.awt.EventQueue.invokeLater(new Runnable() {
-        //        public void run() {
         MeetSelectionDialog dialog = new MeetSelectionDialog(meets, new javax.swing.JFrame(), true);
-        //dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
-        //        }
-        //    });
+        if(dialog.canceled) {
+            throw new MeetSelectionCanceledException();
+        }
         return dialog.getSelectedMeet();
     }
 
-    public class MeetSelectionCanceledException extends Exception {
+    public static class MeetSelectionCanceledException extends Exception {
 
     }
 
     private Meet getSelectedMeet() {
-        if (cancelled) {
+        if (canceled) {
             return null;
         } else if (newMeetButton.isSelected()) {
             return null;
@@ -192,26 +187,26 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
             newMeetButton.setSelected(true);
         } else {
             cb.setSelectedItem(meets.get(0));
-            if (isToday(meets.get(0).getMeetDate())) {
-                existingMeetButton.setSelected(true);
-            }
-            else {
-                newMeetButton.setSelected(true);
-            }
+//            if (isToday(meets.get(0).getMeetDate())) {
+//                existingMeetButton.setSelected(true);
+//            }
+//            else {
+//                newMeetButton.setSelected(true);
+//            }
         }
     }
 
-    private boolean isToday(Date inp) {
-
-        Calendar cal1 = new GregorianCalendar();
-        Calendar cal2 = new GregorianCalendar();
-
-        cal1.setTime(new Date());
-        cal2.setTime(inp);
-
-        return ((cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)) &&
-                (cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)));
-    }
+//    private boolean isToday(Date inp) {
+//
+//        Calendar cal1 = new GregorianCalendar();
+//        Calendar cal2 = new GregorianCalendar();
+//
+//        cal1.setTime(new Date());
+//        cal2.setTime(inp);
+//
+//        return ((cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)) &&
+//                (cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)));
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;

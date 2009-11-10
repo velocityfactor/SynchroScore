@@ -96,7 +96,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
         homeTeam.setModel(cbm);
 
         meetName.setText(meet.getName());
-        meetDate.setDate(meet.getMeetDate());
+        meetDate.setText(meet.getMeetDate());
         if('C' == meet.getType()) {
             champsButton.setSelected(true);
         }
@@ -167,7 +167,6 @@ public class MeetSetupPanel extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         meetName = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        meetDate = new org.jdesktop.swingx.JXDatePicker();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -222,155 +221,152 @@ public class MeetSetupPanel extends javax.swing.JPanel {
         jLabel22 = new javax.swing.JLabel();
         regularMeetButton = new javax.swing.JRadioButton();
         champsButton = new javax.swing.JRadioButton();
+        meetDate = new javax.swing.JTextField();
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel1.setText("Title for Meet Report");
 
-        meetName.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        meetName.setFont(new java.awt.Font("Tahoma", 0, 14));
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel2.setText("Meet Date");
 
-        meetDate.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        meetDate.setMaximumSize(new java.awt.Dimension(114, 20));
-        meetDate.setMinimumSize(new java.awt.Dimension(114, 20));
-
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel3.setText("Novice Figures");
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel4.setText("Station 1 (A-1)");
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel5.setText("Figure Description");
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel6.setText("DD");
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel7.setText("Fig. #");
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel8.setText("8 and Under");
 
         noviceFigNum1.setEditable(false);
-        noviceFigNum1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        noviceFigNum1.setFont(new java.awt.Font("Tahoma", 0, 14));
         noviceFigNum1.setFocusable(false);
 
         noviceDD1.setEditable(false);
-        noviceDD1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        noviceDD1.setFont(new java.awt.Font("Tahoma", 0, 14));
         noviceDD1.setFocusable(false);
 
-        eightAndUnder1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        eightAndUnder1.setFont(new java.awt.Font("Tahoma", 0, 14));
 
-        jLabel9.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel9.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel9.setText("Station 2 (A-2)");
 
         noviceFigNum2.setEditable(false);
-        noviceFigNum2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        noviceFigNum2.setFont(new java.awt.Font("Tahoma", 0, 14));
         noviceFigNum2.setFocusable(false);
 
         noviceDD2.setEditable(false);
-        noviceDD2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        noviceDD2.setFont(new java.awt.Font("Tahoma", 0, 14));
         noviceDD2.setFocusable(false);
 
-        eightAndUnder2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        eightAndUnder2.setFont(new java.awt.Font("Tahoma", 0, 14));
 
-        jLabel10.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel10.setText("Station 3 (B-1)");
 
         noviceFigNum3.setEditable(false);
-        noviceFigNum3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        noviceFigNum3.setFont(new java.awt.Font("Tahoma", 0, 14));
         noviceFigNum3.setFocusable(false);
 
         noviceDD3.setEditable(false);
-        noviceDD3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        noviceDD3.setFont(new java.awt.Font("Tahoma", 0, 14));
         noviceDD3.setFocusable(false);
 
-        eightAndUnder3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        eightAndUnder3.setFont(new java.awt.Font("Tahoma", 0, 14));
 
-        jLabel11.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel11.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel11.setText("Station 4 (B-2)");
 
         noviceFigNum4.setEditable(false);
-        noviceFigNum4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        noviceFigNum4.setFont(new java.awt.Font("Tahoma", 0, 14));
         noviceFigNum4.setFocusable(false);
 
         noviceDD4.setEditable(false);
-        noviceDD4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        noviceDD4.setFont(new java.awt.Font("Tahoma", 0, 14));
         noviceDD4.setFocusable(false);
 
-        eightAndUnder4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        eightAndUnder4.setFont(new java.awt.Font("Tahoma", 0, 14));
 
-        jLabel12.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel12.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel12.setText("Station 1 (A-1)");
 
-        jLabel13.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel13.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel13.setText("Station 2 (A-2)");
 
-        jLabel14.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel14.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel14.setText("Fig. #");
 
         intFigNum1.setEditable(false);
-        intFigNum1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        intFigNum1.setFont(new java.awt.Font("Tahoma", 0, 14));
         intFigNum1.setFocusable(false);
 
         intFigNum2.setEditable(false);
-        intFigNum2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        intFigNum2.setFont(new java.awt.Font("Tahoma", 0, 14));
         intFigNum2.setFocusable(false);
 
-        jLabel15.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel15.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel15.setText("DD");
 
         intDD1.setEditable(false);
-        intDD1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        intDD1.setFont(new java.awt.Font("Tahoma", 0, 14));
         intDD1.setFocusable(false);
 
         intDD2.setEditable(false);
-        intDD2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        intDD2.setFont(new java.awt.Font("Tahoma", 0, 14));
         intDD2.setFocusable(false);
 
-        jLabel16.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel16.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel16.setText("Figure Description");
 
-        jLabel17.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel17.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel17.setText("Intermediate Figures");
 
-        jLabel19.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel19.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel19.setText("Station 4 (B-2)");
 
         intFigNum4.setEditable(false);
-        intFigNum4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        intFigNum4.setFont(new java.awt.Font("Tahoma", 0, 14));
         intFigNum4.setFocusable(false);
 
         intDD4.setEditable(false);
-        intDD4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        intDD4.setFont(new java.awt.Font("Tahoma", 0, 14));
         intDD4.setFocusable(false);
 
-        jLabel20.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel20.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel20.setText("Station 3 (B-1)");
 
         intFigNum3.setEditable(false);
-        intFigNum3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        intFigNum3.setFont(new java.awt.Font("Tahoma", 0, 14));
         intFigNum3.setFocusable(false);
 
         intDD3.setEditable(false);
-        intDD3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        intDD3.setFont(new java.awt.Font("Tahoma", 0, 14));
         intDD3.setFocusable(false);
 
-        homeTeam.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        homeTeam.setFont(new java.awt.Font("Tahoma", 0, 14));
         homeTeam.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jLabel18.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel18.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel18.setText("Home Team");
 
-        jLabel21.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel21.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel21.setText("Opponents");
 
-        opponents.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        opponents.setFont(new java.awt.Font("Tahoma", 0, 14));
         jScrollPane1.setViewportView(opponents);
 
-        saveButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        saveButton.setFont(new java.awt.Font("Tahoma", 0, 14));
         saveButton.setText("Save");
         saveButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -378,7 +374,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
             }
         });
 
-        noviceFigName1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        noviceFigName1.setFont(new java.awt.Font("Tahoma", 0, 14));
         noviceFigName1.setRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(
@@ -397,7 +393,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
             }
         });
 
-        noviceFigName2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        noviceFigName2.setFont(new java.awt.Font("Tahoma", 0, 14));
         noviceFigName2.setRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(
@@ -416,7 +412,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
             }
         });
 
-        noviceFigName3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        noviceFigName3.setFont(new java.awt.Font("Tahoma", 0, 14));
         noviceFigName3.setRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(
@@ -435,7 +431,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
             }
         });
 
-        noviceFigName4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        noviceFigName4.setFont(new java.awt.Font("Tahoma", 0, 14));
         noviceFigName4.setRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(
@@ -454,7 +450,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
             }
         });
 
-        intFigName1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        intFigName1.setFont(new java.awt.Font("Tahoma", 0, 14));
         intFigName1.setRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(
@@ -473,7 +469,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
             }
         });
 
-        intFigName2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        intFigName2.setFont(new java.awt.Font("Tahoma", 0, 14));
         intFigName2.setRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(
@@ -492,7 +488,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
             }
         });
 
-        intFigName3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        intFigName3.setFont(new java.awt.Font("Tahoma", 0, 14));
         intFigName3.setRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(
@@ -511,7 +507,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
             }
         });
 
-        intFigName4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        intFigName4.setFont(new java.awt.Font("Tahoma", 0, 14));
         intFigName4.setRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(
@@ -530,17 +526,19 @@ public class MeetSetupPanel extends javax.swing.JPanel {
             }
         });
 
-        jLabel22.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel22.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel22.setText("Meet type:");
 
         meetTypeButtonGroup.add(regularMeetButton);
-        regularMeetButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        regularMeetButton.setFont(new java.awt.Font("Tahoma", 0, 14));
         regularMeetButton.setSelected(true);
         regularMeetButton.setText("Regular");
 
         meetTypeButtonGroup.add(champsButton);
-        champsButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        champsButton.setFont(new java.awt.Font("Tahoma", 0, 14));
         champsButton.setText("Championship");
+
+        meetDate.setFont(new java.awt.Font("Tahoma", 0, 14));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -556,9 +554,6 @@ public class MeetSetupPanel extends javax.swing.JPanel {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(10, 10, 10)
                                 .addComponent(jLabel1))
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(meetName, javax.swing.GroupLayout.PREFERRED_SIZE, 564, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -621,30 +616,31 @@ public class MeetSetupPanel extends javax.swing.JPanel {
                                 .addGap(18, 18, 18)
                                 .addComponent(regularMeetButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(champsButton)))
+                                .addComponent(champsButton))
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(meetName, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(meetDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel21)
-                                .addComponent(homeTeam, 0, 215, Short.MAX_VALUE)
-                                .addComponent(jLabel18)
-                                .addComponent(jLabel2)
-                                .addComponent(jScrollPane1, 0, 0, Short.MAX_VALUE)))))
-                .addContainerGap(156, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(meetDate)
+                            .addComponent(jLabel21)
+                            .addComponent(homeTeam, 0, 215, Short.MAX_VALUE)
+                            .addComponent(jLabel18)
+                            .addComponent(jLabel2)
+                            .addComponent(jScrollPane1, 0, 0, Short.MAX_VALUE))))
+                .addContainerGap(220, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(meetName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(meetDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel1)
                     .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(meetName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(meetDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(2, 2, 2)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -736,7 +732,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
                             .addComponent(intFigNum4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(intDD4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(intFigName4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
                 .addComponent(saveButton)
                 .addContainerGap())
         );
@@ -746,7 +742,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
 
         //Update Meet object and pass it to the controller
         meet.setName(meetName.getText());
-        meet.setMeetDate(meetDate.getDate());
+        meet.setMeetDate(meetDate.getText());
         meet.setType(champsButton.isSelected() ? 'C' : 'R');
         meet.setHomeTeam((Team) homeTeam.getSelectedItem());
         List<Team> op = new ArrayList<Team>();
@@ -904,7 +900,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
-    private org.jdesktop.swingx.JXDatePicker meetDate;
+    private javax.swing.JTextField meetDate;
     private javax.swing.JTextField meetName;
     private javax.swing.ButtonGroup meetTypeButtonGroup;
     private javax.swing.JTextField noviceDD1;
