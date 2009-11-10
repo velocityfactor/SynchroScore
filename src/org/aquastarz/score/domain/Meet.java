@@ -20,11 +20,11 @@
 package org.aquastarz.score.domain;
 
 import java.io.Serializable;
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Vector;
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -35,9 +35,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
 @Entity
 //@NamedQueries({@NamedQuery(name = "Meet.findAll", query = "SELECT m FROM Meet m"), @NamedQuery(name = "Meet.findByMeetId", query = "SELECT m FROM Meet m WHERE m.meetId = :meetId"), @NamedQuery(name = "Meet.findByMeetDate", query = "SELECT m FROM Meet m WHERE m.meetDate = :meetDate"), @NamedQuery(name = "Meet.findByName", query = "SELECT m FROM Meet m WHERE m.name = :name"), @NamedQuery(name = "Meet.findByType", query = "SELECT m FROM Meet m WHERE m.type = :type")})
@@ -45,23 +42,68 @@ import javax.persistence.Transient;
 public class Meet implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer meetId;
-    private Date meetDate;
+
+    @Basic(optional = false)
+    @Column(name = "meetDate", nullable = false, length = 100)
+    private String meetDate;
+
+    @Basic(optional = false)
+    @Column(name = "name", nullable = false, length = 255)
     private String name;
+
+    @ManyToMany
     private List<Team> opponents = new Vector();
+
+    @OneToMany(mappedBy = "meet")
     private List<FiguresParticipant> figuresParticipants = new Vector<FiguresParticipant>();
     private char type;
     private boolean figuresOrderGenerated = false;
+
+    @ManyToOne
+    @JoinColumn(name="homeTeam")
     private Team homeTeam;
+
+    @ManyToOne
+    @JoinColumn(name="eu1Figure")
     private Figure eu1Figure;
+
+    @ManyToOne
+    @JoinColumn(name="eu2Figure")
     private Figure eu2Figure;
+
+    @ManyToOne
+    @JoinColumn(name="nov1Figure")
     private Figure nov1Figure;
+
+    @ManyToOne
+    @JoinColumn(name="nov2Figure")
     private Figure nov2Figure;
+
+    @ManyToOne
+    @JoinColumn(name="nov3Figure")
     private Figure nov3Figure;
+
+    @ManyToOne
+    @JoinColumn(name="nov4Figure")
     private Figure nov4Figure;
+
+    @ManyToOne
+    @JoinColumn(name="int1Figure")
     private Figure int1Figure;
+
+    @ManyToOne
+    @JoinColumn(name="int2Figure")
     private Figure int2Figure;
+
+    @ManyToOne
+    @JoinColumn(name="int3Figure")
     private Figure int3Figure;
+
+    @ManyToOne
+    @JoinColumn(name="int4Figure")
     private Figure int4Figure;
 
     public Meet() {
@@ -71,15 +113,13 @@ public class Meet implements Serializable {
         this.meetId = meetId;
     }
 
-    public Meet(Integer meetId, Date meetDate, String name, char type) {
+    public Meet(Integer meetId, String meetDate, String name, char type) {
         this.meetId = meetId;
         this.meetDate = meetDate;
         this.name = name;
         this.type = type;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getMeetId() {
         return meetId;
     }
@@ -88,7 +128,6 @@ public class Meet implements Serializable {
         this.meetId = meetId;
     }
 
-    @Transient
     public List<Swimmer> getSwimmers() {
         ArrayList<Swimmer> swimmers = new ArrayList<Swimmer>();
         for(FiguresParticipant fp:figuresParticipants) {
@@ -97,7 +136,6 @@ public class Meet implements Serializable {
         return swimmers;
     }
 
-    @ManyToMany
     public List<Team> getOpponents() {
         return opponents;
     }
@@ -105,12 +143,11 @@ public class Meet implements Serializable {
         this.opponents = opponents;
     }
 
-    @Temporal(value = TemporalType.TIMESTAMP)
-    public Date getMeetDate() {
+    public String getMeetDate() {
         return meetDate;
     }
 
-    public void setMeetDate(Date meetDate) {
+    public void setMeetDate(String meetDate) {
         this.meetDate = meetDate;
     }
 
@@ -122,7 +159,6 @@ public class Meet implements Serializable {
         this.name = name;
     }
 
-    @OneToMany(mappedBy = "meet")
     public List<FiguresParticipant> getFiguresParticipants() {
         return figuresParticipants;
     }
@@ -147,8 +183,6 @@ public class Meet implements Serializable {
         this.figuresOrderGenerated = figuresOrderGenerated;
     }
 
-    @ManyToOne
-    @JoinColumn(name="nov3Figure")
     public Figure getNov3Figure() {
         return nov3Figure;
     }
@@ -157,8 +191,6 @@ public class Meet implements Serializable {
         this.nov3Figure = nov3Figure;
     }
 
-    @ManyToOne
-    @JoinColumn(name="nov4Figure")
     public Figure getNov4Figure() {
         return nov4Figure;
     }
@@ -167,8 +199,6 @@ public class Meet implements Serializable {
         this.nov4Figure = nov4Figure;
     }
 
-    @ManyToOne
-    @JoinColumn(name="eu1Figure")
     public Figure getEu1Figure() {
         return eu1Figure;
     }
@@ -177,8 +207,6 @@ public class Meet implements Serializable {
         this.eu1Figure = eu1Figure;
     }
 
-    @ManyToOne
-    @JoinColumn(name="eu2Figure")
     public Figure getEu2Figure() {
         return eu2Figure;
     }
@@ -187,8 +215,6 @@ public class Meet implements Serializable {
         this.eu2Figure = eu2Figure;
     }
 
-    @ManyToOne
-    @JoinColumn(name="homeTeam")
     public Team getHomeTeam() {
         return homeTeam;
     }
@@ -197,8 +223,6 @@ public class Meet implements Serializable {
         this.homeTeam = homeTeam;
     }
 
-    @ManyToOne
-    @JoinColumn(name="int1Figure")
     public Figure getInt1Figure() {
         return int1Figure;
     }
@@ -207,8 +231,6 @@ public class Meet implements Serializable {
         this.int1Figure = int1Figure;
     }
 
-    @ManyToOne
-    @JoinColumn(name="int2Figure")
     public Figure getInt2Figure() {
         return int2Figure;
     }
@@ -217,8 +239,6 @@ public class Meet implements Serializable {
         this.int2Figure = int2Figure;
     }
 
-    @ManyToOne
-    @JoinColumn(name="int3Figure")
     public Figure getInt3Figure() {
         return int3Figure;
     }
@@ -227,8 +247,6 @@ public class Meet implements Serializable {
         this.int3Figure = int3Figure;
     }
 
-    @ManyToOne
-    @JoinColumn(name="int4Figure")
     public Figure getInt4Figure() {
         return int4Figure;
     }
@@ -237,8 +255,6 @@ public class Meet implements Serializable {
         this.int4Figure = int4Figure;
     }
 
-    @ManyToOne
-    @JoinColumn(name="nov1Figure")
     public Figure getNov1Figure() {
         return nov1Figure;
     }
@@ -247,8 +263,6 @@ public class Meet implements Serializable {
         this.nov1Figure = nov1Figure;
     }
 
-    @ManyToOne
-    @JoinColumn(name="nov2Figure")
     public Figure getNov2Figure() {
         return nov2Figure;
     }
@@ -256,6 +270,31 @@ public class Meet implements Serializable {
     public void setNov2Figure(Figure nov2Figure) {
         this.nov2Figure = nov2Figure;
     }
+
+    public boolean hasFiguresParticipants(Meet meet) {
+        return figuresParticipants!=null && figuresParticipants.size()>0;
+    }
+
+    public boolean isValid(Meet meet) {
+        boolean valid=true;
+        if(name==null || name.length()<1) valid=false;
+        if(meetDate==null || meetDate.length()<1) valid=false;
+        if(type!='R' && type!='C') valid=false;
+        if(homeTeam==null) valid=false;
+        if(opponents==null || opponents.size()<1) valid=false;
+        if(nov1Figure==null) valid=false;
+        if(nov2Figure==null) valid=false;
+        if(nov3Figure==null) valid=false;
+        if(nov4Figure==null) valid=false;
+        if(int1Figure==null) valid=false;
+        if(int2Figure==null) valid=false;
+        if(int3Figure==null) valid=false;
+        if(int4Figure==null) valid=false;
+        if(type=='R' && eu1Figure==null) valid=false;
+        if(type=='R' && eu2Figure==null) valid=false;
+        return valid;
+    }
+
 
     @Override
     public int hashCode() {
@@ -279,7 +318,7 @@ public class Meet implements Serializable {
 
     @Override
     public String toString() {
-        return name+" ["+DateFormat.getDateInstance(DateFormat.SHORT).format(meetDate)+"]";
+        return name+" ["+meetDate+"]";
     }
 
 }

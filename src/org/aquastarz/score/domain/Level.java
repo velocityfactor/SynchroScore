@@ -22,21 +22,18 @@ package org.aquastarz.score.domain;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
-import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
 @Table(name = "level")
-@NamedQueries({@NamedQuery(name = "Level.findAll", query = "SELECT l FROM Level l"), @NamedQuery(name = "Level.findByLevelId", query = "SELECT l FROM Level l WHERE l.levelId = :levelId"), @NamedQuery(name = "Level.findByName", query = "SELECT l FROM Level l WHERE l.name = :name")})
+@NamedQueries({@NamedQuery(name = "Level.findAllInOrder", query = "SELECT l FROM Level l ORDER BY sortOrder"), @NamedQuery(name = "Level.findByLevelId", query = "SELECT l FROM Level l WHERE l.levelId = :levelId"), @NamedQuery(name = "Level.findByName", query = "SELECT l FROM Level l WHERE l.name = :name")})
 public class Level implements Serializable {
     @Transient
     private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
@@ -48,8 +45,9 @@ public class Level implements Serializable {
     @Basic(optional = false)
     @Column(name = "name", nullable = false, length = 45)
     private String name;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "level")
-    private Collection<Swimmer> swimmerCollection;
+    @Basic(optional = false)
+    @Column(name = "sortOrder", nullable = false)
+    private Integer sortOrder;
 
     public Level() {
     }
@@ -83,12 +81,12 @@ public class Level implements Serializable {
         changeSupport.firePropertyChange("name", oldName, name);
     }
 
-    public Collection<Swimmer> getSwimmerCollection() {
-        return swimmerCollection;
+    public Integer getSortOrder() {
+        return sortOrder;
     }
 
-    public void setSwimmerCollection(Collection<Swimmer> swimmerCollection) {
-        this.swimmerCollection = swimmerCollection;
+    public void setSortOrder(Integer sortOrder) {
+        this.sortOrder = sortOrder;
     }
 
     @Override

@@ -19,6 +19,8 @@
 // </editor-fold>
 package org.aquastarz.score.controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -58,10 +60,10 @@ public class ScoreController {
             try {
                 meet = new Meet();
                 meet.setName("Mock Meet");
-                meet.setMeetDate(new Date());
+                DateFormat df = SimpleDateFormat.getDateInstance(SimpleDateFormat.LONG);
+                meet.setMeetDate(df.format(new Date()));
                 transaction.commit();
-            }
-            catch(Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 transaction.rollback();
                 //TODO feedback
@@ -75,8 +77,7 @@ public class ScoreController {
     private Meet selectMeetFromList() {
         try {
             return MeetSelectionDialog.selectMeet(getMeets());
-        }
-        catch(MeetSelectionDialog.MeetSelectionCanceledException e) {
+        } catch (MeetSelectionDialog.MeetSelectionCanceledException e) {
             System.exit(0);
         }
 
@@ -121,37 +122,12 @@ public class ScoreController {
         figureOrderQuery.setParameter("meet", meet);
         figureOrderQuery.setParameter("figureOrder", figureOrder);
         try {
-            FiguresParticipant figuresParticipant = (FiguresParticipant)figureOrderQuery.getSingleResult();
+            FiguresParticipant figuresParticipant = (FiguresParticipant) figureOrderQuery.getSingleResult();
             return figuresParticipant;
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             //not found
             return null;
         }
-    }
-
-    public boolean isMeetSetupValid(Meet meet) {
-        boolean valid=true;
-        if(meet.getName()==null || meet.getName().length()<1) valid=false;
-        if(meet.getMeetDate()==null) valid=false;
-        if(meet.getType()!='R' && meet.getType()!='C') valid=false;
-        if(meet.getHomeTeam()==null) valid=false;
-        if(meet.getOpponents()==null || meet.getOpponents().size()<1) valid=false;
-        if(meet.getNov1Figure()==null) valid=false;
-        if(meet.getNov2Figure()==null) valid=false;
-        if(meet.getNov3Figure()==null) valid=false;
-        if(meet.getNov4Figure()==null) valid=false;
-        if(meet.getInt1Figure()==null) valid=false;
-        if(meet.getInt2Figure()==null) valid=false;
-        if(meet.getInt3Figure()==null) valid=false;
-        if(meet.getInt4Figure()==null) valid=false;
-        if(meet.getType()=='R' && meet.getEu1Figure()==null) valid=false;
-        if(meet.getType()=='R' && meet.getEu2Figure()==null) valid=false;
-        return valid;
-    }
-
-    public boolean hasFiguresParticipants(Meet meet) {
-        return meet.getFiguresParticipants()!=null && meet.getFiguresParticipants().size()>0;
     }
 
     /* Accepts a new meet with no swimmers or an existing meet with swimmers.
@@ -168,36 +144,51 @@ public class ScoreController {
         transaction.begin();
 
         try {
-            HashMap<Swimmer,FiguresParticipant> map = new HashMap<Swimmer,FiguresParticipant>();
-            for(FiguresParticipant fp : meet.getFiguresParticipants()) {
+            HashMap<Swimmer, FiguresParticipant> map = new HashMap<Swimmer, FiguresParticipant>();
+            for (FiguresParticipant fp : meet.getFiguresParticipants()) {
                 map.put(fp.getSwimmer(), fp);
             }
 
-            for(Swimmer s : swimmers) {
+            for (Swimmer s : swimmers) {
                 FiguresParticipant fp = map.remove(s);
-                if(fp==null) { //Adding a new swimmer
-                    FiguresParticipant newFp = new FiguresParticipant(meet,s);
+                if (fp == null) { //Adding a new swimmer
+                    FiguresParticipant newFp = new FiguresParticipant(meet, s);
                     newList.add(newFp);
-                    if(meet.getFiguresOrderGenerated()) {
-                        // TODO calculate a figureOrder
-                        throw new java.lang.UnsupportedOperationException("need to calculate a figure order");
+                    if (meet.getFiguresOrderGenerated()) {
+                        String maxOrder = "";
+                        Integer newLevelOrder = newFp.getSwimmer().getLevel().getSortOrder();
+                        for (FiguresParticipant levelFp : meet.getFiguresParticipants()) {
+                            Integer levelOrder = levelFp.getSwimmer().getLevel().getSortOrder();
+                            if (levelFp.getFigureOrder().compareTo(maxOrder) > 0 && newLevelOrder >= levelOrder) {
+                                maxOrder = levelFp.getFigureOrder();
+                            }
+                        }
+                        String nextOrder = null;
+                        char seq = maxOrder.charAt(maxOrder.length() - 1);
+                        if (seq > 'A') {
+                            seq++;
+                            nextOrder = maxOrder.substring(0, maxOrder.length() - 1) + seq;
+                        } else {
+                            nextOrder = maxOrder + "B";
+                        }
+                        newFp.setFigureOrder(nextOrder);
                     }
                     entityManager.persist(newFp);
-                }
-                else {  //Keep existing swimmer
+                } else {  //Keep existing swimmer
                     newList.add(fp);
                 }
             }
 
             //Remaining FiguresParticipants in map not needed, delete them
-            for(FiguresParticipant fp : map.values()) {
+            for (FiguresParticipant fp : map.values()) {
                 entityManager.remove(fp);
             }
             transaction.commit();
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            if(transaction.isActive()) transaction.rollback();
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
         }
         meet.setFiguresParticipants(newList);
         saveMeet(meet);
@@ -206,22 +197,31 @@ public class ScoreController {
     //TODO this method needs to randomize swimmers within levels and order the levels instead
     //  of the current complete randomization
     public boolean generateRandomFiguresOrder(Meet meet) {
-        Map<Double,FiguresParticipant> map = new TreeMap<Double,FiguresParticipant>();
-        for(FiguresParticipant fp : meet.getFiguresParticipants()) {
-            map.put(Math.random(), fp);
+        Map<Double, FiguresParticipant> map = new TreeMap<Double, FiguresParticipant>();
+        for (FiguresParticipant fp : meet.getFiguresParticipants()) {
+            map.put(Math.random() + fp.getSwimmer().getLevel().getSortOrder(), fp);
         }
+
+        //Calculate length to zero pad numbers (could be trickier, but this is good enough)
+        String format = "%02d";
+        if (map.size() > 99) {
+            format = "%03d";
+        }
+        if (map.size() > 999) {
+            format = "%04d";
+        }
+
         EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
         try {
-            int i=1;
-            for(FiguresParticipant fp : map.values()) {
-                fp.setFigureOrder(Integer.toString(i));
+            int i = 1;
+            for (FiguresParticipant fp : map.values()) {
+                fp.setFigureOrder(String.format(format, i));
                 i++;
             }
             meet.setFiguresOrderGenerated(true);
             transaction.commit();
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             transaction.rollback();
             return false;

@@ -20,14 +20,24 @@
 package org.aquastarz.score.gui;
 
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRTableModelDataSource;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 import org.aquastarz.score.controller.ScoreController;
 import org.aquastarz.score.domain.FiguresParticipant;
 import org.aquastarz.score.domain.Meet;
@@ -40,7 +50,7 @@ public class SynchroFrame extends javax.swing.JFrame {
 
     public enum Tab {
 
-        MEET_SETUP, SWIMMERS, FIGURES, ROUTINES, REPORTS
+        MEET_SETUP, SWIMMERS, FIGURES_ORDER, FIGURES, ROUTINES, REPORTS
     };
     private ScoreController controller = null;
     private Meet meet = null;
@@ -59,24 +69,34 @@ public class SynchroFrame extends javax.swing.JFrame {
     }
 
     private void listenForHotKeys() {
-
         //Pressing period or decimal on the keypad moves to swimmer search
         // when on figure score tab
-        Action action = new AbstractAction() {
+        Action swimmerSearchAction = new AbstractAction() {
+
             public void actionPerformed(ActionEvent e) {
-                if(tabPane.getSelectedComponent()==figureScore) {
+                if (tabPane.getSelectedComponent() == figureScore) {
                     swimmerSearchPanel.requestFocus();
                 }
+            }
+        };
+        Action maintenanceAction = new AbstractAction() {
+
+            public void actionPerformed(ActionEvent e) {
+                MaintenanceFrame.open();
             }
         };
         String keyStrokeAndKey = "PERIOD";
         KeyStroke keyStroke = KeyStroke.getKeyStroke(keyStrokeAndKey);
         tabPane.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(keyStroke, keyStrokeAndKey);
-        tabPane.getActionMap().put(keyStrokeAndKey, action);
+        tabPane.getActionMap().put(keyStrokeAndKey, swimmerSearchAction);
         keyStrokeAndKey = "DECIMAL";
         keyStroke = KeyStroke.getKeyStroke(keyStrokeAndKey);
         tabPane.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(keyStroke, keyStrokeAndKey);
-        tabPane.getActionMap().put(keyStrokeAndKey, action);
+        tabPane.getActionMap().put(keyStrokeAndKey, swimmerSearchAction);
+        keyStrokeAndKey = "F10";
+        keyStroke = KeyStroke.getKeyStroke(keyStrokeAndKey);
+        tabPane.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(keyStroke, keyStrokeAndKey);
+        tabPane.getActionMap().put(keyStrokeAndKey, maintenanceAction);
     }
 
     private void setSetupStatus(Color color, int percent) {
@@ -84,31 +104,27 @@ public class SynchroFrame extends javax.swing.JFrame {
         setupProgress.setValue(percent);
     }
 
-    private void disableAllTabs() {
-        for (Tab tab : Tab.values()) {
-            setTabEnabled(tab, false);
-        }
-    }
-
     private void updateStatus() {
-        if (controller.isMeetSetupValid(meet)) {
+        if (meet.isValid(meet)) {
             setTabEnabled(SynchroFrame.Tab.SWIMMERS, true);
             updateSwimmerTab();
-            if (controller.hasFiguresParticipants(meet)) {
-                if(meet.getFiguresOrderGenerated()) {
+            if (meet.hasFiguresParticipants(meet)) {
+                if (meet.getFiguresOrderGenerated()) {
                     setSetupStatus(Color.GREEN, 100);
-                }
-                else {
+                    setTabEnabled(Tab.FIGURES_ORDER, true);
+                    setTabEnabled(Tab.FIGURES, true);
+                    setTabEnabled(Tab.ROUTINES, true);
+                    setTabEnabled(Tab.REPORTS, true);
+                    updateFiguresOrderList();
+                } else {
                     setSetupStatus(Color.YELLOW, 90);
                 }
-                setTabEnabled(SynchroFrame.Tab.FIGURES, true);
-                setTabEnabled(SynchroFrame.Tab.ROUTINES, true);
-                setTabEnabled(SynchroFrame.Tab.REPORTS, true);
             } else {
                 setSetupStatus(Color.YELLOW, 45);
-                setTabEnabled(SynchroFrame.Tab.FIGURES, false);
-                setTabEnabled(SynchroFrame.Tab.ROUTINES, false);
-                setTabEnabled(SynchroFrame.Tab.REPORTS, false);
+                setTabEnabled(Tab.FIGURES_ORDER, false);
+                setTabEnabled(Tab.FIGURES, false);
+                setTabEnabled(Tab.ROUTINES, false);
+                setTabEnabled(Tab.REPORTS, false);
             }
         } else {
             setSetupStatus(Color.RED, 5);
@@ -117,8 +133,18 @@ public class SynchroFrame extends javax.swing.JFrame {
 
     }
 
+    private void disableAllTabs() {
+        for (Tab tab : Tab.values()) {
+            setTabEnabled(tab, false);
+        }
+    }
+
     private void setTabEnabled(Tab tab, boolean enabled) {
         tabPane.setEnabledAt(tab.ordinal(), enabled);
+    }
+
+    private void selectTab(Tab tab) {
+        tabPane.setSelectedIndex(tab.ordinal());
     }
 
     private void registerListeners() {
@@ -132,10 +158,11 @@ public class SynchroFrame extends javax.swing.JFrame {
         });
 
         swimmerSearchPanel.addFiguresParticipantSearchPanelListener(new FiguresParticipantSearchPanelListener() {
+
             public void figuresParticipantSearchRequested(String figureOrder) {
-                FiguresParticipant figuresParticipant = controller.findFiguresParticipantByFigureOrder(meet,figureOrder);
+                FiguresParticipant figuresParticipant = controller.findFiguresParticipantByFigureOrder(meet, figureOrder);
                 //TODO if null returned, show feedback
-                if(figuresParticipant!=null) {
+                if (figuresParticipant != null) {
                     swimmerSearchPanel.setFiguresParticipant(figuresParticipant);
                 }
             }
@@ -148,16 +175,29 @@ public class SynchroFrame extends javax.swing.JFrame {
 
     private void updateSwimmerTab() {
         teamTabs.removeAll();
-        SwimmerSelectionPanel panel=new SwimmerSelectionPanel(meet.getHomeTeam());
+        SwimmerSelectionPanel panel = new SwimmerSelectionPanel(meet.getHomeTeam());
         teamTabs.add(meet.getHomeTeam().getTeamId(), panel);
         panel.setSwimmers(controller.getSwimmers(meet.getHomeTeam()), meet.getSwimmers());
         for (Team opponent : meet.getOpponents()) {
-            panel=new SwimmerSelectionPanel(opponent);
+            panel = new SwimmerSelectionPanel(opponent);
             teamTabs.add(opponent.getTeamId(), panel);
             panel.setSwimmers(controller.getSwimmers(opponent), meet.getSwimmers());
         }
     }
-    
+
+    private void updateFiguresOrderList() {
+        List<FiguresParticipant> figuresParticipants = meet.getFiguresParticipants();
+        Map<String, FiguresParticipant> sortedFiguresParticipants = new TreeMap<String, FiguresParticipant>();
+        for (FiguresParticipant figuresParticipant : figuresParticipants) {
+            String key = figuresParticipant.getFigureOrder();
+            if (figureOrderSortByName.isSelected()) {
+                key = figuresParticipant.getSwimmer().getLastName() + figuresParticipant.getSwimmer().getFirstName();
+            }
+            sortedFiguresParticipants.put(key, figuresParticipant);
+        }
+        figureOrderTable.setModel(new FiguresParticipantsTableModel(sortedFiguresParticipants.values()));
+    }
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -168,12 +208,20 @@ public class SynchroFrame extends javax.swing.JFrame {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        figuresOrderSortButtonGroup = new javax.swing.ButtonGroup();
         tabPane = new javax.swing.JTabbedPane();
         meetSetup = new org.aquastarz.score.gui.MeetSetupPanel();
         swimmers = new javax.swing.JPanel();
         saveSwimmersButton = new javax.swing.JButton();
         teamTabs = new javax.swing.JTabbedPane();
         generateRandomFiguresOrderButton = new javax.swing.JButton();
+        figuresOrder = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        figureOrderSortByNumber = new javax.swing.JRadioButton();
+        figureOrderSortByName = new javax.swing.JRadioButton();
+        figureOrderScrollPane = new javax.swing.JScrollPane();
+        figureOrderTable = new javax.swing.JTable();
+        figuresOrderPrintButton = new javax.swing.JButton();
         figureScore = new javax.swing.JPanel();
         swimmerSearchPanel = new org.aquastarz.score.gui.FiguresParticipantSearchPanel();
         figureScorePanel = new org.aquastarz.score.gui.FigureScorePanel();
@@ -193,21 +241,6 @@ public class SynchroFrame extends javax.swing.JFrame {
         jSeparator3 = new javax.swing.JToolBar.Separator();
         jLabel4 = new javax.swing.JLabel();
         routinesProgress = new javax.swing.JProgressBar();
-        menuBar = new javax.swing.JMenuBar();
-        fileMenu = new javax.swing.JMenu();
-        openMenuItem = new javax.swing.JMenuItem();
-        saveMenuItem = new javax.swing.JMenuItem();
-        saveAsMenuItem = new javax.swing.JMenuItem();
-        maintenanceMenuItem = new javax.swing.JMenuItem();
-        exitMenuItem = new javax.swing.JMenuItem();
-        editMenu = new javax.swing.JMenu();
-        cutMenuItem = new javax.swing.JMenuItem();
-        copyMenuItem = new javax.swing.JMenuItem();
-        pasteMenuItem = new javax.swing.JMenuItem();
-        deleteMenuItem = new javax.swing.JMenuItem();
-        helpMenu = new javax.swing.JMenu();
-        contentsMenuItem = new javax.swing.JMenuItem();
-        aboutMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Synchro Scoring");
@@ -216,11 +249,6 @@ public class SynchroFrame extends javax.swing.JFrame {
 
         tabPane.setFont(new java.awt.Font("Tahoma", 0, 14));
         tabPane.setMinimumSize(new java.awt.Dimension(603, 200));
-        tabPane.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                tabPaneStateChanged(evt);
-            }
-        });
         tabPane.addTab("Meet Setup", meetSetup);
 
         saveSwimmersButton.setFont(new java.awt.Font("Tahoma", 0, 14));
@@ -262,7 +290,7 @@ public class SynchroFrame extends javax.swing.JFrame {
             swimmersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, swimmersLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(teamTabs, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
+                .addComponent(teamTabs, javax.swing.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(swimmersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(saveSwimmersButton)
@@ -271,6 +299,83 @@ public class SynchroFrame extends javax.swing.JFrame {
         );
 
         tabPane.addTab("Swimmers", swimmers);
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14));
+        jLabel5.setText("Sort by:");
+
+        figuresOrderSortButtonGroup.add(figureOrderSortByNumber);
+        figureOrderSortByNumber.setFont(new java.awt.Font("Tahoma", 0, 14));
+        figureOrderSortByNumber.setSelected(true);
+        figureOrderSortByNumber.setText("Number");
+        figureOrderSortByNumber.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                figuresOrderSortByNumberActionPerformed(evt);
+            }
+        });
+
+        figuresOrderSortButtonGroup.add(figureOrderSortByName);
+        figureOrderSortByName.setFont(new java.awt.Font("Tahoma", 0, 14));
+        figureOrderSortByName.setText("Name");
+        figureOrderSortByName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                figuresOrderSortByNameActionPerformed(evt);
+            }
+        });
+
+        figureOrderTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        figureOrderScrollPane.setViewportView(figureOrderTable);
+
+        figuresOrderPrintButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        figuresOrderPrintButton.setText("Print");
+        figuresOrderPrintButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                figuresOrderPrintButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout figuresOrderLayout = new javax.swing.GroupLayout(figuresOrder);
+        figuresOrder.setLayout(figuresOrderLayout);
+        figuresOrderLayout.setHorizontalGroup(
+            figuresOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, figuresOrderLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(figureOrderScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 713, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(figuresOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5)
+                    .addComponent(figureOrderSortByNumber)
+                    .addComponent(figureOrderSortByName)
+                    .addComponent(figuresOrderPrintButton))
+                .addContainerGap())
+        );
+        figuresOrderLayout.setVerticalGroup(
+            figuresOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(figuresOrderLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(figuresOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(figureOrderScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 501, Short.MAX_VALUE)
+                    .addGroup(figuresOrderLayout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addGap(1, 1, 1)
+                        .addComponent(figureOrderSortByNumber)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(figureOrderSortByName)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(figuresOrderPrintButton)))
+                .addContainerGap())
+        );
+
+        tabPane.addTab("Figures Order", figuresOrder);
 
         figureScore.setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -307,7 +412,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 270, Short.MAX_VALUE)
+            .addGap(0, 291, Short.MAX_VALUE)
         );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -328,7 +433,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         );
         routineScoreLayout.setVerticalGroup(
             routineScoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 502, Short.MAX_VALUE)
+            .addGap(0, 523, Short.MAX_VALUE)
         );
 
         tabPane.addTab("Routines", routineScore);
@@ -341,7 +446,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         );
         reportPanelLayout.setVerticalGroup(
             reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 502, Short.MAX_VALUE)
+            .addGap(0, 523, Short.MAX_VALUE)
         );
 
         tabPane.addTab("Reports", reportPanel);
@@ -386,78 +491,8 @@ public class SynchroFrame extends javax.swing.JFrame {
 
         getContentPane().add(jToolBar1, java.awt.BorderLayout.SOUTH);
 
-        fileMenu.setText("File");
-
-        openMenuItem.setText("Open");
-        fileMenu.add(openMenuItem);
-
-        saveMenuItem.setText("Save");
-        fileMenu.add(saveMenuItem);
-
-        saveAsMenuItem.setText("Save As ...");
-        fileMenu.add(saveAsMenuItem);
-
-        maintenanceMenuItem.setText("Maintenance");
-        maintenanceMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                maintenanceMenuItemActionPerformed(evt);
-            }
-        });
-        fileMenu.add(maintenanceMenuItem);
-
-        exitMenuItem.setText("Exit");
-        exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                exitMenuItemActionPerformed(evt);
-            }
-        });
-        fileMenu.add(exitMenuItem);
-
-        menuBar.add(fileMenu);
-
-        editMenu.setText("Edit");
-
-        cutMenuItem.setText("Cut");
-        editMenu.add(cutMenuItem);
-
-        copyMenuItem.setText("Copy");
-        editMenu.add(copyMenuItem);
-
-        pasteMenuItem.setText("Paste");
-        editMenu.add(pasteMenuItem);
-
-        deleteMenuItem.setText("Delete");
-        editMenu.add(deleteMenuItem);
-
-        menuBar.add(editMenu);
-
-        helpMenu.setText("Help");
-
-        contentsMenuItem.setText("Contents");
-        helpMenu.add(contentsMenuItem);
-
-        aboutMenuItem.setText("About");
-        helpMenu.add(aboutMenuItem);
-
-        menuBar.add(helpMenu);
-
-        setJMenuBar(menuBar);
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
-        System.exit(0);
-    }//GEN-LAST:event_exitMenuItemActionPerformed
-
-    private void maintenanceMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_maintenanceMenuItemActionPerformed
-        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        MaintenanceFrame.open();
-        setCursor(Cursor.getDefaultCursor());
-    }//GEN-LAST:event_maintenanceMenuItemActionPerformed
-
-    private void tabPaneStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabPaneStateChanged
-    }//GEN-LAST:event_tabPaneStateChanged
 
     private void saveSwimmersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveSwimmersButtonActionPerformed
         ArrayList<Swimmer> participatingSwimmers = new ArrayList<Swimmer>();
@@ -465,10 +500,9 @@ public class SynchroFrame extends javax.swing.JFrame {
             SwimmerSelectionPanel ssp = (SwimmerSelectionPanel) teamTabs.getComponentAt(i);
             participatingSwimmers.addAll(ssp.getSelectedSwimmers());
         }
-        controller.updateFiguresSwimmers(meet,participatingSwimmers);
+        controller.updateFiguresSwimmers(meet, participatingSwimmers);
         controller.saveMeet(meet);
         updateStatus();
-        //TODO show errors if no swimmers selected
     }//GEN-LAST:event_saveSwimmersButtonActionPerformed
 
     private void saveFigureScoreButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFigureScoreButtonActionPerformed
@@ -476,51 +510,67 @@ public class SynchroFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_saveFigureScoreButtonActionPerformed
 
     private void generateRandomFiguresOrderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateRandomFiguresOrderButtonActionPerformed
-        if(meet.getFiguresOrderGenerated()) {
+        if (meet.getFiguresOrderGenerated()) {
             int confirm = JOptionPane.showConfirmDialog(this, "You have already generated the random meet order.  Shall I do it again and overwrite the current ordering?", "Warning", JOptionPane.OK_CANCEL_OPTION);
-            if(confirm != JOptionPane.OK_OPTION) return;
+            if (confirm != JOptionPane.OK_OPTION) {
+                return;
+            }
         }
-
         controller.generateRandomFiguresOrder(meet);
         updateStatus();
-        //TODO give some feedback
+        selectTab(Tab.FIGURES_ORDER);
     }//GEN-LAST:event_generateRandomFiguresOrderButtonActionPerformed
 
+    private void figuresOrderSortByNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_figuresOrderSortByNumberActionPerformed
+        updateFiguresOrderList();
+    }//GEN-LAST:event_figuresOrderSortByNumberActionPerformed
+
+    private void figuresOrderSortByNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_figuresOrderSortByNameActionPerformed
+        updateFiguresOrderList();
+    }//GEN-LAST:event_figuresOrderSortByNameActionPerformed
+
+    private void figuresOrderPrintButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_figuresOrderPrintButtonActionPerformed
+        try {
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/FiguresOrder.jasper")); //JasperCompileManager.compileReport(jasperDesign);
+            JRDataSource data = new JRTableModelDataSource(figureOrderTable.getModel());
+            Map<String,Object> params = new HashMap<String,Object>();
+            params.put("MeetDate", meet.getMeetDate());
+            params.put("MeetName", meet.getName());
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, data);
+            JasperViewer.viewReport(jasperPrint, false);
+        } catch (Exception ex) {
+            String connectMsg = "Could not create the report.\n" + ex.getLocalizedMessage();
+            System.out.println(connectMsg);
+        }
+    }//GEN-LAST:event_figuresOrderPrintButtonActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuItem aboutMenuItem;
-    private javax.swing.JMenuItem contentsMenuItem;
-    private javax.swing.JMenuItem copyMenuItem;
-    private javax.swing.JMenuItem cutMenuItem;
-    private javax.swing.JMenuItem deleteMenuItem;
-    private javax.swing.JMenu editMenu;
-    private javax.swing.JMenuItem exitMenuItem;
+    private javax.swing.JScrollPane figureOrderScrollPane;
+    private javax.swing.JRadioButton figureOrderSortByName;
+    private javax.swing.JRadioButton figureOrderSortByNumber;
+    private javax.swing.JTable figureOrderTable;
     private javax.swing.JPanel figureScore;
     private org.aquastarz.score.gui.FigureScorePanel figureScorePanel;
-    private javax.swing.JMenu fileMenu;
+    private javax.swing.JPanel figuresOrder;
+    private javax.swing.JButton figuresOrderPrintButton;
+    private javax.swing.ButtonGroup figuresOrderSortButtonGroup;
     private javax.swing.JButton generateRandomFiguresOrderButton;
-    private javax.swing.JMenu helpMenu;
     private javax.swing.JProgressBar intFiguresProgress;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JToolBar jToolBar1;
-    private javax.swing.JMenuItem maintenanceMenuItem;
     private org.aquastarz.score.gui.MeetSetupPanel meetSetup;
-    private javax.swing.JMenuBar menuBar;
     private javax.swing.JProgressBar novFiguresProgress;
-    private javax.swing.JMenuItem openMenuItem;
-    private javax.swing.JMenuItem pasteMenuItem;
     private javax.swing.JPanel reportPanel;
     private javax.swing.JPanel routineScore;
     private javax.swing.JProgressBar routinesProgress;
-    private javax.swing.JMenuItem saveAsMenuItem;
     private javax.swing.JButton saveFigureScoreButton;
-    private javax.swing.JMenuItem saveMenuItem;
     private javax.swing.JButton saveSwimmersButton;
     private javax.swing.JProgressBar setupProgress;
     private org.aquastarz.score.gui.FiguresParticipantSearchPanel swimmerSearchPanel;
