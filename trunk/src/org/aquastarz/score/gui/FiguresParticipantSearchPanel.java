@@ -38,7 +38,7 @@ public class FiguresParticipantSearchPanel extends javax.swing.JPanel {
     }
 
     private void fireFiguresParticipantSearchRequested(String figureOrder) {
-        for(FiguresParticipantSearchPanelListener listener : listeners) {
+        for (FiguresParticipantSearchPanelListener listener : listeners) {
             String s = figureOrder.replaceAll("\\.", "");
             this.figureOrder.setText(s);
             listener.figuresParticipantSearchRequested(s);
@@ -46,7 +46,7 @@ public class FiguresParticipantSearchPanel extends javax.swing.JPanel {
     }
 
     private void fireFiguresParticipantSet() {
-        for(FiguresParticipantSearchPanelListener listener : listeners) {
+        for (FiguresParticipantSearchPanelListener listener : listeners) {
             listener.figuresParticipantSet();
         }
     }
@@ -56,7 +56,7 @@ public class FiguresParticipantSearchPanel extends javax.swing.JPanel {
         Swimmer s = figuresParticipant.getSwimmer();
         leagueSwimmerNumber.setText(s.getSwimmerId().toString());
         swimmerLevel.setText(s.getLevel().getLevelId());
-        swimmerName.setText(s.getLastName()+", "+s.getFirstName());
+        swimmerName.setText(s.getLastName() + ", " + s.getFirstName());
         swimmerTeam.setText(s.getTeam().getTeamId());
         fireFiguresParticipantSet();
     }
@@ -90,7 +90,7 @@ public class FiguresParticipantSearchPanel extends javax.swing.JPanel {
         meetLabel.setFont(new java.awt.Font("Tahoma", 0, 14));
         meetLabel.setText("Meet #:");
 
-        figureOrder.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        figureOrder.setFont(new java.awt.Font("Tahoma", 0, 14));
         figureOrder.setText("99");
         figureOrder.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -107,7 +107,7 @@ public class FiguresParticipantSearchPanel extends javax.swing.JPanel {
         leagueLabel.setText("League #:");
 
         leagueSwimmerNumber.setBackground(new java.awt.Color(255, 255, 255));
-        leagueSwimmerNumber.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        leagueSwimmerNumber.setFont(new java.awt.Font("Tahoma", 0, 14));
         leagueSwimmerNumber.setText("999");
         leagueSwimmerNumber.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         leagueSwimmerNumber.setOpaque(true);
@@ -116,7 +116,7 @@ public class FiguresParticipantSearchPanel extends javax.swing.JPanel {
         nameLabel.setText("Name:");
 
         swimmerName.setBackground(java.awt.SystemColor.text);
-        swimmerName.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        swimmerName.setFont(new java.awt.Font("Tahoma", 0, 14));
         swimmerName.setText("Swimmer, Suzie");
         swimmerName.setOpaque(true);
 
@@ -124,7 +124,7 @@ public class FiguresParticipantSearchPanel extends javax.swing.JPanel {
         teamLabel.setText("Team:");
 
         swimmerTeam.setBackground(java.awt.SystemColor.text);
-        swimmerTeam.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        swimmerTeam.setFont(new java.awt.Font("Tahoma", 0, 14));
         swimmerTeam.setText("ABC");
         swimmerTeam.setOpaque(true);
 
@@ -132,7 +132,7 @@ public class FiguresParticipantSearchPanel extends javax.swing.JPanel {
         levelLabel.setText("Level:");
 
         swimmerLevel.setBackground(java.awt.SystemColor.text);
-        swimmerLevel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        swimmerLevel.setFont(new java.awt.Font("Tahoma", 0, 14));
         swimmerLevel.setText("Novice 9-10");
         swimmerLevel.setOpaque(true);
 
@@ -191,7 +191,8 @@ public class FiguresParticipantSearchPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_figureOrderMouseClicked
 
     private void figureOrderKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_figureOrderKeyPressed
-        if(evt.getKeyChar()==10) {
+        if (evt.getKeyChar() == 10 || evt.getKeyChar() == 9) {
+            figureOrder.setText(figureOrder.getText().toUpperCase());
             fireFiguresParticipantSearchRequested(figureOrder.getText());
         }
     }//GEN-LAST:event_figureOrderKeyPressed
@@ -200,8 +201,6 @@ public class FiguresParticipantSearchPanel extends javax.swing.JPanel {
         figureOrder.selectAll();
         figureOrder.requestFocus();
     }//GEN-LAST:event_formFocusGained
-
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField figureOrder;
     private javax.swing.JLabel leagueLabel;
@@ -214,5 +213,4 @@ public class FiguresParticipantSearchPanel extends javax.swing.JPanel {
     private javax.swing.JLabel swimmerTeam;
     private javax.swing.JLabel teamLabel;
     // End of variables declaration//GEN-END:variables
-
 }
