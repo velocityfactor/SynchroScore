@@ -59,7 +59,9 @@ public class Meet implements Serializable {
 
     @OneToMany(mappedBy = "meet")
     private List<FiguresParticipant> figuresParticipants = new Vector<FiguresParticipant>();
+
     private char type;
+
     private boolean figuresOrderGenerated = false;
 
     @ManyToOne
@@ -295,6 +297,29 @@ public class Meet implements Serializable {
         return valid;
     }
 
+    public List<Figure> getFigureList(Swimmer swimmer) {
+        List<Figure> figures = new ArrayList<Figure>();
+        String level = swimmer.getLevel().getLevelId();
+        if(level.startsWith("N")) {
+            if("N8".equals(level)) {
+                figures.add(eu1Figure);
+                figures.add(eu2Figure);
+            }
+            else {
+                figures.add(nov1Figure);
+                figures.add(nov2Figure);
+                figures.add(nov3Figure);
+                figures.add(nov4Figure);
+            }
+        }
+        else {
+            figures.add(int1Figure);
+            figures.add(int2Figure);
+            figures.add(int3Figure);
+            figures.add(int4Figure);
+        }
+        return figures;
+    }
 
     @Override
     public int hashCode() {

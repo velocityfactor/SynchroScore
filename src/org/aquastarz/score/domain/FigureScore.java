@@ -160,8 +160,8 @@ public class FigureScore implements Serializable {
 
     private FiguresParticipant figuresParticipant;
 
-//    @JoinColumn(name = "figuresParticipantId", referencedColumnName = "figuresParticipantId", nullable = false)
     @ManyToOne(optional = false)
+    @JoinColumn(name = "figuresParticipantId")
     public FiguresParticipant getFiguresParticipant() {
         return figuresParticipant;
     }

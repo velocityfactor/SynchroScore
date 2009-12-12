@@ -22,6 +22,7 @@ package org.aquastarz.score.controller;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +33,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import org.aquastarz.score.ScoreApp;
 import org.aquastarz.score.domain.Figure;
+import org.aquastarz.score.domain.FigureScore;
 import org.aquastarz.score.domain.FiguresParticipant;
 import org.aquastarz.score.domain.Meet;
 import org.aquastarz.score.domain.Swimmer;
@@ -228,5 +230,19 @@ public class ScoreController {
         }
 
         return true;
+    }
+
+    public void saveFigureScores(Collection<FigureScore> figureScores) {
+        EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        for(FigureScore figureScore:figureScores) {
+            figureScore = entityManager.merge(figureScore);
+        }
+        try {
+            transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
+            e.printStackTrace();
+        }
     }
 }

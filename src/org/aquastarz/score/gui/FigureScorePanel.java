@@ -19,18 +19,24 @@
 // </editor-fold>
 package org.aquastarz.score.gui;
 
-import java.awt.event.ActionEvent;
+import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.KeyStroke;
+import java.util.Map;
+import javax.swing.JTextField;
 import org.aquastarz.score.domain.Figure;
 import org.aquastarz.score.domain.FigureScore;
+import org.aquastarz.score.domain.FiguresParticipant;
+import org.aquastarz.score.util.TwoDigitScore;
 
 public class FigureScorePanel extends javax.swing.JPanel {
 
     private int currentRow;
+    private FiguresParticipant figuresParticipant;
+    private Map<Figure, FigureScore> figureScoreMap;
+    private Figure[] figures;
 
     /** Creates new form FigureScorePanel */
     public FigureScorePanel() {
@@ -38,8 +44,208 @@ public class FigureScorePanel extends javax.swing.JPanel {
         setEditableRow(0);
     }
 
-    public void setData(List<Figure> figures, Collection<FigureScore> figureScores) {
-        
+    public void setData(List<Figure> figures, FiguresParticipant figuresParticipant) {
+        this.figuresParticipant = figuresParticipant;
+        Collection<FigureScore> figureScores = figuresParticipant.getFiguresScores();
+        figureScoreMap = new HashMap<Figure, FigureScore>();
+        for (FigureScore figureScore : figureScores) {
+            figureScoreMap.put(figureScore.getFigure(), figureScore);
+        }
+        Figure[] fig = figures.toArray(new Figure[4]);
+        this.figures = fig;
+        if (fig[0] != null) {
+            fig1.setText(fig[0].getFigureId());
+            dd1.setText(fig[0].getDegreeOfDifficulty().toString());
+            FigureScore figureScore = figureScoreMap.get(fig[0]);
+            if(figureScore!=null && figureScore.getPenalty()!=null) {
+                pen1.setText(figureScoreMap.get(fig[0]).getPenalty().toString());
+            }
+            else {
+                pen1.setText("0");
+            }
+        }
+        if (fig[1] != null) {
+            fig2.setText(fig[1].getFigureId());
+            dd2.setText(fig[1].getDegreeOfDifficulty().toString());
+            FigureScore figureScore = figureScoreMap.get(fig[1]);
+            if(figureScore!=null && figureScore.getPenalty()!=null) {
+                pen2.setText(figureScoreMap.get(fig[1]).getPenalty().toString());
+            }
+            else {
+                pen2.setText("0");
+            }
+        }
+        if (fig[2] != null) {
+            fig3.setText(fig[2].getFigureId());
+            dd3.setText(fig[2].getDegreeOfDifficulty().toString());
+            FigureScore figureScore = figureScoreMap.get(fig[2]);
+            if(figureScore!=null && figureScore.getPenalty()!=null) {
+                pen3.setText(figureScoreMap.get(fig[2]).getPenalty().toString());
+            }
+            else {
+                pen3.setText("0");
+            }
+        }
+        if (fig[3] != null) {
+            fig4.setText(fig[3].getFigureId());
+            dd4.setText(fig[3].getDegreeOfDifficulty().toString());
+            FigureScore figureScore = figureScoreMap.get(fig[3]);
+            if(figureScore!=null && figureScore.getPenalty()!=null) {
+                pen4.setText(figureScoreMap.get(fig[3]).getPenalty().toString());
+            }
+            else {
+                pen4.setText("0");
+            }
+        }
+        for (int i = 1; i <= 4; i++) {
+            for (int j = 1; j <= 5; j++) {
+                setScoreText(i, j, getScore(i, j));
+            }
+        }
+    }
+
+    private String getScore(int fig, int judge) {
+        FigureScore score = figureScoreMap.get(figures[fig - 1]);
+        if (score != null) {
+            switch (judge) {
+                case 1:
+                    return score.getScore1().toString();
+                case 2:
+                    return score.getScore2().toString();
+                case 3:
+                    return score.getScore3().toString();
+                case 4:
+                    return score.getScore4().toString();
+                case 5:
+                    return score.getScore5().toString();
+            }
+        }
+        return "";
+    }
+
+    public Collection<FigureScore> getFigureScores() {
+        storeScore(currentRow);
+        return figureScoreMap.values();
+    }
+
+    private void storeScore(int fig) {
+        FigureScore score = figureScoreMap.get(figures[fig-1]);
+        if (score == null) {
+            score = new FigureScore();
+            score.setFigure(figures[fig-1]);
+            score.setFiguresParticipant(figuresParticipant);
+        }
+        score.setScore1(getScoreValue(fig, 1));
+        score.setScore2(getScoreValue(fig, 2));
+        score.setScore3(getScoreValue(fig, 3));
+        score.setScore4(getScoreValue(fig, 4));
+        score.setScore5(getScoreValue(fig, 5));
+        score.setPenalty(getPenaltyValue(fig));
+        score.setTotalScore(new BigDecimal("0.0"));
+        figureScoreMap.put(figures[fig-1], score);
+    }
+
+    private JTextField getScoreField(int fig, int judge) {
+        String compName = "scoreS" + fig + "J" + judge;
+        Object comp = null;
+        try {
+            Field f = this.getClass().getDeclaredField(compName);
+            comp = f.get(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (comp instanceof JTextField) {
+            return (JTextField) comp;
+        }
+        return null;
+    }
+
+    private BigDecimal getScoreValue(int fig, int judge) {
+        JTextField f = getScoreField(fig, judge);
+        BigDecimal score = null;
+        if (f != null) {
+            String s = f.getText();
+            score = TwoDigitScore.convert(s);
+        }
+        return score;
+    }
+
+    private void setScoreText(int fig, int judge, String text) {
+        JTextField f = getScoreField(fig, judge);
+        if (f != null) {
+            f.setText(text);
+        }
+    }
+
+    private BigDecimal getPenaltyValue(int fig) {
+        BigDecimal penalty = null;
+        switch(fig) {
+            case 1:
+                penalty = getPenalty1();
+                break;
+            case 2:
+                penalty = getPenalty2();
+                break;
+            case 3:
+                penalty = getPenalty3();
+                break;
+            case 4:
+                penalty = getPenalty4();
+                break;
+        }
+        return penalty;
+    }
+
+    private BigDecimal getPenalty1() {
+        if(penaltyHS1.isSelected()) {
+            return new BigDecimal("0.5");
+        }
+        if(penalty1S1.isSelected()) {
+            return new BigDecimal("1.0");
+        }
+        if(penalty2S1.isSelected()) {
+            return new BigDecimal("2.0");
+        }
+        return new BigDecimal("0.0");
+    }
+
+    private BigDecimal getPenalty2() {
+        if(penaltyHS2.isSelected()) {
+            return new BigDecimal("0.5");
+        }
+        if(penalty1S2.isSelected()) {
+            return new BigDecimal("1.0");
+        }
+        if(penalty2S2.isSelected()) {
+            return new BigDecimal("2.0");
+        }
+        return new BigDecimal("0.0");
+    }
+
+    private BigDecimal getPenalty3() {
+        if(penaltyHS3.isSelected()) {
+            return new BigDecimal("0.5");
+        }
+        if(penalty1S3.isSelected()) {
+            return new BigDecimal("1.0");
+        }
+        if(penalty2S3.isSelected()) {
+            return new BigDecimal("2.0");
+        }
+        return new BigDecimal("0.0");
+    }
+
+    private BigDecimal getPenalty4() {
+        if(penaltyHS4.isSelected()) {
+            return new BigDecimal("0.5");
+        }
+        if(penalty1S4.isSelected()) {
+            return new BigDecimal("1.0");
+        }
+        if(penalty2S4.isSelected()) {
+            return new BigDecimal("2.0");
+        }
+        return new BigDecimal("0.0");
     }
 
     /** This method is called from within the constructor to
@@ -810,7 +1016,7 @@ public class FigureScorePanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void penalty2S3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_penalty2S3ActionPerformed
-        if(penalty2S3.isSelected()) {
+        if (penalty2S3.isSelected()) {
             penalty1S3.setSelected(false);
             penaltyHS3.setSelected(false);
         }
@@ -821,21 +1027,21 @@ public class FigureScorePanel extends javax.swing.JPanel {
 }//GEN-LAST:event_station1ButtonActionPerformed
 
     private void penalty2S2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_penalty2S2ActionPerformed
-        if(penalty2S2.isSelected()) {
+        if (penalty2S2.isSelected()) {
             penalty1S2.setSelected(false);
             penaltyHS2.setSelected(false);
         }
 }//GEN-LAST:event_penalty2S2ActionPerformed
 
     private void penalty2S4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_penalty2S4ActionPerformed
-        if(penalty2S4.isSelected()) {
+        if (penalty2S4.isSelected()) {
             penalty1S4.setSelected(false);
             penaltyHS4.setSelected(false);
         }
 }//GEN-LAST:event_penalty2S4ActionPerformed
 
     private void penalty2S1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_penalty2S1ActionPerformed
-        if(penalty2S1.isSelected()) {
+        if (penalty2S1.isSelected()) {
             penalty1S1.setSelected(false);
             penaltyHS1.setSelected(false);
         }
@@ -854,56 +1060,56 @@ public class FigureScorePanel extends javax.swing.JPanel {
     }//GEN-LAST:event_station4ButtonActionPerformed
 
     private void penalty1S1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_penalty1S1ActionPerformed
-        if(penalty1S1.isSelected()) {
+        if (penalty1S1.isSelected()) {
             penalty2S1.setSelected(false);
             penaltyHS1.setSelected(false);
         }
     }//GEN-LAST:event_penalty1S1ActionPerformed
 
     private void penaltyHS1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_penaltyHS1ActionPerformed
-        if(penaltyHS1.isSelected()) {
+        if (penaltyHS1.isSelected()) {
             penalty2S1.setSelected(false);
             penalty1S1.setSelected(false);
         }
     }//GEN-LAST:event_penaltyHS1ActionPerformed
 
     private void penalty1S2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_penalty1S2ActionPerformed
-        if(penalty1S2.isSelected()) {
+        if (penalty1S2.isSelected()) {
             penalty2S2.setSelected(false);
             penaltyHS2.setSelected(false);
         }
     }//GEN-LAST:event_penalty1S2ActionPerformed
 
     private void penaltyHS2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_penaltyHS2ActionPerformed
-        if(penaltyHS2.isSelected()) {
+        if (penaltyHS2.isSelected()) {
             penalty2S2.setSelected(false);
             penalty1S2.setSelected(false);
         }
     }//GEN-LAST:event_penaltyHS2ActionPerformed
 
     private void penalty1S3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_penalty1S3ActionPerformed
-        if(penalty1S3.isSelected()) {
+        if (penalty1S3.isSelected()) {
             penalty2S3.setSelected(false);
             penaltyHS3.setSelected(false);
         }
     }//GEN-LAST:event_penalty1S3ActionPerformed
 
     private void penaltyHS3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_penaltyHS3ActionPerformed
-        if(penaltyHS3.isSelected()) {
+        if (penaltyHS3.isSelected()) {
             penalty2S3.setSelected(false);
             penalty1S3.setSelected(false);
         }
     }//GEN-LAST:event_penaltyHS3ActionPerformed
 
     private void penalty1S4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_penalty1S4ActionPerformed
-        if(penalty1S4.isSelected()) {
+        if (penalty1S4.isSelected()) {
             penalty2S4.setSelected(false);
             penaltyHS4.setSelected(false);
         }
     }//GEN-LAST:event_penalty1S4ActionPerformed
 
     private void penaltyHS4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_penaltyHS4ActionPerformed
-        if(penaltyHS4.isSelected()) {
+        if (penaltyHS4.isSelected()) {
             penalty2S4.setSelected(false);
             penalty1S4.setSelected(false);
         }
@@ -914,131 +1120,131 @@ public class FigureScorePanel extends javax.swing.JPanel {
     }//GEN-LAST:event_formFocusGained
 
     private void scoreS1J1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS1J1KeyPressed
-        if(evt.getKeyChar()==10) {
+        if (evt.getKeyChar() == 10) {
             scoreS1J2.requestFocus();
         }
     }//GEN-LAST:event_scoreS1J1KeyPressed
 
     private void scoreS1J2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS1J2KeyPressed
-        if(evt.getKeyChar()==10) {
+        if (evt.getKeyChar() == 10) {
             scoreS1J3.requestFocus();
         }
     }//GEN-LAST:event_scoreS1J2KeyPressed
 
     private void scoreS1J3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS1J3KeyPressed
-        if(evt.getKeyChar()==10) {
+        if (evt.getKeyChar() == 10) {
             scoreS1J4.requestFocus();
         }
     }//GEN-LAST:event_scoreS1J3KeyPressed
 
     private void scoreS1J4KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS1J4KeyPressed
-        if(evt.getKeyChar()==10) {
+        if (evt.getKeyChar() == 10) {
             scoreS1J5.requestFocus();
         }
     }//GEN-LAST:event_scoreS1J4KeyPressed
 
     private void scoreS1J5KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS1J5KeyPressed
-        if(evt.getKeyChar()==10) {
+        if (evt.getKeyChar() == 10) {
             //TODO focus to save button
         }
     }//GEN-LAST:event_scoreS1J5KeyPressed
 
     private void scoreS2J1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS2J1KeyPressed
-        if(evt.getKeyChar()==10) {
+        if (evt.getKeyChar() == 10) {
             scoreS2J2.requestFocus();
         }
     }//GEN-LAST:event_scoreS2J1KeyPressed
 
     private void scoreS2J2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS2J2KeyPressed
-        if(evt.getKeyChar()==10) {
+        if (evt.getKeyChar() == 10) {
             scoreS2J3.requestFocus();
         }
     }//GEN-LAST:event_scoreS2J2KeyPressed
 
     private void scoreS2J3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS2J3KeyPressed
-        if(evt.getKeyChar()==10) {
+        if (evt.getKeyChar() == 10) {
             scoreS2J4.requestFocus();
         }
     }//GEN-LAST:event_scoreS2J3KeyPressed
 
     private void scoreS2J4KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS2J4KeyPressed
-        if(evt.getKeyChar()==10) {
+        if (evt.getKeyChar() == 10) {
             scoreS2J5.requestFocus();
         }
     }//GEN-LAST:event_scoreS2J4KeyPressed
 
     private void scoreS2J5KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS2J5KeyPressed
-        if(evt.getKeyChar()==10) {
+        if (evt.getKeyChar() == 10) {
             //TODO focus to save button
         }
     }//GEN-LAST:event_scoreS2J5KeyPressed
 
     private void scoreS3J1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS3J1KeyPressed
-        if(evt.getKeyChar()==10) {
+        if (evt.getKeyChar() == 10) {
             scoreS3J2.requestFocus();
         }
     }//GEN-LAST:event_scoreS3J1KeyPressed
 
     private void scoreS3J2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS3J2KeyPressed
-        if(evt.getKeyChar()==10) {
+        if (evt.getKeyChar() == 10) {
             scoreS3J3.requestFocus();
         }
     }//GEN-LAST:event_scoreS3J2KeyPressed
 
     private void scoreS3J3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS3J3KeyPressed
-        if(evt.getKeyChar()==10) {
+        if (evt.getKeyChar() == 10) {
             scoreS3J4.requestFocus();
         }
     }//GEN-LAST:event_scoreS3J3KeyPressed
 
     private void scoreS3J4KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS3J4KeyPressed
-        if(evt.getKeyChar()==10) {
+        if (evt.getKeyChar() == 10) {
             scoreS3J5.requestFocus();
         }
     }//GEN-LAST:event_scoreS3J4KeyPressed
 
     private void scoreS3J5KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS3J5KeyPressed
-        if(evt.getKeyChar()==10) {
+        if (evt.getKeyChar() == 10) {
             //TODO focus to save button
         }
     }//GEN-LAST:event_scoreS3J5KeyPressed
 
     private void scoreS4J1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS4J1KeyPressed
-        if(evt.getKeyChar()==10) {
+        if (evt.getKeyChar() == 10) {
             scoreS4J2.requestFocus();
         }
     }//GEN-LAST:event_scoreS4J1KeyPressed
 
     private void scoreS4J2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS4J2KeyPressed
-        if(evt.getKeyChar()==10) {
+        if (evt.getKeyChar() == 10) {
             scoreS4J3.requestFocus();
         }
     }//GEN-LAST:event_scoreS4J2KeyPressed
 
     private void scoreS4J3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS4J3KeyPressed
-        if(evt.getKeyChar()==10) {
+        if (evt.getKeyChar() == 10) {
             scoreS4J4.requestFocus();
         }
     }//GEN-LAST:event_scoreS4J3KeyPressed
 
     private void scoreS4J4KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS4J4KeyPressed
-        if(evt.getKeyChar()==10) {
+        if (evt.getKeyChar() == 10) {
             scoreS4J5.requestFocus();
         }
     }//GEN-LAST:event_scoreS4J4KeyPressed
 
     private void scoreS4J5KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS4J5KeyPressed
-        if(evt.getKeyChar()==10) {
+        if (evt.getKeyChar() == 10) {
             //Focus to save button
         }
     }//GEN-LAST:event_scoreS4J5KeyPressed
 
     private void setEditableRow(int row) {
         currentRow = row;
-        boolean row1=(row==1);
-        boolean row2=(row==2);
-        boolean row3=(row==3);
-        boolean row4=(row==4);
+        boolean row1 = (row == 1);
+        boolean row2 = (row == 2);
+        boolean row3 = (row == 3);
+        boolean row4 = (row == 4);
         scoreS1J1.setEditable(row1);
         scoreS1J2.setEditable(row1);
         scoreS1J3.setEditable(row1);
@@ -1075,13 +1281,20 @@ public class FigureScorePanel extends javax.swing.JPanel {
         penalty1S4.setEnabled(row4);
         penaltyHS4.setEnabled(row4);
 
-        if(row1) scoreS1J1.requestFocus();
-        if(row2) scoreS2J1.requestFocus();
-        if(row3) scoreS3J1.requestFocus();
-        if(row4) scoreS4J1.requestFocus();
+        if (row1) {
+            scoreS1J1.requestFocus();
+        }
+        if (row2) {
+            scoreS2J1.requestFocus();
+        }
+        if (row3) {
+            scoreS3J1.requestFocus();
+        }
+        if (row4) {
+            scoreS4J1.requestFocus();
+        }
 
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel dd1;
     private javax.swing.JLabel dd2;
@@ -1151,6 +1364,6 @@ public class FigureScorePanel extends javax.swing.JPanel {
     private javax.swing.JLabel total3;
     private javax.swing.JLabel total4;
     private javax.swing.JLabel totalLabel;
-    // End of variables declaration//GEN-END:variables
 
+    // End of variables declaration//GEN-END:variables
 }
