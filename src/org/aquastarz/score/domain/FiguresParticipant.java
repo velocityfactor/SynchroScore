@@ -69,15 +69,15 @@ public class FiguresParticipant implements Serializable {
     @Basic(optional = true)
     private BigDecimal points;
 
-    @OneToMany(mappedBy = "figureScoreId")
-    private Collection<FigureScore> scores = new Vector<FigureScore>();
+    @OneToMany(mappedBy = "figuresParticipant")
+    private Collection<FigureScore> figureScores = new Vector<FigureScore>();
 
-    public Collection<FigureScore> getScores() {
-        return scores;
+    public Collection<FigureScore> getFiguresScores() {
+        return figureScores;
     }
 
-    public void setScores(Collection<FigureScore> scores) {
-        this.scores = scores;
+    public void setFiguresScores(Collection<FigureScore> figureScores) {
+        this.figureScores = figureScores;
     }
 
     public FiguresParticipant() {

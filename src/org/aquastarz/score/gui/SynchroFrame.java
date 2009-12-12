@@ -164,6 +164,7 @@ public class SynchroFrame extends javax.swing.JFrame {
                 //TODO if null returned, show feedback
                 if (figuresParticipant != null) {
                     swimmerSearchPanel.setFiguresParticipant(figuresParticipant);
+                    figureScorePanel.setData(meet.getFigureList(figuresParticipant.getSwimmer()),figuresParticipant);
                 }
             }
 
@@ -225,8 +226,8 @@ public class SynchroFrame extends javax.swing.JFrame {
         figureScore = new javax.swing.JPanel();
         swimmerSearchPanel = new org.aquastarz.score.gui.FiguresParticipantSearchPanel();
         figureScorePanel = new org.aquastarz.score.gui.FigureScorePanel();
-        saveFigureScoreButton = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
+        saveFigureScoreButton = new javax.swing.JButton();
         routineScore = new javax.swing.JPanel();
         reportPanel = new javax.swing.JPanel();
         jToolBar1 = new javax.swing.JToolBar();
@@ -397,22 +398,22 @@ public class SynchroFrame extends javax.swing.JFrame {
                 saveFigureScoreButtonActionPerformed(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
-        figureScore.add(saveFigureScoreButton, gridBagConstraints);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 814, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(saveFigureScoreButton)
+                .addContainerGap(739, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 291, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(saveFigureScoreButton)
+                .addContainerGap(290, Short.MAX_VALUE))
         );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -506,7 +507,7 @@ public class SynchroFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_saveSwimmersButtonActionPerformed
 
     private void saveFigureScoreButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFigureScoreButtonActionPerformed
-        // TODO add your handling code here:
+        controller.saveFigureScores(figureScorePanel.getFigureScores());
     }//GEN-LAST:event_saveFigureScoreButtonActionPerformed
 
     private void generateRandomFiguresOrderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateRandomFiguresOrderButtonActionPerformed
