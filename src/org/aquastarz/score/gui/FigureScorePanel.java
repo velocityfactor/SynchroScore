@@ -19,6 +19,7 @@
 // </editor-fold>
 package org.aquastarz.score.gui;
 
+import java.awt.event.KeyEvent;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -26,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JTextField;
+import org.aquastarz.score.controller.ScoreController;
 import org.aquastarz.score.domain.Figure;
 import org.aquastarz.score.domain.FigureScore;
 import org.aquastarz.score.domain.FiguresParticipant;
@@ -33,6 +35,8 @@ import org.aquastarz.score.util.TwoDigitScore;
 
 public class FigureScorePanel extends javax.swing.JPanel {
 
+    private static org.apache.log4j.Logger logger =
+            org.apache.log4j.Logger.getLogger(FigureScorePanel.class.getName());
     private int currentRow;
     private FiguresParticipant figuresParticipant;
     private Map<Figure, FigureScore> figureScoreMap;
@@ -42,6 +46,39 @@ public class FigureScorePanel extends javax.swing.JPanel {
     public FigureScorePanel() {
         initComponents();
         setEditableRow(0);
+        clear();
+    }
+
+    public void clear() {
+        for (int i = 1; i <= 4; i++) {
+            for (int j = 1; j <= 5; j++) {
+                setScoreText(i, j, "");
+            }
+        }
+        penaltyHS1.setSelected(false);
+        penalty1S1.setSelected(false);
+        penalty2S1.setSelected(false);
+        penaltyHS2.setSelected(false);
+        penalty1S2.setSelected(false);
+        penalty2S2.setSelected(false);
+        penaltyHS3.setSelected(false);
+        penalty1S3.setSelected(false);
+        penalty2S3.setSelected(false);
+        penaltyHS4.setSelected(false);
+        penalty1S4.setSelected(false);
+        penalty2S4.setSelected(false);
+        dd1.setText("");
+        total1.setText("");
+        fig1.setText("");
+        dd2.setText("");
+        total2.setText("");
+        fig2.setText("");
+        dd3.setText("");
+        total3.setText("");
+        fig3.setText("");
+        dd4.setText("");
+        total4.setText("");
+        fig4.setText("");
     }
 
     public void setData(List<Figure> figures, FiguresParticipant figuresParticipant) {
@@ -54,47 +91,123 @@ public class FigureScorePanel extends javax.swing.JPanel {
         Figure[] fig = figures.toArray(new Figure[4]);
         this.figures = fig;
         if (fig[0] != null) {
-            fig1.setText(fig[0].getFigureId());
+            fig1.setText(fig[0].getName());
             dd1.setText(fig[0].getDegreeOfDifficulty().toString());
+            penaltyHS1.setSelected(false);
+            penalty1S1.setSelected(false);
+            penalty2S1.setSelected(false);
             FigureScore figureScore = figureScoreMap.get(fig[0]);
-            if(figureScore!=null && figureScore.getPenalty()!=null) {
-                pen1.setText(figureScoreMap.get(fig[0]).getPenalty().toString());
-            }
-            else {
-                pen1.setText("0");
+            if (figureScore != null) {
+                if (figureScore.getTotalScore() != null) {
+                    total1.setText(figureScore.getTotalScore().toPlainString());
+                } else {
+                    total1.setText("NA");
+                }
+                if (figureScore.getPenalty() != null) {
+                    BigDecimal penalty = figureScoreMap.get(fig[0]).getPenalty();
+                    int ip = penalty.movePointRight(1).intValue();
+                    switch (ip) {
+                        case 5:
+                            penaltyHS1.setSelected(true);
+                            break;
+                        case 10:
+                            penalty1S1.setSelected(true);
+                            break;
+                        case 20:
+                            penalty2S1.setSelected(true);
+                            break;
+                    }
+                }
             }
         }
         if (fig[1] != null) {
-            fig2.setText(fig[1].getFigureId());
+            fig2.setText(fig[1].getName());
             dd2.setText(fig[1].getDegreeOfDifficulty().toString());
+            penaltyHS2.setSelected(false);
+            penalty1S2.setSelected(false);
+            penalty2S2.setSelected(false);
             FigureScore figureScore = figureScoreMap.get(fig[1]);
-            if(figureScore!=null && figureScore.getPenalty()!=null) {
-                pen2.setText(figureScoreMap.get(fig[1]).getPenalty().toString());
-            }
-            else {
-                pen2.setText("0");
+            if (figureScore != null) {
+                if (figureScore.getTotalScore() != null) {
+                    total2.setText(figureScore.getTotalScore().toPlainString());
+                } else {
+                    total2.setText("NA");
+                }
+                if (figureScore.getPenalty() != null) {
+                    BigDecimal penalty = figureScoreMap.get(fig[1]).getPenalty();
+                    int ip = penalty.movePointRight(1).intValue();
+                    switch (ip) {
+                        case 5:
+                            penaltyHS2.setSelected(true);
+                            break;
+                        case 10:
+                            penalty1S2.setSelected(true);
+                            break;
+                        case 20:
+                            penalty2S2.setSelected(true);
+                            break;
+                    }
+                }
             }
         }
         if (fig[2] != null) {
-            fig3.setText(fig[2].getFigureId());
+            fig3.setText(fig[2].getName());
             dd3.setText(fig[2].getDegreeOfDifficulty().toString());
+            penaltyHS3.setSelected(false);
+            penalty1S3.setSelected(false);
+            penalty2S3.setSelected(false);
             FigureScore figureScore = figureScoreMap.get(fig[2]);
-            if(figureScore!=null && figureScore.getPenalty()!=null) {
-                pen3.setText(figureScoreMap.get(fig[2]).getPenalty().toString());
-            }
-            else {
-                pen3.setText("0");
+            if (figureScore != null) {
+                if (figureScore.getTotalScore() != null) {
+                    total3.setText(figureScore.getTotalScore().toPlainString());
+                } else {
+                    total3.setText("NA");
+                }
+                if (figureScore.getPenalty() != null) {
+                    BigDecimal penalty = figureScoreMap.get(fig[2]).getPenalty();
+                    int ip = penalty.movePointRight(1).intValue();
+                    switch (ip) {
+                        case 5:
+                            penaltyHS3.setSelected(true);
+                            break;
+                        case 10:
+                            penalty1S3.setSelected(true);
+                            break;
+                        case 20:
+                            penalty2S3.setSelected(true);
+                            break;
+                    }
+                }
             }
         }
         if (fig[3] != null) {
-            fig4.setText(fig[3].getFigureId());
+            fig4.setText(fig[3].getName());
             dd4.setText(fig[3].getDegreeOfDifficulty().toString());
+            penaltyHS4.setSelected(false);
+            penalty1S4.setSelected(false);
+            penalty2S4.setSelected(false);
             FigureScore figureScore = figureScoreMap.get(fig[3]);
-            if(figureScore!=null && figureScore.getPenalty()!=null) {
-                pen4.setText(figureScoreMap.get(fig[3]).getPenalty().toString());
-            }
-            else {
-                pen4.setText("0");
+            if (figureScore != null) {
+                if (figureScore.getTotalScore() != null) {
+                    total4.setText(figureScore.getTotalScore().toPlainString());
+                } else {
+                    total4.setText("NA");
+                }
+                if (figureScore.getPenalty() != null) {
+                    BigDecimal penalty = figureScoreMap.get(fig[3]).getPenalty();
+                    int ip = penalty.movePointRight(1).intValue();
+                    switch (ip) {
+                        case 5:
+                            penaltyHS4.setSelected(true);
+                            break;
+                        case 10:
+                            penalty1S4.setSelected(true);
+                            break;
+                        case 20:
+                            penalty2S4.setSelected(true);
+                            break;
+                    }
+                }
             }
         }
         for (int i = 1; i <= 4; i++) {
@@ -124,15 +237,30 @@ public class FigureScorePanel extends javax.swing.JPanel {
     }
 
     public Collection<FigureScore> getFigureScores() {
-        storeScore(currentRow);
+        storeScores();
         return figureScoreMap.values();
     }
 
+    public FiguresParticipant getFiguresParticipant() {
+        return figuresParticipant;
+    }
+
+    private void storeScores() {
+        for (int row = 1; row <= 4; row++) {
+            storeScore(row);
+        }
+    }
+
     private void storeScore(int fig) {
-        FigureScore score = figureScoreMap.get(figures[fig-1]);
+        FigureScore score = figureScoreMap.get(figures[fig - 1]);
         if (score == null) {
+            if (getScoreValue(fig, 1) == null && getScoreValue(fig, 2) == null
+                    && getScoreValue(fig, 3) == null && getScoreValue(fig, 4) == null
+                    && getScoreValue(fig, 5) == null) {
+                return;  //Don't make a new one if there's no score entered.
+            }
             score = new FigureScore();
-            score.setFigure(figures[fig-1]);
+            score.setFigure(figures[fig - 1]);
             score.setFiguresParticipant(figuresParticipant);
         }
         score.setScore1(getScoreValue(fig, 1));
@@ -142,7 +270,15 @@ public class FigureScorePanel extends javax.swing.JPanel {
         score.setScore5(getScoreValue(fig, 5));
         score.setPenalty(getPenaltyValue(fig));
         score.setTotalScore(new BigDecimal("0.0"));
-        figureScoreMap.put(figures[fig-1], score);
+        figureScoreMap.put(figures[fig - 1], score);
+    }
+
+    public boolean scoresValid() {
+        boolean valid = true;
+        for (FigureScore score : figureScoreMap.values()) {
+            valid &= ScoreController.isValid(score);
+        }
+        return valid;
     }
 
     private JTextField getScoreField(int fig, int judge) {
@@ -152,7 +288,7 @@ public class FigureScorePanel extends javax.swing.JPanel {
             Field f = this.getClass().getDeclaredField(compName);
             comp = f.get(this);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
         if (comp instanceof JTextField) {
             return (JTextField) comp;
@@ -179,7 +315,7 @@ public class FigureScorePanel extends javax.swing.JPanel {
 
     private BigDecimal getPenaltyValue(int fig) {
         BigDecimal penalty = null;
-        switch(fig) {
+        switch (fig) {
             case 1:
                 penalty = getPenalty1();
                 break;
@@ -197,55 +333,117 @@ public class FigureScorePanel extends javax.swing.JPanel {
     }
 
     private BigDecimal getPenalty1() {
-        if(penaltyHS1.isSelected()) {
+        if (penaltyHS1.isSelected()) {
             return new BigDecimal("0.5");
         }
-        if(penalty1S1.isSelected()) {
+        if (penalty1S1.isSelected()) {
             return new BigDecimal("1.0");
         }
-        if(penalty2S1.isSelected()) {
+        if (penalty2S1.isSelected()) {
             return new BigDecimal("2.0");
         }
         return new BigDecimal("0.0");
     }
 
     private BigDecimal getPenalty2() {
-        if(penaltyHS2.isSelected()) {
+        if (penaltyHS2.isSelected()) {
             return new BigDecimal("0.5");
         }
-        if(penalty1S2.isSelected()) {
+        if (penalty1S2.isSelected()) {
             return new BigDecimal("1.0");
         }
-        if(penalty2S2.isSelected()) {
+        if (penalty2S2.isSelected()) {
             return new BigDecimal("2.0");
         }
         return new BigDecimal("0.0");
     }
 
     private BigDecimal getPenalty3() {
-        if(penaltyHS3.isSelected()) {
+        if (penaltyHS3.isSelected()) {
             return new BigDecimal("0.5");
         }
-        if(penalty1S3.isSelected()) {
+        if (penalty1S3.isSelected()) {
             return new BigDecimal("1.0");
         }
-        if(penalty2S3.isSelected()) {
+        if (penalty2S3.isSelected()) {
             return new BigDecimal("2.0");
         }
         return new BigDecimal("0.0");
     }
 
     private BigDecimal getPenalty4() {
-        if(penaltyHS4.isSelected()) {
+        if (penaltyHS4.isSelected()) {
             return new BigDecimal("0.5");
         }
-        if(penalty1S4.isSelected()) {
+        if (penalty1S4.isSelected()) {
             return new BigDecimal("1.0");
         }
-        if(penalty2S4.isSelected()) {
+        if (penalty2S4.isSelected()) {
             return new BigDecimal("2.0");
         }
         return new BigDecimal("0.0");
+    }
+
+    private void readyToSave() {
+        storeScores();
+        firePropertyChange("FocusSave", null, null);
+    }
+
+    private void setEditableRow(int row) {
+        currentRow = row;
+        boolean row1 = (row == 1);
+        boolean row2 = (row == 2);
+        boolean row3 = (row == 3);
+        boolean row4 = (row == 4);
+        scoreS1J1.setEditable(row1);
+        scoreS1J2.setEditable(row1);
+        scoreS1J3.setEditable(row1);
+        scoreS1J4.setEditable(row1);
+        scoreS1J5.setEditable(row1);
+        penalty2S1.setEnabled(row1);
+        penalty1S1.setEnabled(row1);
+        penaltyHS1.setEnabled(row1);
+
+        scoreS2J1.setEditable(row2);
+        scoreS2J2.setEditable(row2);
+        scoreS2J3.setEditable(row2);
+        scoreS2J4.setEditable(row2);
+        scoreS2J5.setEditable(row2);
+        penalty2S2.setEnabled(row2);
+        penalty1S2.setEnabled(row2);
+        penaltyHS2.setEnabled(row2);
+
+        scoreS3J1.setEditable(row3);
+        scoreS3J2.setEditable(row3);
+        scoreS3J3.setEditable(row3);
+        scoreS3J4.setEditable(row3);
+        scoreS3J5.setEditable(row3);
+        penalty2S3.setEnabled(row3);
+        penalty1S3.setEnabled(row3);
+        penaltyHS3.setEnabled(row3);
+
+        scoreS4J1.setEditable(row4);
+        scoreS4J2.setEditable(row4);
+        scoreS4J3.setEditable(row4);
+        scoreS4J4.setEditable(row4);
+        scoreS4J5.setEditable(row4);
+        penalty2S4.setEnabled(row4);
+        penalty1S4.setEnabled(row4);
+        penaltyHS4.setEnabled(row4);
+
+        if (row1) {
+            scoreS1J1.requestFocusInWindow();
+        }
+        if (row2) {
+            scoreS2J1.requestFocusInWindow();
+        }
+        if (row3) {
+            scoreS3J1.requestFocusInWindow();
+        }
+        if (row4) {
+            scoreS4J1.requestFocusInWindow();
+        }
+
     }
 
     /** This method is called from within the constructor to
@@ -271,11 +469,9 @@ public class FigureScorePanel extends javax.swing.JPanel {
         penalty2S1 = new javax.swing.JCheckBox();
         penalty1S1 = new javax.swing.JCheckBox();
         penaltyHS1 = new javax.swing.JCheckBox();
-        raw1 = new javax.swing.JLabel();
         dd1 = new javax.swing.JLabel();
         total1 = new javax.swing.JLabel();
         fig1 = new javax.swing.JLabel();
-        pen1 = new javax.swing.JLabel();
         scoreS2J1 = new javax.swing.JTextField();
         scoreS2J2 = new javax.swing.JTextField();
         scoreS2J3 = new javax.swing.JTextField();
@@ -284,11 +480,9 @@ public class FigureScorePanel extends javax.swing.JPanel {
         penalty2S2 = new javax.swing.JCheckBox();
         penalty1S2 = new javax.swing.JCheckBox();
         penaltyHS2 = new javax.swing.JCheckBox();
-        raw2 = new javax.swing.JLabel();
         dd2 = new javax.swing.JLabel();
         total2 = new javax.swing.JLabel();
         fig2 = new javax.swing.JLabel();
-        pen2 = new javax.swing.JLabel();
         scoreS3J1 = new javax.swing.JTextField();
         scoreS3J2 = new javax.swing.JTextField();
         scoreS3J3 = new javax.swing.JTextField();
@@ -297,11 +491,9 @@ public class FigureScorePanel extends javax.swing.JPanel {
         penalty2S3 = new javax.swing.JCheckBox();
         penalty1S3 = new javax.swing.JCheckBox();
         penaltyHS3 = new javax.swing.JCheckBox();
-        raw3 = new javax.swing.JLabel();
         dd3 = new javax.swing.JLabel();
         total3 = new javax.swing.JLabel();
         fig3 = new javax.swing.JLabel();
-        pen3 = new javax.swing.JLabel();
         scoreS4J1 = new javax.swing.JTextField();
         scoreS4J2 = new javax.swing.JTextField();
         scoreS4J3 = new javax.swing.JTextField();
@@ -310,16 +502,12 @@ public class FigureScorePanel extends javax.swing.JPanel {
         penalty2S4 = new javax.swing.JCheckBox();
         penalty1S4 = new javax.swing.JCheckBox();
         penaltyHS4 = new javax.swing.JCheckBox();
-        raw4 = new javax.swing.JLabel();
         dd4 = new javax.swing.JLabel();
         total4 = new javax.swing.JLabel();
         fig4 = new javax.swing.JLabel();
-        pen4 = new javax.swing.JLabel();
-        rawLabel = new javax.swing.JLabel();
         ddLabel = new javax.swing.JLabel();
         totalLabel = new javax.swing.JLabel();
         figLabel = new javax.swing.JLabel();
-        penLabel = new javax.swing.JLabel();
         judge1Label = new javax.swing.JLabel();
         judge2Label = new javax.swing.JLabel();
         judge3Label = new javax.swing.JLabel();
@@ -327,6 +515,8 @@ public class FigureScorePanel extends javax.swing.JPanel {
         judge5Label = new javax.swing.JLabel();
         penaltyLabel = new javax.swing.JLabel();
 
+        setMinimumSize(new java.awt.Dimension(725, 127));
+        setPreferredSize(new java.awt.Dimension(725, 127));
         addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 formFocusGained(evt);
@@ -335,7 +525,7 @@ public class FigureScorePanel extends javax.swing.JPanel {
         setLayout(new java.awt.GridBagLayout());
 
         stationSelected.add(station1Button);
-        station1Button.setFont(new java.awt.Font("Tahoma", 0, 14));
+        station1Button.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         station1Button.setText("Station 1 (A-1)");
         station1Button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -361,7 +551,7 @@ public class FigureScorePanel extends javax.swing.JPanel {
         add(station2Button, gridBagConstraints);
 
         stationSelected.add(station3Button);
-        station3Button.setFont(new java.awt.Font("Tahoma", 0, 14));
+        station3Button.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         station3Button.setText("Station 3 (B-1)");
         station3Button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -481,41 +671,33 @@ public class FigureScorePanel extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.ipadx = 10;
         add(penaltyHS1, gridBagConstraints);
-
-        raw1.setFont(new java.awt.Font("Tahoma", 0, 14));
-        raw1.setText("0");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 1;
-        add(raw1, gridBagConstraints);
 
         dd1.setFont(new java.awt.Font("Tahoma", 0, 14));
         dd1.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 10;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.ipadx = 10;
         add(dd1, gridBagConstraints);
 
-        total1.setFont(new java.awt.Font("Tahoma", 0, 14));
+        total1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         total1.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 11;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.ipadx = 10;
         add(total1, gridBagConstraints);
 
         fig1.setFont(new java.awt.Font("Tahoma", 0, 14));
+        fig1.setText("fig1");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 12;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         add(fig1, gridBagConstraints);
-
-        pen1.setFont(new java.awt.Font("Tahoma", 0, 14));
-        pen1.setText("0");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 13;
-        gridBagConstraints.gridy = 1;
-        add(pen1, gridBagConstraints);
 
         scoreS2J1.setFont(new java.awt.Font("Tahoma", 0, 14));
         scoreS2J1.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -612,20 +794,15 @@ public class FigureScorePanel extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.ipadx = 10;
         add(penaltyHS2, gridBagConstraints);
-
-        raw2.setFont(new java.awt.Font("Tahoma", 0, 14));
-        raw2.setText("0");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 2;
-        add(raw2, gridBagConstraints);
 
         dd2.setFont(new java.awt.Font("Tahoma", 0, 14));
         dd2.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 10;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.ipadx = 10;
         add(dd2, gridBagConstraints);
 
         total2.setFont(new java.awt.Font("Tahoma", 0, 14));
@@ -633,20 +810,17 @@ public class FigureScorePanel extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 11;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.ipadx = 10;
         add(total2, gridBagConstraints);
 
         fig2.setFont(new java.awt.Font("Tahoma", 0, 14));
+        fig2.setText("fig2");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 12;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         add(fig2, gridBagConstraints);
-
-        pen2.setFont(new java.awt.Font("Tahoma", 0, 14));
-        pen2.setText("0");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 13;
-        gridBagConstraints.gridy = 2;
-        add(pen2, gridBagConstraints);
 
         scoreS3J1.setFont(new java.awt.Font("Tahoma", 0, 14));
         scoreS3J1.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -743,20 +917,15 @@ public class FigureScorePanel extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 3;
+        gridBagConstraints.ipadx = 10;
         add(penaltyHS3, gridBagConstraints);
-
-        raw3.setFont(new java.awt.Font("Tahoma", 0, 14));
-        raw3.setText("0");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 3;
-        add(raw3, gridBagConstraints);
 
         dd3.setFont(new java.awt.Font("Tahoma", 0, 14));
         dd3.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 10;
         gridBagConstraints.gridy = 3;
+        gridBagConstraints.ipadx = 10;
         add(dd3, gridBagConstraints);
 
         total3.setFont(new java.awt.Font("Tahoma", 0, 14));
@@ -764,20 +933,17 @@ public class FigureScorePanel extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 11;
         gridBagConstraints.gridy = 3;
+        gridBagConstraints.ipadx = 10;
         add(total3, gridBagConstraints);
 
-        fig3.setFont(new java.awt.Font("Tahoma", 0, 14));
+        fig3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        fig3.setText("fig3");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 12;
         gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         add(fig3, gridBagConstraints);
-
-        pen3.setFont(new java.awt.Font("Tahoma", 0, 14));
-        pen3.setText("0");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 13;
-        gridBagConstraints.gridy = 3;
-        add(pen3, gridBagConstraints);
 
         scoreS4J1.setFont(new java.awt.Font("Tahoma", 0, 14));
         scoreS4J1.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -874,20 +1040,15 @@ public class FigureScorePanel extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 4;
+        gridBagConstraints.ipadx = 10;
         add(penaltyHS4, gridBagConstraints);
-
-        raw4.setFont(new java.awt.Font("Tahoma", 0, 14));
-        raw4.setText("0");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 4;
-        add(raw4, gridBagConstraints);
 
         dd4.setFont(new java.awt.Font("Tahoma", 0, 14));
         dd4.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 10;
         gridBagConstraints.gridy = 4;
+        gridBagConstraints.ipadx = 10;
         add(dd4, gridBagConstraints);
 
         total4.setFont(new java.awt.Font("Tahoma", 0, 14));
@@ -895,29 +1056,17 @@ public class FigureScorePanel extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 11;
         gridBagConstraints.gridy = 4;
+        gridBagConstraints.ipadx = 10;
         add(total4, gridBagConstraints);
 
-        fig4.setFont(new java.awt.Font("Tahoma", 0, 14));
+        fig4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        fig4.setText("fig4");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 12;
         gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         add(fig4, gridBagConstraints);
-
-        pen4.setFont(new java.awt.Font("Tahoma", 0, 14));
-        pen4.setText("0");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 13;
-        gridBagConstraints.gridy = 4;
-        add(pen4, gridBagConstraints);
-
-        rawLabel.setFont(new java.awt.Font("Tahoma", 0, 14));
-        rawLabel.setText("Raw");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 5;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTH;
-        add(rawLabel, gridBagConstraints);
 
         ddLabel.setFont(new java.awt.Font("Tahoma", 0, 14));
         ddLabel.setText("DD");
@@ -925,82 +1074,83 @@ public class FigureScorePanel extends javax.swing.JPanel {
         gridBagConstraints.gridx = 10;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.ipadx = 5;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTH;
         add(ddLabel, gridBagConstraints);
 
-        totalLabel.setFont(new java.awt.Font("Tahoma", 0, 14));
+        totalLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         totalLabel.setText("Total");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 11;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.ipadx = 5;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTH;
         add(totalLabel, gridBagConstraints);
 
-        figLabel.setFont(new java.awt.Font("Tahoma", 0, 14));
-        figLabel.setText("Fig#");
+        figLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        figLabel.setText("Figure");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 12;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 5;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTH;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTHWEST;
+        gridBagConstraints.weightx = 1.0;
         add(figLabel, gridBagConstraints);
 
-        penLabel.setFont(new java.awt.Font("Tahoma", 0, 14));
-        penLabel.setText("Pen.");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 13;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 5;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTH;
-        add(penLabel, gridBagConstraints);
-
-        judge1Label.setFont(new java.awt.Font("Tahoma", 0, 14));
+        judge1Label.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         judge1Label.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         judge1Label.setText("Judge 1");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTH;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
         add(judge1Label, gridBagConstraints);
 
-        judge2Label.setFont(new java.awt.Font("Tahoma", 0, 14));
+        judge2Label.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         judge2Label.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         judge2Label.setText("Judge 2");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTH;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
         add(judge2Label, gridBagConstraints);
 
-        judge3Label.setFont(new java.awt.Font("Tahoma", 0, 14));
+        judge3Label.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         judge3Label.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         judge3Label.setText("Judge 3");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTH;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
         add(judge3Label, gridBagConstraints);
 
-        judge4Label.setFont(new java.awt.Font("Tahoma", 0, 14));
+        judge4Label.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         judge4Label.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         judge4Label.setText("Judge 4");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTH;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
         add(judge4Label, gridBagConstraints);
 
-        judge5Label.setFont(new java.awt.Font("Tahoma", 0, 14));
+        judge5Label.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         judge5Label.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         judge5Label.setText("Judge 5");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTH;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
         add(judge5Label, gridBagConstraints);
@@ -1010,6 +1160,7 @@ public class FigureScorePanel extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 0);
         add(penaltyLabel, gridBagConstraints);
@@ -1120,181 +1271,124 @@ public class FigureScorePanel extends javax.swing.JPanel {
     }//GEN-LAST:event_formFocusGained
 
     private void scoreS1J1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS1J1KeyPressed
-        if (evt.getKeyChar() == 10) {
-            scoreS1J2.requestFocus();
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            scoreS1J2.requestFocusInWindow();
         }
     }//GEN-LAST:event_scoreS1J1KeyPressed
 
     private void scoreS1J2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS1J2KeyPressed
-        if (evt.getKeyChar() == 10) {
-            scoreS1J3.requestFocus();
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            scoreS1J3.requestFocusInWindow();
         }
     }//GEN-LAST:event_scoreS1J2KeyPressed
 
     private void scoreS1J3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS1J3KeyPressed
-        if (evt.getKeyChar() == 10) {
-            scoreS1J4.requestFocus();
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            scoreS1J4.requestFocusInWindow();
         }
     }//GEN-LAST:event_scoreS1J3KeyPressed
 
     private void scoreS1J4KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS1J4KeyPressed
-        if (evt.getKeyChar() == 10) {
-            scoreS1J5.requestFocus();
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            scoreS1J5.requestFocusInWindow();
         }
     }//GEN-LAST:event_scoreS1J4KeyPressed
 
     private void scoreS1J5KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS1J5KeyPressed
-        if (evt.getKeyChar() == 10) {
-            //TODO focus to save button
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            readyToSave();
         }
     }//GEN-LAST:event_scoreS1J5KeyPressed
 
     private void scoreS2J1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS2J1KeyPressed
-        if (evt.getKeyChar() == 10) {
-            scoreS2J2.requestFocus();
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            scoreS2J2.requestFocusInWindow();
         }
     }//GEN-LAST:event_scoreS2J1KeyPressed
 
     private void scoreS2J2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS2J2KeyPressed
-        if (evt.getKeyChar() == 10) {
-            scoreS2J3.requestFocus();
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            scoreS2J3.requestFocusInWindow();
         }
     }//GEN-LAST:event_scoreS2J2KeyPressed
 
     private void scoreS2J3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS2J3KeyPressed
-        if (evt.getKeyChar() == 10) {
-            scoreS2J4.requestFocus();
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            scoreS2J4.requestFocusInWindow();
         }
     }//GEN-LAST:event_scoreS2J3KeyPressed
 
     private void scoreS2J4KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS2J4KeyPressed
-        if (evt.getKeyChar() == 10) {
-            scoreS2J5.requestFocus();
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            scoreS2J5.requestFocusInWindow();
         }
     }//GEN-LAST:event_scoreS2J4KeyPressed
 
     private void scoreS2J5KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS2J5KeyPressed
-        if (evt.getKeyChar() == 10) {
-            //TODO focus to save button
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            readyToSave();
         }
     }//GEN-LAST:event_scoreS2J5KeyPressed
 
     private void scoreS3J1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS3J1KeyPressed
-        if (evt.getKeyChar() == 10) {
-            scoreS3J2.requestFocus();
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            scoreS3J2.requestFocusInWindow();
         }
     }//GEN-LAST:event_scoreS3J1KeyPressed
 
     private void scoreS3J2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS3J2KeyPressed
-        if (evt.getKeyChar() == 10) {
-            scoreS3J3.requestFocus();
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            scoreS3J3.requestFocusInWindow();
         }
     }//GEN-LAST:event_scoreS3J2KeyPressed
 
     private void scoreS3J3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS3J3KeyPressed
-        if (evt.getKeyChar() == 10) {
-            scoreS3J4.requestFocus();
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            scoreS3J4.requestFocusInWindow();
         }
     }//GEN-LAST:event_scoreS3J3KeyPressed
 
     private void scoreS3J4KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS3J4KeyPressed
-        if (evt.getKeyChar() == 10) {
-            scoreS3J5.requestFocus();
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            scoreS3J5.requestFocusInWindow();
         }
     }//GEN-LAST:event_scoreS3J4KeyPressed
 
     private void scoreS3J5KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS3J5KeyPressed
-        if (evt.getKeyChar() == 10) {
-            //TODO focus to save button
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            readyToSave();
         }
     }//GEN-LAST:event_scoreS3J5KeyPressed
 
     private void scoreS4J1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS4J1KeyPressed
-        if (evt.getKeyChar() == 10) {
-            scoreS4J2.requestFocus();
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            scoreS4J2.requestFocusInWindow();
         }
     }//GEN-LAST:event_scoreS4J1KeyPressed
 
     private void scoreS4J2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS4J2KeyPressed
-        if (evt.getKeyChar() == 10) {
-            scoreS4J3.requestFocus();
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            scoreS4J3.requestFocusInWindow();
         }
     }//GEN-LAST:event_scoreS4J2KeyPressed
 
     private void scoreS4J3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS4J3KeyPressed
-        if (evt.getKeyChar() == 10) {
-            scoreS4J4.requestFocus();
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            scoreS4J4.requestFocusInWindow();
         }
     }//GEN-LAST:event_scoreS4J3KeyPressed
 
     private void scoreS4J4KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS4J4KeyPressed
-        if (evt.getKeyChar() == 10) {
-            scoreS4J5.requestFocus();
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            scoreS4J5.requestFocusInWindow();
         }
     }//GEN-LAST:event_scoreS4J4KeyPressed
 
     private void scoreS4J5KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS4J5KeyPressed
-        if (evt.getKeyChar() == 10) {
-            //Focus to save button
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            readyToSave();
         }
     }//GEN-LAST:event_scoreS4J5KeyPressed
-
-    private void setEditableRow(int row) {
-        currentRow = row;
-        boolean row1 = (row == 1);
-        boolean row2 = (row == 2);
-        boolean row3 = (row == 3);
-        boolean row4 = (row == 4);
-        scoreS1J1.setEditable(row1);
-        scoreS1J2.setEditable(row1);
-        scoreS1J3.setEditable(row1);
-        scoreS1J4.setEditable(row1);
-        scoreS1J5.setEditable(row1);
-        penalty2S1.setEnabled(row1);
-        penalty1S1.setEnabled(row1);
-        penaltyHS1.setEnabled(row1);
-
-        scoreS2J1.setEditable(row2);
-        scoreS2J2.setEditable(row2);
-        scoreS2J3.setEditable(row2);
-        scoreS2J4.setEditable(row2);
-        scoreS2J5.setEditable(row2);
-        penalty2S2.setEnabled(row2);
-        penalty1S2.setEnabled(row2);
-        penaltyHS2.setEnabled(row2);
-
-        scoreS3J1.setEditable(row3);
-        scoreS3J2.setEditable(row3);
-        scoreS3J3.setEditable(row3);
-        scoreS3J4.setEditable(row3);
-        scoreS3J5.setEditable(row3);
-        penalty2S3.setEnabled(row3);
-        penalty1S3.setEnabled(row3);
-        penaltyHS3.setEnabled(row3);
-
-        scoreS4J1.setEditable(row4);
-        scoreS4J2.setEditable(row4);
-        scoreS4J3.setEditable(row4);
-        scoreS4J4.setEditable(row4);
-        scoreS4J5.setEditable(row4);
-        penalty2S4.setEnabled(row4);
-        penalty1S4.setEnabled(row4);
-        penaltyHS4.setEnabled(row4);
-
-        if (row1) {
-            scoreS1J1.requestFocus();
-        }
-        if (row2) {
-            scoreS2J1.requestFocus();
-        }
-        if (row3) {
-            scoreS3J1.requestFocus();
-        }
-        if (row4) {
-            scoreS4J1.requestFocus();
-        }
-
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel dd1;
     private javax.swing.JLabel dd2;
@@ -1311,11 +1405,6 @@ public class FigureScorePanel extends javax.swing.JPanel {
     private javax.swing.JLabel judge3Label;
     private javax.swing.JLabel judge4Label;
     private javax.swing.JLabel judge5Label;
-    private javax.swing.JLabel pen1;
-    private javax.swing.JLabel pen2;
-    private javax.swing.JLabel pen3;
-    private javax.swing.JLabel pen4;
-    private javax.swing.JLabel penLabel;
     private javax.swing.JCheckBox penalty1S1;
     private javax.swing.JCheckBox penalty1S2;
     private javax.swing.JCheckBox penalty1S3;
@@ -1329,11 +1418,6 @@ public class FigureScorePanel extends javax.swing.JPanel {
     private javax.swing.JCheckBox penaltyHS3;
     private javax.swing.JCheckBox penaltyHS4;
     private javax.swing.JLabel penaltyLabel;
-    private javax.swing.JLabel raw1;
-    private javax.swing.JLabel raw2;
-    private javax.swing.JLabel raw3;
-    private javax.swing.JLabel raw4;
-    private javax.swing.JLabel rawLabel;
     private javax.swing.JTextField scoreS1J1;
     private javax.swing.JTextField scoreS1J2;
     private javax.swing.JTextField scoreS1J3;
@@ -1364,6 +1448,5 @@ public class FigureScorePanel extends javax.swing.JPanel {
     private javax.swing.JLabel total3;
     private javax.swing.JLabel total4;
     private javax.swing.JLabel totalLabel;
-
     // End of variables declaration//GEN-END:variables
 }

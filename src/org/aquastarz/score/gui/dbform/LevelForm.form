@@ -53,16 +53,18 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="levelIdLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="nameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="sortOrderLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="levelIdField" alignment="0" pref="334" max="32767" attributes="0"/>
                           <Component id="nameField" alignment="0" pref="334" max="32767" attributes="0"/>
+                          <Component id="sortOrderField" alignment="0" pref="334" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" attributes="0">
                       <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="masterScrollPane" pref="380" max="32767" attributes="0"/>
+                      <Component id="masterScrollPane" pref="393" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -83,6 +85,11 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="nameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="nameField" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="sortOrderLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="sortOrderField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" max="-2" attributes="1"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -115,6 +122,10 @@
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN" value="1"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
               </Subbinding>
+              <Subbinding sourcePath="${sortOrder}">
+                <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN" value="2"/>
+                <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Integer.class"/>
+              </Subbinding>
             </BindingProperty>
           </BindingProperties>
         </Component>
@@ -128,6 +139,11 @@
     <Component class="javax.swing.JLabel" name="nameLabel">
       <Properties>
         <Property name="text" type="java.lang.String" value="Name:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="sortOrderLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Sort Order:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="levelIdField">
@@ -144,6 +160,14 @@
           <Property name="incompletePathValue" type="java.lang.String" value="null"/>
         </BindingProperty>
         <BindingProperty name="enabled" source="masterTable" sourcePath="${selectedElement != null}" target="nameField" targetPath="enabled" updateStrategy="1" immediately="false"/>
+      </BindingProperties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="sortOrderField">
+      <BindingProperties>
+        <BindingProperty name="text" source="masterTable" sourcePath="${selectedElement.sortOrder}" target="sortOrderField" targetPath="text" updateStrategy="0" immediately="false">
+          <Property name="incompletePathValue" type="java.lang.String" value="null"/>
+        </BindingProperty>
+        <BindingProperty name="enabled" source="masterTable" sourcePath="${selectedElement != null}" target="sortOrderField" targetPath="enabled" updateStrategy="1" immediately="false"/>
       </BindingProperties>
     </Component>
     <Component class="javax.swing.JButton" name="saveButton">

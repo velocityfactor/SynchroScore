@@ -32,10 +32,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "figurescore")
-@NamedQueries({@NamedQuery(name = "FigureScore.findAll", query = "SELECT s FROM FigureScore s"), @NamedQuery(name = "FigureScore.findByFigureScoreId", query = "SELECT s FROM FigureScore s WHERE s.figureScoreId = :figureScoreId")})
+@NamedQueries({
+    @NamedQuery(name = "FigureScore.findAll", query = "SELECT s FROM FigureScore s"),
+    @NamedQuery(name = "FigureScore.findByFigureScoreId", query = "SELECT s FROM FigureScore s WHERE s.figureScoreId = :figureScoreId")})
 public class FigureScore implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -47,7 +50,6 @@ public class FigureScore implements Serializable {
         this.figuresParticipant = figuresParticipant;
         this.figure = figure;
     }
-    
     private Integer figureScoreId;
 
     @Id
@@ -61,7 +63,6 @@ public class FigureScore implements Serializable {
     public void setFigureScoreId(Integer figureScoreId) {
         this.figureScoreId = figureScoreId;
     }
-
     private BigDecimal score1;
 
     @Basic(optional = false)
@@ -73,7 +74,6 @@ public class FigureScore implements Serializable {
     public void setScore1(BigDecimal score1) {
         this.score1 = score1;
     }
-
     private BigDecimal score2;
 
     @Basic(optional = false)
@@ -85,7 +85,6 @@ public class FigureScore implements Serializable {
     public void setScore2(BigDecimal score2) {
         this.score2 = score2;
     }
-
     private BigDecimal score3;
 
     @Basic(optional = false)
@@ -97,7 +96,6 @@ public class FigureScore implements Serializable {
     public void setScore3(BigDecimal score3) {
         this.score3 = score3;
     }
-
     private BigDecimal score4;
 
     @Basic(optional = false)
@@ -109,7 +107,6 @@ public class FigureScore implements Serializable {
     public void setScore4(BigDecimal score4) {
         this.score4 = score4;
     }
-
     private BigDecimal score5;
 
     @Basic(optional = false)
@@ -121,7 +118,6 @@ public class FigureScore implements Serializable {
     public void setScore5(BigDecimal score5) {
         this.score5 = score5;
     }
-
     private BigDecimal totalScore;
 
     @Basic(optional = false)
@@ -133,7 +129,6 @@ public class FigureScore implements Serializable {
     public void setTotalScore(BigDecimal totalScore) {
         this.totalScore = totalScore;
     }
-
     private BigDecimal penalty;
 
     @Basic(optional = false)
@@ -145,7 +140,6 @@ public class FigureScore implements Serializable {
     public void setPenalty(BigDecimal penalty) {
         this.penalty = penalty;
     }
-
     private Figure figure;
 
     @JoinColumn(name = "figureId", referencedColumnName = "figureId", nullable = false)
@@ -157,7 +151,6 @@ public class FigureScore implements Serializable {
     public void setFigure(Figure figure) {
         this.figure = figure;
     }
-
     private FiguresParticipant figuresParticipant;
 
     @ManyToOne(optional = false)
