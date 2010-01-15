@@ -19,7 +19,11 @@
 // </editor-fold>
 package org.aquastarz.score.gui;
 
+import java.awt.event.ActionEvent;
 import java.util.Vector;
+import javax.swing.AbstractAction;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 import org.aquastarz.score.domain.FiguresParticipant;
 import org.aquastarz.score.domain.Swimmer;
 import org.aquastarz.score.gui.event.FiguresParticipantSearchPanelListener;
@@ -31,6 +35,7 @@ public class FiguresParticipantSearchPanel extends javax.swing.JPanel {
     /** Creates new form SwimmerSearchPanel */
     public FiguresParticipantSearchPanel() {
         initComponents();
+        clear();
     }
 
     public void addFiguresParticipantSearchPanelListener(FiguresParticipantSearchPanelListener listener) {
@@ -51,6 +56,14 @@ public class FiguresParticipantSearchPanel extends javax.swing.JPanel {
         }
     }
 
+    public void clear() {
+        figureOrder.setText("");
+        leagueSwimmerNumber.setText("");
+        swimmerName.setText("");
+        swimmerLevel.setText("");
+        swimmerTeam.setText("");
+    }
+
     public void setFiguresParticipant(FiguresParticipant figuresParticipant) {
         figureOrder.setText(figuresParticipant.getFigureOrder());
         Swimmer s = figuresParticipant.getSwimmer();
@@ -59,6 +72,16 @@ public class FiguresParticipantSearchPanel extends javax.swing.JPanel {
         swimmerName.setText(s.getLastName() + ", " + s.getFirstName());
         swimmerTeam.setText(s.getTeam().getTeamId());
         fireFiguresParticipantSet();
+    }
+
+    public void focus() {
+        figureOrder.requestFocusInWindow();
+        figureOrder.selectAll();
+    }
+
+    private void figureOrderEntered() {
+        figureOrder.setText(figureOrder.getText().toUpperCase());
+        fireFiguresParticipantSearchRequested(figureOrder.getText());
     }
 
     /** This method is called from within the constructor to
@@ -192,8 +215,7 @@ public class FiguresParticipantSearchPanel extends javax.swing.JPanel {
 
     private void figureOrderKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_figureOrderKeyPressed
         if (evt.getKeyChar() == 10 || evt.getKeyChar() == 9) {
-            figureOrder.setText(figureOrder.getText().toUpperCase());
-            fireFiguresParticipantSearchRequested(figureOrder.getText());
+            figureOrderEntered();
         }
     }//GEN-LAST:event_figureOrderKeyPressed
 
