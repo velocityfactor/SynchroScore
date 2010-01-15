@@ -20,8 +20,11 @@
 package org.aquastarz.score.domain;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -35,6 +38,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 @Entity
 //@NamedQueries({@NamedQuery(name = "Meet.findAll", query = "SELECT m FROM Meet m"), @NamedQuery(name = "Meet.findByMeetId", query = "SELECT m FROM Meet m WHERE m.meetId = :meetId"), @NamedQuery(name = "Meet.findByMeetDate", query = "SELECT m FROM Meet m WHERE m.meetDate = :meetDate"), @NamedQuery(name = "Meet.findByName", query = "SELECT m FROM Meet m WHERE m.name = :name"), @NamedQuery(name = "Meet.findByType", query = "SELECT m FROM Meet m WHERE m.type = :type")})
@@ -107,6 +111,9 @@ public class Meet implements Serializable {
     @ManyToOne
     @JoinColumn(name="int4Figure")
     private Figure int4Figure;
+
+    @Transient
+    private Map<Team,BigDecimal> pointsMap = new HashMap<Team,BigDecimal>();
 
     public Meet() {
     }
@@ -271,6 +278,10 @@ public class Meet implements Serializable {
 
     public void setNov2Figure(Figure nov2Figure) {
         this.nov2Figure = nov2Figure;
+    }
+
+    public Map<Team, BigDecimal> getPointsMap() {
+        return pointsMap;
     }
 
     public boolean hasFiguresParticipants(Meet meet) {
