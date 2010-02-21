@@ -27,8 +27,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
@@ -39,6 +43,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRTableModelDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
+import org.aquastarz.score.ScoreApp;
 import org.aquastarz.score.controller.ScoreController;
 import org.aquastarz.score.domain.FiguresParticipant;
 import org.aquastarz.score.domain.Meet;
@@ -51,7 +56,7 @@ public class SynchroFrame extends javax.swing.JFrame {
 
     public enum Tab {
 
-        MEET_SETUP, SWIMMERS, FIGURES_ORDER, FIGURES, ROUTINES, REPORTS
+        MEET_SETUP, SWIMMERS, FIGURES_ORDER, FIGURES, ROUTINES, REPORTS, LEAGUE
     };
     private ScoreController controller = null;
     private Meet meet = null;
@@ -117,6 +122,8 @@ public class SynchroFrame extends javax.swing.JFrame {
     }
 
     private void updateStatus() {
+        updateLeagueList();
+        setTabEnabled(Tab.LEAGUE, true);
         if (meet.isValid(meet)) {
             setTabEnabled(SynchroFrame.Tab.SWIMMERS, true);
             updateSwimmerTab();
@@ -228,6 +235,32 @@ public class SynchroFrame extends javax.swing.JFrame {
         figureOrderTable.setModel(new FiguresParticipantsTableModel(sortedFiguresParticipants.values()));
     }
 
+    private void updateLeagueList() {
+        EntityManager entityManager = ScoreApp.getEntityManager();
+        Query swimmerQuery = null;
+
+        String teamId = "%";
+        ComboBoxModel cbm = leagueTeamCombo.getModel();
+        Object o = cbm.getSelectedItem();
+        if(o != null && o instanceof String) {
+            teamId = (String) o;
+            if("[All]".equals(o)) teamId = "%";
+        }
+
+        if(leagueSortByName.isSelected()) {
+            swimmerQuery = entityManager.createNamedQuery("Swimmer.findByTeamOrderByName");
+        }
+        else if(leagueSortByTeam.isSelected()) {
+            swimmerQuery = entityManager.createNamedQuery("Swimmer.findByTeamOrderByTeamAndName");
+        }
+        else {
+            swimmerQuery = entityManager.createNamedQuery("Swimmer.findByTeamOrderBySwimmerId");
+        }
+        swimmerQuery.setParameter("teamId", teamId);
+        List<Swimmer> swimmerList = swimmerQuery.getResultList();
+        swimmerTable.setModel(new SwimmersTableModel(swimmerList));
+    }
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -259,6 +292,29 @@ public class SynchroFrame extends javax.swing.JFrame {
         saveFigureScoreButton = new javax.swing.JButton();
         routineScore = new javax.swing.JPanel();
         reportPanel = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
+        jButton9 = new javax.swing.JButton();
+        jButton10 = new javax.swing.JButton();
+        jButton11 = new javax.swing.JButton();
+        jButton12 = new javax.swing.JButton();
+        jButton13 = new javax.swing.JButton();
+        leaguePanel = new javax.swing.JPanel();
+        leaguePrintButton = new javax.swing.JButton();
+        swimmerScrollPane = new javax.swing.JScrollPane();
+        swimmerTable = new javax.swing.JTable();
+        jLabel6 = new javax.swing.JLabel();
+        leagueSortByNumber = new javax.swing.JRadioButton();
+        leagueSortByName = new javax.swing.JRadioButton();
+        leagueSortByTeam = new javax.swing.JRadioButton();
+        jLabel7 = new javax.swing.JLabel();
+        leagueTeamCombo = new javax.swing.JComboBox();
         jToolBar1 = new javax.swing.JToolBar();
         jLabel1 = new javax.swing.JLabel();
         setupProgress = new javax.swing.JProgressBar();
@@ -277,7 +333,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         setMinimumSize(new java.awt.Dimension(603, 200));
         setName(""); // NOI18N
 
-        tabPane.setFont(new java.awt.Font("Tahoma", 0, 14));
+        tabPane.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tabPane.setMinimumSize(new java.awt.Dimension(603, 200));
         tabPane.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -335,12 +391,11 @@ public class SynchroFrame extends javax.swing.JFrame {
 
         tabPane.addTab("Swimmers", swimmers);
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14));
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel5.setText("Sort by:");
 
         figuresOrderSortButtonGroup.add(figureOrderSortByNumber);
-        figureOrderSortByNumber.setFont(new java.awt.Font("Tahoma", 0, 14));
-        figureOrderSortByNumber.setSelected(true);
+        figureOrderSortByNumber.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         figureOrderSortByNumber.setText("Number");
         figureOrderSortByNumber.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -370,7 +425,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         ));
         figureOrderScrollPane.setViewportView(figureOrderTable);
 
-        figuresOrderPrintButton.setFont(new java.awt.Font("Tahoma", 0, 14));
+        figuresOrderPrintButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         figuresOrderPrintButton.setText("Print");
         figuresOrderPrintButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -484,18 +539,224 @@ public class SynchroFrame extends javax.swing.JFrame {
 
         tabPane.addTab("Routines", routineScore);
 
+        jButton1.setText("Nov. Figures");
+
+        jButton2.setText("Nov. Meet Sheet");
+
+        jButton3.setText("Nov. Station");
+
+        jButton4.setText("Int. Figures");
+
+        jButton5.setText("Int. Meet Sheet");
+
+        jButton6.setText("Int. Station");
+
+        jButton7.setText("Team Results");
+
+        jButton8.setText("Nov. Figure Labels");
+
+        jButton9.setText("Int. Figure Labels");
+
+        jButton10.setText("Nov. Routines");
+
+        jButton11.setText("Nov. Routine Labels");
+
+        jButton12.setText("Int. Routines");
+
+        jButton13.setText("Int. Routine Labels");
+
         javax.swing.GroupLayout reportPanelLayout = new javax.swing.GroupLayout(reportPanel);
         reportPanel.setLayout(reportPanelLayout);
         reportPanelLayout.setHorizontalGroup(
             reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 814, Short.MAX_VALUE)
+            .addGroup(reportPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(reportPanelLayout.createSequentialGroup()
+                        .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton1)
+                            .addComponent(jButton2)
+                            .addComponent(jButton3))
+                        .addGap(18, 18, 18)
+                        .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(reportPanelLayout.createSequentialGroup()
+                                .addComponent(jButton4)
+                                .addGap(18, 18, 18)
+                                .addComponent(jButton7))
+                            .addComponent(jButton5)
+                            .addComponent(jButton6)))
+                    .addGroup(reportPanelLayout.createSequentialGroup()
+                        .addComponent(jButton8)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton9))
+                    .addGroup(reportPanelLayout.createSequentialGroup()
+                        .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton10)
+                            .addComponent(jButton11))
+                        .addGap(18, 18, 18)
+                        .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton12)
+                            .addComponent(jButton13))))
+                .addContainerGap(413, Short.MAX_VALUE))
         );
+
+        reportPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton1, jButton10, jButton11, jButton2, jButton3, jButton8});
+
+        reportPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton12, jButton13, jButton4, jButton5, jButton6, jButton9});
+
         reportPanelLayout.setVerticalGroup(
             reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 523, Short.MAX_VALUE)
+            .addGroup(reportPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(reportPanelLayout.createSequentialGroup()
+                        .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton4)
+                            .addComponent(jButton7))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton6))
+                    .addGroup(reportPanelLayout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton3)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton8)
+                    .addComponent(jButton9))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(reportPanelLayout.createSequentialGroup()
+                        .addComponent(jButton10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton11))
+                    .addGroup(reportPanelLayout.createSequentialGroup()
+                        .addComponent(jButton12)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton13)))
+                .addContainerGap(344, Short.MAX_VALUE))
         );
 
         tabPane.addTab("Reports", reportPanel);
+
+        leaguePrintButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        leaguePrintButton.setText("Print");
+        leaguePrintButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                leaguePrintButtonActionPerformed(evt);
+            }
+        });
+
+        swimmerTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        swimmerScrollPane.setViewportView(swimmerTable);
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel6.setText("Sort by:");
+
+        figuresOrderSortButtonGroup.add(leagueSortByNumber);
+        leagueSortByNumber.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        leagueSortByNumber.setSelected(true);
+        leagueSortByNumber.setText("Number");
+        leagueSortByNumber.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                leagueSortByNumberfiguresOrderSortByNumberActionPerformed(evt);
+            }
+        });
+
+        figuresOrderSortButtonGroup.add(leagueSortByName);
+        leagueSortByName.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        leagueSortByName.setText("Name");
+        leagueSortByName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                leagueSortByNamefiguresOrderSortByNameActionPerformed(evt);
+            }
+        });
+
+        figuresOrderSortButtonGroup.add(leagueSortByTeam);
+        leagueSortByTeam.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        leagueSortByTeam.setText("Team");
+        leagueSortByTeam.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                leagueSortByTeamfiguresOrderSortByNameActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel7.setText("Team:");
+
+        Query teamQuery = ScoreApp.getEntityManager().createNamedQuery("Team.findAllOrderByTeamId");
+        List<Team> teamList = teamQuery.getResultList();
+        DefaultComboBoxModel dcbm = new DefaultComboBoxModel();
+        dcbm.addElement("[All]");
+        for(Team team : teamList) {
+            dcbm.addElement(team.getTeamId());
+        }
+        leagueTeamCombo.setModel(dcbm);
+        leagueTeamCombo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                leagueTeamComboActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout leaguePanelLayout = new javax.swing.GroupLayout(leaguePanel);
+        leaguePanel.setLayout(leaguePanelLayout);
+        leaguePanelLayout.setHorizontalGroup(
+            leaguePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, leaguePanelLayout.createSequentialGroup()
+                .addComponent(swimmerScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 723, Short.MAX_VALUE)
+                .addGroup(leaguePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(leaguePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(leaguePanelLayout.createSequentialGroup()
+                            .addGap(6, 6, 6)
+                            .addGroup(leaguePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel6)
+                                .addComponent(leagueSortByNumber, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(leagueSortByName)
+                                .addComponent(leagueSortByTeam)))
+                        .addGroup(leaguePanelLayout.createSequentialGroup()
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addGroup(leaguePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(leagueTeamCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel7))))
+                    .addGroup(leaguePanelLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(leaguePrintButton)))
+                .addContainerGap())
+        );
+        leaguePanelLayout.setVerticalGroup(
+            leaguePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(swimmerScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 523, Short.MAX_VALUE)
+            .addGroup(leaguePanelLayout.createSequentialGroup()
+                .addComponent(jLabel6)
+                .addGap(1, 1, 1)
+                .addComponent(leagueSortByNumber)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(leagueSortByName)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(leagueSortByTeam)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(leagueTeamCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 329, Short.MAX_VALUE)
+                .addComponent(leaguePrintButton)
+                .addContainerGap())
+        );
+
+        tabPane.addTab("League", leaguePanel);
 
         getContentPane().add(tabPane, java.awt.BorderLayout.CENTER);
 
@@ -617,6 +878,38 @@ public class SynchroFrame extends javax.swing.JFrame {
             swimmerSearchPanel.focus();
         }
     }//GEN-LAST:event_tabPaneStateChanged
+
+    private void leaguePrintButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_leaguePrintButtonActionPerformed
+        try {
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/Roster.jasper"));
+            JRDataSource data = new JRTableModelDataSource(swimmerTable.getModel());
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put("Title", "Roster");
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, data);
+            JasperViewer.viewReport(jasperPrint, false);
+        } catch (Exception ex) {
+            String connectMsg = "Could not create the report.\n" + ex.getLocalizedMessage();
+            System.out.println(connectMsg);
+        }
+
+    }//GEN-LAST:event_leaguePrintButtonActionPerformed
+
+    private void leagueSortByNumberfiguresOrderSortByNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_leagueSortByNumberfiguresOrderSortByNumberActionPerformed
+        updateLeagueList();
+    }//GEN-LAST:event_leagueSortByNumberfiguresOrderSortByNumberActionPerformed
+
+    private void leagueSortByNamefiguresOrderSortByNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_leagueSortByNamefiguresOrderSortByNameActionPerformed
+        updateLeagueList();
+    }//GEN-LAST:event_leagueSortByNamefiguresOrderSortByNameActionPerformed
+
+    private void leagueSortByTeamfiguresOrderSortByNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_leagueSortByTeamfiguresOrderSortByNameActionPerformed
+        updateLeagueList();
+    }//GEN-LAST:event_leagueSortByTeamfiguresOrderSortByNameActionPerformed
+
+    private void leagueTeamComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_leagueTeamComboActionPerformed
+        updateLeagueList();
+    }//GEN-LAST:event_leagueTeamComboActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane figureOrderScrollPane;
     private javax.swing.JRadioButton figureOrderSortByName;
@@ -629,16 +922,37 @@ public class SynchroFrame extends javax.swing.JFrame {
     private javax.swing.ButtonGroup figuresOrderSortButtonGroup;
     private javax.swing.JButton generateRandomFiguresOrderButton;
     private javax.swing.JProgressBar intFiguresProgress;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton10;
+    private javax.swing.JButton jButton11;
+    private javax.swing.JButton jButton12;
+    private javax.swing.JButton jButton13;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JPanel leaguePanel;
+    private javax.swing.JButton leaguePrintButton;
+    private javax.swing.JRadioButton leagueSortByName;
+    private javax.swing.JRadioButton leagueSortByNumber;
+    private javax.swing.JRadioButton leagueSortByTeam;
+    private javax.swing.JComboBox leagueTeamCombo;
     private org.aquastarz.score.gui.MeetSetupPanel meetSetup;
     private javax.swing.JProgressBar novFiguresProgress;
     private javax.swing.JPanel reportPanel;
@@ -647,7 +961,9 @@ public class SynchroFrame extends javax.swing.JFrame {
     private javax.swing.JButton saveFigureScoreButton;
     private javax.swing.JButton saveSwimmersButton;
     private javax.swing.JProgressBar setupProgress;
+    private javax.swing.JScrollPane swimmerScrollPane;
     private org.aquastarz.score.gui.FiguresParticipantSearchPanel swimmerSearchPanel;
+    private javax.swing.JTable swimmerTable;
     private javax.swing.JPanel swimmers;
     private javax.swing.JTabbedPane tabPane;
     private javax.swing.JTabbedPane teamTabs;

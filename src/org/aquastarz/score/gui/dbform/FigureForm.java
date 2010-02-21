@@ -30,11 +30,12 @@ import javax.swing.JPanel;
 import org.aquastarz.score.ScoreApp;
 
 public class FigureForm extends JPanel {
-    EntityManager entityManager = ScoreApp.getEntityManager();
+    EntityManager entityManager = null;
     
     public FigureForm() {
         initComponents();
         if (!Beans.isDesignTime()) {
+            entityManager = ScoreApp.getEntityManager();
             entityManager.getTransaction().begin();
         }
     }
