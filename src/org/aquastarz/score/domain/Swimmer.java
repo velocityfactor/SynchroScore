@@ -37,7 +37,12 @@ import javax.persistence.Transient;
 
 @Entity
 @Table(name = "swimmer")
-@NamedQueries({@NamedQuery(name = "Swimmer.findAll", query = "SELECT s FROM Swimmer s"), @NamedQuery(name = "Swimmer.findBySwimmerId", query = "SELECT s FROM Swimmer s WHERE s.swimmerId = :swimmerId"), @NamedQuery(name = "Swimmer.findByFirstName", query = "SELECT s FROM Swimmer s WHERE s.firstName = :firstName"), @NamedQuery(name = "Swimmer.findByLastName", query = "SELECT s FROM Swimmer s WHERE s.lastName = :lastName")})
+@NamedQueries({@NamedQuery(name = "Swimmer.findByTeamOrderBySwimmerId", query = "SELECT s FROM Swimmer s where s.team.teamId like :teamId order by swimmerId"),
+    @NamedQuery(name = "Swimmer.findByTeamOrderByName", query = "SELECT s FROM Swimmer s where s.team.teamId like :teamId order by lastName,firstName"),
+    @NamedQuery(name = "Swimmer.findByTeamOrderByTeamAndName", query = "SELECT s FROM Swimmer s where s.team.teamId like :teamId order by team,lastName,firstName"),
+    @NamedQuery(name = "Swimmer.findBySwimmerId", query = "SELECT s FROM Swimmer s WHERE s.swimmerId = :swimmerId"),
+    @NamedQuery(name = "Swimmer.findByFirstName", query = "SELECT s FROM Swimmer s WHERE s.firstName = :firstName"),
+    @NamedQuery(name = "Swimmer.findByLastName", query = "SELECT s FROM Swimmer s WHERE s.lastName = :lastName")})
 public class Swimmer implements Serializable {
 
     @Transient

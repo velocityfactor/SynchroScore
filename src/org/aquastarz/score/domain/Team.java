@@ -33,7 +33,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "team")
-@NamedQueries({@NamedQuery(name = "Team.findAll", query = "SELECT t FROM Team t"), @NamedQuery(name = "Team.findByTeamId", query = "SELECT t FROM Team t WHERE t.teamId = :teamId"), @NamedQuery(name = "Team.findByName", query = "SELECT t FROM Team t WHERE t.name = :name")})
+@NamedQueries({@NamedQuery(name = "Team.findAllOrderByTeamId", query = "SELECT t FROM Team t order by teamId"), @NamedQuery(name = "Team.findByTeamId", query = "SELECT t FROM Team t WHERE t.teamId = :teamId"), @NamedQuery(name = "Team.findByName", query = "SELECT t FROM Team t WHERE t.name = :name")})
 public class Team implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

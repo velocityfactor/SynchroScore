@@ -30,11 +30,12 @@ import javax.swing.JPanel;
 import org.aquastarz.score.ScoreApp;
 
 public class LevelForm extends JPanel {
-    EntityManager entityManager = ScoreApp.getEntityManager();
+    EntityManager entityManager = null;
     
     public LevelForm() {
         initComponents();
         if (!Beans.isDesignTime()) {
+            entityManager = ScoreApp.getEntityManager();
             entityManager.getTransaction().begin();
         }
     }
