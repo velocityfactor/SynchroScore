@@ -35,11 +35,12 @@ import org.aquastarz.score.domain.Level;
 import org.aquastarz.score.domain.Team;
 
 public class SwimmerForm extends JPanel {
-    EntityManager entityManager = ScoreApp.getEntityManager();
+    EntityManager entityManager = null;
     
     public SwimmerForm() {
         initComponents();
         if (!Beans.isDesignTime()) {
+            entityManager = ScoreApp.getEntityManager();
             entityManager.getTransaction().begin();
         }
     }

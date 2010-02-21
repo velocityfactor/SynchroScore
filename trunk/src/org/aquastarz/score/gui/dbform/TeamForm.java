@@ -31,11 +31,12 @@ import org.aquastarz.score.ScoreApp;
 
 public class TeamForm extends JPanel {
 
-    EntityManager entityManager = ScoreApp.getEntityManager();
+    EntityManager entityManager = null;
 
     public TeamForm() {
         initComponents();
         if (!Beans.isDesignTime()) {
+            entityManager = ScoreApp.getEntityManager();
             entityManager.getTransaction().begin();
         }
     }
