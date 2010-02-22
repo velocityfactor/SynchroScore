@@ -90,6 +90,12 @@ public class FigureScorePanel extends javax.swing.JPanel {
         }
         Figure[] fig = figures.toArray(new Figure[4]);
         this.figures = fig;
+        if(figuresParticipant.getTotalScore()!=null) {
+            figuresTotal.setText(figuresParticipant.getTotalScore().toString());
+        }
+        else {
+            figuresTotal.setText("--");
+        }
         if (fig[0] != null) {
             fig1.setText(fig[0].getName());
             dd1.setText(fig[0].getDegreeOfDifficulty().toString());
@@ -433,15 +439,19 @@ public class FigureScorePanel extends javax.swing.JPanel {
 
         if (row1) {
             scoreS1J1.requestFocusInWindow();
+            scoreS1J1.selectAll();
         }
         if (row2) {
             scoreS2J1.requestFocusInWindow();
+            scoreS2J1.selectAll();
         }
         if (row3) {
             scoreS3J1.requestFocusInWindow();
+            scoreS3J1.selectAll();
         }
         if (row4) {
             scoreS4J1.requestFocusInWindow();
+            scoreS4J1.selectAll();
         }
 
     }
@@ -514,6 +524,8 @@ public class FigureScorePanel extends javax.swing.JPanel {
         judge4Label = new javax.swing.JLabel();
         judge5Label = new javax.swing.JLabel();
         penaltyLabel = new javax.swing.JLabel();
+        figuresTotalLabel = new javax.swing.JLabel();
+        figuresTotal = new javax.swing.JLabel();
 
         setMinimumSize(new java.awt.Dimension(725, 127));
         setPreferredSize(new java.awt.Dimension(725, 127));
@@ -525,7 +537,7 @@ public class FigureScorePanel extends javax.swing.JPanel {
         setLayout(new java.awt.GridBagLayout());
 
         stationSelected.add(station1Button);
-        station1Button.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        station1Button.setFont(new java.awt.Font("Tahoma", 0, 14));
         station1Button.setText("Station 1 (A-1)");
         station1Button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -551,7 +563,7 @@ public class FigureScorePanel extends javax.swing.JPanel {
         add(station2Button, gridBagConstraints);
 
         stationSelected.add(station3Button);
-        station3Button.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        station3Button.setFont(new java.awt.Font("Tahoma", 0, 14));
         station3Button.setText("Station 3 (B-1)");
         station3Button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -675,28 +687,33 @@ public class FigureScorePanel extends javax.swing.JPanel {
         add(penaltyHS1, gridBagConstraints);
 
         dd1.setFont(new java.awt.Font("Tahoma", 0, 14));
+        dd1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         dd1.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 10;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.ipadx = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         add(dd1, gridBagConstraints);
 
         total1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        total1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         total1.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 11;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.ipadx = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         add(total1, gridBagConstraints);
 
-        fig1.setFont(new java.awt.Font("Tahoma", 0, 14));
+        fig1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         fig1.setText("fig1");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 12;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         add(fig1, gridBagConstraints);
 
         scoreS2J1.setFont(new java.awt.Font("Tahoma", 0, 14));
@@ -798,28 +815,33 @@ public class FigureScorePanel extends javax.swing.JPanel {
         add(penaltyHS2, gridBagConstraints);
 
         dd2.setFont(new java.awt.Font("Tahoma", 0, 14));
+        dd2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         dd2.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 10;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.ipadx = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         add(dd2, gridBagConstraints);
 
         total2.setFont(new java.awt.Font("Tahoma", 0, 14));
+        total2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         total2.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 11;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.ipadx = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         add(total2, gridBagConstraints);
 
-        fig2.setFont(new java.awt.Font("Tahoma", 0, 14));
+        fig2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         fig2.setText("fig2");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 12;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         add(fig2, gridBagConstraints);
 
         scoreS3J1.setFont(new java.awt.Font("Tahoma", 0, 14));
@@ -921,19 +943,23 @@ public class FigureScorePanel extends javax.swing.JPanel {
         add(penaltyHS3, gridBagConstraints);
 
         dd3.setFont(new java.awt.Font("Tahoma", 0, 14));
+        dd3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         dd3.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 10;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.ipadx = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         add(dd3, gridBagConstraints);
 
-        total3.setFont(new java.awt.Font("Tahoma", 0, 14));
+        total3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        total3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         total3.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 11;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.ipadx = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         add(total3, gridBagConstraints);
 
         fig3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -943,6 +969,7 @@ public class FigureScorePanel extends javax.swing.JPanel {
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         add(fig3, gridBagConstraints);
 
         scoreS4J1.setFont(new java.awt.Font("Tahoma", 0, 14));
@@ -1044,19 +1071,23 @@ public class FigureScorePanel extends javax.swing.JPanel {
         add(penaltyHS4, gridBagConstraints);
 
         dd4.setFont(new java.awt.Font("Tahoma", 0, 14));
+        dd4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         dd4.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 10;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.ipadx = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         add(dd4, gridBagConstraints);
 
-        total4.setFont(new java.awt.Font("Tahoma", 0, 14));
+        total4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        total4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         total4.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 11;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.ipadx = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         add(total4, gridBagConstraints);
 
         fig4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1066,9 +1097,11 @@ public class FigureScorePanel extends javax.swing.JPanel {
         gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         add(fig4, gridBagConstraints);
 
-        ddLabel.setFont(new java.awt.Font("Tahoma", 0, 14));
+        ddLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        ddLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         ddLabel.setText("DD");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 10;
@@ -1079,6 +1112,7 @@ public class FigureScorePanel extends javax.swing.JPanel {
         add(ddLabel, gridBagConstraints);
 
         totalLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        totalLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         totalLabel.setText("Total");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 11;
@@ -1088,7 +1122,7 @@ public class FigureScorePanel extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTH;
         add(totalLabel, gridBagConstraints);
 
-        figLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        figLabel.setFont(new java.awt.Font("Tahoma", 0, 14));
         figLabel.setText("Figure");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 12;
@@ -1098,9 +1132,10 @@ public class FigureScorePanel extends javax.swing.JPanel {
         gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTHWEST;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         add(figLabel, gridBagConstraints);
 
-        judge1Label.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        judge1Label.setFont(new java.awt.Font("Tahoma", 0, 14));
         judge1Label.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         judge1Label.setText("Judge 1");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1111,7 +1146,7 @@ public class FigureScorePanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
         add(judge1Label, gridBagConstraints);
 
-        judge2Label.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        judge2Label.setFont(new java.awt.Font("Tahoma", 0, 14));
         judge2Label.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         judge2Label.setText("Judge 2");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1122,7 +1157,7 @@ public class FigureScorePanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
         add(judge2Label, gridBagConstraints);
 
-        judge3Label.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        judge3Label.setFont(new java.awt.Font("Tahoma", 0, 14));
         judge3Label.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         judge3Label.setText("Judge 3");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1133,7 +1168,7 @@ public class FigureScorePanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
         add(judge3Label, gridBagConstraints);
 
-        judge4Label.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        judge4Label.setFont(new java.awt.Font("Tahoma", 0, 14));
         judge4Label.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         judge4Label.setText("Judge 4");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1144,7 +1179,7 @@ public class FigureScorePanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 4);
         add(judge4Label, gridBagConstraints);
 
-        judge5Label.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        judge5Label.setFont(new java.awt.Font("Tahoma", 0, 14));
         judge5Label.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         judge5Label.setText("Judge 5");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1164,6 +1199,29 @@ public class FigureScorePanel extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 0);
         add(penaltyLabel, gridBagConstraints);
+
+        figuresTotalLabel.setFont(new java.awt.Font("Tahoma", 0, 14));
+        figuresTotalLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        figuresTotalLabel.setText("Figures Total:");
+        figuresTotalLabel.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        add(figuresTotalLabel, gridBagConstraints);
+
+        figuresTotal.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        figuresTotal.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        figuresTotal.setText("--");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 11;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.ipadx = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        add(figuresTotal, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
     private void penalty2S3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_penalty2S3ActionPerformed
@@ -1273,24 +1331,28 @@ public class FigureScorePanel extends javax.swing.JPanel {
     private void scoreS1J1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS1J1KeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             scoreS1J2.requestFocusInWindow();
+            scoreS1J2.selectAll();
         }
     }//GEN-LAST:event_scoreS1J1KeyPressed
 
     private void scoreS1J2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS1J2KeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             scoreS1J3.requestFocusInWindow();
+            scoreS1J3.selectAll();
         }
     }//GEN-LAST:event_scoreS1J2KeyPressed
 
     private void scoreS1J3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS1J3KeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             scoreS1J4.requestFocusInWindow();
+            scoreS1J4.selectAll();
         }
     }//GEN-LAST:event_scoreS1J3KeyPressed
 
     private void scoreS1J4KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS1J4KeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             scoreS1J5.requestFocusInWindow();
+            scoreS1J5.selectAll();
         }
     }//GEN-LAST:event_scoreS1J4KeyPressed
 
@@ -1303,24 +1365,28 @@ public class FigureScorePanel extends javax.swing.JPanel {
     private void scoreS2J1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS2J1KeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             scoreS2J2.requestFocusInWindow();
+            scoreS2J2.selectAll();
         }
     }//GEN-LAST:event_scoreS2J1KeyPressed
 
     private void scoreS2J2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS2J2KeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             scoreS2J3.requestFocusInWindow();
+            scoreS2J3.selectAll();
         }
     }//GEN-LAST:event_scoreS2J2KeyPressed
 
     private void scoreS2J3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS2J3KeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             scoreS2J4.requestFocusInWindow();
+            scoreS2J4.selectAll();
         }
     }//GEN-LAST:event_scoreS2J3KeyPressed
 
     private void scoreS2J4KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS2J4KeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             scoreS2J5.requestFocusInWindow();
+            scoreS2J5.selectAll();
         }
     }//GEN-LAST:event_scoreS2J4KeyPressed
 
@@ -1333,24 +1399,28 @@ public class FigureScorePanel extends javax.swing.JPanel {
     private void scoreS3J1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS3J1KeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             scoreS3J2.requestFocusInWindow();
+            scoreS3J2.selectAll();
         }
     }//GEN-LAST:event_scoreS3J1KeyPressed
 
     private void scoreS3J2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS3J2KeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             scoreS3J3.requestFocusInWindow();
+            scoreS3J3.selectAll();
         }
     }//GEN-LAST:event_scoreS3J2KeyPressed
 
     private void scoreS3J3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS3J3KeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             scoreS3J4.requestFocusInWindow();
+            scoreS3J4.selectAll();
         }
     }//GEN-LAST:event_scoreS3J3KeyPressed
 
     private void scoreS3J4KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS3J4KeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             scoreS3J5.requestFocusInWindow();
+            scoreS3J5.selectAll();
         }
     }//GEN-LAST:event_scoreS3J4KeyPressed
 
@@ -1363,24 +1433,28 @@ public class FigureScorePanel extends javax.swing.JPanel {
     private void scoreS4J1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS4J1KeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             scoreS4J2.requestFocusInWindow();
+            scoreS4J2.selectAll();
         }
     }//GEN-LAST:event_scoreS4J1KeyPressed
 
     private void scoreS4J2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS4J2KeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             scoreS4J3.requestFocusInWindow();
+            scoreS4J3.selectAll();
         }
     }//GEN-LAST:event_scoreS4J2KeyPressed
 
     private void scoreS4J3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS4J3KeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             scoreS4J4.requestFocusInWindow();
+            scoreS4J4.selectAll();
         }
     }//GEN-LAST:event_scoreS4J3KeyPressed
 
     private void scoreS4J4KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS4J4KeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             scoreS4J5.requestFocusInWindow();
+            scoreS4J5.selectAll();
         }
     }//GEN-LAST:event_scoreS4J4KeyPressed
 
@@ -1400,6 +1474,8 @@ public class FigureScorePanel extends javax.swing.JPanel {
     private javax.swing.JLabel fig3;
     private javax.swing.JLabel fig4;
     private javax.swing.JLabel figLabel;
+    private javax.swing.JLabel figuresTotal;
+    private javax.swing.JLabel figuresTotalLabel;
     private javax.swing.JLabel judge1Label;
     private javax.swing.JLabel judge2Label;
     private javax.swing.JLabel judge3Label;
