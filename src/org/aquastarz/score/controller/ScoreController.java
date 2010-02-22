@@ -20,10 +20,8 @@
 package org.aquastarz.score.controller;
 
 import java.math.BigDecimal;
-import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -236,30 +234,35 @@ public class ScoreController {
 
     public boolean saveFigureScores(FiguresParticipant figuresParticipant, Collection<FigureScore> figureScores) {
         //Calculate totals before saving
-        logger.setLevel(Level.DEBUG);
         for (FigureScore figureScore : figureScores) {
-            if(logger.isDebugEnabled()) logger.debug("Getting total for "+figureScore.getFigure().getName());
+            if (logger.isDebugEnabled()) {
+                logger.debug("Getting total for " + figureScore.getFigure().getName());
+            }
             figureScore.setTotalScore(totalScore(figureScore));
-            if(figureScore.getTotalScore() == null) {
+            if (figureScore.getTotalScore() == null) {
                 logger.error("Saving figure scores aborted because of error getting totalScore.");
                 return false;
-            }
-            else {
-                if(logger.isDebugEnabled()) logger.debug("Total = "+figureScore.getTotalScore().toPlainString());
+            } else {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Total = " + figureScore.getTotalScore().toPlainString());
+                }
             }
         }
-        logger.setLevel(Level.WARN);
-        
+
         EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
         try {
+            BigDecimal totalScore = BigDecimal.ZERO;
             for (FigureScore figureScore : figureScores) {
+                totalScore = totalScore.add(figureScore.getTotalScore());
                 figureScore = entityManager.merge(figureScore);
                 if (!figuresParticipant.getFiguresScores().contains(figureScore)) {
                     figuresParticipant.getFiguresScores().add(figureScore);
                 }
             }
+            figuresParticipant.setTotalScore(totalScore);
             entityManager.merge(figuresParticipant);
+
             transaction.commit();
 
             mainFrame.updateFiguresStatus();
@@ -299,14 +302,15 @@ public class ScoreController {
                 count += fp.getFiguresScores().size();
             }
         }
-        int percent = count * 100 / possible;
+        int percent = possible > 0 ? count * 100 / possible : 0;
 
-        if (countNovice) {
-            logger.warn("Novice figures are " + percent + "% complete.");
-        } else {
-            logger.warn("Intermediate figures are " + percent + "% complete.");
+        if (logger.isDebugEnabled()) {
+            if(countNovice) {
+                logger.debug("Novice figures are " + percent + "% complete.");
+            } else {
+                logger.debug("Intermediate figures are " + percent + "% complete.");
+            }
         }
-
         return percent;
     }
 
@@ -340,11 +344,9 @@ public class ScoreController {
         for (BigDecimal score : scores) {
             if (!minRemoved && score.compareTo(min) == 0) {
                 minRemoved = true;
-            }
-            else if(!maxRemoved && score.compareTo(max) == 0) {
+            } else if (!maxRemoved && score.compareTo(max) == 0) {
                 maxRemoved = true;
-            }
-            else {
+            } else {
                 adjScores.add(score);
             }
         }
@@ -359,7 +361,7 @@ public class ScoreController {
 
         //Sum the scores
         BigDecimal sum = BigDecimal.ZERO;
-        for(BigDecimal score : adjScores) {
+        for (BigDecimal score : adjScores) {
             sum = sum.add(score);
         }
 
@@ -370,5 +372,9 @@ public class ScoreController {
         BigDecimal total = ddSum.subtract(fs.getPenalty());
 
         return total;
+    }
+
+    public static void calculateMeetResults(Meet meet) {
+
     }
 }

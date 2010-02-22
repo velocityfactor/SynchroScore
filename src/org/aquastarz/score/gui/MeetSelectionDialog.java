@@ -24,6 +24,13 @@
  */
 package org.aquastarz.score.gui;
 
+import java.awt.Dimension;
+import java.awt.Rectangle;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
@@ -40,6 +47,7 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
     /** Creates new form MeetSelectionDialog */
     public MeetSelectionDialog(List<Meet> meets, java.awt.Frame parent, boolean modal) {
         super(parent, modal);
+
         initComponents();
         fillCombo(meetCombo, meets);
     }
@@ -59,11 +67,14 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
         meetCombo = new javax.swing.JComboBox();
         okButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("SynchroScore");
         setAlwaysOnTop(true);
-        setLocationByPlatform(true);
+        setBackground(new java.awt.Color(255, 255, 255));
         setModal(true);
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -73,17 +84,17 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
         });
 
         buttonGroup1.add(newMeetButton);
-        newMeetButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        newMeetButton.setFont(new java.awt.Font("Tahoma", 0, 14));
         newMeetButton.setText("New Meet");
 
         buttonGroup1.add(existingMeetButton);
-        existingMeetButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        existingMeetButton.setFont(new java.awt.Font("Tahoma", 0, 14));
         existingMeetButton.setText("Existing Meet");
 
-        meetCombo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        meetCombo.setFont(new java.awt.Font("Tahoma", 0, 14));
         meetCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        okButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        okButton.setFont(new java.awt.Font("Tahoma", 0, 14));
         okButton.setText("OK");
         okButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -91,7 +102,7 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
             }
         });
 
-        cancelButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        cancelButton.setFont(new java.awt.Font("Tahoma", 0, 14));
         cancelButton.setText("Cancel");
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -99,68 +110,110 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
             }
         });
 
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/aquastarz/score/gui/synchro.png"))); // NOI18N
+        jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        jPanel1.setBackground(new java.awt.Color(0, 102, 204));
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("SynchroScore 0.8");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 459, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(newMeetButton)
-                    .addComponent(existingMeetButton)
+                    .addComponent(newMeetButton, javax.swing.GroupLayout.DEFAULT_SIZE, 331, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addComponent(meetCombo, 0, 256, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
+                        .addGap(28, 28, 28)
                         .addComponent(okButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cancelButton)))
+                        .addComponent(cancelButton))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addComponent(meetCombo, 0, 310, Short.MAX_VALUE))
+                    .addComponent(existingMeetButton, javax.swing.GroupLayout.DEFAULT_SIZE, 331, Short.MAX_VALUE))
                 .addContainerGap())
         );
+
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {cancelButton, okButton});
+
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(newMeetButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(existingMeetButton)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(meetCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(okButton)
-                    .addComponent(cancelButton)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(newMeetButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(existingMeetButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(meetCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cancelButton)
+                            .addComponent(okButton)))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        setVisible(false);
-    }//GEN-LAST:event_okButtonActionPerformed
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        canceled = true;
+    }//GEN-LAST:event_formWindowClosing
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         canceled = true;
         setVisible(false);
-    }//GEN-LAST:event_cancelButtonActionPerformed
+}//GEN-LAST:event_cancelButtonActionPerformed
 
-    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        canceled = true;
-    }//GEN-LAST:event_formWindowClosing
+    private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
+        setVisible(false);
+}//GEN-LAST:event_okButtonActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static Meet selectMeet(final List<Meet> meets) throws MeetSelectionCanceledException {
         MeetSelectionDialog dialog = new MeetSelectionDialog(meets, new javax.swing.JFrame(), true);
+        Dimension dim = dialog.getToolkit().getScreenSize();
+        Rectangle abounds = dialog.getBounds();
+        dialog.setLocation((dim.width - abounds.width) / 2,
+                (dim.height - abounds.height) / 2);
         dialog.setVisible(true);
-        if(dialog.canceled) {
+        if (dialog.canceled) {
             throw new MeetSelectionCanceledException();
         }
         return dialog.getSelectedMeet();
     }
 
     public static class MeetSelectionCanceledException extends Exception {
-
     }
 
     private Meet getSelectedMeet() {
@@ -187,31 +240,42 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
             newMeetButton.setSelected(true);
         } else {
             cb.setSelectedItem(meets.get(0));
-//            if (isToday(meets.get(0).getMeetDate())) {
-//                existingMeetButton.setSelected(true);
-//            }
-//            else {
-//                newMeetButton.setSelected(true);
-//            }
+            DateFormat df = SimpleDateFormat.getDateInstance(SimpleDateFormat.LONG);
+
+            // Try to parse the date - it's just a string, so may not parse
+            try {
+                Date d = df.parse(meets.get(0).getMeetDate());
+
+                if (isToday(d)) {
+                    existingMeetButton.setSelected(true);
+                }
+                else {
+                    newMeetButton.setSelected(true);
+                }
+            }
+            catch(Exception e) { //don't care
+            }
         }
     }
+    private boolean isToday(Date inp) {
 
-//    private boolean isToday(Date inp) {
-//
-//        Calendar cal1 = new GregorianCalendar();
-//        Calendar cal2 = new GregorianCalendar();
-//
-//        cal1.setTime(new Date());
-//        cal2.setTime(inp);
-//
-//        return ((cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)) &&
-//                (cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)));
-//    }
+        Calendar cal1 = new GregorianCalendar();
+        Calendar cal2 = new GregorianCalendar();
+
+        cal1.setTime(new Date());
+        cal2.setTime(inp);
+
+        return ((cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)) &&
+                (cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)));
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton cancelButton;
     private javax.swing.JRadioButton existingMeetButton;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JComboBox meetCombo;
     private javax.swing.JRadioButton newMeetButton;
     private javax.swing.JButton okButton;

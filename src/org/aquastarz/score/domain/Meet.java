@@ -288,7 +288,7 @@ public class Meet implements Serializable {
         return figuresParticipants!=null && figuresParticipants.size()>0;
     }
 
-    public boolean isValid(Meet meet) {
+    public boolean isValid() {
         boolean valid=true;
         if(name==null || name.length()<1) valid=false;
         if(meetDate==null || meetDate.length()<1) valid=false;
