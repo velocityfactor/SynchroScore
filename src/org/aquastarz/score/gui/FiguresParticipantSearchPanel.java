@@ -75,6 +75,7 @@ public class FiguresParticipantSearchPanel extends javax.swing.JPanel {
     }
 
     public void focus() {
+        this.requestFocusInWindow();
         figureOrder.requestFocusInWindow();
         figureOrder.selectAll();
     }

@@ -20,13 +20,16 @@
 package org.aquastarz.score.gui;
 
 import java.awt.Color;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import javax.imageio.ImageIO;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.swing.AbstractAction;
@@ -54,17 +57,27 @@ import org.aquastarz.score.gui.event.FiguresParticipantSearchPanelListener;
 
 public class SynchroFrame extends javax.swing.JFrame {
 
+    private static org.apache.log4j.Logger logger =
+            org.apache.log4j.Logger.getLogger(SynchroFrame.class.getName());
+
     public enum Tab {
 
         MEET_SETUP, SWIMMERS, FIGURES_ORDER, FIGURES, ROUTINES, REPORTS, LEAGUE
     };
     private ScoreController controller = null;
     private Meet meet = null;
+    Image appIcon = null;
 
     /** Creates new form Synchro */
     public SynchroFrame(ScoreController controller, Meet meet) {
         this.controller = controller;
         this.meet = meet;
+        try {
+            URL rsrcUrl = Thread.currentThread().getContextClassLoader().getResource("org/aquastarz/score/gui/synchro-icon.png");
+            appIcon = ImageIO.read(rsrcUrl);
+        } catch (Exception e) {
+            logger.error("Error loading app icon.", e);
+        }
         initComponents();
         listenForHotKeys();
         registerListeners();
@@ -124,7 +137,7 @@ public class SynchroFrame extends javax.swing.JFrame {
     private void updateStatus() {
         updateLeagueList();
         setTabEnabled(Tab.LEAGUE, true);
-        if (meet.isValid(meet)) {
+        if (meet.isValid()) {
             setTabEnabled(SynchroFrame.Tab.SWIMMERS, true);
             updateSwimmerTab();
             if (meet.hasFiguresParticipants(meet)) {
@@ -177,7 +190,9 @@ public class SynchroFrame extends javax.swing.JFrame {
             public void meetSetupSaved() {
                 controller.saveMeet(meet);
                 updateStatus();
-                //TODO show error if meet setup not complete
+                if (!meet.isValid()) {
+                    JOptionPane.showMessageDialog(rootPane, "The Meet setup that you have saved is not complete.", "Warning", JOptionPane.WARNING_MESSAGE);
+                }
             }
         });
 
@@ -242,18 +257,20 @@ public class SynchroFrame extends javax.swing.JFrame {
         String teamId = "%";
         ComboBoxModel cbm = leagueTeamCombo.getModel();
         Object o = cbm.getSelectedItem();
-        if(o != null && o instanceof String) {
+        if (o != null && o instanceof String) {
             teamId = (String) o;
-            if("[All]".equals(o)) teamId = "%";
+            if ("[All]".equals(o)) {
+                teamId = "%";
+            }
         }
 
-        if(leagueSortByName.isSelected()) {
+        if (leagueSortByName.isSelected()) {
             swimmerQuery = entityManager.createNamedQuery("Swimmer.findByTeamOrderByName");
-        }
-        else if(leagueSortByTeam.isSelected()) {
+        } else if (leagueSortByTeam.isSelected()) {
             swimmerQuery = entityManager.createNamedQuery("Swimmer.findByTeamOrderByTeamAndName");
-        }
-        else {
+        } else if (leagueSortByLevel.isSelected()) {
+            swimmerQuery = entityManager.createNamedQuery("Swimmer.findByTeamOrderByLevelAndName");
+        } else {
             swimmerQuery = entityManager.createNamedQuery("Swimmer.findByTeamOrderBySwimmerId");
         }
         swimmerQuery.setParameter("teamId", teamId);
@@ -272,6 +289,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         java.awt.GridBagConstraints gridBagConstraints;
 
         figuresOrderSortButtonGroup = new javax.swing.ButtonGroup();
+        leagueSortButtonGroup = new javax.swing.ButtonGroup();
         tabPane = new javax.swing.JTabbedPane();
         meetSetup = new org.aquastarz.score.gui.MeetSetupPanel();
         swimmers = new javax.swing.JPanel();
@@ -315,6 +333,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         leagueSortByTeam = new javax.swing.JRadioButton();
         jLabel7 = new javax.swing.JLabel();
         leagueTeamCombo = new javax.swing.JComboBox();
+        leagueSortByLevel = new javax.swing.JRadioButton();
         jToolBar1 = new javax.swing.JToolBar();
         jLabel1 = new javax.swing.JLabel();
         setupProgress = new javax.swing.JProgressBar();
@@ -330,6 +349,7 @@ public class SynchroFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Synchro Scoring");
+        setIconImage(appIcon);
         setMinimumSize(new java.awt.Dimension(603, 200));
         setName(""); // NOI18N
 
@@ -342,8 +362,9 @@ public class SynchroFrame extends javax.swing.JFrame {
         });
         tabPane.addTab("Meet Setup", meetSetup);
 
-        saveSwimmersButton.setFont(new java.awt.Font("Tahoma", 0, 14));
+        saveSwimmersButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         saveSwimmersButton.setText("Save");
+        saveSwimmersButton.setToolTipText("Save figures participants.");
         saveSwimmersButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 saveSwimmersButtonActionPerformed(evt);
@@ -353,8 +374,9 @@ public class SynchroFrame extends javax.swing.JFrame {
         teamTabs.setTabPlacement(javax.swing.JTabbedPane.LEFT);
         teamTabs.setFont(new java.awt.Font("Tahoma", 0, 14));
 
-        generateRandomFiguresOrderButton.setFont(new java.awt.Font("Tahoma", 0, 14));
-        generateRandomFiguresOrderButton.setText("Generate Random Figures Order");
+        generateRandomFiguresOrderButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        generateRandomFiguresOrderButton.setText("Randomize");
+        generateRandomFiguresOrderButton.setToolTipText("Generate random figures order.");
         generateRandomFiguresOrderButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 generateRandomFiguresOrderButtonActionPerformed(evt);
@@ -365,28 +387,23 @@ public class SynchroFrame extends javax.swing.JFrame {
         swimmers.setLayout(swimmersLayout);
         swimmersLayout.setHorizontalGroup(
             swimmersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(swimmersLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(swimmersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(swimmersLayout.createSequentialGroup()
-                        .addComponent(saveSwimmersButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(generateRandomFiguresOrderButton)
-                        .addContainerGap(502, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, swimmersLayout.createSequentialGroup()
-                        .addComponent(teamTabs, javax.swing.GroupLayout.DEFAULT_SIZE, 459, Short.MAX_VALUE)
-                        .addGap(345, 345, 345))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, swimmersLayout.createSequentialGroup()
+                .addComponent(teamTabs, javax.swing.GroupLayout.DEFAULT_SIZE, 685, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addGroup(swimmersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(saveSwimmersButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(generateRandomFiguresOrderButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         swimmersLayout.setVerticalGroup(
             swimmersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, swimmersLayout.createSequentialGroup()
+            .addGroup(swimmersLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(teamTabs, javax.swing.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)
+                .addComponent(saveSwimmersButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(swimmersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(saveSwimmersButton)
-                    .addComponent(generateRandomFiguresOrderButton))
-                .addContainerGap())
+                .addComponent(generateRandomFiguresOrderButton)
+                .addContainerGap(452, Short.MAX_VALUE))
+            .addComponent(teamTabs, javax.swing.GroupLayout.DEFAULT_SIZE, 523, Short.MAX_VALUE)
         );
 
         tabPane.addTab("Swimmers", swimmers);
@@ -396,6 +413,7 @@ public class SynchroFrame extends javax.swing.JFrame {
 
         figuresOrderSortButtonGroup.add(figureOrderSortByNumber);
         figureOrderSortByNumber.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        figureOrderSortByNumber.setSelected(true);
         figureOrderSortByNumber.setText("Number");
         figureOrderSortByNumber.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -473,6 +491,8 @@ public class SynchroFrame extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         figureScore.add(swimmerSearchPanel, gridBagConstraints);
 
+        figureScorePanel.setMinimumSize(new java.awt.Dimension(725, 150));
+        figureScorePanel.setPreferredSize(new java.awt.Dimension(725, 150));
         figureScorePanel.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
             public void propertyChange(java.beans.PropertyChangeEvent evt) {
                 figureScorePanelPropertyChange(evt);
@@ -513,7 +533,7 @@ public class SynchroFrame extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(saveFigureScoreButton)
-                .addContainerGap(280, Short.MAX_VALUE))
+                .addContainerGap(257, Short.MAX_VALUE))
         );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -666,7 +686,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel6.setText("Sort by:");
 
-        figuresOrderSortButtonGroup.add(leagueSortByNumber);
+        leagueSortButtonGroup.add(leagueSortByNumber);
         leagueSortByNumber.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         leagueSortByNumber.setSelected(true);
         leagueSortByNumber.setText("Number");
@@ -676,7 +696,7 @@ public class SynchroFrame extends javax.swing.JFrame {
             }
         });
 
-        figuresOrderSortButtonGroup.add(leagueSortByName);
+        leagueSortButtonGroup.add(leagueSortByName);
         leagueSortByName.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         leagueSortByName.setText("Name");
         leagueSortByName.addActionListener(new java.awt.event.ActionListener() {
@@ -685,7 +705,7 @@ public class SynchroFrame extends javax.swing.JFrame {
             }
         });
 
-        figuresOrderSortButtonGroup.add(leagueSortByTeam);
+        leagueSortButtonGroup.add(leagueSortByTeam);
         leagueSortByTeam.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         leagueSortByTeam.setText("Team");
         leagueSortByTeam.addActionListener(new java.awt.event.ActionListener() {
@@ -711,29 +731,38 @@ public class SynchroFrame extends javax.swing.JFrame {
             }
         });
 
+        leagueSortButtonGroup.add(leagueSortByLevel);
+        leagueSortByLevel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        leagueSortByLevel.setText("Level");
+        leagueSortByLevel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                leagueSortByLevelfiguresOrderSortByNameActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout leaguePanelLayout = new javax.swing.GroupLayout(leaguePanel);
         leaguePanel.setLayout(leaguePanelLayout);
         leaguePanelLayout.setHorizontalGroup(
             leaguePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, leaguePanelLayout.createSequentialGroup()
-                .addComponent(swimmerScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 723, Short.MAX_VALUE)
-                .addGroup(leaguePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(leaguePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(leaguePanelLayout.createSequentialGroup()
-                            .addGap(6, 6, 6)
-                            .addGroup(leaguePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel6)
-                                .addComponent(leagueSortByNumber, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(leagueSortByName)
-                                .addComponent(leagueSortByTeam)))
-                        .addGroup(leaguePanelLayout.createSequentialGroup()
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addGroup(leaguePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(leagueTeamCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel7))))
+                .addComponent(swimmerScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 733, Short.MAX_VALUE)
+                .addGroup(leaguePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(leaguePanelLayout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(leaguePrintButton)))
+                        .addGap(6, 6, 6)
+                        .addGroup(leaguePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6)
+                            .addComponent(leagueSortByNumber, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(leagueSortByName)
+                            .addComponent(leagueSortByTeam)
+                            .addComponent(leagueSortByLevel)))
+                    .addGroup(leaguePanelLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(leaguePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(leagueTeamCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(leaguePanelLayout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE))
+                            .addComponent(leaguePrintButton))))
                 .addContainerGap())
         );
         leaguePanelLayout.setVerticalGroup(
@@ -747,11 +776,13 @@ public class SynchroFrame extends javax.swing.JFrame {
                 .addComponent(leagueSortByName)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(leagueSortByTeam)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(leagueSortByLevel)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(leagueTeamCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 329, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 304, Short.MAX_VALUE)
                 .addComponent(leaguePrintButton)
                 .addContainerGap())
         );
@@ -856,8 +887,7 @@ public class SynchroFrame extends javax.swing.JFrame {
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, data);
             JasperViewer.viewReport(jasperPrint, false);
         } catch (Exception ex) {
-            String connectMsg = "Could not create the report.\n" + ex.getLocalizedMessage();
-            System.out.println(connectMsg);
+            logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
         }
     }//GEN-LAST:event_figuresOrderPrintButtonActionPerformed
 
@@ -888,8 +918,7 @@ public class SynchroFrame extends javax.swing.JFrame {
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, data);
             JasperViewer.viewReport(jasperPrint, false);
         } catch (Exception ex) {
-            String connectMsg = "Could not create the report.\n" + ex.getLocalizedMessage();
-            System.out.println(connectMsg);
+            logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
         }
 
     }//GEN-LAST:event_leaguePrintButtonActionPerformed
@@ -910,6 +939,9 @@ public class SynchroFrame extends javax.swing.JFrame {
         updateLeagueList();
     }//GEN-LAST:event_leagueTeamComboActionPerformed
 
+    private void leagueSortByLevelfiguresOrderSortByNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_leagueSortByLevelfiguresOrderSortByNameActionPerformed
+        updateLeagueList();
+    }//GEN-LAST:event_leagueSortByLevelfiguresOrderSortByNameActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane figureOrderScrollPane;
     private javax.swing.JRadioButton figureOrderSortByName;
@@ -949,6 +981,8 @@ public class SynchroFrame extends javax.swing.JFrame {
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JPanel leaguePanel;
     private javax.swing.JButton leaguePrintButton;
+    private javax.swing.ButtonGroup leagueSortButtonGroup;
+    private javax.swing.JRadioButton leagueSortByLevel;
     private javax.swing.JRadioButton leagueSortByName;
     private javax.swing.JRadioButton leagueSortByNumber;
     private javax.swing.JRadioButton leagueSortByTeam;

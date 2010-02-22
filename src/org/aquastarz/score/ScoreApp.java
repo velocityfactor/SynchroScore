@@ -27,7 +27,8 @@ import org.aquastarz.score.config.Bootstrap;
 import org.aquastarz.score.controller.ScoreController;
 
 public class ScoreApp {
-
+    private static org.apache.log4j.Logger logger =
+            org.apache.log4j.Logger.getLogger(ScoreApp.class.getName());
     private static String url = "jdbc:hsqldb:file:"+System.getProperty("user.home")+"/.SynchroScore/Data";
     private static Map props=null;
 
@@ -54,17 +55,17 @@ public class ScoreApp {
         //TODO new db each run
         db.delete();
         if(!db.exists()) {
-            System.out.println("No db file found, create...");
+            logger.info("No db file found, create...");
             db.mkdir();
             Map initProps=new TreeMap();
             initProps.put("hibernate.hbm2ddl.auto","update");
             initProps.put("hibernate.connection.url",url);
             EntityManager entityManager = javax.persistence.Persistence.createEntityManagerFactory("synchroPU", initProps).createEntityManager();
             entityManager.close();
-            System.out.println("Load sample data...");
+            logger.info("Load sample data...");
             Bootstrap.loadLeagueData();
             Bootstrap.loadSampleSwimmers();
-            System.out.println("DB init done.");
+            logger.info("DB init done.");
         }
     }
 }
