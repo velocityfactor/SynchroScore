@@ -113,7 +113,13 @@ public class Meet implements Serializable {
     private Figure int4Figure;
 
     @Transient
-    private Map<Team,BigDecimal> pointsMap = new HashMap<Team,BigDecimal>();
+    private Map<Team,BigDecimal> pointsMap = null;
+
+    @Transient
+    private Map<Team,Integer> placeMap = null;
+
+    @Transient
+    private List<String> calcErrors = null;
 
     public Meet() {
     }
@@ -280,8 +286,41 @@ public class Meet implements Serializable {
         this.nov2Figure = nov2Figure;
     }
 
+    public boolean needsPointsCalc() {
+        return placeMap==null || pointsMap==null;
+    }
+
+    public void clearPoints() {
+        placeMap=null;
+        pointsMap=null;
+    }
+
+    public Map<Team, Integer> getPlaceMap() {
+        return placeMap;
+    }
+
+    public void setPlaceMap(Map<Team, Integer> placeMap) {
+        this.placeMap=placeMap;
+    }
+
     public Map<Team, BigDecimal> getPointsMap() {
         return pointsMap;
+    }
+
+    public void setPointsMap(Map<Team, BigDecimal> pointsMap) {
+        this.pointsMap=pointsMap;
+    }
+
+    public List<String> getCalcErrors() {
+        return calcErrors;
+    }
+
+    public void setCalcErrors(List<String> calcErrors) {
+        this.calcErrors=calcErrors;
+    }
+
+    public boolean hasCalcErrors() {
+        return calcErrors!=null && calcErrors.size()>0;
     }
 
     public boolean hasFiguresParticipants(Meet meet) {

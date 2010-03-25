@@ -24,15 +24,20 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.logging.Level;
 import javax.persistence.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import org.apache.log4j.Level;
 import org.aquastarz.score.ScoreApp;
 import org.aquastarz.score.domain.Figure;
 import org.aquastarz.score.domain.FigureScore;
@@ -97,6 +102,11 @@ public class ScoreController {
 
     public List<Figure> getFigures() {
         javax.persistence.Query query = entityManager.createQuery("SELECT f FROM Figure f order by f.figureId");
+        return query.getResultList();
+    }
+
+    public List<Level> getLevels() {
+        javax.persistence.Query query = entityManager.createQuery("SELECT l FROM Level l order by l.levelId");
         return query.getResultList();
     }
 
@@ -233,6 +243,9 @@ public class ScoreController {
     }
 
     public boolean saveFigureScores(FiguresParticipant figuresParticipant, Collection<FigureScore> figureScores) {
+        //Mark meet as needing recalc
+        figuresParticipant.getMeet().clearPoints();
+
         //Calculate totals before saving
         for (FigureScore figureScore : figureScores) {
             if (logger.isDebugEnabled()) {
@@ -314,7 +327,7 @@ public class ScoreController {
         return percent;
     }
 
-    public static BigDecimal totalScore(FigureScore fs) {
+    public BigDecimal totalScore(FigureScore fs) {
         // Must be valid (values for all five scores, penalty, etc)
         if (!isValid(fs)) {
             return null;
@@ -371,10 +384,181 @@ public class ScoreController {
         //Subtract penalty
         BigDecimal total = ddSum.subtract(fs.getPenalty());
 
+        //Score can't be less than zero
+        if(BigDecimal.ZERO.compareTo(fs.getTotalScore())>=0) {
+            fs.setTotalScore(BigDecimal.ZERO);
+        }
+
         return total;
     }
 
-    public static void calculateMeetResults(Meet meet) {
+    public boolean meetResultsValid(Meet meet) {
+        if(meet.needsPointsCalc()) calculateMeetResults(meet);
+        return !meet.hasCalcErrors();
+    }
 
+    public boolean figuresParticipantHasAllScores(FiguresParticipant fp) {
+        //Regular meets N8U have 2 scores, otherwise 4
+        if(fp.getMeet().getType()=='R' && "N8U".equals(fp.getSwimmer().getLevel().getLevelId())) {
+            return fp.getFiguresScores().size()==2;
+        }
+        else {
+            return fp.getFiguresScores().size()==4;
+        }
+    }
+
+    public void calculateMeetResults(Meet meet) {
+        List<String> calcErrors = new ArrayList<String>();
+
+        //Calculate total score for figures participants
+        for(FiguresParticipant fp:meet.getFiguresParticipants()) {
+            if(fp.getFiguresScores().size()<4) {
+                calcErrors.add("Swimmer #"+fp.getFigureOrder()+" does not have 4 figure scores.");
+            }
+            for(FigureScore fs:fp.getFiguresScores()) {
+                if(BigDecimal.ZERO.compareTo(fs.getTotalScore())>=0) {
+                    calcErrors.add("Swimmer #"+fp.getFigureOrder()+" score for "+fs.getFigure().getName()+" is zero.");
+                }
+            }
+            fp.setTotalScore(calculateTotalScore(fp));
+        }
+
+        //Assign places and points to figures participants by level
+        for(Level level:getLevels()) {
+            List<FiguresParticipant> pointList = new ArrayList<FiguresParticipant>();
+            for(FiguresParticipant fp:meet.getFiguresParticipants()) {
+                if(fp.getSwimmer().getLevel().equals(level)) {
+                    pointList.add(fp);
+                }
+            }
+
+            Collections.sort(pointList,new Comparator<FiguresParticipant>() {
+                public int compare(FiguresParticipant fp1, FiguresParticipant fp2) {
+                   return fp2.getTotalScore().compareTo(fp1.getTotalScore());
+                }
+            });
+
+            BigDecimal lastTotal=BigDecimal.ZERO;
+            Map<Integer,Integer> tieMap = new HashMap<Integer,Integer>();
+            int place=0;
+            for(FiguresParticipant fp:pointList) {
+                if(fp.getTotalScore().equals(lastTotal) && place>0) {
+                    //tie
+                    fp.setPlace(place);
+                    int tieCount = 0;
+                    if(tieMap.containsKey(place)) tieCount = tieMap.get(place);
+                    tieCount++;
+                    tieMap.put(place, tieCount);
+                }
+                else {
+                    int placeInc=1;
+                    if(tieMap.containsKey(place)) placeInc = tieMap.get(place);
+                    place+=placeInc;
+                    fp.setPlace(place);
+                }
+                lastTotal = fp.getTotalScore();
+            }
+            for(FiguresParticipant fp:pointList) {
+                int tieCount = 1;
+                if(tieMap.containsKey(place)) tieCount = tieMap.get(place);
+                fp.setPoints(calculateFigurePlacePoints(fp.getPlace(),tieCount,meet.getType()));
+            }
+        }
+
+        //Sum points for teams
+        Map<Team,BigDecimal> meetPointsMap = new HashMap<Team,BigDecimal>();
+        meetPointsMap.put(meet.getHomeTeam(),BigDecimal.ZERO);
+        for(Team team:meet.getOpponents()) {
+            meetPointsMap.put(team, BigDecimal.ZERO);
+        }
+        for(FiguresParticipant fp:meet.getFiguresParticipants()) {
+            Team team = fp.getSwimmer().getTeam();
+            BigDecimal points = meetPointsMap.get(team);
+            points = points.add(fp.getPoints());
+            meetPointsMap.put(team, points);
+        }
+        meet.setPointsMap(meetPointsMap);
+
+        //Assign places for teams
+        Map<Team,Integer> meetPlaceMap = new HashMap<Team,Integer>();
+        List<Entry<Team,BigDecimal>> list = new LinkedList<Entry<Team,BigDecimal>>(meetPointsMap.entrySet());
+        Collections.sort(list, new Comparator<Entry<Team,BigDecimal>>() {
+            public int compare(Entry<Team,BigDecimal> o1, Entry<Team,BigDecimal> o2) {
+                return o2.getValue().compareTo(o1.getValue());
+            }
+        });
+        int place=0;
+        BigDecimal lastPoints = BigDecimal.ZERO;
+        for(Entry<Team,BigDecimal>entry:list) {
+            BigDecimal points = entry.getValue();
+            if(!points.equals(lastPoints) || place==0) {
+                place++;
+            }
+            meetPlaceMap.put(entry.getKey(), place);
+            lastPoints = points;
+        }
+        meet.setPlaceMap(meetPlaceMap);
+    }
+
+    private BigDecimal calculateFigurePlacePoints(int place,int tieCount,char meetType) {
+        BigDecimal points = BigDecimal.ZERO;
+        for(int i=0;i<tieCount;i++) {
+            points=points.add(getFigurePlacePoints(place+i,meetType));
+        }
+        points=points.divide(BigDecimal.valueOf(tieCount));
+        return points;
+    }
+    
+    private BigDecimal getFigurePlacePoints(int place, char meetType) {
+        if(place<1) throw new IllegalArgumentException("place<1 not allowed.");
+        if(meetType=='R') {
+            switch(place) {
+                case 1:
+                    return BigDecimal.valueOf(7);
+                case 2:
+                    return BigDecimal.valueOf(5);
+                case 3:
+                    return BigDecimal.valueOf(3);
+                case 4:
+                    return BigDecimal.valueOf(2);
+                case 5:
+                    return BigDecimal.valueOf(1);
+                default:
+                    return BigDecimal.ZERO;
+            }
+        }
+        else if(meetType=='C') {
+            switch(place) {
+                case 1:
+                    return BigDecimal.valueOf(10);
+                case 2:
+                    return BigDecimal.valueOf(8);
+                case 3:
+                    return BigDecimal.valueOf(6);
+                case 4:
+                    return BigDecimal.valueOf(5);
+                case 5:
+                    return BigDecimal.valueOf(4);
+                case 6:
+                    return BigDecimal.valueOf(3);
+                case 7:
+                    return BigDecimal.valueOf(2);
+                case 8:
+                    return BigDecimal.valueOf(1);
+                default:
+                    return BigDecimal.ZERO;
+            }
+        }
+        else {
+            throw new IllegalArgumentException("meetType was \""+meetType+"\" but only R and C are allowed.");
+        }
+    }
+
+    public BigDecimal calculateTotalScore(FiguresParticipant fp) {
+        BigDecimal total = BigDecimal.ZERO;
+        for(FigureScore fs:fp.getFiguresScores()) {
+            total=total.add(fs.getTotalScore());
+        }
+        return total;
     }
 }
