@@ -28,6 +28,8 @@ import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityManager;
 import org.aquastarz.score.ScoreApp;
+import org.aquastarz.score.config.Bootstrap;
+import org.aquastarz.score.domain.Figure;
 import org.aquastarz.score.domain.FigureScore;
 import org.aquastarz.score.domain.FiguresParticipant;
 import org.aquastarz.score.domain.Level;
@@ -58,11 +60,13 @@ public class ScoreControllerTest {
 
     @Before
     public void setUp() {
+        EntityManager entityManager = ScoreApp.getEntityManager();
+        Bootstrap.loadLeagueData(entityManager);
+
         CSVReader csv = new CSVReader(new InputStreamReader(getClass().getResourceAsStream("results.csv")));
         String[] nextLine;
         try {
-            //skip header
-            csv.readNext();
+            csv.readNext(); //skip header
             while ((nextLine = csv.readNext()) != null) {
                 LegacyResult lr = new LegacyResult(nextLine);
                 legacyResults.put(lr.swmrNo, lr);
@@ -72,10 +76,10 @@ public class ScoreControllerTest {
             e.printStackTrace();
         }
         csv = new CSVReader(new InputStreamReader(getClass().getResourceAsStream("figstat.csv")));
-        LegacyMeet legacyMeet=null;
+        LegacyMeet legacyMeet = null;
         try {
-            //skip header
-            csv.readNext();
+            csv.readNext(); //skip header
+            nextLine = csv.readNext();
             legacyMeet = new LegacyMeet(nextLine);
             csv.close();
         } catch (Exception e) {
@@ -85,63 +89,83 @@ public class ScoreControllerTest {
         Meet meet = new Meet();
         meet.setName(legacyMeet.meetTitle);
         meet.setMeetDate(legacyMeet.meetDate);
-        if("Dual".equals(legacyMeet.meetType)) {
+        if ("Dual".equals(legacyMeet.meetType)) {
             meet.setType('R');
-        }
-        else {
+        } else {
             meet.setType('C');
         }
 
-        //TODO fill these from legacyMeet
-        meet.setHomeTeam(null);
-        meet.setEu1Figure(null);
-        meet.setEu2Figure(null);
-        meet.setNov1Figure(null);
-        meet.setNov2Figure(null);
-        meet.setNov3Figure(null);
-        meet.setNov4Figure(null);
-        meet.setInt1Figure(null);
-        meet.setInt2Figure(null);
-        meet.setInt3Figure(null);
-        meet.setInt4Figure(null);
-        meet.setFiguresOrderGenerated(true);
-        meet.setHomeTeam(null);
-        meet.setOpponents(null);
-        EntityManager entityManager = ScoreApp.getEntityManager();
-        Map<String,Level> levels = new HashMap<String,Level>();
-        levels.put("NOV8 & Under",entityManager.find(Level.class,"N8"));
-        levels.put("NOV9-10",entityManager.find(Level.class,"N9-10"));
-        levels.put("NOV11-12",entityManager.find(Level.class,"N11-12"));
-        levels.put("NOV13-14",entityManager.find(Level.class,"N13-14"));
-        levels.put("NOV15-18",entityManager.find(Level.class,"N15-18"));
-        levels.put("INT11-12",entityManager.find(Level.class,"I11-12"));
-        levels.put("INT13-14",entityManager.find(Level.class,"I13-14"));
-        levels.put("INT15-16 (I)",entityManager.find(Level.class,"I15-16"));
-        levels.put("INT17-18 (I)",entityManager.find(Level.class,"I17-18"));
-
-        int swimmerId=1;
-        for(LegacyResult lr : legacyResults.values()) {
-            Team team=entityManager.find(Team.class, lr.team);
-            if(team==null) {
-                System.out.println("Team not found ["+lr.team+"]");
+        meet.setHomeTeam(entityManager.find(Team.class, legacyMeet.homeTm));
+        List<Team> oppList = new ArrayList<Team>();
+        oppList.add(entityManager.find(Team.class, legacyMeet.oppnTm));
+        meet.setOpponents(oppList);
+        meet.setNov1Figure(entityManager.find(Figure.class, legacyMeet.nRestSta1));
+        meet.setNov2Figure(entityManager.find(Figure.class, legacyMeet.nRestSta2));
+        meet.setNov3Figure(entityManager.find(Figure.class, legacyMeet.nRestSta3));
+        meet.setNov4Figure(entityManager.find(Figure.class, legacyMeet.nRestSta4));
+        meet.setInt1Figure(entityManager.find(Figure.class, legacyMeet.iSta1));
+        meet.setInt2Figure(entityManager.find(Figure.class, legacyMeet.iSta2));
+        meet.setInt3Figure(entityManager.find(Figure.class, legacyMeet.iSta3));
+        meet.setInt4Figure(entityManager.find(Figure.class, legacyMeet.iSta4));
+        if (legacyMeet.n8USta1) {
+            meet.setEu1Figure(meet.getNov1Figure());
+        }
+        if (legacyMeet.n8USta2) {
+            if (meet.getEu1Figure() == null) {
+                meet.setEu1Figure(meet.getNov2Figure());
+            } else {
+                meet.setEu2Figure(meet.getNov2Figure());
             }
-            Level level=levels.get(lr.novInt+lr.ageGrp);
-            if(level==null) {
-                System.out.println("Level not found ["+lr.novInt+lr.ageGrp+"]");
+        }
+        if (legacyMeet.n8USta3) {
+            if (meet.getEu1Figure() == null) {
+                meet.setEu1Figure(meet.getNov3Figure());
+            } else {
+                meet.setEu2Figure(meet.getNov3Figure());
+            }
+        }
+        if (legacyMeet.n8USta4) {
+            meet.setEu2Figure(meet.getNov4Figure());
+        }
+        meet.setFiguresOrderGenerated(true);
+
+        //Map legacy level names to current
+        Map<String, Level> levels = new HashMap<String, Level>();
+        levels.put("NOV8 & Under", entityManager.find(Level.class, "N8"));
+        levels.put("NOV9-10", entityManager.find(Level.class, "N9-10"));
+        levels.put("NOV11-12", entityManager.find(Level.class, "N11-12"));
+        levels.put("NOV13-14", entityManager.find(Level.class, "N13-14"));
+        levels.put("NOV15-18", entityManager.find(Level.class, "N15-18"));
+        levels.put("INT11-12", entityManager.find(Level.class, "I11-12"));
+        levels.put("INT13-14", entityManager.find(Level.class, "I13-14"));
+        levels.put("INT15-16 (I)", entityManager.find(Level.class, "I15-16"));
+        levels.put("INT17-18 (I)", entityManager.find(Level.class, "I17-18"));
+
+        //Load league swimmer list from meet participants
+        for (LegacyResult lr : legacyResults.values()) {
+            Team team = entityManager.find(Team.class, lr.team);
+            if (team == null) {
+                System.out.println("Team not found [" + lr.team + "]");
+            }
+            Level level = levels.get(lr.novInt + lr.ageGrp);
+            if (level == null) {
+                System.out.println("Level not found [" + lr.novInt + lr.ageGrp + "]");
             }
             Swimmer swimmer = new Swimmer();
             swimmer.setFirstName(lr.gName);
             swimmer.setLastName(lr.fName);
             swimmer.setLevel(level);
-            swimmer.setSwimmerId(swimmerId++);
+            swimmer.setSwimmerId(lr.leagueNo);
             swimmer.setTeam(team);
             entityManager.persist(swimmer);
         }
-        for(LegacyResult lr : legacyResults.values()) {
+        for (LegacyResult lr : legacyResults.values()) {
             FiguresParticipant fp = new FiguresParticipant();
             fp.setFigureOrder(lr.swmrNo);
             List<FigureScore> scores = new ArrayList<FigureScore>();
-            for(int i=0;i<5) {
+            for (int i = 0; i < 4; i++) {
+                if ("N8".equals(fp.getSwimmer().getLevel().getLevelId())) {
+                }
                 FigureScore fs = new FigureScore();
 
             }
@@ -163,8 +187,6 @@ public class ScoreControllerTest {
     @Test
     public void testCalculateTotalScore() {
     }
-
-
 
     private class LegacyResult {
 
@@ -258,6 +280,7 @@ public class ScoreControllerTest {
     }
 
     private class LegacyMeet {
+
         String meetType;
         String homeTm;
         String oppnTm;
@@ -291,7 +314,6 @@ public class ScoreControllerTest {
         String iSta4;
         BigDecimal iS4DD;
         String iS4Des;
-
 
         LegacyMeet(String line[]) {
             meetType = line[0];
