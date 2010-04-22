@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Figures Results" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="MeetDate" class="java.lang.String"/>
+	<parameter name="MeetName" class="java.lang.String"/>
+	<parameter name="Title" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="place" class="java.lang.Integer">
+		<fieldDescription><![CDATA[place]]></fieldDescription>
+	</field>
+	<field name="points" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[points]]></fieldDescription>
+	</field>
+	<field name="totalScore" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[totalScore]]></fieldDescription>
+	</field>
+	<field name="swimmer" class="org.aquastarz.score.domain.Swimmer">
+		<fieldDescription><![CDATA[swimmer]]></fieldDescription>
+	</field>
+	<field name="figureOrder" class="java.lang.String">
+		<fieldDescription><![CDATA[figureOrder]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="48" splitType="Stretch">
+			<staticText>
+				<reportElement x="458" y="0" width="294" height="22"/>
+				<textElement textAlignment="Right">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VFCAL Synchronized Swimming]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="0" width="279" height="22"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{MeetDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="23" width="279" height="21"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{MeetName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="458" y="22" width="294" height="22"/>
+				<textElement textAlignment="Right" markup="none">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{Title}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="21" splitType="Stretch">
+			<staticText>
+				<reportElement x="174" y="0" width="150" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Last Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="0" width="51" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Place]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="500" y="0" width="68" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Final Total]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="19" width="752" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="61" y="0" width="58" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Level]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="339" y="0" width="150" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[First Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="129" y="0" width="38" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Team]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="578" y="0" width="51" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Order #]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="639" y="0" width="58" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[League #]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="707" y="1" width="45" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Points]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<textField>
+				<reportElement x="339" y="0" width="150" height="16"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{swimmer}.getFirstName()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="3" y="0" width="51" height="16"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{place}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="174" y="0" width="150" height="16"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{swimmer}.getLastName()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="61" y="0" width="58" height="16"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{swimmer}.getLevel().getLevelId()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="129" y="0" width="38" height="16"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{swimmer}.getTeam().getTeamId()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="500" y="0" width="68" height="16"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{totalScore}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="578" y="0" width="51" height="16"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{figureOrder}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="707" y="0" width="45" height="16"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{points}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="639" y="0" width="58" height="16"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{swimmer}.getSwimmerId()]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="28" splitType="Stretch">
+			<textField>
+				<reportElement x="312" y="8" width="80" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="392" y="8" width="40" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
