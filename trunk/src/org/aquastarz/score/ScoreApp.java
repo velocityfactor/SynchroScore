@@ -29,13 +29,21 @@ import org.aquastarz.score.controller.ScoreController;
 public class ScoreApp {
     private static org.apache.log4j.Logger logger =
             org.apache.log4j.Logger.getLogger(ScoreApp.class.getName());
-    private static String url = "jdbc:hsqldb:file:"+System.getProperty("user.home")+"/.SynchroScore/Data";
+    private static boolean dbProductionMode=false;
+    private static final String productionFilename = System.getProperty("user.home")+"/.SynchroScore/Data";
+    private static final String productionUrl = "jdbc:hsqldb:file:"+productionFilename;
+    private static final String testUrl = "jdbc:hsqldb:mem:Synchro";
     private static Map props=null;
 
     public static EntityManager getEntityManager() {
         if(props==null) {
             props=new TreeMap();
-            props.put("hibernate.connection.url",url);
+            if(dbProductionMode) {
+                props.put("hibernate.connection.url",productionUrl);
+            }
+            else {
+                props.put("hibernate.connection.url",testUrl);
+            }
         }
         return javax.persistence.Persistence.createEntityManagerFactory("synchroPU",props).createEntityManager();
     }
@@ -44,13 +52,14 @@ public class ScoreApp {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        initDB();
+        dbProductionMode=true;
+        initDB(productionUrl);
         new ScoreController();
     }
 
-    public static void initDB() {
+    public static void initDB(String url) {
         //TODO check db for adequate data, delete and recreate if not.
-        File db=new File(System.getProperty("user.home"),"/.SynchroScore");
+        File db=new File(productionFilename);
         
         //TODO new db each run
         db.delete();
@@ -63,8 +72,9 @@ public class ScoreApp {
             EntityManager entityManager = javax.persistence.Persistence.createEntityManagerFactory("synchroPU", initProps).createEntityManager();
             entityManager.close();
             logger.info("Load sample data...");
-            Bootstrap.loadLeagueData();
-            Bootstrap.loadSampleSwimmers();
+            entityManager = ScoreApp.getEntityManager();
+            Bootstrap.loadLeagueData(entityManager);
+            Bootstrap.loadSampleSwimmers(entityManager);
             logger.info("DB init done.");
         }
     }

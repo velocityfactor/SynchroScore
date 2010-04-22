@@ -112,12 +112,12 @@ public class FiguresParticipant implements Serializable {
         changeSupport.firePropertyChange("totalScore", oldTotalScore, totalScore);
     }
 
-    public int getPlace() {
+    public Integer getPlace() {
         return place;
     }
 
-    public void setPlace(int place) {
-        int oldPlace = this.place;
+    public void setPlace(Integer place) {
+        Integer oldPlace = this.place;
         this.place = place;
         changeSupport.firePropertyChange("place", oldPlace, place);
     }

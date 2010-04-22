@@ -22,13 +22,10 @@ package org.aquastarz.score.config;
 import org.aquastarz.score.domain.*;
 import java.math.BigDecimal;
 import javax.persistence.EntityManager;
-import org.aquastarz.score.ScoreApp;
 
 public class Bootstrap {
 
-    public static void clearDB() {
-        EntityManager entityManager = ScoreApp.getEntityManager();
-
+    public static void clearDB(EntityManager entityManager) {
         entityManager.getTransaction().begin();
 
         entityManager.createQuery("delete from FiguresParticipant").executeUpdate();
@@ -43,20 +40,18 @@ public class Bootstrap {
 
     }
 
-    public static void loadLeagueData() {
-        EntityManager entityManager = ScoreApp.getEntityManager();
-
+    public static void loadLeagueData(EntityManager entityManager) {
         entityManager.getTransaction().begin();
 
-        entityManager.persist(new Level("N8", "Novice 8 and Under"));
-        entityManager.persist(new Level("N9-10", "Novice 9-10"));
-        entityManager.persist(new Level("N11-12", "Novice 11-12"));
-        entityManager.persist(new Level("N13-14", "Novice 13-14"));
-        entityManager.persist(new Level("N15-18", "Novice 15-18"));
-        entityManager.persist(new Level("I11-12", "Intermediate 11-12"));
-        entityManager.persist(new Level("I13-14", "Intermediate 13-14"));
-        entityManager.persist(new Level("I15-16", "Intermediate 15-16"));
-        entityManager.persist(new Level("I17-18", "Intermediate 17-18"));
+        entityManager.persist(new Level("N8", "Novice 8 and Under",1));
+        entityManager.persist(new Level("N9-10", "Novice 9-10",2));
+        entityManager.persist(new Level("N11-12", "Novice 11-12",3));
+        entityManager.persist(new Level("N13-14", "Novice 13-14",4));
+        entityManager.persist(new Level("N15-18", "Novice 15-18",5));
+        entityManager.persist(new Level("I11-12", "Intermediate 11-12",6));
+        entityManager.persist(new Level("I13-14", "Intermediate 13-14",7));
+        entityManager.persist(new Level("I15-16", "Intermediate 15-16",8));
+        entityManager.persist(new Level("I17-18", "Intermediate 17-18",9));
 
         Team aub=new Team("AUB", "Auburn Mermaids");
         Team cor=new Team("COR", "Cordova Cordettes");
@@ -85,10 +80,7 @@ public class Bootstrap {
         entityManager.getTransaction().commit();
     }
 
-    public static void loadSampleSwimmers() {
-        EntityManager entityManager = ScoreApp.getEntityManager();
-
-
+    public static void loadSampleSwimmers(EntityManager entityManager) {
         saveSwimmer(entityManager,1, "Peauroi", "Elise", "I15-16", "DAV");
         saveSwimmer(entityManager,2, "Eernisse", "Jessylyn", "I15-16", "DAV");
         saveSwimmer(entityManager,3, "Cholewinski", "Krysten", "I15-16", "DAV");
