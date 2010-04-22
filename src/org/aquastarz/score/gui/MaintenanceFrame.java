@@ -20,6 +20,7 @@
 package org.aquastarz.score.gui;
 
 import javax.swing.JOptionPane;
+import org.aquastarz.score.ScoreApp;
 
 public class MaintenanceFrame extends javax.swing.JFrame {
     private static MaintenanceFrame instance;
@@ -134,17 +135,17 @@ public class MaintenanceFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void loadDBButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadDBButtonActionPerformed
-        org.aquastarz.score.config.Bootstrap.loadLeagueData();
+        org.aquastarz.score.config.Bootstrap.loadLeagueData(ScoreApp.getEntityManager());
         JOptionPane.showMessageDialog(this, "Done.");
 }//GEN-LAST:event_loadDBButtonActionPerformed
 
     private void loadSwimmersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadSwimmersButtonActionPerformed
-        org.aquastarz.score.config.Bootstrap.loadSampleSwimmers();
+        org.aquastarz.score.config.Bootstrap.loadSampleSwimmers(ScoreApp.getEntityManager());
         JOptionPane.showMessageDialog(this, "Done.");
     }//GEN-LAST:event_loadSwimmersButtonActionPerformed
 
     private void clearDBButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearDBButtonActionPerformed
-        org.aquastarz.score.config.Bootstrap.clearDB();
+        org.aquastarz.score.config.Bootstrap.clearDB(ScoreApp.getEntityManager());
         JOptionPane.showMessageDialog(this, "Done.");
     }//GEN-LAST:event_clearDBButtonActionPerformed
 

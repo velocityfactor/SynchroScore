@@ -56,9 +56,10 @@ public class Level implements Serializable {
         this.levelId = levelId;
     }
 
-    public Level(String levelId, String name) {
+    public Level(String levelId, String name, Integer sortOrder) {
         this.levelId = levelId;
         this.name = name;
+        this.sortOrder = sortOrder;
     }
 
     public String getLevelId() {
