@@ -61,7 +61,7 @@ public class ScoreControllerTest {
     @Before
     public void setUp() {
         EntityManager entityManager = ScoreApp.getEntityManager();
-        Bootstrap.loadLeagueData(entityManager);
+        Bootstrap.loadLeagueData();
 
         CSVReader csv = new CSVReader(new InputStreamReader(getClass().getResourceAsStream("results.csv")));
         String[] nextLine;
@@ -135,7 +135,7 @@ public class ScoreControllerTest {
         levels.put("NOV9-10", entityManager.find(Level.class, "N9-10"));
         levels.put("NOV11-12", entityManager.find(Level.class, "N11-12"));
         levels.put("NOV13-14", entityManager.find(Level.class, "N13-14"));
-        levels.put("NOV15-18", entityManager.find(Level.class, "N15-18"));
+        levels.put("NOV15-18 (N)", entityManager.find(Level.class, "N15-18"));
         levels.put("INT11-12", entityManager.find(Level.class, "I11-12"));
         levels.put("INT13-14", entityManager.find(Level.class, "I13-14"));
         levels.put("INT15-16 (I)", entityManager.find(Level.class, "I15-16"));
@@ -162,17 +162,30 @@ public class ScoreControllerTest {
         for (LegacyResult lr : legacyResults.values()) {
             FiguresParticipant fp = new FiguresParticipant();
             fp.setFigureOrder(lr.swmrNo);
+            fp.setSwimmer(entityManager.find(Swimmer.class, lr.leagueNo));
             List<FigureScore> scores = new ArrayList<FigureScore>();
             for (int i = 0; i < 4; i++) {
-                if ("N8".equals(fp.getSwimmer().getLevel().getLevelId())) {
+                if (!"N8".equals(fp.getSwimmer().getLevel().getLevelId()) || ((i == 0 && legacyMeet.n8USta1)
+                        || (i == 1 && legacyMeet.n8USta2)
+                        || (i == 2 && legacyMeet.n8USta3)
+                        || (i == 3 && legacyMeet.n8USta4)))  {
+                    FigureScore fs = new FigureScore();
+                    try {
+                        fs.setScore1((BigDecimal)lr.getClass().getDeclaredField("s"+(i+1)+"j1").get(lr));
+                        fs.setScore2((BigDecimal)lr.getClass().getDeclaredField("s"+(i+1)+"j2").get(lr));
+                        fs.setScore3((BigDecimal)lr.getClass().getDeclaredField("s"+(i+1)+"j3").get(lr));
+                        fs.setScore4((BigDecimal)lr.getClass().getDeclaredField("s"+(i+1)+"j4").get(lr));
+                        fs.setScore5((BigDecimal)lr.getClass().getDeclaredField("s"+(i+1)+"j5").get(lr));
+                        fs.setPenalty((BigDecimal)lr.getClass().getDeclaredField("s"+(i+1)+"Pen").get(lr));
+                    }
+                    catch(Exception e) {
+                        e.printStackTrace();
+                    }
+                    scores.add(fs);
                 }
-                FigureScore fs = new FigureScore();
-
             }
-            fp.setFiguresScores(null);
+            fp.setFiguresScores(scores);
             fp.setMeet(meet);
-
-            fp.setSwimmer(null);
 
             entityManager.persist(fp);
             meet.getFiguresParticipants().add(fp);
@@ -238,7 +251,7 @@ public class ScoreControllerTest {
             ageCat = Integer.valueOf(line[1]);
             dFinTot = Integer.valueOf(line[2]);
             swmrNo = line[3];
-            finTot = new BigDecimal(line[5]);
+            finTot = new BigDecimal(line[4]);
             novInt = line[5];
             ageGrp = line[6];
             fName = line[7];
