@@ -135,12 +135,12 @@ public class MaintenanceFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void loadDBButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadDBButtonActionPerformed
-        org.aquastarz.score.config.Bootstrap.loadLeagueData(ScoreApp.getEntityManager());
+        org.aquastarz.score.config.Bootstrap.loadLeagueData();
         JOptionPane.showMessageDialog(this, "Done.");
 }//GEN-LAST:event_loadDBButtonActionPerformed
 
     private void loadSwimmersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadSwimmersButtonActionPerformed
-        org.aquastarz.score.config.Bootstrap.loadSampleSwimmers(ScoreApp.getEntityManager());
+        org.aquastarz.score.config.Bootstrap.loadSampleSwimmers();
         JOptionPane.showMessageDialog(this, "Done.");
     }//GEN-LAST:event_loadSwimmersButtonActionPerformed
 

@@ -22,6 +22,7 @@ package org.aquastarz.score.config;
 import org.aquastarz.score.domain.*;
 import java.math.BigDecimal;
 import javax.persistence.EntityManager;
+import org.aquastarz.score.ScoreApp;
 
 public class Bootstrap {
 
@@ -40,7 +41,8 @@ public class Bootstrap {
 
     }
 
-    public static void loadLeagueData(EntityManager entityManager) {
+    public static void loadLeagueData() {
+        EntityManager entityManager = ScoreApp.getEntityManager();
         entityManager.getTransaction().begin();
 
         entityManager.persist(new Level("N8", "Novice 8 and Under",1));
@@ -80,7 +82,8 @@ public class Bootstrap {
         entityManager.getTransaction().commit();
     }
 
-    public static void loadSampleSwimmers(EntityManager entityManager) {
+    public static void loadSampleSwimmers() {
+        EntityManager entityManager = ScoreApp.getEntityManager();
         saveSwimmer(entityManager,1, "Peauroi", "Elise", "I15-16", "DAV");
         saveSwimmer(entityManager,2, "Eernisse", "Jessylyn", "I15-16", "DAV");
         saveSwimmer(entityManager,3, "Cholewinski", "Krysten", "I15-16", "DAV");
