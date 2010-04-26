@@ -184,6 +184,6 @@ public class FigureScore implements Serializable {
 
     @Override
     public String toString() {
-        return "FigureScore #" + figureScoreId;
+        return "FigureScore #" + figureScoreId+" s1="+score1+" s2="+score2+" s3="+score3+" s4="+score4+" s5="+score5+" pen="+penalty+" dd="+figure.getDegreeOfDifficulty();
     }
 }
