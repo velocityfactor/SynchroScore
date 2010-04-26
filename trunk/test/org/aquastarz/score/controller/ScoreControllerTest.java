@@ -21,6 +21,7 @@ package org.aquastarz.score.controller;
 
 import au.com.bytecode.opencsv.CSVReader;
 import java.io.InputStreamReader;
+import java.lang.String;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,25 +46,21 @@ import static org.junit.Assert.*;
 
 public class ScoreControllerTest {
 
-    Map<String, LegacyResult> legacyResults = new HashMap<String, LegacyResult>();
+    static Map<String, LegacyResult> legacyResults = new HashMap<String, LegacyResult>();
+    static LegacyMeet legacyMeet = null;
+    static Meet meet = null;
+    static List<FigureScoreTracker> figureScoreTrackers = new ArrayList<FigureScoreTracker>();
+    static List<FiguresParticipantTracker> figuresParticipantTrackers = new ArrayList<FiguresParticipantTracker>();
 
     public ScoreControllerTest() {
     }
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-
-    @Before
-    public void setUp() {
         EntityManager entityManager = ScoreApp.getEntityManager();
         Bootstrap.loadLeagueData();
 
-        CSVReader csv = new CSVReader(new InputStreamReader(getClass().getResourceAsStream("results.csv")));
+        CSVReader csv = new CSVReader(new InputStreamReader(ScoreControllerTest.class.getResourceAsStream("results.csv")));
         String[] nextLine;
         try {
             csv.readNext(); //skip header
@@ -75,8 +72,8 @@ public class ScoreControllerTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        csv = new CSVReader(new InputStreamReader(getClass().getResourceAsStream("figstat.csv")));
-        LegacyMeet legacyMeet = null;
+        csv = new CSVReader(new InputStreamReader(ScoreControllerTest.class.getResourceAsStream("figstat.csv")));
+
         try {
             csv.readNext(); //skip header
             nextLine = csv.readNext();
@@ -86,7 +83,9 @@ public class ScoreControllerTest {
             e.printStackTrace();
         }
 
-        Meet meet = new Meet();
+        entityManager.getTransaction().begin();
+
+        meet = new Meet();
         meet.setName(legacyMeet.meetTitle);
         meet.setMeetDate(legacyMeet.meetDate);
         if ("Dual".equals(legacyMeet.meetType)) {
@@ -163,45 +162,126 @@ public class ScoreControllerTest {
             FiguresParticipant fp = new FiguresParticipant();
             fp.setFigureOrder(lr.swmrNo);
             fp.setSwimmer(entityManager.find(Swimmer.class, lr.leagueNo));
+            fp.setMeet(meet);
+            entityManager.persist(fp);
+
+            FiguresParticipantTracker fpt = new FiguresParticipantTracker();
+            fpt.figuresParticipant = fp;
+            fpt.place = lr.place;
+            fpt.points = lr.points;
+            fpt.total = lr.finTot;
+            figuresParticipantTrackers.add(fpt);
+
             List<FigureScore> scores = new ArrayList<FigureScore>();
+            int figNum = 1;
             for (int i = 0; i < 4; i++) {
                 if (!"N8".equals(fp.getSwimmer().getLevel().getLevelId()) || ((i == 0 && legacyMeet.n8USta1)
                         || (i == 1 && legacyMeet.n8USta2)
                         || (i == 2 && legacyMeet.n8USta3)
-                        || (i == 3 && legacyMeet.n8USta4)))  {
+                        || (i == 3 && legacyMeet.n8USta4))) {
                     FigureScore fs = new FigureScore();
-                    try {
-                        fs.setScore1((BigDecimal)lr.getClass().getDeclaredField("s"+(i+1)+"j1").get(lr));
-                        fs.setScore2((BigDecimal)lr.getClass().getDeclaredField("s"+(i+1)+"j2").get(lr));
-                        fs.setScore3((BigDecimal)lr.getClass().getDeclaredField("s"+(i+1)+"j3").get(lr));
-                        fs.setScore4((BigDecimal)lr.getClass().getDeclaredField("s"+(i+1)+"j4").get(lr));
-                        fs.setScore5((BigDecimal)lr.getClass().getDeclaredField("s"+(i+1)+"j5").get(lr));
-                        fs.setPenalty((BigDecimal)lr.getClass().getDeclaredField("s"+(i+1)+"Pen").get(lr));
+                    fs.setFiguresParticipant(fp);
+                    if ("N8".equals(fp.getSwimmer().getLevel().getLevelId())) {
+                        switch (figNum) {
+                            case 1:
+                                fs.setFigure(meet.getEu1Figure());
+                                break;
+                            case 2:
+                                fs.setFigure(meet.getEu2Figure());
+                                break;
+                        }
+
+                    } else if (fp.getSwimmer().getLevel().getLevelId().startsWith("N")) {
+                        switch (figNum) {
+                            case 1:
+                                fs.setFigure(meet.getNov1Figure());
+                                break;
+                            case 2:
+                                fs.setFigure(meet.getNov2Figure());
+                                break;
+                            case 3:
+                                fs.setFigure(meet.getNov3Figure());
+                                break;
+                            case 4:
+                                fs.setFigure(meet.getNov4Figure());
+                                break;
+                        }
+                    } else {
+                        switch (figNum) {
+                            case 1:
+                                fs.setFigure(meet.getInt1Figure());
+                                break;
+                            case 2:
+                                fs.setFigure(meet.getInt2Figure());
+                                break;
+                            case 3:
+                                fs.setFigure(meet.getInt3Figure());
+                                break;
+                            case 4:
+                                fs.setFigure(meet.getInt4Figure());
+                                break;
+                        }
                     }
-                    catch(Exception e) {
+                    try {
+                        fs.setScore1((BigDecimal) lr.getClass().getDeclaredField("s" + (i + 1) + "j1").get(lr));
+                        fs.setScore2((BigDecimal) lr.getClass().getDeclaredField("s" + (i + 1) + "j2").get(lr));
+                        fs.setScore3((BigDecimal) lr.getClass().getDeclaredField("s" + (i + 1) + "j3").get(lr));
+                        fs.setScore4((BigDecimal) lr.getClass().getDeclaredField("s" + (i + 1) + "j4").get(lr));
+                        fs.setScore5((BigDecimal) lr.getClass().getDeclaredField("s" + (i + 1) + "j5").get(lr));
+                        fs.setPenalty((BigDecimal) lr.getClass().getDeclaredField("s" + (i + 1) + "Pen").get(lr));
+                        fs.setTotalScore(ScoreController.totalScore(fs));
+                        FigureScoreTracker fst = new FigureScoreTracker();
+                        fst.figureScore = fs;
+                        fst.total = (BigDecimal) lr.getClass().getDeclaredField("s" + (i + 1) + "Tot").get(lr);
+                        figureScoreTrackers.add(fst);
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
+                    entityManager.persist(fs);
                     scores.add(fs);
+                    figNum++;
                 }
             }
             fp.setFiguresScores(scores);
-            fp.setMeet(meet);
-
-            entityManager.persist(fp);
             meet.getFiguresParticipants().add(fp);
         }
+        ScoreController.calculateMeetResults(meet);
         entityManager.persist(meet);
+
+        entityManager.flush();
+        entityManager.getTransaction().commit();
+    }
+
+    @AfterClass
+    public static void tearDownClass() throws Exception {
+    }
+
+    @Before
+    public void setUp() {
     }
 
     @After
     public void tearDown() {
+        ScoreApp.getEntityManager().close();
+    }
+
+    @Test
+    public void testTotalScore() {
+        for (FigureScoreTracker fst : figureScoreTrackers) {
+            assertTrue(fst.total.compareTo(fst.figureScore.getTotalScore()) == 0);
+        }
     }
 
     @Test
     public void testCalculateTotalScore() {
+        for (FiguresParticipantTracker fpt : figuresParticipantTrackers) {
+            assertTrue(fpt.total.compareTo(fpt.figuresParticipant.getTotalScore()) == 0);
+            assertEquals(fpt.place,fpt.figuresParticipant.getPlace().intValue());
+            assertTrue(fpt.points.compareTo(fpt.figuresParticipant.getPoints()) == 0);
+        }
     }
 
-    private class LegacyResult {
+    private static class LegacyResult {
 
         int niCat;
         int ageCat;
@@ -292,7 +372,7 @@ public class ScoreControllerTest {
         }
     }
 
-    private class LegacyMeet {
+    private static class LegacyMeet {
 
         String meetType;
         String homeTm;
@@ -363,5 +443,19 @@ public class ScoreControllerTest {
             iS4DD = new BigDecimal(line[31]);
             iS4Des = line[32];
         }
+    }
+
+    private static class FigureScoreTracker {
+
+        FigureScore figureScore;
+        BigDecimal total;
+    }
+
+    private static class FiguresParticipantTracker {
+
+        FiguresParticipant figuresParticipant;
+        BigDecimal total;
+        BigDecimal points;
+        int place;
     }
 }

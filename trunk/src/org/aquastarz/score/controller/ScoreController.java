@@ -32,9 +32,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.TreeMap;
-import java.util.logging.Level;
 import javax.persistence.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -42,6 +40,7 @@ import org.aquastarz.score.ScoreApp;
 import org.aquastarz.score.domain.Figure;
 import org.aquastarz.score.domain.FigureScore;
 import org.aquastarz.score.domain.FiguresParticipant;
+import org.aquastarz.score.domain.Level;
 import org.aquastarz.score.domain.Meet;
 import org.aquastarz.score.domain.Swimmer;
 import org.aquastarz.score.domain.Team;
@@ -105,8 +104,8 @@ public class ScoreController {
         return query.getResultList();
     }
 
-    public List<Level> getLevels() {
-        javax.persistence.Query query = entityManager.createQuery("SELECT l FROM Level l order by l.levelId");
+    public static List<Level> getLevels() {
+        javax.persistence.Query query = ScoreApp.getEntityManager().createQuery("SELECT l FROM Level l order by l.levelId");
         return query.getResultList();
     }
 
@@ -327,7 +326,7 @@ public class ScoreController {
         return percent;
     }
 
-    public BigDecimal totalScore(FigureScore fs) {
+    public static BigDecimal totalScore(FigureScore fs) {
         // Must be valid (values for all five scores, penalty, etc)
         if (!isValid(fs)) {
             return null;
@@ -385,8 +384,8 @@ public class ScoreController {
         BigDecimal total = ddSum.subtract(fs.getPenalty());
 
         //Score can't be less than zero
-        if(BigDecimal.ZERO.compareTo(fs.getTotalScore())>=0) {
-            fs.setTotalScore(BigDecimal.ZERO);
+        if(BigDecimal.ZERO.compareTo(total)>=0) {
+            total = BigDecimal.ZERO;
         }
 
         return total;
@@ -407,7 +406,7 @@ public class ScoreController {
         }
     }
 
-    public void calculateMeetResults(Meet meet) {
+    public static void calculateMeetResults(Meet meet) {
         List<String> calcErrors = new ArrayList<String>();
 
         //Calculate total score for figures participants
@@ -500,7 +499,7 @@ public class ScoreController {
         meet.setPlaceMap(meetPlaceMap);
     }
 
-    private BigDecimal calculateFigurePlacePoints(int place,int tieCount,char meetType) {
+    private static BigDecimal calculateFigurePlacePoints(int place,int tieCount,char meetType) {
         BigDecimal points = BigDecimal.ZERO;
         for(int i=0;i<tieCount;i++) {
             points=points.add(getFigurePlacePoints(place+i,meetType));
@@ -509,7 +508,7 @@ public class ScoreController {
         return points;
     }
     
-    private BigDecimal getFigurePlacePoints(int place, char meetType) {
+    private static BigDecimal getFigurePlacePoints(int place, char meetType) {
         if(place<1) throw new IllegalArgumentException("place<1 not allowed.");
         if(meetType=='R') {
             switch(place) {
@@ -554,7 +553,7 @@ public class ScoreController {
         }
     }
 
-    public BigDecimal calculateTotalScore(FiguresParticipant fp) {
+    public static BigDecimal calculateTotalScore(FiguresParticipant fp) {
         BigDecimal total = BigDecimal.ZERO;
         for(FigureScore fs:fp.getFiguresScores()) {
             total=total.add(fs.getTotalScore());
