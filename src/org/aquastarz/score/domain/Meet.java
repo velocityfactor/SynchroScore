@@ -22,7 +22,6 @@ package org.aquastarz.score.domain;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -41,8 +40,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 @Entity
-//@NamedQueries({@NamedQuery(name = "Meet.findAll", query = "SELECT m FROM Meet m"), @NamedQuery(name = "Meet.findByMeetId", query = "SELECT m FROM Meet m WHERE m.meetId = :meetId"), @NamedQuery(name = "Meet.findByMeetDate", query = "SELECT m FROM Meet m WHERE m.meetDate = :meetDate"), @NamedQuery(name = "Meet.findByName", query = "SELECT m FROM Meet m WHERE m.name = :name"), @NamedQuery(name = "Meet.findByType", query = "SELECT m FROM Meet m WHERE m.type = :type")})
-@NamedQueries({@NamedQuery(name = "Meet.findAllMeetsDescendingDate", query = "SELECT m FROM Meet m order by m.meetDate desc")})
+@NamedQueries({@NamedQuery(name = "Meet.findBySeasonOrderByDateDesc", query = "SELECT m FROM Meet m where m.season.seasonId like :seasonId order by m.meetDate desc")})
 public class Meet implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -111,6 +109,10 @@ public class Meet implements Serializable {
     @ManyToOne
     @JoinColumn(name="int4Figure")
     private Figure int4Figure;
+
+    @ManyToOne
+    @JoinColumn(name="season")
+    private Season season;
 
     @Transient
     private Map<Team,BigDecimal> pointsMap = null;
@@ -284,6 +286,14 @@ public class Meet implements Serializable {
 
     public void setNov2Figure(Figure nov2Figure) {
         this.nov2Figure = nov2Figure;
+    }
+
+    public Season getSeason() {
+        return season;
+    }
+
+    public void setSeason(Season season) {
+        this.season = season;
     }
 
     public boolean needsPointsCalc() {

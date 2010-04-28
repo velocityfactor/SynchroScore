@@ -25,9 +25,9 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -37,44 +37,56 @@ import javax.persistence.Transient;
 
 @Entity
 @Table(name = "swimmer")
-@NamedQueries({@NamedQuery(name = "Swimmer.findByTeamOrderBySwimmerId", query = "SELECT s FROM Swimmer s where s.team.teamId like :teamId order by swimmerId"),
-    @NamedQuery(name = "Swimmer.findByTeamOrderByName", query = "SELECT s FROM Swimmer s where s.team.teamId like :teamId order by lastName,firstName"),
-    @NamedQuery(name = "Swimmer.findByTeamOrderByTeamAndName", query = "SELECT s FROM Swimmer s where s.team.teamId like :teamId order by team,lastName,firstName"),
-    @NamedQuery(name = "Swimmer.findByTeamOrderByLevelAndName", query = "SELECT s FROM Swimmer s where s.team.teamId like :teamId order by level.sortOrder,lastName,firstName"),
-    @NamedQuery(name = "Swimmer.findBySwimmerId", query = "SELECT s FROM Swimmer s WHERE s.swimmerId = :swimmerId"),
-    @NamedQuery(name = "Swimmer.findByFirstName", query = "SELECT s FROM Swimmer s WHERE s.firstName = :firstName"),
-    @NamedQuery(name = "Swimmer.findByLastName", query = "SELECT s FROM Swimmer s WHERE s.lastName = :lastName")})
+@NamedQueries({@NamedQuery(name = "Swimmer.findByTeamAndSeasonOrderByLeagueNum", query = "SELECT s FROM Swimmer s where s.team.teamId like :teamId and s.season.seasonId like :seasonId order by leagueNum"),
+    @NamedQuery(name = "Swimmer.findByLeagueNumAndSeason", query = "SELECT s FROM Swimmer s where s.leagueNum like :leagueNum and s.season.seasonId like :seasonId"),
+    @NamedQuery(name = "Swimmer.findByTeamAndSeasonOrderByName", query = "SELECT s FROM Swimmer s where s.team.teamId like :teamId and s.season.seasonId like :seasonId order by lastName,firstName"),
+    @NamedQuery(name = "Swimmer.findByTeamAndSeasonOrderByTeamAndName", query = "SELECT s FROM Swimmer s where s.team.teamId like :teamId and s.season.seasonId like :seasonId order by team,lastName,firstName"),
+    @NamedQuery(name = "Swimmer.findByTeamAndSeasonOrderByLevelAndName", query = "SELECT s FROM Swimmer s where s.team.teamId like :teamId and s.season.seasonId like :seasonId order by level.sortOrder,lastName,firstName")})
 public class Swimmer implements Serializable {
 
     @Transient
     private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
     private static final long serialVersionUID = 1L;
+
     @Id
-    @Basic(optional = false)
-    @Column(name = "swimmerId", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer swimmerId;
+
+    @Basic(optional = false)
+    @Column(name = "leagueNum", nullable = false)
+    private Integer leagueNum;
+
     @Basic(optional = false)
     @Column(name = "firstName", nullable = false, length = 45)
     private String firstName;
+
     @Basic(optional = false)
     @Column(name = "lastName", nullable = false, length = 45)
     private String lastName;
+
+    @ManyToOne(optional = false)
     @JoinColumn(name = "level", referencedColumnName = "levelId", nullable = false)
-    @ManyToOne(optional = false)
     private Level level;
-    @JoinColumn(name = "team", referencedColumnName = "teamId", nullable = false)
+
     @ManyToOne(optional = false)
+    @JoinColumn(name = "team", referencedColumnName = "teamId", nullable = false)
     private Team team;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "season", referencedColumnName = "seasonId", nullable = false)
+    private Season season;
 
     public Swimmer() {
     }
 
-    public Swimmer(Integer swimmerId) {
-        this.swimmerId = swimmerId;
+    public Swimmer(Integer leagueNum, Season season) {
+        this.leagueNum = leagueNum;
+        this.season = season;
     }
 
-    public Swimmer(Integer swimmerId, String firstName, String lastName) {
+    public Swimmer(Integer swimmerId, Season season, String firstName, String lastName) {
         this.swimmerId = swimmerId;
+        this.season = season;
         this.firstName = firstName;
         this.lastName = lastName;
     }
@@ -83,10 +95,14 @@ public class Swimmer implements Serializable {
         return swimmerId;
     }
 
-    public void setSwimmerId(Integer swimmerId) {
-        Integer oldSwimmerId = this.swimmerId;
-        this.swimmerId = swimmerId;
-        changeSupport.firePropertyChange("swimmerId", oldSwimmerId, swimmerId);
+    public Integer getLeagueNum() {
+        return leagueNum;
+    }
+
+    public void setLeagueNum(Integer leagueNum) {
+        Integer oldLeagueNum = this.leagueNum;
+        this.leagueNum = leagueNum;
+        changeSupport.firePropertyChange("leagueNum", oldLeagueNum, leagueNum);
     }
 
     public String getFirstName() {
@@ -127,6 +143,14 @@ public class Swimmer implements Serializable {
         Team oldTeam = this.team;
         this.team = team;
         changeSupport.firePropertyChange("team", oldTeam, team);
+    }
+
+    public Season getSeason() {
+        return season;
+    }
+
+    public void setSeason(Season season) {
+        this.season = season;
     }
 
     @Override
