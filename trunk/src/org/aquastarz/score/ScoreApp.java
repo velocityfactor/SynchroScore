@@ -25,6 +25,7 @@ import java.util.TreeMap;
 import javax.persistence.EntityManager;
 import org.aquastarz.score.config.Bootstrap;
 import org.aquastarz.score.controller.ScoreController;
+import org.aquastarz.score.domain.Season;
 
 public class ScoreApp {
 
@@ -50,6 +51,15 @@ public class ScoreApp {
             props.put("hibernate.connection.url", dbUrl);
         }
         return javax.persistence.Persistence.createEntityManagerFactory("synchroPU", props).createEntityManager();
+    }
+
+    public static Season getCurrentSeason() {
+        Season season = new Season("Test2009");
+        EntityManager entityManager = getEntityManager();
+        entityManager.getTransaction().begin();
+        entityManager.persist(season);
+        entityManager.getTransaction().commit();
+        return season;
     }
 
     /**
