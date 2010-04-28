@@ -49,6 +49,7 @@ import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
 import org.aquastarz.score.ScoreApp;
 import org.aquastarz.score.controller.ScoreController;
+import org.aquastarz.score.db.SwimmerDB;
 import org.aquastarz.score.domain.FiguresParticipant;
 import org.aquastarz.score.domain.Meet;
 import org.aquastarz.score.domain.Swimmer;
@@ -230,11 +231,11 @@ public class SynchroFrame extends javax.swing.JFrame {
         teamTabs.removeAll();
         SwimmerSelectionPanel panel = new SwimmerSelectionPanel(meet.getHomeTeam());
         teamTabs.add(meet.getHomeTeam().getTeamId(), panel);
-        panel.setSwimmers(controller.getSwimmers(meet.getHomeTeam()), meet.getSwimmers());
+        panel.setSwimmers(SwimmerDB.getSwimmers(meet.getHomeTeam()), meet.getSwimmers());
         for (Team opponent : meet.getOpponents()) {
             panel = new SwimmerSelectionPanel(opponent);
             teamTabs.add(opponent.getTeamId(), panel);
-            panel.setSwimmers(controller.getSwimmers(opponent), meet.getSwimmers());
+            panel.setSwimmers(SwimmerDB.getSwimmers(opponent), meet.getSwimmers());
         }
     }
 
@@ -266,15 +267,16 @@ public class SynchroFrame extends javax.swing.JFrame {
         }
 
         if (leagueSortByName.isSelected()) {
-            swimmerQuery = entityManager.createNamedQuery("Swimmer.findByTeamOrderByName");
+            swimmerQuery = entityManager.createNamedQuery("Swimmer.findByTeamAndSeasonOrderByName");
         } else if (leagueSortByTeam.isSelected()) {
-            swimmerQuery = entityManager.createNamedQuery("Swimmer.findByTeamOrderByTeamAndName");
+            swimmerQuery = entityManager.createNamedQuery("Swimmer.findByTeamAndSeasonOrderByTeamAndName");
         } else if (leagueSortByLevel.isSelected()) {
-            swimmerQuery = entityManager.createNamedQuery("Swimmer.findByTeamOrderByLevelAndName");
+            swimmerQuery = entityManager.createNamedQuery("Swimmer.findByTeamAndSeasonOrderByLevelAndName");
         } else {
-            swimmerQuery = entityManager.createNamedQuery("Swimmer.findByTeamOrderBySwimmerId");
+            swimmerQuery = entityManager.createNamedQuery("Swimmer.findByTeamAndSeasonOrderBySwimmerId");
         }
         swimmerQuery.setParameter("teamId", teamId);
+        swimmerQuery.setParameter("seasonId", ScoreApp.getCurrentSeason());
         List<Swimmer> swimmerList = swimmerQuery.getResultList();
         swimmerTable.setModel(new SwimmersTableModel(swimmerList));
     }

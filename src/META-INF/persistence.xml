@@ -8,6 +8,7 @@
     <class>org.aquastarz.score.domain.Swimmer</class>
     <class>org.aquastarz.score.domain.Meet</class>
     <class>org.aquastarz.score.domain.FigureScore</class>
+    <class>org.aquastarz.score.domain.Season</class>
     <properties>
       <property name="hibernate.connection.username" value="sa"/>
       <property name="hibernate.connection.driver_class" value="org.hsqldb.jdbcDriver"/>

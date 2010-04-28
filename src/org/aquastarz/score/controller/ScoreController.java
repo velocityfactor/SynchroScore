@@ -42,6 +42,7 @@ import org.aquastarz.score.domain.FigureScore;
 import org.aquastarz.score.domain.FiguresParticipant;
 import org.aquastarz.score.domain.Level;
 import org.aquastarz.score.domain.Meet;
+import org.aquastarz.score.domain.Season;
 import org.aquastarz.score.domain.Swimmer;
 import org.aquastarz.score.domain.Team;
 import org.aquastarz.score.gui.MeetSelectionDialog;
@@ -110,7 +111,8 @@ public class ScoreController {
     }
 
     public List<Meet> getMeets() {
-        javax.persistence.Query query = entityManager.createNamedQuery("Meet.findAllMeetsDescendingDate");
+        javax.persistence.Query query = entityManager.createNamedQuery("Meet.findBySeasonOrderByDateDesc");
+        query.setParameter("seasonId", ScoreApp.getCurrentSeason().getSeasonId());
         return query.getResultList();
     }
 
@@ -124,12 +126,6 @@ public class ScoreController {
             transaction.rollback();
             logger.error("Error saving meet.", e);
         }
-    }
-
-    public List<Swimmer> getSwimmers(Team team) {
-        Query swimmerQuery = entityManager.createQuery("SELECT s from Swimmer s WHERE s.team='" + team.getTeamId() + "' ORDER BY s.lastName,s.firstName");
-        List<Swimmer> swimmers = swimmerQuery.getResultList();
-        return swimmers;
     }
 
     public FiguresParticipant findFiguresParticipantByFigureOrder(Meet meet, String figureOrder) {
