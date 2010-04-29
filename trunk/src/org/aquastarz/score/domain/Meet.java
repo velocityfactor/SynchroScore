@@ -40,7 +40,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 @Entity
-@NamedQueries({@NamedQuery(name = "Meet.findBySeasonOrderByDateDesc", query = "SELECT m FROM Meet m where m.season.seasonId like :seasonId order by m.meetDate desc")})
+@NamedQueries({@NamedQuery(name = "Meet.findBySeasonOrderByDateDesc", query = "SELECT m FROM Meet m where m.season like :season order by m.meetDate desc")})
 public class Meet implements Serializable {
     private static final long serialVersionUID = 1L;
 

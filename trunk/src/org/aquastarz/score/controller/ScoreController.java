@@ -112,7 +112,7 @@ public class ScoreController {
 
     public List<Meet> getMeets() {
         javax.persistence.Query query = entityManager.createNamedQuery("Meet.findBySeasonOrderByDateDesc");
-        query.setParameter("seasonId", ScoreApp.getCurrentSeason().getSeasonId());
+        query.setParameter("season", ScoreApp.getCurrentSeason());
         return query.getResultList();
     }
 
