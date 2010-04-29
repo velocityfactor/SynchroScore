@@ -37,11 +37,11 @@ import javax.persistence.Transient;
 
 @Entity
 @Table(name = "swimmer")
-@NamedQueries({@NamedQuery(name = "Swimmer.findByTeamAndSeasonOrderByLeagueNum", query = "SELECT s FROM Swimmer s where s.team.teamId like :teamId and s.season.seasonId like :seasonId order by leagueNum"),
-    @NamedQuery(name = "Swimmer.findByLeagueNumAndSeason", query = "SELECT s FROM Swimmer s where s.leagueNum like :leagueNum and s.season.seasonId like :seasonId"),
-    @NamedQuery(name = "Swimmer.findByTeamAndSeasonOrderByName", query = "SELECT s FROM Swimmer s where s.team.teamId like :teamId and s.season.seasonId like :seasonId order by lastName,firstName"),
-    @NamedQuery(name = "Swimmer.findByTeamAndSeasonOrderByTeamAndName", query = "SELECT s FROM Swimmer s where s.team.teamId like :teamId and s.season.seasonId like :seasonId order by team,lastName,firstName"),
-    @NamedQuery(name = "Swimmer.findByTeamAndSeasonOrderByLevelAndName", query = "SELECT s FROM Swimmer s where s.team.teamId like :teamId and s.season.seasonId like :seasonId order by level.sortOrder,lastName,firstName")})
+@NamedQueries({@NamedQuery(name = "Swimmer.findByTeamIdAndSeasonOrderByLeagueNum", query = "SELECT s FROM Swimmer s where s.team.teamId like :teamId and s.season like :season order by leagueNum"),
+    @NamedQuery(name = "Swimmer.findByLeagueNumAndSeason", query = "SELECT s FROM Swimmer s where s.leagueNum like :leagueNum and s.season = :season"),
+    @NamedQuery(name = "Swimmer.findByTeamIdAndSeasonOrderByName", query = "SELECT s FROM Swimmer s where s.team.teamId like :teamId and s.season like :season order by lastName,firstName"),
+    @NamedQuery(name = "Swimmer.findByTeamIdAndSeasonOrderByTeamAndName", query = "SELECT s FROM Swimmer s where s.team.teamId like :teamId and s.season like :season order by team,lastName,firstName"),
+    @NamedQuery(name = "Swimmer.findByTeamIdAndSeasonOrderByLevelAndName", query = "SELECT s FROM Swimmer s where s.team.teamId like :teamId and s.season like :season order by level.sortOrder,lastName,firstName")})
 public class Swimmer implements Serializable {
 
     @Transient
@@ -84,11 +84,13 @@ public class Swimmer implements Serializable {
         this.season = season;
     }
 
-    public Swimmer(Integer swimmerId, Season season, String firstName, String lastName) {
-        this.swimmerId = swimmerId;
+    public Swimmer(Integer leagueNum, Season season, Team team, Level level, String firstName, String lastName) {
+        this.leagueNum = leagueNum;
         this.season = season;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.level = level;
+        this.team = team;
     }
 
     public Integer getSwimmerId() {

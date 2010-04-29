@@ -55,7 +55,7 @@ public class SwimmerForm extends JPanel {
     private void initComponents() {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        swimmerQuery = java.beans.Beans.isDesignTime() ? null : entityManager.createQuery("SELECT s FROM Swimmer s");
+        swimmerQuery = java.beans.Beans.isDesignTime() ? null : entityManager.createQuery("SELECT s FROM Swimmer s where s.season like :season");
         swimmerList = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : swimmerQuery.getResultList();
         levelQuery = java.beans.Beans.isDesignTime() ? null : entityManager.createQuery("SELECT l FROM Level l");
         levelList = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : levelQuery.getResultList();
@@ -80,9 +80,11 @@ public class SwimmerForm extends JPanel {
 
         FormListener formListener = new FormListener();
 
+        swimmerQuery.setParameter("season",ScoreApp.getCurrentSeason());
+
         org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, swimmerList, masterTable);
-        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${swimmerId}"));
-        columnBinding.setColumnName("Swimmer Id");
+        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${leagueNum}"));
+        columnBinding.setColumnName("League #");
         columnBinding.setColumnClass(Integer.class);
         columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${lastName}"));
@@ -305,6 +307,7 @@ public class SwimmerForm extends JPanel {
 
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
         org.aquastarz.score.domain.Swimmer s = new org.aquastarz.score.domain.Swimmer();
+        s.setSeason(ScoreApp.getCurrentSeason());
         entityManager.persist(s);
         swimmerList.add(s);
         int row = swimmerList.size()-1;
