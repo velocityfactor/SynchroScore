@@ -259,7 +259,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         String teamId = "%";
         ComboBoxModel cbm = leagueTeamCombo.getModel();
         Object o = cbm.getSelectedItem();
-        if (o != null && o instanceof String) {
+        if (o != null && o instanceof Team) {
             teamId = (String) o;
             if ("[All]".equals(o)) {
                 teamId = "%";
@@ -267,16 +267,17 @@ public class SynchroFrame extends javax.swing.JFrame {
         }
 
         if (leagueSortByName.isSelected()) {
-            swimmerQuery = entityManager.createNamedQuery("Swimmer.findByTeamAndSeasonOrderByName");
+            swimmerQuery = entityManager.createNamedQuery("Swimmer.findByTeamIdAndSeasonOrderByName");
         } else if (leagueSortByTeam.isSelected()) {
-            swimmerQuery = entityManager.createNamedQuery("Swimmer.findByTeamAndSeasonOrderByTeamAndName");
+            swimmerQuery = entityManager.createNamedQuery("Swimmer.findByTeamIdAndSeasonOrderByTeamAndName");
         } else if (leagueSortByLevel.isSelected()) {
-            swimmerQuery = entityManager.createNamedQuery("Swimmer.findByTeamAndSeasonOrderByLevelAndName");
+            swimmerQuery = entityManager.createNamedQuery("Swimmer.findByTeamIdAndSeasonOrderByLevelAndName");
         } else {
-            swimmerQuery = entityManager.createNamedQuery("Swimmer.findByTeamAndSeasonOrderBySwimmerId");
+            swimmerQuery = entityManager.createNamedQuery("Swimmer.findByTeamIdAndSeasonOrderByLeagueNum");
         }
+
         swimmerQuery.setParameter("teamId", teamId);
-        swimmerQuery.setParameter("seasonId", ScoreApp.getCurrentSeason());
+        swimmerQuery.setParameter("season", ScoreApp.getCurrentSeason());
         List<Swimmer> swimmerList = swimmerQuery.getResultList();
         swimmerTable.setModel(new SwimmersTableModel(swimmerList));
     }

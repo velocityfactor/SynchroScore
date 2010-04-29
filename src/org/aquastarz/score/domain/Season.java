@@ -38,6 +38,8 @@ public class Season implements Serializable {
     @Column(name = "name", nullable = false, length = 30)
     private String name;
 
+    protected Season() {}
+
     public Season(String name) {
         this.name = name;
     }
@@ -52,6 +54,10 @@ public class Season implements Serializable {
 
     public Long getSeasonId() {
         return seasonId;
+    }
+
+    public void setSeasonId(Long seasonId) {
+        this.seasonId=seasonId;
     }
 
     @Override

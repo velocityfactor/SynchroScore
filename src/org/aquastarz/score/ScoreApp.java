@@ -53,6 +53,10 @@ public class ScoreApp {
         return javax.persistence.Persistence.createEntityManagerFactory("synchroPU", props).createEntityManager();
     }
 
+    public static void resetTestDB() {
+        if(testUrl.equals(dbUrl)) dbUrl=null;
+    }
+
     public static Season getCurrentSeason() {
         Season season = new Season("Test2009");
         EntityManager entityManager = getEntityManager();

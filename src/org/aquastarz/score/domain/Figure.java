@@ -42,7 +42,7 @@ public class Figure implements Serializable {
 
     @Id
     @Basic(optional = false)
-    @Column(name = "figureId", nullable = false)
+    @Column(name = "figureId", nullable = false, length = 10)
     private String figureId;
 
     @Column(precision = 2, scale = 1)

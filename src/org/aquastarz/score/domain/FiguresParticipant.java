@@ -38,7 +38,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 @Entity
-@NamedQueries({@NamedQuery(name = "FiguresParticipant.findAll", query = "SELECT f FROM FiguresParticipant f"), @NamedQuery(name = "FiguresParticipant.findByMeetAndFigureOrder", query = "SELECT f FROM FiguresParticipant f WHERE f.figureOrder = :figureOrder and f.meet = :meet")})
+@NamedQueries({@NamedQuery(name = "FiguresParticipant.findAll", query = "SELECT f FROM FiguresParticipant f"),
+    @NamedQuery(name = "FiguresParticipant.findByMeetAndFigureOrder", query = "SELECT f FROM FiguresParticipant f WHERE f.figureOrder = :figureOrder and f.meet = :meet")})
 public class FiguresParticipant implements Serializable {
 
     @Transient

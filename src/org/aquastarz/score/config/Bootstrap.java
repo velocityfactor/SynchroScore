@@ -44,6 +44,7 @@ public class Bootstrap {
         entityManager.createQuery("delete from Level").executeUpdate();
         entityManager.createQuery("delete from Team").executeUpdate();
         entityManager.createQuery("delete from Figure").executeUpdate();
+        entityManager.createQuery("delete from Season").executeUpdate();
 
         entityManager.getTransaction().commit();
 
@@ -63,6 +64,9 @@ public class Bootstrap {
         entityManager.persist(new Level("I15-16", "Intermediate 15-16",8));
         entityManager.persist(new Level("I17-18", "Intermediate 17-18",9));
 
+        entityManager.getTransaction().commit();
+        entityManager.getTransaction().begin();
+
         Team aub=new Team("AUB", "Auburn Mermaids");
         Team cor=new Team("COR", "Cordova Cordettes");
         Team fec=new Team("FEC", "Fulton El Camino Stingrays");
@@ -75,6 +79,9 @@ public class Bootstrap {
         entityManager.persist(dav);
         entityManager.persist(ros);
         entityManager.persist(sun);
+
+        entityManager.getTransaction().commit();
+        entityManager.getTransaction().begin();
 
         entityManager.persist(new Figure("101", new BigDecimal("1.6"), "Ballet Leg, R/L"));
         entityManager.persist(new Figure("311", new BigDecimal("1.8"), "Kip"));
@@ -282,13 +289,9 @@ public class Bootstrap {
     }
 
     private static void saveSwimmer(EntityManager entityManager, Integer leagueNum, String lastName, String firstName, String levelId, String teamId) {
-        Swimmer swimmer=new Swimmer(leagueNum, ScoreApp.getCurrentSeason(), firstName, lastName);
-
         Team team=(Team)entityManager.createNamedQuery("Team.findByTeamId").setParameter("teamId",teamId).getSingleResult();
-        swimmer.setTeam(team);
-
         Level level=(Level)entityManager.createNamedQuery("Level.findByLevelId").setParameter("levelId", levelId).getSingleResult();
-        swimmer.setLevel(level);
+        Swimmer swimmer=new Swimmer(leagueNum, ScoreApp.getCurrentSeason(), team, level, firstName, lastName);
 
         entityManager.getTransaction().begin();
         entityManager.persist(swimmer);
@@ -395,16 +398,9 @@ public class Bootstrap {
             if (level == null) {
                 System.out.println("Level not found [" + lr.novInt + lr.ageGrp + "]");
             }
-            Swimmer swimmer = new Swimmer();
-            swimmer.setFirstName(lr.gName);
-            swimmer.setLastName(lr.fName);
-            swimmer.setLevel(level);
-            swimmer.setLeagueNum(lr.leagueNo);
-            swimmer.setTeam(team);
-            swimmer.setSeason(season);
+            Swimmer swimmer = new Swimmer(lr.leagueNo, season, team, level, lr.gName, lr.fName);
             entityManager.persist(swimmer);
         }
-
         for (LegacyResult lr : legacyResults.values()) {
             FiguresParticipant fp = new FiguresParticipant();
             fp.setFigureOrder(lr.swmrNo);

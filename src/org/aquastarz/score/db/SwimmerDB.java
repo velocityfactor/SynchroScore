@@ -26,18 +26,27 @@ import org.aquastarz.score.domain.Swimmer;
 import org.aquastarz.score.domain.Team;
 
 public class SwimmerDB {
+    private static org.apache.log4j.Logger logger =
+            org.apache.log4j.Logger.getLogger(SwimmerDB.class.getName());
 
     public static Swimmer findByLeagueNum(Integer leagueNum) {
         Query swimmerQuery = ScoreApp.getEntityManager().createNamedQuery("Swimmer.findByLeagueNumAndSeason");
         swimmerQuery.setParameter("leagueNum", leagueNum);
-        swimmerQuery.setParameter("seasonId", ScoreApp.getCurrentSeason().getSeasonId());
-        return (Swimmer)swimmerQuery.getSingleResult();
+        swimmerQuery.setParameter("season", ScoreApp.getCurrentSeason().getSeasonId());
+        Swimmer swimmer = null;
+        try {
+            swimmer = (Swimmer)swimmerQuery.getSingleResult();
+        }
+        catch(Exception e) {
+            logger.error("Swimmer not found.  Season="+ScoreApp.getCurrentSeason().getName()+" leagueNum="+leagueNum,e);
+        }
+        return swimmer;
     }
 
     public static List<Swimmer> getSwimmers(Team team) {
-        Query swimmerQuery = ScoreApp.getEntityManager().createNamedQuery("Swimmer.findByTeamAndSeasonOrderByName");
+        Query swimmerQuery = ScoreApp.getEntityManager().createNamedQuery("Swimmer.findByTeamIdAndSeasonOrderByName");
         swimmerQuery.setParameter("teamId", team.getTeamId());
-        swimmerQuery.setParameter("seasonId", ScoreApp.getCurrentSeason().getSeasonId());
+        swimmerQuery.setParameter("season", ScoreApp.getCurrentSeason());
         List<Swimmer> swimmers = swimmerQuery.getResultList();
         return swimmers;
     }
