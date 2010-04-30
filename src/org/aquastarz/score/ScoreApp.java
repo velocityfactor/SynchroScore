@@ -55,15 +55,6 @@ public class ScoreApp {
         }
     }
 
-    public static void resetTestDB() {
-        if(testUrl.equals(dbUrl)) Bootstrap.clearDB(getEntityManager());
-//        getEntityManager().close();
-//        javax.persistence.Persistence.createEntityManagerFactory("synchroPU",props).close();
-//        if(testUrl.equals(dbUrl)) {
-//            dbUrl=null;
-//        }
-    }
-
     private static Season curSeason = null;
     public static Season getCurrentSeason() {
         if(curSeason==null) {
