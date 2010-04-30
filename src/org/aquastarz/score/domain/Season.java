@@ -26,8 +26,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 @Entity
+@NamedQueries({@NamedQuery(name = "Season.findByName", query = "SELECT s FROM Season s where s.name like :name")})
 public class Season implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
