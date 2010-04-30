@@ -32,13 +32,13 @@ public class SwimmerDB {
     public static Swimmer findByLeagueNum(Integer leagueNum) {
         Query swimmerQuery = ScoreApp.getEntityManager().createNamedQuery("Swimmer.findByLeagueNumAndSeason");
         swimmerQuery.setParameter("leagueNum", leagueNum);
-        swimmerQuery.setParameter("season", ScoreApp.getCurrentSeason().getSeasonId());
+        swimmerQuery.setParameter("season", ScoreApp.getCurrentSeason());
         Swimmer swimmer = null;
         try {
             swimmer = (Swimmer)swimmerQuery.getSingleResult();
         }
         catch(Exception e) {
-            logger.error("Swimmer not found.  Season="+ScoreApp.getCurrentSeason().getName()+" leagueNum="+leagueNum,e);
+            logger.error("Swimmer not found.  Season="+ScoreApp.getCurrentSeason().getSeasonId()+" leagueNum="+leagueNum,e);
         }
         return swimmer;
     }

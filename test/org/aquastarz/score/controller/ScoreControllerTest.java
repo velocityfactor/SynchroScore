@@ -42,6 +42,7 @@ public class ScoreControllerTest {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
+        Bootstrap.loadLegacyMeet(ScoreApp.getCurrentSeason(),"DAVSUN");
     }
 
     @AfterClass
@@ -50,15 +51,10 @@ public class ScoreControllerTest {
 
     @Before
     public void setUp() {
-        //System.out.println("setUp");
-        Bootstrap.loadLegacyMeet(ScoreApp.getCurrentSeason(),"DAVSUN");
     }
 
     @After
     public void tearDown() {
-        //System.out.println("tearDown");
-        ScoreApp.getEntityManager().close();
-        ScoreApp.resetTestDB();
     }
 
     @Test

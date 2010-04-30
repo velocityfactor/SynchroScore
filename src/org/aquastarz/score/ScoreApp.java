@@ -23,6 +23,7 @@ import java.io.File;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import org.aquastarz.score.config.Bootstrap;
 import org.aquastarz.score.controller.ScoreController;
 import org.aquastarz.score.domain.Season;
@@ -41,29 +42,47 @@ public class ScoreApp {
         if (dbUrl == null) { //test mode
             dbUrl = testUrl;
             Map initProps = new TreeMap();
-            initProps.put("hibernate.hbm2ddl.auto", "create");
+            initProps.put("hibernate.hbm2ddl.auto", "create-drop");
             initProps.put("hibernate.connection.url", dbUrl);
-            EntityManager entityManager = javax.persistence.Persistence.createEntityManagerFactory("synchroPU", initProps).createEntityManager();
-            entityManager.close();
+            return javax.persistence.Persistence.createEntityManagerFactory("synchroPU", initProps).createEntityManager();
         }
-        if (props == null) {
-            props = new TreeMap();
-            props.put("hibernate.connection.url", dbUrl);
+        else {
+            if (props == null) {
+                props = new TreeMap();
+                props.put("hibernate.connection.url", dbUrl);
+            }
+            return javax.persistence.Persistence.createEntityManagerFactory("synchroPU", props).createEntityManager();
         }
-        return javax.persistence.Persistence.createEntityManagerFactory("synchroPU", props).createEntityManager();
     }
 
     public static void resetTestDB() {
-        if(testUrl.equals(dbUrl)) dbUrl=null;
+        if(testUrl.equals(dbUrl)) Bootstrap.clearDB(getEntityManager());
+//        getEntityManager().close();
+//        javax.persistence.Persistence.createEntityManagerFactory("synchroPU",props).close();
+//        if(testUrl.equals(dbUrl)) {
+//            dbUrl=null;
+//        }
     }
 
+    private static Season curSeason = null;
     public static Season getCurrentSeason() {
-        Season season = new Season("Test2009");
-        EntityManager entityManager = getEntityManager();
-        entityManager.getTransaction().begin();
-        entityManager.persist(season);
-        entityManager.getTransaction().commit();
-        return season;
+        if(curSeason==null) {
+            EntityManager entityManager = getEntityManager();
+            Query query = entityManager.createNamedQuery("Season.findByName");
+            query.setParameter("name", "2009");
+            try {
+                curSeason = (Season) query.getSingleResult();
+                System.out.println("Found Season = "+curSeason.getSeasonId());
+            }
+            catch(Exception e) {}
+            if(curSeason==null) {
+                curSeason = new Season("2009");
+                entityManager.getTransaction().begin();
+                entityManager.persist(curSeason);
+                entityManager.getTransaction().commit();
+            }
+        }
+        return curSeason;
     }
 
     /**
