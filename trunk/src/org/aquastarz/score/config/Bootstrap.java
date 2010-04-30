@@ -37,10 +37,10 @@ public class Bootstrap {
     public static void clearDB(EntityManager entityManager) {
         entityManager.getTransaction().begin();
 
-        entityManager.createQuery("delete from FiguresParticipant").executeUpdate();
         entityManager.createQuery("delete from FigureScore").executeUpdate();
-        entityManager.createQuery("delete from Meet").executeUpdate();
+        entityManager.createQuery("delete from FiguresParticipant").executeUpdate();
         entityManager.createQuery("delete from Swimmer").executeUpdate();
+        entityManager.createQuery("delete from Meet").executeUpdate();
         entityManager.createQuery("delete from Level").executeUpdate();
         entityManager.createQuery("delete from Team").executeUpdate();
         entityManager.createQuery("delete from Figure").executeUpdate();
@@ -307,7 +307,7 @@ public class Bootstrap {
         EntityManager entityManager = ScoreApp.getEntityManager();
         Bootstrap.loadLeagueData();
 
-        CSVReader csv = new CSVReader(new InputStreamReader(Bootstrap.class.getResourceAsStream(season.getName()+"/"+name+"/results.csv")));
+        CSVReader csv = new CSVReader(new InputStreamReader(Bootstrap.class.getResourceAsStream("Season"+season.getName()+"/"+name+"/results.csv")));
         String[] nextLine;
         try {
             csv.readNext(); //skip header
@@ -319,7 +319,7 @@ public class Bootstrap {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        csv = new CSVReader(new InputStreamReader(Bootstrap.class.getResourceAsStream(season.getName()+"/"+name+"/figstat.csv")));
+        csv = new CSVReader(new InputStreamReader(Bootstrap.class.getResourceAsStream("Season"+season.getName()+"/"+name+"/figstat.csv")));
 
         try {
             csv.readNext(); //skip header

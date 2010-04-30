@@ -73,7 +73,7 @@ public class Swimmer implements Serializable {
     private Team team;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "season", referencedColumnName = "seasonId", nullable = false)
+//    @JoinColumn(name = "season", referencedColumnName = "seasonId", nullable = false)
     private Season season;
 
     public Swimmer() {
