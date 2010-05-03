@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Figures Results" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="193"/>
 	<property name="ireport.y" value="0"/>
+	<import value="org.aquastarz.score.domain.Swimmer"/>
 	<parameter name="MeetDate" class="java.lang.String"/>
 	<parameter name="MeetName" class="java.lang.String"/>
 	<parameter name="Title" class="java.lang.String"/>
@@ -24,6 +25,12 @@
 	<field name="figureOrder" class="java.lang.String">
 		<fieldDescription><![CDATA[figureOrder]]></fieldDescription>
 	</field>
+	<group name="Level" keepTogether="true">
+		<groupExpression><![CDATA[$F{swimmer}.getLevel()]]></groupExpression>
+		<groupFooter>
+			<band height="15" splitType="Prevent"/>
+		</groupFooter>
+	</group>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -156,7 +163,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{swimmer}.getLastName()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="61" y="0" width="58" height="16"/>
+				<reportElement isPrintRepeatedValues="false" x="61" y="0" width="58" height="16"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
@@ -169,7 +176,7 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{swimmer}.getTeam().getTeamId()]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="###0.00;(###0.00)">
 				<reportElement x="500" y="0" width="68" height="16"/>
 				<textElement>
 					<font size="12"/>
@@ -184,7 +191,9 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{figureOrder}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="707" y="0" width="45" height="16"/>
+				<reportElement x="707" y="0" width="45" height="16">
+					<printWhenExpression><![CDATA[!BigDecimal.ZERO.equals($F{points})]]></printWhenExpression>
+				</reportElement>
 				<textElement>
 					<font size="12"/>
 				</textElement>

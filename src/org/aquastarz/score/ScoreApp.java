@@ -20,6 +20,7 @@
 package org.aquastarz.score;
 
 import java.io.File;
+import java.util.Calendar;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.persistence.EntityManager;
@@ -32,9 +33,9 @@ public class ScoreApp {
 
     private static org.apache.log4j.Logger logger =
             org.apache.log4j.Logger.getLogger(ScoreApp.class.getName());
-    private static final String productionFilename = System.getProperty("user.home") + "/.SynchroScore/Data";
-    private static final String productionUrl = "jdbc:hsqldb:file:" + productionFilename;
-    private static final String testUrl = "jdbc:hsqldb:file:/temp/synchrotest"; //mem:Synchro";
+    private static final String productionFilename = System.getProperty("user.home") + "/.SynchroScore";
+    private static final String productionUrl = "jdbc:hsqldb:file:" + productionFilename + "/Synchro";
+    private static final String testUrl = "jdbc:hsqldb:mem:Synchro";
     private static String dbUrl = null;
     private static Map props = null;
 
@@ -45,8 +46,7 @@ public class ScoreApp {
             initProps.put("hibernate.hbm2ddl.auto", "create-drop");
             initProps.put("hibernate.connection.url", dbUrl);
             return javax.persistence.Persistence.createEntityManagerFactory("synchroPU", initProps).createEntityManager();
-        }
-        else {
+        } else {
             if (props == null) {
                 props = new TreeMap();
                 props.put("hibernate.connection.url", dbUrl);
@@ -54,19 +54,19 @@ public class ScoreApp {
             return javax.persistence.Persistence.createEntityManagerFactory("synchroPU", props).createEntityManager();
         }
     }
-
     private static Season curSeason = null;
+
     public static Season getCurrentSeason() {
-        if(curSeason==null) {
+        if (curSeason == null) {
             EntityManager entityManager = getEntityManager();
             Query query = entityManager.createNamedQuery("Season.findByName");
             query.setParameter("name", "2009");
             try {
                 curSeason = (Season) query.getSingleResult();
-                System.out.println("Found Season = "+curSeason.getSeasonId());
+                System.out.println("Found Season = " + curSeason.getSeasonId());
+            } catch (Exception e) {
             }
-            catch(Exception e) {}
-            if(curSeason==null) {
+            if (curSeason == null) {
                 curSeason = new Season("2009");
                 entityManager.getTransaction().begin();
                 entityManager.persist(curSeason);
@@ -76,22 +76,23 @@ public class ScoreApp {
         return curSeason;
     }
 
+    public static void setCurrentSeason(Season season) {
+        curSeason = season;
+    }
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         dbUrl = productionUrl;
         initDB();
-        bootstrapDB();
+        getEntityManager();
+        findCurrentSeason();
         new ScoreController();
     }
 
     public static void initDB() {
-        //TODO check db for adequate data, delete and recreate if not.
         File db = new File(productionFilename);
-
-        //TODO new db each run
-        db.delete();
 
         if (!db.exists()) {
             logger.info("No db file found, create...");
@@ -104,10 +105,26 @@ public class ScoreApp {
         }
     }
 
-    public static void bootstrapDB() {
-        logger.info("Load sample data...");
-        Bootstrap.loadLeagueData();
-        Bootstrap.loadSampleSwimmers();
-        logger.info("DB init done.");
+    public static void findCurrentSeason() {
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+
+        EntityManager entityManager = getEntityManager();
+        Query query = entityManager.createNamedQuery("Season.findByName");
+        query.setParameter("name", Integer.toString(year));
+        try {
+            curSeason = (Season) query.getSingleResult();
+            logger.debug("Found Season = " + curSeason.getSeasonId());
+        } catch (Exception e) {
+        }
+        if (curSeason == null) {
+            curSeason = new Season(Integer.toString(year));
+            entityManager.getTransaction().begin();
+            entityManager.persist(curSeason);
+            entityManager.getTransaction().commit();
+            logger.debug("New Season = " + curSeason.getSeasonId());
+            Bootstrap.loadLeagueData();
+        }
+
     }
 }

@@ -33,11 +33,11 @@ public class LevelForm extends JPanel {
     EntityManager entityManager = null;
     
     public LevelForm() {
-        initComponents();
         if (!Beans.isDesignTime()) {
             entityManager = ScoreApp.getEntityManager();
             entityManager.getTransaction().begin();
         }
+        initComponents();
     }
     
     /** This method is called from within the constructor to
@@ -50,7 +50,7 @@ public class LevelForm extends JPanel {
     private void initComponents() {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        query = java.beans.Beans.isDesignTime() ? null : entityManager.createQuery("SELECT l FROM Level l");
+        query = java.beans.Beans.isDesignTime() ? null : entityManager.createQuery("SELECT l FROM Level l order by sortOrder");
         list = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : org.jdesktop.observablecollections.ObservableCollections.observableList(query.getResultList());
         masterScrollPane = new javax.swing.JScrollPane();
         masterTable = new javax.swing.JTable();

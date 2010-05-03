@@ -222,7 +222,6 @@ public class MeetSetupPanel extends javax.swing.JPanel {
         regularMeetButton = new javax.swing.JRadioButton();
         champsButton = new javax.swing.JRadioButton();
         meetDate = new javax.swing.JTextField();
-        jLabel23 = new javax.swing.JLabel();
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel1.setText("Title for Meet Report");
@@ -299,7 +298,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
 
         eightAndUnder4.setFont(new java.awt.Font("Tahoma", 0, 14));
 
-        jLabel12.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel12.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel12.setText("Station 1 (A-1)");
 
         jLabel13.setFont(new java.awt.Font("Tahoma", 0, 14));
@@ -541,9 +540,6 @@ public class MeetSetupPanel extends javax.swing.JPanel {
 
         meetDate.setFont(new java.awt.Font("Tahoma", 0, 14));
 
-        jLabel23.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel23.setText("Press F10 for Maintenance Window");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -625,15 +621,13 @@ public class MeetSetupPanel extends javax.swing.JPanel {
                                 .addContainerGap()
                                 .addComponent(meetName, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel23)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(meetDate)
-                                .addComponent(jLabel21)
-                                .addComponent(homeTeam, 0, 215, Short.MAX_VALUE)
-                                .addComponent(jLabel18)
-                                .addComponent(jLabel2)
-                                .addComponent(jScrollPane1, 0, 0, Short.MAX_VALUE)))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(meetDate)
+                            .addComponent(jLabel21)
+                            .addComponent(homeTeam, 0, 215, Short.MAX_VALUE)
+                            .addComponent(jLabel18)
+                            .addComponent(jLabel2)
+                            .addComponent(jScrollPane1, 0, 0, Short.MAX_VALUE))))
                 .addContainerGap(220, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -737,8 +731,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
                             .addComponent(jLabel19)
                             .addComponent(intFigNum4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(intDD4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(intFigName4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel23))))
+                            .addComponent(intFigName4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
                 .addComponent(saveButton)
                 .addContainerGap())
@@ -899,7 +892,6 @@ public class MeetSetupPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;

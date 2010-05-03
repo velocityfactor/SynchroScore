@@ -10,7 +10,7 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="swimmerQuery.setParameter(&quot;season&quot;,ScoreApp.getCurrentSeason());"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="if(!java.beans.Beans.isDesignTime()) swimmerQuery.setParameter(&quot;season&quot;,ScoreApp.getCurrentSeason());"/>
       </AuxValues>
     </Component>
     <Component class="java.util.List" name="swimmerList">

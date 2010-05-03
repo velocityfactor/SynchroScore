@@ -23,11 +23,13 @@ import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 import javax.imageio.ImageIO;
 import javax.persistence.EntityManager;
@@ -56,6 +58,7 @@ import org.aquastarz.score.domain.Swimmer;
 import org.aquastarz.score.domain.Team;
 import org.aquastarz.score.gui.event.MeetSetupPanelListener;
 import org.aquastarz.score.gui.event.FiguresParticipantSearchPanelListener;
+import org.aquastarz.score.report.TeamPoints;
 
 public class SynchroFrame extends javax.swing.JFrame {
 
@@ -64,7 +67,7 @@ public class SynchroFrame extends javax.swing.JFrame {
 
     public enum Tab {
 
-        MEET_SETUP, SWIMMERS, FIGURES_ORDER, FIGURES, ROUTINES, REPORTS, LEAGUE
+        MEET_SETUP, SWIMMERS, FIGURES_ORDER, FIGURES, ROUTINES, REPORTS, LEAGUE, MAINTENANCE
     };
     private ScoreController controller = null;
     private Meet meet = null;
@@ -101,12 +104,6 @@ public class SynchroFrame extends javax.swing.JFrame {
                 }
             }
         };
-        Action maintenanceAction = new AbstractAction() {
-
-            public void actionPerformed(ActionEvent e) {
-                MaintenanceFrame.open();
-            }
-        };
         String keyStrokeAndKey = "PERIOD";
         KeyStroke keyStroke = KeyStroke.getKeyStroke(keyStrokeAndKey);
         tabPane.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(keyStroke, keyStrokeAndKey);
@@ -115,10 +112,6 @@ public class SynchroFrame extends javax.swing.JFrame {
         keyStroke = KeyStroke.getKeyStroke(keyStrokeAndKey);
         tabPane.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(keyStroke, keyStrokeAndKey);
         tabPane.getActionMap().put(keyStrokeAndKey, swimmerSearchAction);
-        keyStrokeAndKey = "F10";
-        keyStroke = KeyStroke.getKeyStroke(keyStrokeAndKey);
-        tabPane.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(keyStroke, keyStrokeAndKey);
-        tabPane.getActionMap().put(keyStrokeAndKey, maintenanceAction);
     }
 
     private void setSetupStatus(Color color, int percent) {
@@ -139,6 +132,7 @@ public class SynchroFrame extends javax.swing.JFrame {
     private void updateStatus() {
         updateLeagueList();
         setTabEnabled(Tab.LEAGUE, true);
+        setTabEnabled(Tab.MAINTENANCE, true);
         if (meet.isValid()) {
             setTabEnabled(SynchroFrame.Tab.SWIMMERS, true);
             updateSwimmerTab();
@@ -282,6 +276,22 @@ public class SynchroFrame extends javax.swing.JFrame {
         swimmerTable.setModel(new SwimmersTableModel(swimmerList));
     }
 
+    private void viewFiguresResultsReport(List<FiguresParticipant> figuresParticipants, String title) {
+        try {
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/FiguresResults.jasper"));
+            JRDataSource data = new JRBeanCollectionDataSource(figuresParticipants);
+
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put("Title", title);
+            params.put("MeetDate", meet.getMeetDate());
+            params.put("MeetName", meet.getName());
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, data);
+            JasperViewer.viewReport(jasperPrint, false);
+        } catch (Exception ex) {
+            logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
+        }
+    }
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -317,10 +327,10 @@ public class SynchroFrame extends javax.swing.JFrame {
         reportNoviceFigures = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        reportIntermediateFigures = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        reportTeamResults = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
         jButton10 = new javax.swing.JButton();
@@ -338,6 +348,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         leagueTeamCombo = new javax.swing.JComboBox();
         leagueSortByLevel = new javax.swing.JRadioButton();
+        maintenancePanel = new org.aquastarz.score.gui.MaintenancePanel();
         jToolBar1 = new javax.swing.JToolBar();
         jLabel1 = new javax.swing.JLabel();
         setupProgress = new javax.swing.JProgressBar();
@@ -574,13 +585,23 @@ public class SynchroFrame extends javax.swing.JFrame {
 
         jButton3.setText("Nov. Station");
 
-        jButton4.setText("Int. Figures");
+        reportIntermediateFigures.setText("Int. Figures");
+        reportIntermediateFigures.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reportIntermediateFiguresActionPerformed(evt);
+            }
+        });
 
         jButton5.setText("Int. Meet Sheet");
 
         jButton6.setText("Int. Station");
 
-        jButton7.setText("Team Results");
+        reportTeamResults.setText("Team Results");
+        reportTeamResults.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reportTeamResultsActionPerformed(evt);
+            }
+        });
 
         jButton8.setText("Nov. Figure Labels");
 
@@ -609,9 +630,9 @@ public class SynchroFrame extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(reportPanelLayout.createSequentialGroup()
-                                .addComponent(jButton4)
+                                .addComponent(reportIntermediateFigures)
                                 .addGap(18, 18, 18)
-                                .addComponent(jButton7))
+                                .addComponent(reportTeamResults))
                             .addComponent(jButton5)
                             .addComponent(jButton6)))
                     .addGroup(reportPanelLayout.createSequentialGroup()
@@ -631,7 +652,7 @@ public class SynchroFrame extends javax.swing.JFrame {
 
         reportPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton10, jButton11, jButton2, jButton3, jButton8, reportNoviceFigures});
 
-        reportPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton12, jButton13, jButton4, jButton5, jButton6, jButton9});
+        reportPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton12, jButton13, jButton5, jButton6, jButton9, reportIntermediateFigures});
 
         reportPanelLayout.setVerticalGroup(
             reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -640,8 +661,8 @@ public class SynchroFrame extends javax.swing.JFrame {
                 .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(reportPanelLayout.createSequentialGroup()
                         .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton4)
-                            .addComponent(jButton7))
+                            .addComponent(reportIntermediateFigures)
+                            .addComponent(reportTeamResults))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -797,6 +818,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         );
 
         tabPane.addTab("League", leaguePanel);
+        tabPane.addTab("Maintenance", maintenancePanel);
 
         getContentPane().add(tabPane, java.awt.BorderLayout.CENTER);
 
@@ -916,6 +938,9 @@ public class SynchroFrame extends javax.swing.JFrame {
         if (tabPane.getSelectedIndex() == Tab.FIGURES.ordinal()) {
             swimmerSearchPanel.focus();
         }
+        if (tabPane.getSelectedIndex() == Tab.MAINTENANCE.ordinal()) {
+            maintenancePanel.init();
+        }
     }//GEN-LAST:event_tabPaneStateChanged
 
     private void leaguePrintButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_leaguePrintButtonActionPerformed
@@ -929,7 +954,6 @@ public class SynchroFrame extends javax.swing.JFrame {
         } catch (Exception ex) {
             logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
         }
-
     }//GEN-LAST:event_leaguePrintButtonActionPerformed
 
     private void leagueSortByNumberfiguresOrderSortByNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_leagueSortByNumberfiguresOrderSortByNumberActionPerformed
@@ -953,12 +977,27 @@ public class SynchroFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_leagueSortByLevelfiguresOrderSortByNameActionPerformed
 
     private void reportNoviceFiguresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportNoviceFiguresActionPerformed
+        viewFiguresResultsReport(ScoreController.findAllFiguresParticipantByMeetAndDivision(meet, true), "Meet Results - Novice Figures");
+    }//GEN-LAST:event_reportNoviceFiguresActionPerformed
+
+    private void reportIntermediateFiguresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportIntermediateFiguresActionPerformed
+        viewFiguresResultsReport(ScoreController.findAllFiguresParticipantByMeetAndDivision(meet, false), "Meet Results - Intermediate Figures");
+    }//GEN-LAST:event_reportIntermediateFiguresActionPerformed
+
+    private void reportTeamResultsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportTeamResultsActionPerformed
+        Map<Team, BigDecimal> points = ScoreController.calculateTeamPoints(meet);
+
+        //Sort by points
+        Map<BigDecimal,TeamPoints> pointsMap = new TreeMap<BigDecimal,TeamPoints>().descendingMap();
+        for(Entry<Team,BigDecimal> pointsEntry:points.entrySet()) {
+            TeamPoints tp = new TeamPoints(pointsEntry.getKey(),pointsEntry.getValue());
+            pointsMap.put(tp.getPoints(), tp);
+        }
+
         try {
-            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/FiguresResults.jasper"));
-            JRDataSource data = new JRBeanCollectionDataSource(meet.getFiguresParticipants());
-         
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/TeamResults.jasper"));
+            JRDataSource data = new JRBeanCollectionDataSource(pointsMap.values());
             Map<String, Object> params = new HashMap<String, Object>();
-            params.put("Title", "Meet Results - Novice Figures");
             params.put("MeetDate", meet.getMeetDate());
             params.put("MeetName", meet.getName());
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, data);
@@ -966,8 +1005,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         } catch (Exception ex) {
             logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
         }
-    }//GEN-LAST:event_reportNoviceFiguresActionPerformed
-
+    }//GEN-LAST:event_reportTeamResultsActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane figureOrderScrollPane;
     private javax.swing.JRadioButton figureOrderSortByName;
@@ -986,10 +1024,8 @@ public class SynchroFrame extends javax.swing.JFrame {
     private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
@@ -1012,10 +1048,13 @@ public class SynchroFrame extends javax.swing.JFrame {
     private javax.swing.JRadioButton leagueSortByNumber;
     private javax.swing.JRadioButton leagueSortByTeam;
     private javax.swing.JComboBox leagueTeamCombo;
+    private org.aquastarz.score.gui.MaintenancePanel maintenancePanel;
     private org.aquastarz.score.gui.MeetSetupPanel meetSetup;
     private javax.swing.JProgressBar novFiguresProgress;
+    private javax.swing.JButton reportIntermediateFigures;
     private javax.swing.JButton reportNoviceFigures;
     private javax.swing.JPanel reportPanel;
+    private javax.swing.JButton reportTeamResults;
     private javax.swing.JPanel routineScore;
     private javax.swing.JProgressBar routinesProgress;
     private javax.swing.JButton saveFigureScoreButton;

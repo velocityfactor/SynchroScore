@@ -380,9 +380,9 @@
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
-                                      <Component id="jButton4" linkSize="2" min="-2" max="-2" attributes="0"/>
+                                      <Component id="reportIntermediateFigures" linkSize="2" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="jButton7" min="-2" max="-2" attributes="0"/>
+                                      <Component id="reportTeamResults" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Component id="jButton5" linkSize="2" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="jButton6" linkSize="2" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -416,8 +416,8 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="jButton4" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jButton7" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="reportIntermediateFigures" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="reportTeamResults" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jButton5" min="-2" max="-2" attributes="0"/>
@@ -474,10 +474,13 @@
                 <Property name="text" type="java.lang.String" value="Nov. Station"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton4">
+            <Component class="javax.swing.JButton" name="reportIntermediateFigures">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Int. Figures"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="reportIntermediateFiguresActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="jButton5">
               <Properties>
@@ -489,10 +492,13 @@
                 <Property name="text" type="java.lang.String" value="Int. Station"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton7">
+            <Component class="javax.swing.JButton" name="reportTeamResults">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Team Results"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="reportTeamResultsActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="jButton8">
               <Properties>
@@ -709,6 +715,15 @@
             </Component>
           </SubComponents>
         </Container>
+        <Component class="org.aquastarz.score.gui.MaintenancePanel" name="maintenancePanel">
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+              <JTabbedPaneConstraints tabName="Maintenance">
+                <Property name="tabTitle" type="java.lang.String" value="Maintenance"/>
+              </JTabbedPaneConstraints>
+            </Constraint>
+          </Constraints>
+        </Component>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JToolBar" name="jToolBar1">

@@ -34,7 +34,10 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+import org.aquastarz.score.ScoreApp;
+import org.aquastarz.score.controller.ScoreController;
 import org.aquastarz.score.domain.Meet;
+import org.aquastarz.score.domain.Season;
 
 /**
  *
@@ -45,11 +48,12 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
     public boolean canceled = false;
 
     /** Creates new form MeetSelectionDialog */
-    public MeetSelectionDialog(List<Meet> meets, java.awt.Frame parent, boolean modal) {
+    public MeetSelectionDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
 
         initComponents();
-        fillCombo(meetCombo, meets);
+        fillMeetCombo(ScoreController.getMeets(ScoreApp.getCurrentSeason()));
+        fillSeasonCombo(ScoreController.getSeasons());
     }
 
     /** This method is called from within the constructor to
@@ -70,6 +74,8 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
+        seasonLabel = new javax.swing.JLabel();
+        seasonCombo = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("SynchroScore");
@@ -84,15 +90,20 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
         });
 
         buttonGroup1.add(newMeetButton);
-        newMeetButton.setFont(new java.awt.Font("Tahoma", 0, 14));
+        newMeetButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         newMeetButton.setText("New Meet");
 
         buttonGroup1.add(existingMeetButton);
         existingMeetButton.setFont(new java.awt.Font("Tahoma", 0, 14));
         existingMeetButton.setText("Existing Meet");
 
-        meetCombo.setFont(new java.awt.Font("Tahoma", 0, 14));
+        meetCombo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         meetCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        meetCombo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                meetComboActionPerformed(evt);
+            }
+        });
 
         okButton.setFont(new java.awt.Font("Tahoma", 0, 14));
         okButton.setText("OK");
@@ -134,9 +145,20 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
+                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
+
+        seasonLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        seasonLabel.setText("Season:");
+
+        seasonCombo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        seasonCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        seasonCombo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                seasonComboActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -147,7 +169,11 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(newMeetButton, javax.swing.GroupLayout.DEFAULT_SIZE, 331, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(seasonLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(seasonCombo, 0, 272, Short.MAX_VALUE))
+                    .addComponent(newMeetButton, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(28, 28, 28)
                         .addComponent(okButton)
@@ -155,8 +181,8 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
                         .addComponent(cancelButton))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(21, 21, 21)
-                        .addComponent(meetCombo, 0, 310, Short.MAX_VALUE))
-                    .addComponent(existingMeetButton, javax.swing.GroupLayout.DEFAULT_SIZE, 331, Short.MAX_VALUE))
+                        .addComponent(meetCombo, 0, 304, Short.MAX_VALUE))
+                    .addComponent(existingMeetButton, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -166,6 +192,10 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(7, 7, 7)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(seasonCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(seasonLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
@@ -174,11 +204,11 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
                         .addComponent(existingMeetButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(meetCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(cancelButton)
                             .addComponent(okButton)))
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)))
         );
 
         pack();
@@ -197,11 +227,23 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
         setVisible(false);
 }//GEN-LAST:event_okButtonActionPerformed
 
+    private void seasonComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seasonComboActionPerformed
+        ScoreApp.setCurrentSeason((Season)seasonCombo.getSelectedItem());
+        fillMeetCombo(ScoreController.getMeets(ScoreApp.getCurrentSeason()));
+        if(seasonCombo.getSelectedIndex()==0) {
+            existingMeetButton.setSelected(true);
+        }
+    }//GEN-LAST:event_seasonComboActionPerformed
+
+    private void meetComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_meetComboActionPerformed
+        existingMeetButton.setSelected(true);
+    }//GEN-LAST:event_meetComboActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    public static Meet selectMeet(final List<Meet> meets) throws MeetSelectionCanceledException {
-        MeetSelectionDialog dialog = new MeetSelectionDialog(meets, new javax.swing.JFrame(), true);
+    public static Meet selectMeet() throws MeetSelectionCanceledException {
+        MeetSelectionDialog dialog = new MeetSelectionDialog(new javax.swing.JFrame(), true);
         Dimension dim = dialog.getToolkit().getScreenSize();
         Rectangle abounds = dialog.getBounds();
         dialog.setLocation((dim.width - abounds.width) / 2,
@@ -228,18 +270,29 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
         return null;
     }
 
-    private void fillCombo(JComboBox cb, List<Meet> meets) {
+    private void fillSeasonCombo(List<Season> seasons) {
+        DefaultComboBoxModel cbm = new DefaultComboBoxModel();
+        for(Season s : seasons) {
+            cbm.addElement(s);
+        }
+        seasonCombo.setModel(cbm);
+        seasonCombo.setSelectedItem(ScoreApp.getCurrentSeason());
+    }
+    
+    private void fillMeetCombo(List<Meet> meets) {
         DefaultComboBoxModel cbm = new DefaultComboBoxModel();
         for (Meet m : meets) {
             cbm.addElement(m);
         }
-        cb.setModel(cbm);
+        meetCombo.setModel(cbm);
         if (meets.size() == 0) {
-            cb.setEnabled(false);
+            meetCombo.setEnabled(false);
             existingMeetButton.setEnabled(false);
             newMeetButton.setSelected(true);
         } else {
-            cb.setSelectedItem(meets.get(0));
+            meetCombo.setEnabled(true);
+            existingMeetButton.setEnabled(true);
+            meetCombo.setSelectedItem(meets.get(0));
             DateFormat df = SimpleDateFormat.getDateInstance(SimpleDateFormat.LONG);
 
             // Try to parse the date - it's just a string, so may not parse
@@ -279,5 +332,7 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
     private javax.swing.JComboBox meetCombo;
     private javax.swing.JRadioButton newMeetButton;
     private javax.swing.JButton okButton;
+    private javax.swing.JComboBox seasonCombo;
+    private javax.swing.JLabel seasonLabel;
     // End of variables declaration//GEN-END:variables
 }
