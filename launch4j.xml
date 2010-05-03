@@ -1,0 +1,44 @@
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>C:\Documents and Settings\shayne\Desktop\SynchroScore\dist\SynchroScore.jar</jar>
+  <outfile>C:\Documents and Settings\shayne\Desktop\SynchroScore\dist\SynchroScore.exe</outfile>
+  <errTitle></errTitle>
+  <cmdLine></cmdLine>
+  <chdir></chdir>
+  <priority>normal</priority>
+  <downloadUrl>http://java.com/download</downloadUrl>
+  <supportUrl></supportUrl>
+  <customProcName>false</customProcName>
+  <stayAlive>false</stayAlive>
+  <manifest></manifest>
+  <icon>C:\Documents and Settings\shayne\Desktop\SynchroScore\synchro.ico</icon>
+  <singleInstance>
+    <mutexName>SynchroScore-mutex</mutexName>
+    <windowTitle>SynchroScore</windowTitle>
+  </singleInstance>
+  <jre>
+    <path></path>
+    <minVersion>1.6.0</minVersion>
+    <maxVersion></maxVersion>
+    <jdkPreference>preferJre</jdkPreference>
+  </jre>
+  <splash>
+    <file>C:\Documents and Settings\shayne\Desktop\SynchroScore\splash.bmp</file>
+    <waitForWindow>true</waitForWindow>
+    <timeout>180</timeout>
+    <timeoutErr>false</timeoutErr>
+  </splash>
+  <versionInfo>
+    <fileVersion>0.8.0.0</fileVersion>
+    <txtFileVersion>0.8</txtFileVersion>
+    <fileDescription>Synchronized Swimming Scoring Application</fileDescription>
+    <copyright>(C) Shayne Hughes 2010</copyright>
+    <productVersion>0.8.0.0</productVersion>
+    <txtProductVersion>0.8</txtProductVersion>
+    <productName>SynchroScore</productName>
+    <companyName></companyName>
+    <internalName>SynchroScore</internalName>
+    <originalFilename>SynchroScore.exe</originalFilename>
+  </versionInfo>
+</launch4jConfig>

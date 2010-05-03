@@ -34,15 +34,19 @@ import static org.junit.Assert.*;
 
 public class ScoreControllerTest {
 
-    static List<FigureScoreTracker> figureScoreTrackers = new ArrayList<FigureScoreTracker>();
-    static List<FiguresParticipantTracker> figuresParticipantTrackers = new ArrayList<FiguresParticipantTracker>();
+    static List<FigureScoreTracker> figureScoreTrackers;
+    static List<FiguresParticipantTracker> figuresParticipantTrackers;
 
     public ScoreControllerTest() {
     }
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-        Bootstrap.loadLegacyMeet(ScoreApp.getCurrentSeason(),"DAVSUN");
+        Bootstrap.loadLeagueData();
+        Bootstrap.loadRoster(ScoreApp.getCurrentSeason());
+        List<Object> trackers = Bootstrap.loadLegacyMeet(ScoreApp.getCurrentSeason(), "DAVSUN");
+        figureScoreTrackers = (List<FigureScoreTracker>) trackers.get(0);
+        figuresParticipantTrackers = (List<FiguresParticipantTracker>) trackers.get(1);
     }
 
     @AfterClass
@@ -59,6 +63,7 @@ public class ScoreControllerTest {
 
     @Test
     public void testTotalScore() {
+        assertTrue(figureScoreTrackers.size() > 0);
         for (FigureScoreTracker fst : figureScoreTrackers) {
             assertTrue(fst.total.compareTo(fst.figureScore.getTotalScore()) == 0);
         }
@@ -66,6 +71,7 @@ public class ScoreControllerTest {
 
     @Test
     public void testCalculateTotalScore() {
+        assertTrue(figuresParticipantTrackers.size() > 0);
         for (FiguresParticipantTracker fpt : figuresParticipantTrackers) {
             assertTrue(fpt.total.compareTo(fpt.figuresParticipant.getTotalScore()) == 0);
             assertEquals(fpt.place, fpt.figuresParticipant.getPlace().intValue());

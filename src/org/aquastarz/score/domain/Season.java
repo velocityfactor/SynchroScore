@@ -30,7 +30,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 @Entity
-@NamedQueries({@NamedQuery(name = "Season.findByName", query = "SELECT s FROM Season s where s.name like :name")})
+@NamedQueries({@NamedQuery(name = "Season.findByName", query = "SELECT s FROM Season s where s.name like :name"),
+    @NamedQuery(name = "Season.findAllOrderByName", query = "SELECT s FROM Season s order by name")})
 public class Season implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -84,7 +85,7 @@ public class Season implements Serializable {
 
     @Override
     public String toString() {
-        return "<season seasonId=\""+seasonId+"\" name=\""+name+"\"/>";
+        return name;
     }
 
 }

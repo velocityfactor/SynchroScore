@@ -4,7 +4,7 @@
   <NonVisualComponents>
     <Component class="javax.persistence.Query" name="query">
       <Properties>
-        <Property name="query" type="java.lang.String" value="SELECT l FROM Level l"/>
+        <Property name="query" type="java.lang.String" value="SELECT l FROM Level l order by sortOrder"/>
         <Property name="entityManager" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="entityManager" type="code"/>
         </Property>
