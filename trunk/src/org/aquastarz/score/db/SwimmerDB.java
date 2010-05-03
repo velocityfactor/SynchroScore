@@ -22,6 +22,7 @@ package org.aquastarz.score.db;
 import java.util.List;
 import javax.persistence.Query;
 import org.aquastarz.score.ScoreApp;
+import org.aquastarz.score.domain.Season;
 import org.aquastarz.score.domain.Swimmer;
 import org.aquastarz.score.domain.Team;
 
@@ -29,10 +30,10 @@ public class SwimmerDB {
     private static org.apache.log4j.Logger logger =
             org.apache.log4j.Logger.getLogger(SwimmerDB.class.getName());
 
-    public static Swimmer findByLeagueNum(Integer leagueNum) {
+    public static Swimmer findByLeagueNum(Integer leagueNum, Season season) {
         Query swimmerQuery = ScoreApp.getEntityManager().createNamedQuery("Swimmer.findByLeagueNumAndSeason");
         swimmerQuery.setParameter("leagueNum", leagueNum);
-        swimmerQuery.setParameter("season", ScoreApp.getCurrentSeason());
+        swimmerQuery.setParameter("season", season);
         Swimmer swimmer = null;
         try {
             swimmer = (Swimmer)swimmerQuery.getSingleResult();

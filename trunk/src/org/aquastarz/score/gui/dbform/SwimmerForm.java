@@ -38,11 +38,11 @@ public class SwimmerForm extends JPanel {
     EntityManager entityManager = null;
     
     public SwimmerForm() {
-        initComponents();
         if (!Beans.isDesignTime()) {
             entityManager = ScoreApp.getEntityManager();
             entityManager.getTransaction().begin();
         }
+        initComponents();
     }
     
     /** This method is called from within the constructor to
@@ -56,6 +56,7 @@ public class SwimmerForm extends JPanel {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         swimmerQuery = java.beans.Beans.isDesignTime() ? null : entityManager.createQuery("SELECT s FROM Swimmer s where s.season like :season");
+        if(!java.beans.Beans.isDesignTime()) swimmerQuery.setParameter("season",ScoreApp.getCurrentSeason());
         swimmerList = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : swimmerQuery.getResultList();
         levelQuery = java.beans.Beans.isDesignTime() ? null : entityManager.createQuery("SELECT l FROM Level l");
         levelList = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : levelQuery.getResultList();
@@ -79,8 +80,6 @@ public class SwimmerForm extends JPanel {
         jComboBox2 = new javax.swing.JComboBox();
 
         FormListener formListener = new FormListener();
-
-        swimmerQuery.setParameter("season",ScoreApp.getCurrentSeason());
 
         org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, swimmerList, masterTable);
         org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${leagueNum}"));

@@ -40,86 +40,67 @@ import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 @Entity
-@NamedQueries({@NamedQuery(name = "Meet.findBySeasonOrderByDateDesc", query = "SELECT m FROM Meet m where m.season like :season order by m.meetDate desc")})
+@NamedQueries({
+    @NamedQuery(name = "Meet.findAllBySeasonOrderByDateDesc", query = "SELECT m FROM Meet m where m.season like :season order by m.meetDate desc"),
+    @NamedQuery(name = "Meet.findBySeasonAndName", query = "SELECT m FROM Meet m where m.season like :season and m.name like :name")})
 public class Meet implements Serializable {
-    private static final long serialVersionUID = 1L;
 
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer meetId;
-
     @Basic(optional = false)
     @Column(name = "meetDate", nullable = false, length = 100)
     private String meetDate;
-
     @Basic(optional = false)
     @Column(name = "name", nullable = false, length = 255)
     private String name;
-
     @ManyToMany
     private List<Team> opponents = new Vector();
-
     @OneToMany(mappedBy = "meet")
     private List<FiguresParticipant> figuresParticipants = new Vector<FiguresParticipant>();
-
     private char type;
-
     private boolean figuresOrderGenerated = false;
-
     @ManyToOne
-    @JoinColumn(name="homeTeam")
+    @JoinColumn(name = "homeTeam")
     private Team homeTeam;
-
     @ManyToOne
-    @JoinColumn(name="eu1Figure")
+    @JoinColumn(name = "eu1Figure")
     private Figure eu1Figure;
-
     @ManyToOne
-    @JoinColumn(name="eu2Figure")
+    @JoinColumn(name = "eu2Figure")
     private Figure eu2Figure;
-
     @ManyToOne
-    @JoinColumn(name="nov1Figure")
+    @JoinColumn(name = "nov1Figure")
     private Figure nov1Figure;
-
     @ManyToOne
-    @JoinColumn(name="nov2Figure")
+    @JoinColumn(name = "nov2Figure")
     private Figure nov2Figure;
-
     @ManyToOne
-    @JoinColumn(name="nov3Figure")
+    @JoinColumn(name = "nov3Figure")
     private Figure nov3Figure;
-
     @ManyToOne
-    @JoinColumn(name="nov4Figure")
+    @JoinColumn(name = "nov4Figure")
     private Figure nov4Figure;
-
     @ManyToOne
-    @JoinColumn(name="int1Figure")
+    @JoinColumn(name = "int1Figure")
     private Figure int1Figure;
-
     @ManyToOne
-    @JoinColumn(name="int2Figure")
+    @JoinColumn(name = "int2Figure")
     private Figure int2Figure;
-
     @ManyToOne
-    @JoinColumn(name="int3Figure")
+    @JoinColumn(name = "int3Figure")
     private Figure int3Figure;
-
     @ManyToOne
-    @JoinColumn(name="int4Figure")
+    @JoinColumn(name = "int4Figure")
     private Figure int4Figure;
-
     @ManyToOne
-    @JoinColumn(name="season")
+    @JoinColumn(name = "season")
     private Season season;
-
     @Transient
-    private Map<Team,BigDecimal> pointsMap = null;
-
+    private Map<Team, BigDecimal> pointsMap = null;
     @Transient
-    private Map<Team,Integer> placeMap = null;
-
+    private Map<Team, Integer> placeMap = null;
     @Transient
     private List<String> calcErrors = null;
 
@@ -147,7 +128,7 @@ public class Meet implements Serializable {
 
     public List<Swimmer> getSwimmers() {
         ArrayList<Swimmer> swimmers = new ArrayList<Swimmer>();
-        for(FiguresParticipant fp:figuresParticipants) {
+        for (FiguresParticipant fp : figuresParticipants) {
             swimmers.add(fp.getSwimmer());
         }
         return swimmers;
@@ -156,6 +137,7 @@ public class Meet implements Serializable {
     public List<Team> getOpponents() {
         return opponents;
     }
+
     public void setOpponents(List<Team> opponents) {
         this.opponents = opponents;
     }
@@ -297,12 +279,12 @@ public class Meet implements Serializable {
     }
 
     public boolean needsPointsCalc() {
-        return placeMap==null || pointsMap==null;
+        return placeMap == null || pointsMap == null;
     }
 
     public void clearPoints() {
-        placeMap=null;
-        pointsMap=null;
+        placeMap = null;
+        pointsMap = null;
     }
 
     public Map<Team, Integer> getPlaceMap() {
@@ -310,7 +292,7 @@ public class Meet implements Serializable {
     }
 
     public void setPlaceMap(Map<Team, Integer> placeMap) {
-        this.placeMap=placeMap;
+        this.placeMap = placeMap;
     }
 
     public Map<Team, BigDecimal> getPointsMap() {
@@ -318,7 +300,7 @@ public class Meet implements Serializable {
     }
 
     public void setPointsMap(Map<Team, BigDecimal> pointsMap) {
-        this.pointsMap=pointsMap;
+        this.pointsMap = pointsMap;
     }
 
     public List<String> getCalcErrors() {
@@ -326,53 +308,81 @@ public class Meet implements Serializable {
     }
 
     public void setCalcErrors(List<String> calcErrors) {
-        this.calcErrors=calcErrors;
+        this.calcErrors = calcErrors;
     }
 
     public boolean hasCalcErrors() {
-        return calcErrors!=null && calcErrors.size()>0;
+        return calcErrors != null && calcErrors.size() > 0;
     }
 
     public boolean hasFiguresParticipants(Meet meet) {
-        return figuresParticipants!=null && figuresParticipants.size()>0;
+        return figuresParticipants != null && figuresParticipants.size() > 0;
     }
 
     public boolean isValid() {
-        boolean valid=true;
-        if(name==null || name.length()<1) valid=false;
-        if(meetDate==null || meetDate.length()<1) valid=false;
-        if(type!='R' && type!='C') valid=false;
-        if(homeTeam==null) valid=false;
-        if(opponents==null || opponents.size()<1) valid=false;
-        if(nov1Figure==null) valid=false;
-        if(nov2Figure==null) valid=false;
-        if(nov3Figure==null) valid=false;
-        if(nov4Figure==null) valid=false;
-        if(int1Figure==null) valid=false;
-        if(int2Figure==null) valid=false;
-        if(int3Figure==null) valid=false;
-        if(int4Figure==null) valid=false;
-        if(type=='R' && eu1Figure==null) valid=false;
-        if(type=='R' && eu2Figure==null) valid=false;
+        boolean valid = true;
+        if (name == null || name.length() < 1) {
+            valid = false;
+        }
+        if (meetDate == null || meetDate.length() < 1) {
+            valid = false;
+        }
+        if (type != 'R' && type != 'C') {
+            valid = false;
+        }
+        if (homeTeam == null) {
+            valid = false;
+        }
+        if (opponents == null || opponents.size() < 1) {
+            valid = false;
+        }
+        if (nov1Figure == null) {
+            valid = false;
+        }
+        if (nov2Figure == null) {
+            valid = false;
+        }
+        if (nov3Figure == null) {
+            valid = false;
+        }
+        if (nov4Figure == null) {
+            valid = false;
+        }
+        if (int1Figure == null) {
+            valid = false;
+        }
+        if (int2Figure == null) {
+            valid = false;
+        }
+        if (int3Figure == null) {
+            valid = false;
+        }
+        if (int4Figure == null) {
+            valid = false;
+        }
+        if (type == 'R' && eu1Figure == null) {
+            valid = false;
+        }
+        if (type == 'R' && eu2Figure == null) {
+            valid = false;
+        }
         return valid;
     }
 
     public List<Figure> getFigureList(Swimmer swimmer) {
         List<Figure> figures = new ArrayList<Figure>();
         String level = swimmer.getLevel().getLevelId();
-        if(level.startsWith("N")) {
-            if("N8".equals(level)) {
+        if (level.startsWith("N")) {
+            if ("N8".equals(level)) {
                 figures.add(eu1Figure);
                 figures.add(eu2Figure);
-            }
-            else {
+            } else {
                 figures.add(nov1Figure);
                 figures.add(nov2Figure);
                 figures.add(nov3Figure);
                 figures.add(nov4Figure);
             }
-        }
-        else {
+        } else {
             figures.add(int1Figure);
             figures.add(int2Figure);
             figures.add(int3Figure);
@@ -403,7 +413,6 @@ public class Meet implements Serializable {
 
     @Override
     public String toString() {
-        return name+" ["+meetDate+"]";
+        return name + " [" + meetDate + "]";
     }
-
 }

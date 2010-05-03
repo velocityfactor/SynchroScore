@@ -34,11 +34,11 @@ public class TeamForm extends JPanel {
     EntityManager entityManager = null;
 
     public TeamForm() {
-        initComponents();
         if (!Beans.isDesignTime()) {
             entityManager = ScoreApp.getEntityManager();
             entityManager.getTransaction().begin();
         }
+        initComponents();
     }
     
     /** This method is called from within the constructor to
