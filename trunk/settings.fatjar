@@ -1,0 +1,14 @@
+#Fat Jar Configuration File
+#Sun May 02 21:51:36 PDT 2010
+onejar.license.required=true
+manifest.classpath=
+manifest.removesigners=true
+onejar.checkbox=false
+jarname=SynchroScore.jar
+manifest.mergeall=true
+manifest.mainclass=org.aquastarz.score.ScoreApp
+manifest.file=<createnew>
+jarname.isextern=false
+onejar.expand=
+excludes=<jar|org-netbeans-modules-java-j2seproject-copylibstask.jar>;<jar|junit-4.5.jar>;<jar|org-netbeans-modules-javawebstart-anttasks.jar>
+includes=
