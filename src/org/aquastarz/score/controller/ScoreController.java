@@ -73,6 +73,7 @@ public class ScoreController {
                 meet.setName("Mock Meet");
                 DateFormat df = SimpleDateFormat.getDateInstance(SimpleDateFormat.LONG);
                 meet.setMeetDate(df.format(new Date()));
+                meet.setSeason(ScoreApp.getCurrentSeason());
                 transaction.commit();
             } catch (Exception e) {
                 logger.error("Error creating new meet.", e);

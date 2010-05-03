@@ -1,8 +1,8 @@
 <launch4jConfig>
   <dontWrapJar>false</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>C:\Documents and Settings\shayne\Desktop\SynchroScore\dist\SynchroScore.jar</jar>
-  <outfile>C:\Documents and Settings\shayne\Desktop\SynchroScore\dist\SynchroScore.exe</outfile>
+  <jar>c:\home\shayne\work\java\SynchroScore\SynchroScore.jar</jar>
+  <outfile>c:\home\shayne\work\java\SynchroScore\SynchroScore.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
   <chdir></chdir>
@@ -12,7 +12,7 @@
   <customProcName>false</customProcName>
   <stayAlive>false</stayAlive>
   <manifest></manifest>
-  <icon>C:\Documents and Settings\shayne\Desktop\SynchroScore\synchro.ico</icon>
+  <icon>c:\home\shayne\work\java\SynchroScore\synchro.ico</icon>
   <singleInstance>
     <mutexName>SynchroScore-mutex</mutexName>
     <windowTitle>SynchroScore</windowTitle>
@@ -24,7 +24,7 @@
     <jdkPreference>preferJre</jdkPreference>
   </jre>
   <splash>
-    <file>C:\Documents and Settings\shayne\Desktop\SynchroScore\splash.bmp</file>
+    <file>c:\home\shayne\work\java\SynchroScore\splash.bmp</file>
     <waitForWindow>true</waitForWindow>
     <timeout>180</timeout>
     <timeoutErr>false</timeoutErr>
