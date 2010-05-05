@@ -39,7 +39,7 @@ public class SwimmerForm extends JPanel {
     
     public SwimmerForm() {
         if (!Beans.isDesignTime()) {
-            entityManager = ScoreApp.getEntityManager();
+            entityManager = ScoreApp.getNewEntityManager();
             entityManager.getTransaction().begin();
         }
         initComponents();

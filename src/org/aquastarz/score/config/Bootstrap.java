@@ -196,8 +196,6 @@ public class Bootstrap {
             e.printStackTrace();
         }
 
-        entityManager.getTransaction().begin();
-
         meet = new Meet();
         meet.setName(legacyMeet.meetTitle);
         meet.setSeason(season);
@@ -241,6 +239,9 @@ public class Bootstrap {
             meet.setEu2Figure(meet.getNov4Figure());
         }
         meet.setFiguresOrderGenerated(true);
+        entityManager.getTransaction().begin();
+        entityManager.persist(meet);
+        entityManager.getTransaction().commit();
 
         for (LegacyResult lr : legacyResults.values()) {
             FiguresParticipant fp = new FiguresParticipant();
@@ -248,7 +249,11 @@ public class Bootstrap {
 
             fp.setSwimmer(SwimmerDB.findByLeagueNum(lr.leagueNo, season));
             fp.setMeet(meet);
+
+            entityManager.getTransaction().begin();
             entityManager.persist(fp);
+            entityManager.getTransaction().commit();
+
 
             FiguresParticipantTracker fpt = new FiguresParticipantTracker();
             fpt.figuresParticipant = fp;
@@ -322,7 +327,10 @@ public class Bootstrap {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                    entityManager.getTransaction().begin();
                     entityManager.persist(fs);
+                    entityManager.getTransaction().commit();
+
                     scores.add(fs);
                     figNum++;
                 }
@@ -331,9 +339,8 @@ public class Bootstrap {
             meet.getFiguresParticipants().add(fp);
         }
         ScoreController.calculateMeetResults(meet);
+        entityManager.getTransaction().begin();
         entityManager.persist(meet);
-
-        entityManager.flush();
         entityManager.getTransaction().commit();
 
         return retVals;
@@ -407,45 +414,45 @@ public class Bootstrap {
             niCat = Integer.valueOf(line[0]);
             ageCat = Integer.valueOf(line[1]);
             dFinTot = Integer.valueOf(line[2]);
-            swmrNo = line[3];
-            finTot = new BigDecimal(line[4]);
+            swmrNo = line[3].toUpperCase();
+            finTot = new BigDecimal(line[4]).setScale(2);
             novInt = line[5];
             ageGrp = line[6];
             fName = line[7];
             gName = line[8];
             team = line[9];
             leagueNo = Integer.valueOf(line[10]);
-            s1j1 = new BigDecimal(line[11]);
-            s1j2 = new BigDecimal(line[12]);
-            s1j3 = new BigDecimal(line[13]);
-            s1j4 = new BigDecimal(line[14]);
-            s1j5 = new BigDecimal(line[15]);
-            s1Tot = new BigDecimal(line[16]);
-            s1Pen = new BigDecimal(line[17]);
-            s2j1 = new BigDecimal(line[18]);
-            s2j2 = new BigDecimal(line[19]);
-            s2j3 = new BigDecimal(line[20]);
-            s2j4 = new BigDecimal(line[21]);
-            s2j5 = new BigDecimal(line[22]);
-            s2Tot = new BigDecimal(line[23]);
-            s2Pen = new BigDecimal(line[24]);
-            s3j1 = new BigDecimal(line[25]);
-            s3j2 = new BigDecimal(line[26]);
-            s3j3 = new BigDecimal(line[27]);
-            s3j4 = new BigDecimal(line[28]);
-            s3j5 = new BigDecimal(line[29]);
-            s3Tot = new BigDecimal(line[30]);
-            s3Pen = new BigDecimal(line[31]);
-            s4j1 = new BigDecimal(line[32]);
-            s4j2 = new BigDecimal(line[33]);
-            s4j3 = new BigDecimal(line[34]);
-            s4j4 = new BigDecimal(line[35]);
-            s4j5 = new BigDecimal(line[36]);
-            s4Tot = new BigDecimal(line[37]);
-            s4Pen = new BigDecimal(line[38]);
-            totPen = new BigDecimal(line[39]);
+            s1j1 = new BigDecimal(line[11]).setScale(1);
+            s1j2 = new BigDecimal(line[12]).setScale(1);
+            s1j3 = new BigDecimal(line[13]).setScale(1);
+            s1j4 = new BigDecimal(line[14]).setScale(1);
+            s1j5 = new BigDecimal(line[15]).setScale(1);
+            s1Tot = new BigDecimal(line[16]).setScale(2);
+            s1Pen = new BigDecimal(line[17]).setScale(1);
+            s2j1 = new BigDecimal(line[18]).setScale(1);
+            s2j2 = new BigDecimal(line[19]).setScale(1);
+            s2j3 = new BigDecimal(line[20]).setScale(1);
+            s2j4 = new BigDecimal(line[21]).setScale(1);
+            s2j5 = new BigDecimal(line[22]).setScale(1);
+            s2Tot = new BigDecimal(line[23]).setScale(2);
+            s2Pen = new BigDecimal(line[24]).setScale(1);
+            s3j1 = new BigDecimal(line[25]).setScale(1);
+            s3j2 = new BigDecimal(line[26]).setScale(1);
+            s3j3 = new BigDecimal(line[27]).setScale(1);
+            s3j4 = new BigDecimal(line[28]).setScale(1);
+            s3j5 = new BigDecimal(line[29]).setScale(1);
+            s3Tot = new BigDecimal(line[30]).setScale(2);
+            s3Pen = new BigDecimal(line[31]).setScale(1);
+            s4j1 = new BigDecimal(line[32]).setScale(1);
+            s4j2 = new BigDecimal(line[33]).setScale(1);
+            s4j3 = new BigDecimal(line[34]).setScale(1);
+            s4j4 = new BigDecimal(line[35]).setScale(1);
+            s4j5 = new BigDecimal(line[36]).setScale(1);
+            s4Tot = new BigDecimal(line[37]).setScale(2);
+            s4Pen = new BigDecimal(line[38]).setScale(1);
+            totPen = new BigDecimal(line[39]).setScale(2);
             place = Integer.valueOf(line[40]);
-            points = new BigDecimal(line[41]);
+            points = new BigDecimal(line[41]).setScale(2);
         }
     }
 
@@ -496,28 +503,28 @@ public class Bootstrap {
             n8USta3 = "1".equals(line[7]);
             n8USta4 = "1".equals(line[8]);
             nRestSta1 = line[9];
-            nRestS1DD = new BigDecimal(line[10]);
+            nRestS1DD = new BigDecimal(line[10]).setScale(1);
             nRestS1Des = line[11];
             nRestSta2 = line[12];
-            nRestS2DD = new BigDecimal(line[13]);
+            nRestS2DD = new BigDecimal(line[13]).setScale(1);
             nRestS2Des = line[14];
             nRestSta3 = line[15];
-            nRestS3DD = new BigDecimal(line[16]);
+            nRestS3DD = new BigDecimal(line[16]).setScale(1);
             nRestS3Des = line[17];
             nRestSta4 = line[18];
-            nRestS4DD = new BigDecimal(line[19]);
+            nRestS4DD = new BigDecimal(line[19]).setScale(1);
             nRestS4Des = line[20];
             iSta1 = line[21];
-            iS1DD = new BigDecimal(line[22]);
+            iS1DD = new BigDecimal(line[22]).setScale(1);
             iS1Des = line[23];
             iSta2 = line[24];
-            iS2DD = new BigDecimal(line[25]);
+            iS2DD = new BigDecimal(line[25]).setScale(1);
             iS2Des = line[26];
             iSta3 = line[27];
-            iS3DD = new BigDecimal(line[28]);
+            iS3DD = new BigDecimal(line[28]).setScale(1);
             iS3Des = line[29];
             iSta4 = line[30];
-            iS4DD = new BigDecimal(line[31]);
+            iS4DD = new BigDecimal(line[31]).setScale(1);
             iS4Des = line[32];
         }
     }

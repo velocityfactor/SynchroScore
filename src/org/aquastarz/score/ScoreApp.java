@@ -34,26 +34,35 @@ public class ScoreApp {
     private static org.apache.log4j.Logger logger =
             org.apache.log4j.Logger.getLogger(ScoreApp.class.getName());
     private static final String productionFilename = System.getProperty("user.home") + "/.SynchroScore";
-    private static final String productionUrl = "jdbc:hsqldb:file:" + productionFilename + "/Synchro";
+    private static final String productionUrl = "jdbc:hsqldb:file:" + productionFilename + "/Synchro;write_delay=false";
     private static final String testUrl = "jdbc:hsqldb:mem:Synchro";
     private static String dbUrl = null;
     private static Map props = null;
+    private static EntityManager entityManager = null;
 
     public static EntityManager getEntityManager() {
-        if (dbUrl == null) { //test mode
-            dbUrl = testUrl;
-            Map initProps = new TreeMap();
-            initProps.put("hibernate.hbm2ddl.auto", "create-drop");
-            initProps.put("hibernate.connection.url", dbUrl);
-            return javax.persistence.Persistence.createEntityManagerFactory("synchroPU", initProps).createEntityManager();
-        } else {
-            if (props == null) {
-                props = new TreeMap();
-                props.put("hibernate.connection.url", dbUrl);
+        if(entityManager == null) {
+            if (dbUrl == null) { //test mode
+                dbUrl = testUrl;
+                Map initProps = new TreeMap();
+                initProps.put("hibernate.hbm2ddl.auto", "create-drop");
+                initProps.put("hibernate.connection.url", dbUrl);
+                entityManager = javax.persistence.Persistence.createEntityManagerFactory("synchroPU", initProps).createEntityManager();
+            } else {
+                if (props == null) {
+                    props = new TreeMap();
+                    props.put("hibernate.connection.url", dbUrl);
+                }
+                entityManager = getNewEntityManager();
             }
-            return javax.persistence.Persistence.createEntityManagerFactory("synchroPU", props).createEntityManager();
         }
+        return entityManager;
     }
+
+    public static EntityManager getNewEntityManager() {
+        return javax.persistence.Persistence.createEntityManagerFactory("synchroPU", props).createEntityManager();
+    }
+
     private static Season curSeason = null;
 
     public static Season getCurrentSeason() {
@@ -87,6 +96,11 @@ public class ScoreApp {
         dbUrl = productionUrl;
         initDB();
         getEntityManager();
+
+        // Set up hooks to shutdown and signals.
+	Runtime.getRuntime().addShutdownHook(new AppSignalHandler());
+	AppSignalHandler.installAll();
+
         findCurrentSeason();
         new ScoreController();
     }
@@ -98,7 +112,7 @@ public class ScoreApp {
             logger.info("No db file found, create...");
             db.mkdir();
             Map initProps = new TreeMap();
-            initProps.put("hibernate.hbm2ddl.auto", "create");  //TODO update, not create
+            initProps.put("hibernate.hbm2ddl.auto", "create");
             initProps.put("hibernate.connection.url", dbUrl);
             EntityManager entityManager = javax.persistence.Persistence.createEntityManagerFactory("synchroPU", initProps).createEntityManager();
             entityManager.close();

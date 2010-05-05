@@ -230,7 +230,7 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
     private void seasonComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seasonComboActionPerformed
         ScoreApp.setCurrentSeason((Season)seasonCombo.getSelectedItem());
         fillMeetCombo(ScoreController.getMeets(ScoreApp.getCurrentSeason()));
-        if(seasonCombo.getSelectedIndex()==0) {
+        if(seasonCombo.getSelectedIndex()==0 && meetCombo.getItemCount()>0) {
             existingMeetButton.setSelected(true);
         }
     }//GEN-LAST:event_seasonComboActionPerformed

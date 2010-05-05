@@ -8,7 +8,7 @@
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="Figure Order" class="java.lang.String">
+	<field name="Figures Order" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="COLUMN_1" class="java.lang.String"/>
@@ -123,7 +123,7 @@
 				<textElement>
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{Figure Order}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{Figures Order}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="129" y="0" width="150" height="16"/>
