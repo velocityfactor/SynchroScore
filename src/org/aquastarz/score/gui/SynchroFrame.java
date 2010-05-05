@@ -20,6 +20,7 @@
 package org.aquastarz.score.gui;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -277,6 +278,11 @@ public class SynchroFrame extends javax.swing.JFrame {
     }
 
     private void viewFiguresResultsReport(List<FiguresParticipant> figuresParticipants, String title) {
+        if (!ScoreController.meetResultsValid(meet)) {
+            JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
+            return;
+        }
+
         try {
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/FiguresResults.jasper"));
             JRDataSource data = new JRBeanCollectionDataSource(figuresParticipants);
@@ -864,6 +870,7 @@ public class SynchroFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void saveSwimmersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveSwimmersButtonActionPerformed
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         ArrayList<Swimmer> participatingSwimmers = new ArrayList<Swimmer>();
         for (int i = 0; i < teamTabs.getTabCount(); i++) {
             SwimmerSelectionPanel ssp = (SwimmerSelectionPanel) teamTabs.getComponentAt(i);
@@ -872,6 +879,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         controller.updateFiguresSwimmers(meet, participatingSwimmers);
         controller.saveMeet(meet);
         updateStatus();
+        setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_saveSwimmersButtonActionPerformed
 
     private void saveFigureScoreButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFigureScoreButtonActionPerformed
@@ -895,9 +903,11 @@ public class SynchroFrame extends javax.swing.JFrame {
                 return;
             }
         }
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         controller.generateRandomFiguresOrder(meet);
         updateStatus();
         selectTab(Tab.FIGURES_ORDER);
+        setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_generateRandomFiguresOrderButtonActionPerformed
 
     private void figuresOrderSortByNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_figuresOrderSortByNumberActionPerformed
@@ -985,12 +995,22 @@ public class SynchroFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_reportIntermediateFiguresActionPerformed
 
     private void reportTeamResultsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportTeamResultsActionPerformed
+        if (!ScoreController.meetResultsValid(meet)) {
+            JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors()!=null?meet.getCalcErrors():"");
+            return;
+        }
+
         Map<Team, BigDecimal> points = ScoreController.calculateTeamPoints(meet);
 
+        if (points == null) {
+            JOptionPane.showMessageDialog(this, "Cannot display report.  Points not calculated.  " + meet.getCalcErrors()!=null?meet.getCalcErrors():"");
+            return;
+        }
+
         //Sort by points
-        Map<BigDecimal,TeamPoints> pointsMap = new TreeMap<BigDecimal,TeamPoints>().descendingMap();
-        for(Entry<Team,BigDecimal> pointsEntry:points.entrySet()) {
-            TeamPoints tp = new TeamPoints(pointsEntry.getKey(),pointsEntry.getValue());
+        Map<BigDecimal, TeamPoints> pointsMap = new TreeMap<BigDecimal, TeamPoints>().descendingMap();
+        for (Entry<Team, BigDecimal> pointsEntry : points.entrySet()) {
+            TeamPoints tp = new TeamPoints(pointsEntry.getKey(), pointsEntry.getValue());
             pointsMap.put(tp.getPoints(), tp);
         }
 

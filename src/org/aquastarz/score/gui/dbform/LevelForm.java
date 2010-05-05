@@ -34,7 +34,7 @@ public class LevelForm extends JPanel {
     
     public LevelForm() {
         if (!Beans.isDesignTime()) {
-            entityManager = ScoreApp.getEntityManager();
+            entityManager = ScoreApp.getNewEntityManager();
             entityManager.getTransaction().begin();
         }
         initComponents();

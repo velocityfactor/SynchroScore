@@ -35,7 +35,7 @@ public class TeamForm extends JPanel {
 
     public TeamForm() {
         if (!Beans.isDesignTime()) {
-            entityManager = ScoreApp.getEntityManager();
+            entityManager = ScoreApp.getNewEntityManager();
             entityManager.getTransaction().begin();
         }
         initComponents();

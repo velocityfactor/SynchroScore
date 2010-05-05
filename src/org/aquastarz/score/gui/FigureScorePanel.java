@@ -90,6 +90,11 @@ public class FigureScorePanel extends javax.swing.JPanel {
         }
         Figure[] fig = figures.toArray(new Figure[4]);
         this.figures = fig;
+
+        total1.setText("--");
+        total2.setText("--");
+        total3.setText("--");
+        total4.setText("--");
         if(figuresParticipant.getTotalScore()!=null) {
             figuresTotal.setText(figuresParticipant.getTotalScore().toString());
         }

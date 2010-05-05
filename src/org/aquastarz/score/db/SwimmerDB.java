@@ -39,7 +39,7 @@ public class SwimmerDB {
             swimmer = (Swimmer)swimmerQuery.getSingleResult();
         }
         catch(Exception e) {
-            logger.error("Swimmer not found.  Season="+ScoreApp.getCurrentSeason().getSeasonId()+" leagueNum="+leagueNum,e);
+            logger.error("Swimmer not found.  Season="+season.getSeasonId()+" leagueNum="+leagueNum,e);
         }
         return swimmer;
     }
