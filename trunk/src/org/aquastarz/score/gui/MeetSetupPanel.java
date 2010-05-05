@@ -20,6 +20,7 @@
 package org.aquastarz.score.gui;
 
 import java.awt.Component;
+import java.awt.Cursor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -740,6 +741,8 @@ public class MeetSetupPanel extends javax.swing.JPanel {
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
 
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+
         //Update Meet object and pass it to the controller
         meet.setName(meetName.getText());
         meet.setMeetDate(meetDate.getText());
@@ -791,6 +794,8 @@ public class MeetSetupPanel extends javax.swing.JPanel {
             }
         }
         fireSavedEvent();
+
+        setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_saveButtonActionPerformed
 
     private void noviceFigName2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noviceFigName2ActionPerformed

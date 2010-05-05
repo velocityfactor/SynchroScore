@@ -31,15 +31,15 @@ public class FiguresParticipantsTableModel implements TableModel {
 
     class TableItem {
 
-        String figureOrder;
+        String figuresOrder;
         String leagueNum;
         String lastName;
         String firstName;
         String team;
         String level;
 
-        TableItem(String figureOrder, String leagueNum, String lastName, String firstName, String team, String level) {
-            this.figureOrder = figureOrder;
+        TableItem(String figuresOrder, String leagueNum, String lastName, String firstName, String team, String level) {
+            this.figuresOrder = figuresOrder;
             this.leagueNum = leagueNum;
             this.lastName = lastName;
             this.firstName = firstName;
@@ -68,7 +68,7 @@ public class FiguresParticipantsTableModel implements TableModel {
     public String getColumnName(int columnIndex) {
         switch (columnIndex) {
             case 0:
-                return "Figure Order";
+                return "Figures Order";
             case 1:
                 return "League #";
             case 2:
@@ -95,7 +95,7 @@ public class FiguresParticipantsTableModel implements TableModel {
         TableItem item = items.get(rowIndex);
         switch (columnIndex) {
             case 0:
-                return item.figureOrder;
+                return item.figuresOrder;
             case 1:
                 return item.leagueNum;
             case 2:

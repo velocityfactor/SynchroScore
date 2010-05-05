@@ -34,7 +34,7 @@ public class FigureForm extends JPanel {
     
     public FigureForm() {
         if (!Beans.isDesignTime()) {
-            entityManager = ScoreApp.getEntityManager();
+            entityManager = ScoreApp.getNewEntityManager();
             entityManager.getTransaction().begin();
         }
         initComponents();
