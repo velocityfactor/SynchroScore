@@ -26,8 +26,8 @@
   <splash>
     <file>c:\home\shayne\work\java\SynchroScore\splash.bmp</file>
     <waitForWindow>true</waitForWindow>
-    <timeout>180</timeout>
-    <timeoutErr>false</timeoutErr>
+    <timeout>60</timeout>
+    <timeoutErr>true</timeoutErr>
   </splash>
   <versionInfo>
     <fileVersion>0.8.0.0</fileVersion>
