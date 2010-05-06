@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="1.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
+  <persistence-unit name="synchroPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <class>org.aquastarz.score.domain.Level</class>
+    <class>org.aquastarz.score.domain.Figure</class>
+    <class>org.aquastarz.score.domain.Team</class>
+    <class>org.aquastarz.score.domain.Swimmer</class>
+    <class>org.aquastarz.score.domain.Meet</class>
+    <class>org.aquastarz.score.domain.FigureScore</class>
+    <class>org.aquastarz.score.domain.Season</class>
+    <properties>
+      <property name="hibernate.connection.username" value="sa"/>
+      <property name="hibernate.connection.driver_class" value="org.hsqldb.jdbcDriver"/>
+      <property name="hibernate.connection.password" value=""/>
+    </properties>
+    <!--    <properties>
+      <property name="hibernate.connection.username" value="synchro"/>
+      <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
+      <property name="hibernate.connection.password" value="synchro"/>
+      <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/synchro"/>
+      <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+    </properties>
+-->
+  </persistence-unit>
+</persistence>
