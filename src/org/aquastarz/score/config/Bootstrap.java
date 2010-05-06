@@ -83,6 +83,8 @@ public class Bootstrap {
         checkAndPersistFigure(entityManager, "345", new BigDecimal("2.2"), "Ariana");
         checkAndPersistFigure(entityManager, "350", new BigDecimal("2.2"), "Minerva");
         checkAndPersistFigure(entityManager, "240", new BigDecimal("2.2"), "Albatross");
+        checkAndPersistFigure(entityManager, "301", new BigDecimal("2.0"), "Barracuda");
+        checkAndPersistFigure(entityManager, "150", new BigDecimal("3.1"), "Knight");
 
         entityManager.getTransaction().commit();
     }
