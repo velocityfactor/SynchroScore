@@ -562,9 +562,7 @@ public class ScoreController {
         for (int i = 0; i < tieCount; i++) {
             points = points.add(getFigurePlacePoints(place + i, meetType));
         }
-        if(tieCount>1) {
-            points = points.divide(BigDecimal.valueOf(tieCount),2,BigDecimal.ROUND_HALF_UP).stripTrailingZeros();
-        }
+        points = points.divide(BigDecimal.valueOf(tieCount),2,BigDecimal.ROUND_HALF_UP);
         return points;
     }
 
