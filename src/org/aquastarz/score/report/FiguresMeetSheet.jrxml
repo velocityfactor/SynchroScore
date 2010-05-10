@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Figures Labels" columnCount="2" printOrder="Horizontal" pageWidth="612" pageHeight="792" columnWidth="288" leftMargin="18" rightMargin="18" topMargin="18" bottomMargin="18">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="43"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table" isDefault="false">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" isDefault="false" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" isDefault="false" mode="Opaque" backcolor="#FFBFBF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" isDefault="false" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1"/>
+	<parameter name="MeetDate" class="java.lang.String"/>
+	<parameter name="MeetName" class="java.lang.String"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="levelName" class="java.lang.String"/>
+	<field name="place" class="java.lang.Integer"/>
+	<field name="team" class="java.lang.String"/>
+	<field name="score" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="210" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="288" height="210"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="1" width="288" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[SYNCHRONIZED SWIMMING FIGURE COMPETITION]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="16" width="169" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{MeetName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="150" y="174" width="108" height="15"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Place: "+$F{place}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="219" y="35" width="69" height="15"/>
+				<textElement textAlignment="Right" markup="html"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Team: <b>"+$F{team}+"</b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="125" y="159" width="133" height="15"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Total Score: "+$F{score}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="169" y="16" width="119" height="15"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{MeetDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="135" y="50" width="123" height="15"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Order: "+$F{figuresOrder}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="50" width="135" height="15"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["League No.: "+$F{leageNum}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="65" width="199" height="15"/>
+				<textElement markup="html"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Age Group: <b>"+$F{levelName}+"</b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="97" width="75" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{figure1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="97" width="25" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{j11}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="125" y="97" width="25" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{j21}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="150" y="97" width="25" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{j31}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="175" y="97" width="25" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{j41}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="97" width="25" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{j51}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="225" y="97" width="33" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{points1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="258" y="97" width="25" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{penalty1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="75" y="97" width="25" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{dd1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="112" width="25" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{j12}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="125" y="112" width="25" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{j22}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="175" y="112" width="25" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{j42}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="112" width="25" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{j52}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="150" y="112" width="25" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{j32}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="75" y="112" width="25" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{dd2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="258" y="112" width="25" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{penalty2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="225" y="112" width="33" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{points2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="112" width="75" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{figure2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="127" width="25" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{j13}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="150" y="127" width="25" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{j33}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="142" width="25" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{j54}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="127" width="25" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{j53}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="225" y="142" width="33" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{points4}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="142" width="25" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{j14}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="127" width="75" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{figure3}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="225" y="127" width="33" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{points3}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="142" width="75" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{figure4}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="125" y="127" width="25" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{j23}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="175" y="127" width="25" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{j43}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="75" y="142" width="25" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{dd4}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="258" y="142" width="25" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{penalty4}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="75" y="127" width="25" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{dd3}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="258" y="127" width="25" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{penalty3}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="125" y="142" width="25" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{j24}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="175" y="142" width="25" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{j43}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="150" y="142" width="25" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{j34}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="75" y="82" width="25" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[DD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="82" width="25" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom"/>
+				<text><![CDATA[J1]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="125" y="82" width="25" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom"/>
+				<text><![CDATA[J2]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="150" y="82" width="25" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom"/>
+				<text><![CDATA[J3]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="175" y="82" width="25" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom"/>
+				<text><![CDATA[J4]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="82" width="25" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom"/>
+				<text><![CDATA[J5]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="225" y="82" width="33" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom"/>
+				<text><![CDATA[TotPts.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="258" y="82" width="25" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom"/>
+				<text><![CDATA[Pen.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="75" y="189" width="183" height="15"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Team Points Earned: "+$F{points}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="35" width="219" height="15"/>
+				<textElement markup="html"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Name: <b>"+$F{firstName}+" "+$F{lastName}+"</b>"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
