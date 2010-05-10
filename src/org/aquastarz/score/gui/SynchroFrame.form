@@ -1,4 +1,4 @@
-<?xml version="1.1" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.5" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
@@ -50,7 +50,7 @@
       </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
-          <BorderConstraints direction="Center"/>
+          <BorderConstraints direction="First"/>
         </Constraint>
       </Constraints>
 
@@ -369,88 +369,72 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
+                      <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="reportNovRoutineLabels" linkSize="4" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="reportNovRoutines" linkSize="4" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="reportNoviceStation" linkSize="4" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="reportNovMeetSheet" linkSize="4" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="reportNovFigureLabels" linkSize="4" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="reportNoviceFigures" linkSize="4" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="reportNoviceFigures" linkSize="1" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jButton2" linkSize="1" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jButton3" linkSize="1" alignment="0" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="reportIntermediateFigures" linkSize="2" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="reportTeamResults" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Component id="jButton5" linkSize="2" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jButton6" linkSize="2" alignment="0" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
+                          <Component id="reportIntRoutingLabels" linkSize="3" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="reportIntRoutines" linkSize="3" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="reportIntStation" linkSize="3" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="reportIntMeetSheet" linkSize="3" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="reportIntFigureLabels" linkSize="3" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="jButton8" linkSize="1" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="jButton9" linkSize="2" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jButton10" linkSize="1" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jButton11" linkSize="1" alignment="0" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jButton12" linkSize="2" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jButton13" linkSize="2" alignment="0" min="-2" max="-2" attributes="0"/>
-                              </Group>
+                              <Component id="reportIntermediateFigures" linkSize="3" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="reportTeamResults" linkSize="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="413" max="32767" attributes="0"/>
+                      <EmptySpace pref="377" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
+                      <EmptySpace min="5" pref="5" max="5" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="reportNoviceFigures" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="reportIntermediateFigures" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="reportTeamResults" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="5" pref="5" max="5" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="reportNovFigureLabels" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="reportIntFigureLabels" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
+                          <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="reportIntermediateFigures" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="reportTeamResults" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="reportNovMeetSheet" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="reportIntMeetSheet" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jButton5" min="-2" max="-2" attributes="0"/>
+                              <Component id="reportNoviceStation" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jButton6" min="-2" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="reportNovRoutines" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="reportIntRoutines" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="reportNoviceFigures" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jButton2" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jButton3" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
+                              <Component id="reportIntStation" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jButton8" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jButton9" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="reportNovRoutineLabels" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="reportIntRoutingLabels" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Component id="jButton10" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jButton11" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" attributes="0">
-                              <Component id="jButton12" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jButton13" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <EmptySpace pref="344" max="32767" attributes="0"/>
+                      <EmptySpace pref="351" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -464,15 +448,18 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="reportNoviceFiguresActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton2">
+            <Component class="javax.swing.JButton" name="reportNovMeetSheet">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Nov. Meet Sheet"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton3">
+            <Component class="javax.swing.JButton" name="reportNoviceStation">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Nov. Station"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="reportNoviceStationActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="reportIntermediateFigures">
               <Properties>
@@ -482,15 +469,18 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="reportIntermediateFiguresActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton5">
+            <Component class="javax.swing.JButton" name="reportIntMeetSheet">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Int. Meet Sheet"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton6">
+            <Component class="javax.swing.JButton" name="reportIntStation">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Int. Station"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="reportIntStationActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="reportTeamResults">
               <Properties>
@@ -500,32 +490,38 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="reportTeamResultsActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton8">
+            <Component class="javax.swing.JButton" name="reportNovFigureLabels">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Nov. Figure Labels"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="reportNovFigureLabelsActionPerformed"/>
+              </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton9">
+            <Component class="javax.swing.JButton" name="reportIntFigureLabels">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Int. Figure Labels"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="reportIntFigureLabelsActionPerformed"/>
+              </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton10">
+            <Component class="javax.swing.JButton" name="reportNovRoutines">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Nov. Routines"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton11">
+            <Component class="javax.swing.JButton" name="reportNovRoutineLabels">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Nov. Routine Labels"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton12">
+            <Component class="javax.swing.JButton" name="reportIntRoutines">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Int. Routines"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton13">
+            <Component class="javax.swing.JButton" name="reportIntRoutingLabels">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Int. Routine Labels"/>
               </Properties>
@@ -660,9 +656,6 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Name"/>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="leagueSortByNamefiguresOrderSortByNameActionPerformed"/>
-              </Events>
             </Component>
             <Component class="javax.swing.JRadioButton" name="leagueSortByTeam">
               <Properties>

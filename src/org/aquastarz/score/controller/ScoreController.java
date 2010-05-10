@@ -19,6 +19,7 @@
 // </editor-fold>
 package org.aquastarz.score.controller;
 
+import org.aquastarz.score.report.StationResult;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -47,6 +48,7 @@ import org.aquastarz.score.domain.Swimmer;
 import org.aquastarz.score.domain.Team;
 import org.aquastarz.score.gui.MeetSelectionDialog;
 import org.aquastarz.score.gui.SynchroFrame;
+import org.aquastarz.score.report.FiguresLabel;
 
 /**
  *
@@ -123,8 +125,7 @@ public class ScoreController {
         query.setParameter("name", name);
         try {
             return (Meet) query.getSingleResult();
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             return null;
         }
     }
@@ -148,10 +149,9 @@ public class ScoreController {
         EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
         try {
-            if(entityManager.contains(meet)) {
+            if (entityManager.contains(meet)) {
                 meet = entityManager.merge(meet);
-            }
-            else {
+            } else {
                 entityManager.persist(meet);
             }
             transaction.commit();
@@ -162,15 +162,14 @@ public class ScoreController {
     }
 
     public static List<FiguresParticipant> findAllFiguresParticipantByMeetAndDivision(Meet meet, boolean isNovice) {
-        if(!ScoreController.meetResultsValid(meet)) {
+        if (!ScoreController.meetResultsValid(meet)) {
             return null;
         }
         Query figureOrderQuery = ScoreApp.getEntityManager().createNamedQuery("FiguresParticipant.findByMeetAndLevelOrderByTotalScore");
         figureOrderQuery.setParameter("meet", meet);
-        figureOrderQuery.setParameter("level", isNovice?"N%":"I%");
+        figureOrderQuery.setParameter("level", isNovice ? "N%" : "I%");
         return figureOrderQuery.getResultList();
     }
-
 
     public FiguresParticipant findFiguresParticipantByFigureOrder(Meet meet, String figureOrder) {
         Query figureOrderQuery = entityManager.createNamedQuery("FiguresParticipant.findByMeetAndFigureOrder");
@@ -327,6 +326,44 @@ public class ScoreController {
             transaction.rollback();
             return false;
         }
+    }
+
+    public static List<StationResult> generateStationResults(Meet meet, boolean isNovice) {
+        List<StationResult> results = new ArrayList<StationResult>();
+
+        for (FiguresParticipant fp : meet.getFiguresParticipants()) {
+            if (isNovice(fp) == isNovice) {
+                for (FigureScore fs : fp.getFiguresScores()) {
+                    StationResult sr = new StationResult();
+                    sr.setFigureId(fs.getFigure().getFigureId());
+                    sr.setFigureName(fs.getFigure().getName());
+                    sr.setFigureDd(fs.getFigure().getDegreeOfDifficulty().toString());
+                    sr.setLastName(fp.getSwimmer().getLastName());
+                    sr.setFirstName(fp.getSwimmer().getFirstName());
+                    sr.setFigureOrder(fp.getFigureOrder());
+                    sr.setScore(fs.getTotalScore());
+                    sr.setLevel(fp.getSwimmer().getLevel().getLevelId());
+                    sr.setLevelOrder(fp.getSwimmer().getLevel().getSortOrder().intValue());
+                    sr.setTeam(fp.getSwimmer().getTeam().getTeamId());
+                    results.add(sr);
+                }
+            }
+        }
+        Collections.sort(results);
+        return results;
+    }
+
+    public static List<FiguresLabel> generateFiguresLabels(Meet meet, boolean isNovice) {
+        List<FiguresLabel> results = new ArrayList<FiguresLabel>();
+
+        for (FiguresParticipant fp : meet.getFiguresParticipants()) {
+            if (isNovice(fp) == isNovice) {
+                FiguresLabel fl = new FiguresLabel(fp.getSwimmer().getLevel().getName(), fp.getSwimmer().getLevel().getSortOrder(), fp.getSwimmer().getFirstName() + " " + fp.getSwimmer().getLastName(), fp.getPlace(), fp.getSwimmer().getTeam().getTeamId(), fp.getTotalScore());
+                results.add(fl);
+            }
+        }
+        Collections.sort(results);
+        return results;
     }
 
     public static boolean isValid(FigureScore figureScore) {
@@ -551,7 +588,7 @@ public class ScoreController {
         //Save
         EntityManager entityManager = ScoreApp.getEntityManager();
         entityManager.getTransaction().begin();
-        for(FiguresParticipant fp : meet.getFiguresParticipants()) {
+        for (FiguresParticipant fp : meet.getFiguresParticipants()) {
             entityManager.merge(fp);
         }
         entityManager.getTransaction().commit();
@@ -562,7 +599,7 @@ public class ScoreController {
         for (int i = 0; i < tieCount; i++) {
             points = points.add(getFigurePlacePoints(place + i, meetType));
         }
-        points = points.divide(BigDecimal.valueOf(tieCount),2,BigDecimal.ROUND_HALF_UP);
+        points = points.divide(BigDecimal.valueOf(tieCount), 2, BigDecimal.ROUND_HALF_UP);
         return points;
     }
 
@@ -619,17 +656,21 @@ public class ScoreController {
         return total;
     }
 
-    public static Map<Team,BigDecimal> calculateTeamPoints(Meet meet) {
-        if(!ScoreController.meetResultsValid(meet)) {
+    public static Map<Team, BigDecimal> calculateTeamPoints(Meet meet) {
+        if (!ScoreController.meetResultsValid(meet)) {
             return null;
         }
 
-        Map<Team,BigDecimal> meetPoints = new HashMap<Team,BigDecimal>();
-        for(FiguresParticipant fp:meet.getFiguresParticipants()) {
-            if(fp.getPoints()==null) return null; //Points not calculated!
+        Map<Team, BigDecimal> meetPoints = new HashMap<Team, BigDecimal>();
+        for (FiguresParticipant fp : meet.getFiguresParticipants()) {
+            if (fp.getPoints() == null) {
+                return null; //Points not calculated!
+            }
             BigDecimal points = meetPoints.get(fp.getSwimmer().getTeam());
-            if(points==null) points=BigDecimal.ZERO;
-            points=points.add(fp.getPoints());
+            if (points == null) {
+                points = BigDecimal.ZERO;
+            }
+            points = points.add(fp.getPoints());
             meetPoints.put(fp.getSwimmer().getTeam(), points);
         }
         return meetPoints;

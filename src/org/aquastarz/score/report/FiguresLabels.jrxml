@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Figures Labels" columnCount="3" printOrder="Horizontal" pageWidth="612" pageHeight="792" columnWidth="185" columnSpacing="10" leftMargin="18" rightMargin="18" topMargin="18" bottomMargin="18">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="MeetDate" class="java.lang.String"/>
+	<parameter name="MeetName" class="java.lang.String"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="levelName" class="java.lang.String"/>
+	<field name="place" class="java.lang.Integer"/>
+	<field name="team" class="java.lang.String"/>
+	<field name="score" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="100" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="52" width="184" height="15"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["NAME: "+$F{name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="7" width="184" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[VFCAL SYNCHRONIZED SWIMMING]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="22" width="184" height="15"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["MEET: "+$P{MeetName}+" "+$P{MeetDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="37" width="184" height="15"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["LEVEL: "+$F{levelName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="67" width="50" height="15"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["PLACE: "+$F{place}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="50" y="67" width="60" height="15"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["TEAM: "+$F{team}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="110" y="67" width="74" height="15"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA["SCORE: "+$F{score}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
