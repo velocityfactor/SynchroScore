@@ -331,18 +331,18 @@ public class SynchroFrame extends javax.swing.JFrame {
         routineScore = new javax.swing.JPanel();
         reportPanel = new javax.swing.JPanel();
         reportNoviceFigures = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        reportNovMeetSheet = new javax.swing.JButton();
+        reportNoviceStation = new javax.swing.JButton();
         reportIntermediateFigures = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        reportIntMeetSheet = new javax.swing.JButton();
+        reportIntStation = new javax.swing.JButton();
         reportTeamResults = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
-        jButton9 = new javax.swing.JButton();
-        jButton10 = new javax.swing.JButton();
-        jButton11 = new javax.swing.JButton();
-        jButton12 = new javax.swing.JButton();
-        jButton13 = new javax.swing.JButton();
+        reportNovFigureLabels = new javax.swing.JButton();
+        reportIntFigureLabels = new javax.swing.JButton();
+        reportNovRoutines = new javax.swing.JButton();
+        reportNovRoutineLabels = new javax.swing.JButton();
+        reportIntRoutines = new javax.swing.JButton();
+        reportIntRoutingLabels = new javax.swing.JButton();
         leaguePanel = new javax.swing.JPanel();
         leaguePrintButton = new javax.swing.JButton();
         swimmerScrollPane = new javax.swing.JScrollPane();
@@ -587,9 +587,14 @@ public class SynchroFrame extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("Nov. Meet Sheet");
+        reportNovMeetSheet.setText("Nov. Meet Sheet");
 
-        jButton3.setText("Nov. Station");
+        reportNoviceStation.setText("Nov. Station");
+        reportNoviceStation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reportNoviceStationActionPerformed(evt);
+            }
+        });
 
         reportIntermediateFigures.setText("Int. Figures");
         reportIntermediateFigures.addActionListener(new java.awt.event.ActionListener() {
@@ -598,9 +603,14 @@ public class SynchroFrame extends javax.swing.JFrame {
             }
         });
 
-        jButton5.setText("Int. Meet Sheet");
+        reportIntMeetSheet.setText("Int. Meet Sheet");
 
-        jButton6.setText("Int. Station");
+        reportIntStation.setText("Int. Station");
+        reportIntStation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reportIntStationActionPerformed(evt);
+            }
+        });
 
         reportTeamResults.setText("Team Results");
         reportTeamResults.addActionListener(new java.awt.event.ActionListener() {
@@ -609,91 +619,91 @@ public class SynchroFrame extends javax.swing.JFrame {
             }
         });
 
-        jButton8.setText("Nov. Figure Labels");
+        reportNovFigureLabels.setText("Nov. Figure Labels");
+        reportNovFigureLabels.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reportNovFigureLabelsActionPerformed(evt);
+            }
+        });
 
-        jButton9.setText("Int. Figure Labels");
+        reportIntFigureLabels.setText("Int. Figure Labels");
+        reportIntFigureLabels.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reportIntFigureLabelsActionPerformed(evt);
+            }
+        });
 
-        jButton10.setText("Nov. Routines");
+        reportNovRoutines.setText("Nov. Routines");
 
-        jButton11.setText("Nov. Routine Labels");
+        reportNovRoutineLabels.setText("Nov. Routine Labels");
 
-        jButton12.setText("Int. Routines");
+        reportIntRoutines.setText("Int. Routines");
 
-        jButton13.setText("Int. Routine Labels");
+        reportIntRoutingLabels.setText("Int. Routine Labels");
 
         javax.swing.GroupLayout reportPanelLayout = new javax.swing.GroupLayout(reportPanel);
         reportPanel.setLayout(reportPanelLayout);
         reportPanelLayout.setHorizontalGroup(
             reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(reportPanelLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(44, 44, 44)
                 .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(reportNovRoutineLabels)
+                    .addComponent(reportNovRoutines)
+                    .addComponent(reportNoviceStation)
+                    .addComponent(reportNovMeetSheet)
+                    .addComponent(reportNovFigureLabels)
+                    .addComponent(reportNoviceFigures))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(reportIntRoutingLabels)
+                    .addComponent(reportIntRoutines)
+                    .addComponent(reportIntStation)
+                    .addComponent(reportIntMeetSheet)
+                    .addComponent(reportIntFigureLabels)
                     .addGroup(reportPanelLayout.createSequentialGroup()
-                        .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(reportNoviceFigures)
-                            .addComponent(jButton2)
-                            .addComponent(jButton3))
-                        .addGap(18, 18, 18)
-                        .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(reportPanelLayout.createSequentialGroup()
-                                .addComponent(reportIntermediateFigures)
-                                .addGap(18, 18, 18)
-                                .addComponent(reportTeamResults))
-                            .addComponent(jButton5)
-                            .addComponent(jButton6)))
-                    .addGroup(reportPanelLayout.createSequentialGroup()
-                        .addComponent(jButton8)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton9))
-                    .addGroup(reportPanelLayout.createSequentialGroup()
-                        .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton10)
-                            .addComponent(jButton11))
-                        .addGap(18, 18, 18)
-                        .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton12)
-                            .addComponent(jButton13))))
-                .addContainerGap(413, Short.MAX_VALUE))
+                        .addComponent(reportIntermediateFigures)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(reportTeamResults)))
+                .addContainerGap(377, Short.MAX_VALUE))
         );
 
-        reportPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton10, jButton11, jButton2, jButton3, jButton8, reportNoviceFigures});
+        reportPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {reportIntFigureLabels, reportIntMeetSheet, reportIntRoutines, reportIntRoutingLabels, reportIntStation, reportIntermediateFigures, reportTeamResults});
 
-        reportPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton12, jButton13, jButton5, jButton6, jButton9, reportIntermediateFigures});
+        reportPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {reportNovFigureLabels, reportNovMeetSheet, reportNovRoutineLabels, reportNovRoutines, reportNoviceFigures, reportNoviceStation});
 
         reportPanelLayout.setVerticalGroup(
             reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(reportPanelLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(5, 5, 5)
+                .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(reportNoviceFigures)
+                    .addComponent(reportIntermediateFigures)
+                    .addComponent(reportTeamResults))
+                .addGap(5, 5, 5)
+                .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(reportNovFigureLabels)
+                    .addComponent(reportIntFigureLabels))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(reportPanelLayout.createSequentialGroup()
                         .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(reportIntermediateFigures)
-                            .addComponent(reportTeamResults))
+                            .addComponent(reportNovMeetSheet)
+                            .addComponent(reportIntMeetSheet))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton5)
+                        .addComponent(reportNoviceStation)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton6))
+                        .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(reportNovRoutines)
+                            .addComponent(reportIntRoutines)))
                     .addGroup(reportPanelLayout.createSequentialGroup()
-                        .addComponent(reportNoviceFigures)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3)))
+                        .addGap(29, 29, 29)
+                        .addComponent(reportIntStation)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton8)
-                    .addComponent(jButton9))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(reportPanelLayout.createSequentialGroup()
-                        .addComponent(jButton10)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton11))
-                    .addGroup(reportPanelLayout.createSequentialGroup()
-                        .addComponent(jButton12)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton13)))
-                .addContainerGap(344, Short.MAX_VALUE))
+                    .addComponent(reportNovRoutineLabels)
+                    .addComponent(reportIntRoutingLabels))
+                .addContainerGap(351, Short.MAX_VALUE))
         );
 
         tabPane.addTab("Reports", reportPanel);
@@ -735,11 +745,6 @@ public class SynchroFrame extends javax.swing.JFrame {
         leagueSortButtonGroup.add(leagueSortByName);
         leagueSortByName.setFont(new java.awt.Font("Tahoma", 0, 14));
         leagueSortByName.setText("Name");
-        leagueSortByName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                leagueSortByNamefiguresOrderSortByNameActionPerformed(evt);
-            }
-        });
 
         leagueSortButtonGroup.add(leagueSortByTeam);
         leagueSortByTeam.setFont(new java.awt.Font("Tahoma", 0, 14));
@@ -826,7 +831,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         tabPane.addTab("League", leaguePanel);
         tabPane.addTab("Maintenance", maintenancePanel);
 
-        getContentPane().add(tabPane, java.awt.BorderLayout.CENTER);
+        getContentPane().add(tabPane, java.awt.BorderLayout.PAGE_START);
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
@@ -1026,6 +1031,79 @@ public class SynchroFrame extends javax.swing.JFrame {
             logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
         }
     }//GEN-LAST:event_reportTeamResultsActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void reportNoviceStationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportNoviceStationActionPerformed
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        try {
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/FiguresStation.jasper"));
+            JRDataSource data = new JRBeanCollectionDataSource(ScoreController.generateStationResults(meet, true));
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put("MeetDate", meet.getMeetDate());
+            params.put("MeetName", meet.getName());
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, data);
+            JasperViewer.viewReport(jasperPrint, false);
+        } catch (Exception ex) {
+            logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
+        }
+        setCursor(Cursor.getDefaultCursor());
+    }//GEN-LAST:event_reportNoviceStationActionPerformed
+
+    private void reportIntStationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportIntStationActionPerformed
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        try {
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/FiguresStation.jasper"));
+            JRDataSource data = new JRBeanCollectionDataSource(ScoreController.generateStationResults(meet, true));
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put("MeetDate", meet.getMeetDate());
+            params.put("MeetName", meet.getName());
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, data);
+            JasperViewer.viewReport(jasperPrint, false);
+        } catch (Exception ex) {
+            logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
+        }
+        setCursor(Cursor.getDefaultCursor());
+    }//GEN-LAST:event_reportIntStationActionPerformed
+
+    private void reportNovFigureLabelsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportNovFigureLabelsActionPerformed
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        try {
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/FiguresLabels.jasper"));
+            JRDataSource data = new JRBeanCollectionDataSource(ScoreController.generateFiguresLabels(meet, true));
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put("MeetDate", meet.getMeetDate());
+            params.put("MeetName", meet.getName());
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, data);
+            JasperViewer.viewReport(jasperPrint, false);
+        } catch (Exception ex) {
+            logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
+        }
+        setCursor(Cursor.getDefaultCursor());
+    }//GEN-LAST:event_reportNovFigureLabelsActionPerformed
+
+    private void reportIntFigureLabelsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportIntFigureLabelsActionPerformed
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        try {
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/FiguresLabels.jasper"));
+            JRDataSource data = new JRBeanCollectionDataSource(ScoreController.generateFiguresLabels(meet, false));
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put("MeetDate", meet.getMeetDate());
+            params.put("MeetName", meet.getName());
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, data);
+            JasperViewer.viewReport(jasperPrint, false);
+        } catch (Exception ex) {
+            logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
+        }
+        setCursor(Cursor.getDefaultCursor());
+    }//GEN-LAST:event_reportIntFigureLabelsActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane figureOrderScrollPane;
     private javax.swing.JRadioButton figureOrderSortByName;
@@ -1038,16 +1116,6 @@ public class SynchroFrame extends javax.swing.JFrame {
     private javax.swing.ButtonGroup figuresOrderSortButtonGroup;
     private javax.swing.JButton generateRandomFiguresOrderButton;
     private javax.swing.JProgressBar intFiguresProgress;
-    private javax.swing.JButton jButton10;
-    private javax.swing.JButton jButton11;
-    private javax.swing.JButton jButton12;
-    private javax.swing.JButton jButton13;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton8;
-    private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -1071,8 +1139,18 @@ public class SynchroFrame extends javax.swing.JFrame {
     private org.aquastarz.score.gui.MaintenancePanel maintenancePanel;
     private org.aquastarz.score.gui.MeetSetupPanel meetSetup;
     private javax.swing.JProgressBar novFiguresProgress;
+    private javax.swing.JButton reportIntFigureLabels;
+    private javax.swing.JButton reportIntMeetSheet;
+    private javax.swing.JButton reportIntRoutines;
+    private javax.swing.JButton reportIntRoutingLabels;
+    private javax.swing.JButton reportIntStation;
     private javax.swing.JButton reportIntermediateFigures;
+    private javax.swing.JButton reportNovFigureLabels;
+    private javax.swing.JButton reportNovMeetSheet;
+    private javax.swing.JButton reportNovRoutineLabels;
+    private javax.swing.JButton reportNovRoutines;
     private javax.swing.JButton reportNoviceFigures;
+    private javax.swing.JButton reportNoviceStation;
     private javax.swing.JPanel reportPanel;
     private javax.swing.JButton reportTeamResults;
     private javax.swing.JPanel routineScore;
