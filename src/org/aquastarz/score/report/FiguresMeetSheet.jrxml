@@ -3,34 +3,53 @@
 	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="43"/>
 	<property name="ireport.y" value="0"/>
-	<style name="table" isDefault="false">
-		<box>
-			<pen lineWidth="1.0" lineColor="#000000"/>
-		</box>
-	</style>
-	<style name="table_TH" isDefault="false" mode="Opaque" backcolor="#FFFFFF">
-		<box>
-			<pen lineWidth="0.5" lineColor="#000000"/>
-		</box>
-	</style>
-	<style name="table_CH" isDefault="false" mode="Opaque" backcolor="#FFBFBF">
-		<box>
-			<pen lineWidth="0.5" lineColor="#000000"/>
-		</box>
-	</style>
-	<style name="table_TD" isDefault="false" mode="Opaque" backcolor="#FFFFFF">
-		<box>
-			<pen lineWidth="0.5" lineColor="#000000"/>
-		</box>
-	</style>
-	<subDataset name="Table Dataset 1"/>
 	<parameter name="MeetDate" class="java.lang.String"/>
 	<parameter name="MeetName" class="java.lang.String"/>
-	<field name="name" class="java.lang.String"/>
+	<field name="firstName" class="java.lang.String"/>
+	<field name="lastName" class="java.lang.String"/>
 	<field name="levelName" class="java.lang.String"/>
 	<field name="place" class="java.lang.Integer"/>
 	<field name="team" class="java.lang.String"/>
 	<field name="score" class="java.math.BigDecimal"/>
+	<field name="figuresOrder" class="java.lang.String"/>
+	<field name="leageNum" class="java.lang.String"/>
+	<field name="figure1" class="java.lang.String"/>
+	<field name="dd1" class="java.lang.String"/>
+	<field name="j11" class="java.lang.String"/>
+	<field name="j21" class="java.lang.String"/>
+	<field name="j31" class="java.lang.String"/>
+	<field name="j41" class="java.lang.String"/>
+	<field name="j51" class="java.lang.String"/>
+	<field name="points1" class="java.lang.String"/>
+	<field name="penalty1" class="java.lang.String"/>
+	<field name="figure2" class="java.lang.String"/>
+	<field name="dd2" class="java.lang.String"/>
+	<field name="j12" class="java.lang.String"/>
+	<field name="j22" class="java.lang.String"/>
+	<field name="j42" class="java.lang.String"/>
+	<field name="j52" class="java.lang.String"/>
+	<field name="j32" class="java.lang.String"/>
+	<field name="penalty2" class="java.lang.String"/>
+	<field name="points2" class="java.lang.String"/>
+	<field name="figure3" class="java.lang.String"/>
+	<field name="dd3" class="java.lang.String"/>
+	<field name="j13" class="java.lang.String"/>
+	<field name="j23" class="java.lang.String"/>
+	<field name="j33" class="java.lang.String"/>
+	<field name="j43" class="java.lang.String"/>
+	<field name="j53" class="java.lang.String"/>
+	<field name="penalty3" class="java.lang.String"/>
+	<field name="points3" class="java.lang.String"/>
+	<field name="figure4" class="java.lang.String"/>
+	<field name="dd4" class="java.lang.String"/>
+	<field name="j14" class="java.lang.String"/>
+	<field name="j24" class="java.lang.String"/>
+	<field name="j34" class="java.lang.String"/>
+	<field name="j44" class="java.lang.String"/>
+	<field name="j54" class="java.lang.String"/>
+	<field name="penalty4" class="java.lang.String"/>
+	<field name="points4" class="java.lang.String"/>
+	<field name="points" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -292,7 +311,7 @@
 			<textField>
 				<reportElement x="175" y="142" width="25" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{j43}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{j44}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="150" y="142" width="25" height="15"/>
