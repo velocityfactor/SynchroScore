@@ -588,6 +588,11 @@ public class SynchroFrame extends javax.swing.JFrame {
         });
 
         reportNovMeetSheet.setText("Nov. Meet Sheet");
+        reportNovMeetSheet.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reportNovMeetSheetActionPerformed(evt);
+            }
+        });
 
         reportNoviceStation.setText("Nov. Station");
         reportNoviceStation.addActionListener(new java.awt.event.ActionListener() {
@@ -604,6 +609,11 @@ public class SynchroFrame extends javax.swing.JFrame {
         });
 
         reportIntMeetSheet.setText("Int. Meet Sheet");
+        reportIntMeetSheet.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reportIntMeetSheetActionPerformed(evt);
+            }
+        });
 
         reportIntStation.setText("Int. Station");
         reportIntStation.addActionListener(new java.awt.event.ActionListener() {
@@ -1103,6 +1113,39 @@ public class SynchroFrame extends javax.swing.JFrame {
         }
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_reportIntFigureLabelsActionPerformed
+
+    private void reportNovMeetSheetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportNovMeetSheetActionPerformed
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        try {
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/FiguresMeetSheet.jasper"));
+            JRDataSource data = new JRBeanCollectionDataSource(ScoreController.generateFiguresMeetSheets(meet, true));
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put("MeetDate", meet.getMeetDate());
+            params.put("MeetName", meet.getName());
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, data);
+            JasperViewer.viewReport(jasperPrint, false);
+        } catch (Exception ex) {
+            logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
+        }
+        setCursor(Cursor.getDefaultCursor());
+    }//GEN-LAST:event_reportNovMeetSheetActionPerformed
+
+    private void reportIntMeetSheetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportIntMeetSheetActionPerformed
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        try {
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/FiguresMeetSheet.jasper"));
+            JRDataSource data = new JRBeanCollectionDataSource(ScoreController.generateFiguresMeetSheets(meet, false));
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put("MeetDate", meet.getMeetDate());
+            params.put("MeetName", meet.getName());
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, data);
+            JasperViewer.viewReport(jasperPrint, false);
+        } catch (Exception ex) {
+            logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
+        }
+        setCursor(Cursor.getDefaultCursor());
+
+    }//GEN-LAST:event_reportIntMeetSheetActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane figureOrderScrollPane;

@@ -452,6 +452,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Nov. Meet Sheet"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="reportNovMeetSheetActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="reportNoviceStation">
               <Properties>
@@ -473,6 +476,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Int. Meet Sheet"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="reportIntMeetSheetActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="reportIntStation">
               <Properties>
