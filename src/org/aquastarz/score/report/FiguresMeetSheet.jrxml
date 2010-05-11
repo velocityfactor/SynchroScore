@@ -12,44 +12,44 @@
 	<field name="team" class="java.lang.String"/>
 	<field name="score" class="java.math.BigDecimal"/>
 	<field name="figuresOrder" class="java.lang.String"/>
-	<field name="leageNum" class="java.lang.String"/>
+	<field name="leagueNum" class="java.lang.Integer"/>
 	<field name="figure1" class="java.lang.String"/>
-	<field name="dd1" class="java.lang.String"/>
-	<field name="j11" class="java.lang.String"/>
-	<field name="j21" class="java.lang.String"/>
-	<field name="j31" class="java.lang.String"/>
-	<field name="j41" class="java.lang.String"/>
-	<field name="j51" class="java.lang.String"/>
-	<field name="points1" class="java.lang.String"/>
-	<field name="penalty1" class="java.lang.String"/>
+	<field name="dd1" class="java.math.BigDecimal"/>
+	<field name="j11" class="java.math.BigDecimal"/>
+	<field name="j21" class="java.math.BigDecimal"/>
+	<field name="j31" class="java.math.BigDecimal"/>
+	<field name="j41" class="java.math.BigDecimal"/>
+	<field name="j51" class="java.math.BigDecimal"/>
+	<field name="score1" class="java.math.BigDecimal"/>
+	<field name="penalty1" class="java.math.BigDecimal"/>
 	<field name="figure2" class="java.lang.String"/>
-	<field name="dd2" class="java.lang.String"/>
-	<field name="j12" class="java.lang.String"/>
-	<field name="j22" class="java.lang.String"/>
-	<field name="j42" class="java.lang.String"/>
-	<field name="j52" class="java.lang.String"/>
-	<field name="j32" class="java.lang.String"/>
-	<field name="penalty2" class="java.lang.String"/>
-	<field name="points2" class="java.lang.String"/>
+	<field name="dd2" class="java.math.BigDecimal"/>
+	<field name="j12" class="java.math.BigDecimal"/>
+	<field name="j22" class="java.math.BigDecimal"/>
+	<field name="j42" class="java.math.BigDecimal"/>
+	<field name="j52" class="java.math.BigDecimal"/>
+	<field name="j32" class="java.math.BigDecimal"/>
+	<field name="penalty2" class="java.math.BigDecimal"/>
+	<field name="score2" class="java.math.BigDecimal"/>
 	<field name="figure3" class="java.lang.String"/>
-	<field name="dd3" class="java.lang.String"/>
-	<field name="j13" class="java.lang.String"/>
-	<field name="j23" class="java.lang.String"/>
-	<field name="j33" class="java.lang.String"/>
-	<field name="j43" class="java.lang.String"/>
-	<field name="j53" class="java.lang.String"/>
-	<field name="penalty3" class="java.lang.String"/>
-	<field name="points3" class="java.lang.String"/>
+	<field name="dd3" class="java.math.BigDecimal"/>
+	<field name="j13" class="java.math.BigDecimal"/>
+	<field name="j23" class="java.math.BigDecimal"/>
+	<field name="j33" class="java.math.BigDecimal"/>
+	<field name="j43" class="java.math.BigDecimal"/>
+	<field name="j53" class="java.math.BigDecimal"/>
+	<field name="penalty3" class="java.math.BigDecimal"/>
+	<field name="score3" class="java.math.BigDecimal"/>
 	<field name="figure4" class="java.lang.String"/>
-	<field name="dd4" class="java.lang.String"/>
-	<field name="j14" class="java.lang.String"/>
-	<field name="j24" class="java.lang.String"/>
-	<field name="j34" class="java.lang.String"/>
-	<field name="j44" class="java.lang.String"/>
-	<field name="j54" class="java.lang.String"/>
-	<field name="penalty4" class="java.lang.String"/>
-	<field name="points4" class="java.lang.String"/>
-	<field name="points" class="java.lang.String"/>
+	<field name="dd4" class="java.math.BigDecimal"/>
+	<field name="j14" class="java.math.BigDecimal"/>
+	<field name="j24" class="java.math.BigDecimal"/>
+	<field name="j34" class="java.math.BigDecimal"/>
+	<field name="j44" class="java.math.BigDecimal"/>
+	<field name="j54" class="java.math.BigDecimal"/>
+	<field name="penalty4" class="java.math.BigDecimal"/>
+	<field name="score4" class="java.math.BigDecimal"/>
+	<field name="points" class="java.math.BigDecimal"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -72,7 +72,8 @@
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[SYNCHRONIZED SWIMMING FIGURE COMPETITION]]></text>
+				<text><![CDATA[SYNCHRONIZED SWIMMING FIGURE COMPETITION
+                ]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="0" y="16" width="169" height="15"/>
@@ -115,7 +116,7 @@
 			<textField>
 				<reportElement x="0" y="50" width="135" height="15"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA["League No.: "+$F{leageNum}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["League No.: "+$F{leagueNum}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="65" width="199" height="15"/>
@@ -132,86 +133,86 @@
 			<textField>
 				<reportElement x="100" y="97" width="25" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{j11}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j11}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="125" y="97" width="25" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{j21}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j21}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="150" y="97" width="25" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{j31}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j31}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="175" y="97" width="25" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{j41}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j41}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="200" y="97" width="25" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{j51}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j51}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="225" y="97" width="33" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{points1}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{score1}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="258" y="97" width="25" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{penalty1}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{penalty1}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="75" y="97" width="25" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{dd1}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{dd1}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="100" y="112" width="25" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{j12}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j12}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="125" y="112" width="25" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{j22}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j22}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="175" y="112" width="25" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{j42}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j42}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="200" y="112" width="25" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{j52}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j52}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="150" y="112" width="25" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{j32}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j32}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="75" y="112" width="25" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{dd2}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{dd2}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="258" y="112" width="25" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{penalty2}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{penalty2}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="225" y="112" width="33" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{points2}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{score2}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="112" width="75" height="15"/>
@@ -223,32 +224,32 @@
 			<textField>
 				<reportElement x="100" y="127" width="25" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{j13}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j13}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="150" y="127" width="25" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{j33}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j33}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="200" y="142" width="25" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{j54}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j54}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="200" y="127" width="25" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{j53}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j53}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="225" y="142" width="33" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{points4}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{score4}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="100" y="142" width="25" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{j14}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j14}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="127" width="75" height="15"/>
@@ -260,7 +261,7 @@
 			<textField>
 				<reportElement x="225" y="127" width="33" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{points3}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{score3}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="142" width="75" height="15"/>
@@ -272,93 +273,101 @@
 			<textField>
 				<reportElement x="125" y="127" width="25" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{j23}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j23}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="175" y="127" width="25" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{j43}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j43}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="75" y="142" width="25" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{dd4}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{dd4}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="">
 				<reportElement x="258" y="142" width="25" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{penalty4}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{penalty4}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="75" y="127" width="25" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{dd3}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{dd3}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="258" y="127" width="25" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{penalty3}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{penalty3}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="125" y="142" width="25" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{j24}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j24}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="175" y="142" width="25" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{j44}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j44}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="150" y="142" width="25" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{j34}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j34}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="75" y="82" width="25" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom">
 					<font size="8"/>
 				</textElement>
-				<text><![CDATA[DD]]></text>
+				<text><![CDATA[DD
+                ]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="100" y="82" width="25" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom"/>
-				<text><![CDATA[J1]]></text>
+				<text><![CDATA[J1
+                ]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="125" y="82" width="25" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom"/>
-				<text><![CDATA[J2]]></text>
+				<text><![CDATA[J2
+                ]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="150" y="82" width="25" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom"/>
-				<text><![CDATA[J3]]></text>
+				<text><![CDATA[J3
+                ]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="175" y="82" width="25" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom"/>
-				<text><![CDATA[J4]]></text>
+				<text><![CDATA[J4
+                ]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="200" y="82" width="25" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom"/>
-				<text><![CDATA[J5]]></text>
+				<text><![CDATA[J5
+                ]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="225" y="82" width="33" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom"/>
-				<text><![CDATA[TotPts.]]></text>
+				<text><![CDATA[TotPts.
+                ]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="258" y="82" width="25" height="15"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom"/>
-				<text><![CDATA[Pen.]]></text>
+				<text><![CDATA[Pen.
+                ]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="75" y="189" width="183" height="15"/>

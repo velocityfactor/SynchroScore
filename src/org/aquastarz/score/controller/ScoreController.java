@@ -49,6 +49,7 @@ import org.aquastarz.score.domain.Team;
 import org.aquastarz.score.gui.MeetSelectionDialog;
 import org.aquastarz.score.gui.SynchroFrame;
 import org.aquastarz.score.report.FiguresLabel;
+import org.aquastarz.score.report.FiguresMeetSheet;
 
 /**
  *
@@ -360,6 +361,18 @@ public class ScoreController {
             if (isNovice(fp) == isNovice) {
                 FiguresLabel fl = new FiguresLabel(fp.getSwimmer().getLevel().getName(), fp.getSwimmer().getLevel().getSortOrder(), fp.getSwimmer().getFirstName() + " " + fp.getSwimmer().getLastName(), fp.getPlace(), fp.getSwimmer().getTeam().getTeamId(), fp.getTotalScore());
                 results.add(fl);
+            }
+        }
+        Collections.sort(results);
+        return results;
+    }
+
+    public static List<FiguresMeetSheet> generateFiguresMeetSheets(Meet meet, boolean isNovice) {
+        List<FiguresMeetSheet> results = new ArrayList<FiguresMeetSheet>();
+
+        for (FiguresParticipant fp : meet.getFiguresParticipants()) {
+            if (isNovice(fp) == isNovice) {
+                results.add(new FiguresMeetSheet(fp));
             }
         }
         Collections.sort(results);
