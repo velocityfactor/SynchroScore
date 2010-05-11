@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Figures Labels" columnCount="3" printOrder="Horizontal" pageWidth="612" pageHeight="792" columnWidth="185" columnSpacing="10" leftMargin="18" rightMargin="18" topMargin="18" bottomMargin="18">
+<!--
+   SynchroScore
+   Copyright (C) 2009 Shayne Hughes
+
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Figures Labels" columnCount="3" printOrder="Horizontal" pageWidth="612" pageHeight="792" columnWidth="187" columnSpacing="11" leftMargin="14" rightMargin="14" topMargin="36" bottomMargin="36">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -23,41 +40,41 @@
 		<band splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="100" splitType="Stretch">
+		<band height="72" splitType="Prevent">
 			<textField>
-				<reportElement x="0" y="52" width="184" height="15"/>
+				<reportElement x="6" y="43" width="184" height="14"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA["NAME: "+$F{name}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="7" width="184" height="15"/>
+				<reportElement x="6" y="0" width="184" height="14"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[VFCAL SYNCHRONIZED SWIMMING]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="0" y="22" width="184" height="15"/>
+				<reportElement x="6" y="15" width="184" height="14"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA["MEET: "+$P{MeetName}+" "+$P{MeetDate}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="37" width="184" height="15"/>
+				<reportElement x="6" y="29" width="184" height="14"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA["LEVEL: "+$F{levelName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="67" width="50" height="15"/>
+				<reportElement x="6" y="57" width="50" height="14"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA["PLACE: "+$F{place}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="50" y="67" width="60" height="15"/>
+				<reportElement x="56" y="57" width="60" height="14"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA["TEAM: "+$F{team}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="110" y="67" width="74" height="15"/>
+				<reportElement x="116" y="57" width="74" height="14"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA["SCORE: "+$F{score}]]></textFieldExpression>
 			</textField>
