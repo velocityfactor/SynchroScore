@@ -66,6 +66,12 @@ public class Bootstrap {
         checkAndPersistLevel(entityManager, "I15-16", "Intermediate 15-16", 8);
         checkAndPersistLevel(entityManager, "I17-18", "Intermediate 17-18", 9);
 
+        checkAndPersistRoutineLevel(entityManager, "N12U", "Novice 12 and Under", 1);
+        checkAndPersistRoutineLevel(entityManager, "N13O", "Novice 13 and Over", 2);
+        checkAndPersistRoutineLevel(entityManager, "I11", "Intermediate 11-14", 3);
+        checkAndPersistRoutineLevel(entityManager, "I15", "Intermediate 15-18", 4);
+        checkAndPersistRoutineLevel(entityManager, "I11T", "Int. 11 and Over Team", 5);
+
         checkAndPersistTeam(entityManager, "AUB", "Auburn Mermaids");
         checkAndPersistTeam(entityManager, "COR", "Cordova Cordettes");
         checkAndPersistTeam(entityManager, "FEC", "Fulton El Camino Stingrays");
@@ -92,6 +98,12 @@ public class Bootstrap {
     public static void checkAndPersistLevel(EntityManager entityManager, String key, String name, int sortOrder) {
         if (entityManager.find(Level.class, key) == null) {
             entityManager.persist(new Level(key, name, sortOrder));
+        }
+    }
+
+    public static void checkAndPersistRoutineLevel(EntityManager entityManager, String key, String name, int sortOrder) {
+        if (entityManager.find(RoutineLevel.class, key) == null) {
+            entityManager.persist(new RoutineLevel(key, name, sortOrder));
         }
     }
 
