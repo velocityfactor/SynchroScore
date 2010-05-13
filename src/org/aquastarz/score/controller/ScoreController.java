@@ -127,6 +127,7 @@ public class ScoreController {
         try {
             return (Meet) query.getSingleResult();
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }

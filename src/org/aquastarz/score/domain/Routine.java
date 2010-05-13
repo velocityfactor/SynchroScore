@@ -45,6 +45,10 @@ public class Routine implements Serializable {
     @Basic(optional = false)
     private Long routineId;
 
+    @ManyToOne
+    @JoinColumn(name = "meet")
+    private Season meet;
+
     @Basic(optional = false)
     @Column(name = "name", nullable = false, length = 60)
     private String name;

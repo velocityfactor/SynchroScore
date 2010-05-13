@@ -80,7 +80,6 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("SynchroScore");
         setAlwaysOnTop(true);
-        setBackground(new java.awt.Color(255, 255, 255));
         setModal(true);
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -90,14 +89,14 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
         });
 
         buttonGroup1.add(newMeetButton);
-        newMeetButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        newMeetButton.setFont(new java.awt.Font("Tahoma", 0, 14));
         newMeetButton.setText("New Meet");
 
         buttonGroup1.add(existingMeetButton);
         existingMeetButton.setFont(new java.awt.Font("Tahoma", 0, 14));
         existingMeetButton.setText("Existing Meet");
 
-        meetCombo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        meetCombo.setFont(new java.awt.Font("Tahoma", 0, 14));
         meetCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         meetCombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -130,7 +129,8 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("SynchroScore 0.8");
+        jLabel2.setText("SynchroScore");
+        jLabel2.setText(jLabel2.getText()+" "+ScoreApp.getVersion());
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -149,10 +149,10 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
                 .addContainerGap())
         );
 
-        seasonLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        seasonLabel.setFont(new java.awt.Font("Tahoma", 0, 14));
         seasonLabel.setText("Season:");
 
-        seasonCombo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        seasonCombo.setFont(new java.awt.Font("Tahoma", 0, 14));
         seasonCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         seasonCombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

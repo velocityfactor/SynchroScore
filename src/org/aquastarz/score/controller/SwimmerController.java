@@ -17,18 +17,19 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 // </editor-fold>
-package org.aquastarz.score.db;
+package org.aquastarz.score.controller;
 
 import java.util.List;
 import javax.persistence.Query;
 import org.aquastarz.score.ScoreApp;
+import org.aquastarz.score.domain.Level;
 import org.aquastarz.score.domain.Season;
 import org.aquastarz.score.domain.Swimmer;
 import org.aquastarz.score.domain.Team;
 
-public class SwimmerDB {
+public class SwimmerController {
     private static org.apache.log4j.Logger logger =
-            org.apache.log4j.Logger.getLogger(SwimmerDB.class.getName());
+            org.apache.log4j.Logger.getLogger(SwimmerController.class.getName());
 
     public static Swimmer findByLeagueNum(Integer leagueNum, Season season) {
         Query swimmerQuery = ScoreApp.getEntityManager().createNamedQuery("Swimmer.findByLeagueNumAndSeason");
@@ -39,7 +40,7 @@ public class SwimmerDB {
             swimmer = (Swimmer)swimmerQuery.getSingleResult();
         }
         catch(Exception e) {
-            logger.error("Swimmer not found.  Season="+season.getSeasonId()+" leagueNum="+leagueNum,e);
+            //Ignore not found error
         }
         return swimmer;
     }
@@ -51,6 +52,4 @@ public class SwimmerDB {
         List<Swimmer> swimmers = swimmerQuery.getResultList();
         return swimmers;
     }
-
-
 }
