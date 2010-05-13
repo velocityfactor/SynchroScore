@@ -198,8 +198,11 @@
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="0"/>
-            <Property name="text" type="java.lang.String" value="SynchroScore 0.8"/>
+            <Property name="text" type="java.lang.String" value="SynchroScore"/>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="jLabel2.setText(jLabel2.getText()+&quot; &quot;+ScoreApp.getVersion());"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>

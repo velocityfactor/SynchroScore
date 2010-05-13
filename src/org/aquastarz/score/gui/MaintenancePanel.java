@@ -11,8 +11,11 @@
 
 package org.aquastarz.score.gui;
 
+import java.awt.Cursor;
 import java.beans.Beans;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import org.aquastarz.score.ScoreApp;
 import org.aquastarz.score.config.Bootstrap;
 
@@ -43,21 +46,17 @@ public class MaintenancePanel extends javax.swing.JPanel {
     private void initComponents() {
 
         maintenanceTab = new javax.swing.JTabbedPane();
+        updateForm = new javax.swing.JPanel();
+        load2009TestDataButton = new javax.swing.JButton();
+        clearDBButton = new javax.swing.JButton();
         swimmerForm1 = new org.aquastarz.score.gui.dbform.SwimmerForm();
         teamForm1 = new org.aquastarz.score.gui.dbform.TeamForm();
         figureForm1 = new org.aquastarz.score.gui.dbform.FigureForm();
         levelForm1 = new org.aquastarz.score.gui.dbform.LevelForm();
-        jPanel1 = new javax.swing.JPanel();
-        load2009TestDataButton = new javax.swing.JButton();
-        clearDBButton = new javax.swing.JButton();
 
         maintenanceTab.setTabPlacement(javax.swing.JTabbedPane.LEFT);
-        maintenanceTab.addTab("Swimmers", swimmerForm1);
-        maintenanceTab.addTab("Teams", teamForm1);
-        maintenanceTab.addTab("Figures", figureForm1);
-        maintenanceTab.addTab("Levels", levelForm1);
 
-        load2009TestDataButton.setText("Load 2009 Test Data");
+        load2009TestDataButton.setText("Load Data File");
         load2009TestDataButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 load2009TestDataButtonActionPerformed(evt);
@@ -71,28 +70,35 @@ public class MaintenancePanel extends javax.swing.JPanel {
             }
         });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout updateFormLayout = new javax.swing.GroupLayout(updateForm);
+        updateForm.setLayout(updateFormLayout);
+        updateFormLayout.setHorizontalGroup(
+            updateFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(updateFormLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(load2009TestDataButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(clearDBButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(739, Short.MAX_VALUE))
+                .addGroup(updateFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(updateFormLayout.createSequentialGroup()
+                        .addComponent(load2009TestDataButton)
+                        .addContainerGap(772, Short.MAX_VALUE))
+                    .addGroup(updateFormLayout.createSequentialGroup()
+                        .addComponent(clearDBButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(766, 766, 766))))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(4, 4, 4)
-                .addComponent(clearDBButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        updateFormLayout.setVerticalGroup(
+            updateFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(updateFormLayout.createSequentialGroup()
+                .addGap(33, 33, 33)
                 .addComponent(load2009TestDataButton)
-                .addContainerGap(402, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 368, Short.MAX_VALUE)
+                .addComponent(clearDBButton)
+                .addContainerGap())
         );
 
-        maintenanceTab.addTab("Advanced", jPanel1);
+        maintenanceTab.addTab("Update", updateForm);
+        maintenanceTab.addTab("Swimmers", swimmerForm1);
+        maintenanceTab.addTab("Teams", teamForm1);
+        maintenanceTab.addTab("Figures", figureForm1);
+        maintenanceTab.addTab("Levels", levelForm1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -118,11 +124,24 @@ public class MaintenancePanel extends javax.swing.JPanel {
 
     private void load2009TestDataButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_load2009TestDataButtonActionPerformed
         Bootstrap.loadLeagueData();  //Just in case we cleared the db
-        Bootstrap.load2009Season();
-        JOptionPane.showMessageDialog(this, "Done.");
+
+        JFileChooser jfc = new JFileChooser();
+        jfc.setDialogTitle("Open SynchroScore data update");
+        jfc.setFileFilter(new FileNameExtensionFilter("Zip file","zip"));
+        int ret = jfc.showOpenDialog(this);
+        if(ret == JFileChooser.APPROVE_OPTION) {
+            setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            Bootstrap.loadUpdateData(jfc.getSelectedFile());
+            setCursor(Cursor.getDefaultCursor());
+            JOptionPane.showMessageDialog(this, "Done.");
+        }
 }//GEN-LAST:event_load2009TestDataButtonActionPerformed
 
     private void clearDBButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearDBButtonActionPerformed
+        int ret = JOptionPane.showConfirmDialog(maintenanceTab, "Are you sure you want to wipe out all meets, swimmers, scores, etc?","Confirm Delete",JOptionPane.YES_NO_OPTION);
+        if(ret!=JOptionPane.YES_OPTION) return;
+        ret = JOptionPane.showConfirmDialog(maintenanceTab, "Really?  Everything?  There's no going back.  You may regret this.","Confirm Delete",JOptionPane.YES_NO_OPTION);
+        if(ret!=JOptionPane.YES_OPTION) return;
         org.aquastarz.score.config.Bootstrap.clearDB(ScoreApp.getEntityManager());
         JOptionPane.showMessageDialog(this, "Done.");
 }//GEN-LAST:event_clearDBButtonActionPerformed
@@ -131,12 +150,12 @@ public class MaintenancePanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton clearDBButton;
     private org.aquastarz.score.gui.dbform.FigureForm figureForm1;
-    private javax.swing.JPanel jPanel1;
     private org.aquastarz.score.gui.dbform.LevelForm levelForm1;
     private javax.swing.JButton load2009TestDataButton;
     private javax.swing.JTabbedPane maintenanceTab;
     private org.aquastarz.score.gui.dbform.SwimmerForm swimmerForm1;
     private org.aquastarz.score.gui.dbform.TeamForm teamForm1;
+    private javax.swing.JPanel updateForm;
     // End of variables declaration//GEN-END:variables
 
 }
