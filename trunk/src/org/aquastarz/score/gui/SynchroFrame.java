@@ -52,7 +52,7 @@ import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
 import org.aquastarz.score.ScoreApp;
 import org.aquastarz.score.controller.ScoreController;
-import org.aquastarz.score.db.SwimmerDB;
+import org.aquastarz.score.controller.SwimmerController;
 import org.aquastarz.score.domain.FiguresParticipant;
 import org.aquastarz.score.domain.Meet;
 import org.aquastarz.score.domain.Swimmer;
@@ -226,11 +226,11 @@ public class SynchroFrame extends javax.swing.JFrame {
         teamTabs.removeAll();
         SwimmerSelectionPanel panel = new SwimmerSelectionPanel(meet.getHomeTeam());
         teamTabs.add(meet.getHomeTeam().getTeamId(), panel);
-        panel.setSwimmers(SwimmerDB.getSwimmers(meet.getHomeTeam()), meet.getSwimmers());
+        panel.setSwimmers(SwimmerController.getSwimmers(meet.getHomeTeam()), meet.getSwimmers());
         for (Team opponent : meet.getOpponents()) {
             panel = new SwimmerSelectionPanel(opponent);
             teamTabs.add(opponent.getTeamId(), panel);
-            panel.setSwimmers(SwimmerDB.getSwimmers(opponent), meet.getSwimmers());
+            panel.setSwimmers(SwimmerController.getSwimmers(opponent), meet.getSwimmers());
         }
     }
 
@@ -369,7 +369,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         routinesProgress = new javax.swing.JProgressBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Synchro Scoring");
+        setTitle("SynchroScore");
         setIconImage(appIcon);
         setMinimumSize(new java.awt.Dimension(603, 200));
         setName(""); // NOI18N

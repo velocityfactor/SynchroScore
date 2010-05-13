@@ -37,9 +37,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 
 @Entity
+@Table(uniqueConstraints={@UniqueConstraint(columnNames={"season","name"})})
 @NamedQueries({
     @NamedQuery(name = "Meet.findAllBySeasonOrderByDateDesc", query = "SELECT m FROM Meet m where m.season like :season order by m.meetDate desc"),
     @NamedQuery(name = "Meet.findBySeasonAndName", query = "SELECT m FROM Meet m where m.season like :season and m.name like :name")})

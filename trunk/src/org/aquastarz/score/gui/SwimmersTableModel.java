@@ -49,7 +49,7 @@ public class SwimmersTableModel implements TableModel {
 
     public SwimmersTableModel(Collection<Swimmer> swimmers) {
         for (Swimmer swimmer : swimmers) {
-            TableItem item = new TableItem(swimmer.getSwimmerId().toString(), swimmer.getLastName(), swimmer.getFirstName(), swimmer.getTeam().getTeamId(), swimmer.getLevel().toString());
+            TableItem item = new TableItem(swimmer.getLeagueNum().toString(), swimmer.getLastName(), swimmer.getFirstName(), swimmer.getTeam().getTeamId(), swimmer.getLevel().toString());
             items.add(item);
         }
     }

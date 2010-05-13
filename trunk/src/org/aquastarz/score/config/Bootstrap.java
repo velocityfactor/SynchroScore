@@ -20,18 +20,24 @@
 package org.aquastarz.score.config;
 
 import au.com.bytecode.opencsv.CSVReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import org.aquastarz.score.domain.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import javax.persistence.EntityManager;
 import org.aquastarz.score.ScoreApp;
 import org.aquastarz.score.controller.ScoreController;
-import org.aquastarz.score.db.SwimmerDB;
+import org.aquastarz.score.controller.SeasonController;
+import org.aquastarz.score.controller.SwimmerController;
 import org.aquastarz.score.domain.Season;
 
 public class Bootstrap {
@@ -119,39 +125,86 @@ public class Bootstrap {
         }
     }
 
-    public static void load2009Season() {
-        EntityManager entityManager = ScoreApp.getEntityManager();
-        Season season = ScoreController.getSeason("2009");
-        if (season == null) {
-            season = new Season("2009");
-            entityManager.getTransaction().begin();
-            entityManager.persist(season);
-            entityManager.getTransaction().commit();
+    public static void loadUpdateData(File zipFile) {
+        //This must read through the zip entries in order, so it handles
+        //any ordering
+        try {
+            InputStream theFile = new FileInputStream(zipFile);
+            ZipInputStream stream = new ZipInputStream(theFile);
 
-            loadRoster(season);
+            //Save the meets and results for later and put them together for
+            //processing
+            Map<String, Map<String, LegacyResult>> lrMap = new HashMap<String, Map<String, LegacyResult>>();
+            Map<String, LegacyMeet> lmMap = new HashMap<String, LegacyMeet>();
 
-            if (ScoreController.findMeet(season, "DAVSUN") == null) {
-                loadLegacyMeet(season, "DAVSUN");
+            try {
+                ZipEntry entry;
+                while ((entry = stream.getNextEntry()) != null) {
+                    String fname = entry.getName();
+                    String folder = null;
+                    int i = fname.lastIndexOf("/");
+                    if (i > 0) {
+                        folder = fname.substring(0, i);
+                    }
+                    String s = String.format("Entry: %s len %d added %TD",
+                            fname, entry.getSize(),
+                            new Date(entry.getTime()));
+                    System.out.println(s);
+                    if (fname.toUpperCase().endsWith("ROSTER.CSV") && folder != null) {
+                        System.out.println("Season = " + folder);
+                        Season season = SeasonController.findOrCreate(folder);
+                        loadRoster(season, stream);
+                    } else if (fname.toUpperCase().endsWith("RESULTS.CSV")) {
+                        lrMap.put(folder, readLegacyResults(stream));
+                    } else if (fname.toUpperCase().endsWith("FIGSTAT.CSV")) {
+                        lmMap.put(folder, readLegacyMeet(stream));
+                    }
+                }
+            } finally {
+                // we must always close the zip file.
+                stream.close();
             }
+
+            //Now put all the meet data togther and load it
+            for (String folder : lmMap.keySet()) {
+                int i = folder.indexOf("/");
+                if (i > 0) {
+                    String seasonName = folder.substring(0, i);
+                    LegacyMeet lm = lmMap.get(folder);
+                    lm.setResults(lrMap.get(folder));
+                    Season season = SeasonController.findOrCreate(seasonName);
+                    
+                    //Skip if we have a meet with same name
+                    if (ScoreController.findMeet(season, lm.meetTitle) == null) {
+                        if (lm.getResults() != null && season != null) {
+                            loadLegacyMeet(season, lm);
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    public static void loadRoster(Season season) {
+    public static void loadRoster(Season season, InputStream is) {
         EntityManager entityManager = ScoreApp.getEntityManager();
 
         //Map legacy level names to current
         Map<String, Level> levels = new HashMap<String, Level>();
-        levels.put("NOV8 & Under", entityManager.find(Level.class, "N8"));
+        levels.put("NOV8 & UNDER", entityManager.find(Level.class, "N8"));
         levels.put("NOV9-10", entityManager.find(Level.class, "N9-10"));
         levels.put("NOV11-12", entityManager.find(Level.class, "N11-12"));
         levels.put("NOV13-14", entityManager.find(Level.class, "N13-14"));
         levels.put("NOV15-18 (N)", entityManager.find(Level.class, "N15-18"));
+        levels.put("NOV15-18", entityManager.find(Level.class, "N15-18"));
         levels.put("INT11-12", entityManager.find(Level.class, "I11-12"));
         levels.put("INT13-14", entityManager.find(Level.class, "I13-14"));
         levels.put("INT15-16 (I)", entityManager.find(Level.class, "I15-16"));
         levels.put("INT17-18 (I)", entityManager.find(Level.class, "I17-18"));
+        levels.put("INT15-16", entityManager.find(Level.class, "I15-16"));
+        levels.put("INT17-18", entityManager.find(Level.class, "I17-18"));
 
-        InputStream is = Bootstrap.class.getResourceAsStream("Season" + season.getName() + "/roster.csv");
         InputStreamReader isr = new InputStreamReader(is);
         CSVReader csv = new CSVReader(isr);
         String[] nextLine;
@@ -160,34 +213,28 @@ public class Bootstrap {
             entityManager.getTransaction().begin();
             while ((nextLine = csv.readNext()) != null) {
                 LegacySwimmer ls = new LegacySwimmer(nextLine);
-                Team team = (Team) entityManager.find(Team.class, ls.team);
-                Level level = levels.get(ls.novInt + ls.ageGrp);
+                Team team = (Team) entityManager.find(Team.class, ls.team.toUpperCase());
+                Level level = levels.get((ls.novInt + ls.ageGrp).toUpperCase());
                 if (level == null) {
                     System.out.println("Level not found [" + ls.novInt + ls.ageGrp + "]");
                 }
-                Swimmer swimmer = new Swimmer(ls.code, season, team, level, ls.gName, ls.sName);
+                Swimmer swimmer = SwimmerController.findByLeagueNum(ls.code, season);
+                if (swimmer == null) {
+                    swimmer = new Swimmer(ls.code, season, team, level, ls.gName, ls.sName);
+                }
                 entityManager.persist(swimmer);
             }
             entityManager.getTransaction().commit();
-            csv.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
-    public static List<Object> loadLegacyMeet(Season season, String name) {
-        List<FigureScoreTracker> figureScoreTrackers = new ArrayList<FigureScoreTracker>();
-        List<FiguresParticipantTracker> figuresParticipantTrackers = new ArrayList<FiguresParticipantTracker>();
-        ArrayList<Object> retVals = new ArrayList<Object>();
-        retVals.add(figureScoreTrackers);
-        retVals.add(figuresParticipantTrackers);
+    private static Map<String, LegacyResult> readLegacyResults(InputStream is) {
         Map<String, LegacyResult> legacyResults = new HashMap<String, LegacyResult>();
-        LegacyMeet legacyMeet = null;
-        Meet meet = null;
-        EntityManager entityManager = ScoreApp.getEntityManager();
 
-        CSVReader csv = new CSVReader(new InputStreamReader(Bootstrap.class.getResourceAsStream("Season" + season.getName() + "/" + name + "/results.csv")));
+        CSVReader csv = new CSVReader(new InputStreamReader(is));
         String[] nextLine;
         try {
             csv.readNext(); //skip header
@@ -195,20 +242,37 @@ public class Bootstrap {
                 LegacyResult lr = new LegacyResult(nextLine);
                 legacyResults.put(lr.swmrNo, lr);
             }
-            csv.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        csv = new CSVReader(new InputStreamReader(Bootstrap.class.getResourceAsStream("Season" + season.getName() + "/" + name + "/figstat.csv")));
+        return legacyResults;
+    }
+
+    private static LegacyMeet readLegacyMeet(InputStream is) {
+        CSVReader csv = new CSVReader(new InputStreamReader(is));
+        String[] nextLine;
+        LegacyMeet legacyMeet = null;
 
         try {
             csv.readNext(); //skip header
             nextLine = csv.readNext();
             legacyMeet = new LegacyMeet(nextLine);
-            csv.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return legacyMeet;
+    }
+
+    public static List<Object> loadLegacyMeet(Season season, LegacyMeet legacyMeet) {
+        List<FigureScoreTracker> figureScoreTrackers = new ArrayList<FigureScoreTracker>();
+        List<FiguresParticipantTracker> figuresParticipantTrackers = new ArrayList<FiguresParticipantTracker>();
+        ArrayList<Object> retVals = new ArrayList<Object>();
+        retVals.add(figureScoreTrackers);
+        retVals.add(figuresParticipantTrackers);
+        Meet meet = null;
+        EntityManager entityManager = ScoreApp.getEntityManager();
+
+        Map<String, LegacyResult> legacyResults = legacyMeet.getResults();
 
         meet = new Meet();
         meet.setName(legacyMeet.meetTitle);
@@ -261,7 +325,7 @@ public class Bootstrap {
             FiguresParticipant fp = new FiguresParticipant();
             fp.setFigureOrder(lr.swmrNo);
 
-            fp.setSwimmer(SwimmerDB.findByLeagueNum(lr.leagueNo, season));
+            fp.setSwimmer(SwimmerController.findByLeagueNum(lr.leagueNo, season));
             fp.setMeet(meet);
 
             entityManager.getTransaction().begin();
@@ -279,10 +343,11 @@ public class Bootstrap {
             List<FigureScore> scores = new ArrayList<FigureScore>();
             int figNum = 1;
             for (int i = 0; i < 4; i++) {
-                if (!"N8".equals(fp.getSwimmer().getLevel().getLevelId()) || ((i == 0 && legacyMeet.n8USta1)
+                if (!"N8".equals(fp.getSwimmer().getLevel().getLevelId())
+                        || (i == 0 && legacyMeet.n8USta1)
                         || (i == 1 && legacyMeet.n8USta2)
                         || (i == 2 && legacyMeet.n8USta3)
-                        || (i == 3 && legacyMeet.n8USta4))) {
+                        || (i == 3 && legacyMeet.n8USta4)) {
                     FigureScore fs = new FigureScore();
                     fs.setFiguresParticipant(fp);
                     if ("N8".equals(fp.getSwimmer().getLevel().getLevelId())) {
@@ -505,6 +570,15 @@ public class Bootstrap {
         String iSta4;
         BigDecimal iS4DD;
         String iS4Des;
+        Map<String, LegacyResult> results;
+
+        public Map<String, LegacyResult> getResults() {
+            return results;
+        }
+
+        public void setResults(Map<String, LegacyResult> results) {
+            this.results = results;
+        }
 
         LegacyMeet(String line[]) {
             meetType = line[0];

@@ -34,9 +34,10 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "swimmer")
+@Table(uniqueConstraints={@UniqueConstraint(columnNames={"season","leagueNum"})})
 @NamedQueries({@NamedQuery(name = "Swimmer.findByTeamIdAndSeasonOrderByLeagueNum", query = "SELECT s FROM Swimmer s where s.team.teamId like :teamId and s.season like :season order by leagueNum"),
     @NamedQuery(name = "Swimmer.findByLeagueNumAndSeason", query = "SELECT s FROM Swimmer s where s.leagueNum like :leagueNum and s.season = :season"),
     @NamedQuery(name = "Swimmer.findByTeamIdAndSeasonOrderByName", query = "SELECT s FROM Swimmer s where s.team.teamId like :teamId and s.season like :season order by lastName,firstName"),
@@ -73,7 +74,7 @@ public class Swimmer implements Serializable {
     private Team team;
 
     @ManyToOne(optional = false)
-//    @JoinColumn(name = "season", referencedColumnName = "seasonId", nullable = false)
+    @JoinColumn(name = "season")
     private Season season;
 
     public Swimmer() {
