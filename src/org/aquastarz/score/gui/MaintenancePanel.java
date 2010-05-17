@@ -54,6 +54,8 @@ public class MaintenancePanel extends javax.swing.JPanel {
         figureForm1 = new org.aquastarz.score.gui.dbform.FigureForm();
         levelForm1 = new org.aquastarz.score.gui.dbform.LevelForm();
 
+        setLayout(new java.awt.CardLayout());
+
         maintenanceTab.setTabPlacement(javax.swing.JTabbedPane.LEFT);
 
         load2009TestDataButton.setText("Load Data File");
@@ -79,7 +81,7 @@ public class MaintenancePanel extends javax.swing.JPanel {
                 .addGroup(updateFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(updateFormLayout.createSequentialGroup()
                         .addComponent(load2009TestDataButton)
-                        .addContainerGap(772, Short.MAX_VALUE))
+                        .addContainerGap(757, Short.MAX_VALUE))
                     .addGroup(updateFormLayout.createSequentialGroup()
                         .addComponent(clearDBButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(766, 766, 766))))
@@ -100,26 +102,7 @@ public class MaintenancePanel extends javax.swing.JPanel {
         maintenanceTab.addTab("Figures", figureForm1);
         maintenanceTab.addTab("Levels", levelForm1);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 951, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(maintenanceTab, javax.swing.GroupLayout.DEFAULT_SIZE, 951, Short.MAX_VALUE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 463, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(maintenanceTab, javax.swing.GroupLayout.DEFAULT_SIZE, 463, Short.MAX_VALUE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-        );
+        add(maintenanceTab, "card2");
     }// </editor-fold>//GEN-END:initComponents
 
     private void load2009TestDataButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_load2009TestDataButtonActionPerformed

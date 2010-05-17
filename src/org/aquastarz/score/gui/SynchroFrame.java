@@ -53,6 +53,7 @@ import net.sf.jasperreports.view.JasperViewer;
 import org.aquastarz.score.ScoreApp;
 import org.aquastarz.score.controller.ScoreController;
 import org.aquastarz.score.controller.SwimmerController;
+import org.aquastarz.score.controller.listener.SwimmerControllerListener;
 import org.aquastarz.score.domain.FiguresParticipant;
 import org.aquastarz.score.domain.Meet;
 import org.aquastarz.score.domain.Swimmer;
@@ -201,6 +202,14 @@ public class SynchroFrame extends javax.swing.JFrame {
 
             public void figuresParticipantSet() {
                 figureScorePanel.requestFocus();
+            }
+        });
+
+        SwimmerController.addListener(new SwimmerControllerListener() {
+
+            public void swimmerUpdated(Swimmer swimmer) {
+                updateSwimmerTab();
+                updateFiguresOrderList();
             }
         });
     }
@@ -409,7 +418,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         swimmersLayout.setHorizontalGroup(
             swimmersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, swimmersLayout.createSequentialGroup()
-                .addComponent(teamTabs, javax.swing.GroupLayout.DEFAULT_SIZE, 685, Short.MAX_VALUE)
+                .addComponent(teamTabs, javax.swing.GroupLayout.DEFAULT_SIZE, 610, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(swimmersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(saveSwimmersButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -478,7 +487,7 @@ public class SynchroFrame extends javax.swing.JFrame {
             figuresOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, figuresOrderLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(figureOrderScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 713, Short.MAX_VALUE)
+                .addComponent(figureOrderScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 638, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(figuresOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5)
@@ -547,7 +556,7 @@ public class SynchroFrame extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(saveFigureScoreButton)
-                .addContainerGap(739, Short.MAX_VALUE))
+                .addContainerGap(664, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -571,7 +580,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         routineScore.setLayout(routineScoreLayout);
         routineScoreLayout.setHorizontalGroup(
             routineScoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 814, Short.MAX_VALUE)
+            .addGap(0, 739, Short.MAX_VALUE)
         );
         routineScoreLayout.setVerticalGroup(
             routineScoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -675,7 +684,7 @@ public class SynchroFrame extends javax.swing.JFrame {
                         .addComponent(reportIntermediateFigures)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(reportTeamResults)))
-                .addContainerGap(377, Short.MAX_VALUE))
+                .addContainerGap(302, Short.MAX_VALUE))
         );
 
         reportPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {reportIntFigureLabels, reportIntMeetSheet, reportIntRoutines, reportIntRoutingLabels, reportIntStation, reportIntermediateFigures, reportTeamResults});
@@ -796,7 +805,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         leaguePanelLayout.setHorizontalGroup(
             leaguePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, leaguePanelLayout.createSequentialGroup()
-                .addComponent(swimmerScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 733, Short.MAX_VALUE)
+                .addComponent(swimmerScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 658, Short.MAX_VALUE)
                 .addGroup(leaguePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(leaguePanelLayout.createSequentialGroup()
                         .addGap(6, 6, 6)
@@ -839,6 +848,8 @@ public class SynchroFrame extends javax.swing.JFrame {
         );
 
         tabPane.addTab("League", leaguePanel);
+
+        maintenancePanel.setPreferredSize(new java.awt.Dimension(1000, 463));
         tabPane.addTab("Maintenance", maintenancePanel);
 
         getContentPane().add(tabPane, java.awt.BorderLayout.PAGE_START);
@@ -1011,14 +1022,14 @@ public class SynchroFrame extends javax.swing.JFrame {
 
     private void reportTeamResultsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportTeamResultsActionPerformed
         if (!ScoreController.meetResultsValid(meet)) {
-            JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors()!=null?meet.getCalcErrors():"");
+            JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors() != null ? meet.getCalcErrors() : "");
             return;
         }
 
         Map<Team, BigDecimal> points = ScoreController.calculateTeamPoints(meet);
 
         if (points == null) {
-            JOptionPane.showMessageDialog(this, "Cannot display report.  Points not calculated.  " + meet.getCalcErrors()!=null?meet.getCalcErrors():"");
+            JOptionPane.showMessageDialog(this, "Cannot display report.  Points not calculated.  " + meet.getCalcErrors() != null ? meet.getCalcErrors() : "");
             return;
         }
 
@@ -1043,11 +1054,9 @@ public class SynchroFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_reportTeamResultsActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void reportNoviceStationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportNoviceStationActionPerformed
@@ -1146,7 +1155,6 @@ public class SynchroFrame extends javax.swing.JFrame {
         setCursor(Cursor.getDefaultCursor());
 
     }//GEN-LAST:event_reportIntMeetSheetActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane figureOrderScrollPane;
     private javax.swing.JRadioButton figureOrderSortByName;
