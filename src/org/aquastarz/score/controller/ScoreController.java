@@ -127,7 +127,6 @@ public class ScoreController {
         try {
             return (Meet) query.getSingleResult();
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -151,11 +150,7 @@ public class ScoreController {
         EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
         try {
-            if (entityManager.contains(meet)) {
-                meet = entityManager.merge(meet);
-            } else {
-                entityManager.persist(meet);
-            }
+            entityManager.persist(meet);
             transaction.commit();
         } catch (Exception e) {
             transaction.rollback();
@@ -308,7 +303,7 @@ public class ScoreController {
             BigDecimal totalScore = BigDecimal.ZERO;
             for (FigureScore figureScore : figureScores) {
                 totalScore = totalScore.add(figureScore.getTotalScore());
-                figureScore = entityManager.merge(figureScore);
+                entityManager.persist(figureScore);
                 if (!figuresParticipant.getFiguresScores().contains(figureScore)) {
                     figuresParticipant.getFiguresScores().add(figureScore);
                 }
@@ -316,7 +311,7 @@ public class ScoreController {
             figuresParticipant.setTotalScore(totalScore);
             figuresParticipant.setPlace(null);
             figuresParticipant.setPoints(null);
-            entityManager.merge(figuresParticipant);
+            entityManager.persist(figuresParticipant);
 
             transaction.commit();
 
@@ -603,7 +598,7 @@ public class ScoreController {
         EntityManager entityManager = ScoreApp.getEntityManager();
         entityManager.getTransaction().begin();
         for (FiguresParticipant fp : meet.getFiguresParticipants()) {
-            entityManager.merge(fp);
+            entityManager.persist(fp);
         }
         entityManager.getTransaction().commit();
     }

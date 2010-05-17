@@ -19,17 +19,38 @@
 // </editor-fold>
 package org.aquastarz.score.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Query;
 import org.aquastarz.score.ScoreApp;
-import org.aquastarz.score.domain.Level;
+import org.aquastarz.score.controller.listener.SwimmerControllerListener;
 import org.aquastarz.score.domain.Season;
 import org.aquastarz.score.domain.Swimmer;
 import org.aquastarz.score.domain.Team;
 
 public class SwimmerController {
+
     private static org.apache.log4j.Logger logger =
             org.apache.log4j.Logger.getLogger(SwimmerController.class.getName());
+    private static final List<SwimmerControllerListener> listeners = new ArrayList<SwimmerControllerListener>();
+
+    public static void addListener(SwimmerControllerListener listener) {
+        synchronized (listeners) {
+            listeners.add(listener);
+        }
+    }
+
+    public static void removeListener(SwimmerControllerListener listener) {
+        synchronized (listeners) {
+            listeners.remove(listener);
+        }
+    }
+
+    public static void notifySwimmerUpdated(Swimmer swimmer) {
+        for (SwimmerControllerListener listener : listeners) {
+            listener.swimmerUpdated(swimmer);
+        }
+    }
 
     public static Swimmer findByLeagueNum(Integer leagueNum, Season season) {
         Query swimmerQuery = ScoreApp.getEntityManager().createNamedQuery("Swimmer.findByLeagueNumAndSeason");
@@ -37,9 +58,8 @@ public class SwimmerController {
         swimmerQuery.setParameter("season", season);
         Swimmer swimmer = null;
         try {
-            swimmer = (Swimmer)swimmerQuery.getSingleResult();
-        }
-        catch(Exception e) {
+            swimmer = (Swimmer) swimmerQuery.getSingleResult();
+        } catch (Exception e) {
             //Ignore not found error
         }
         return swimmer;
@@ -51,5 +71,10 @@ public class SwimmerController {
         swimmerQuery.setParameter("season", ScoreApp.getCurrentSeason());
         List<Swimmer> swimmers = swimmerQuery.getResultList();
         return swimmers;
+    }
+
+    public static Integer getNextLeagueNumber() {
+        Query swimmerQuery = ScoreApp.getEntityManager().createQuery("select max(leagueNum) from Swimmer");
+        return (Integer) swimmerQuery.getSingleResult() + 1;
     }
 }

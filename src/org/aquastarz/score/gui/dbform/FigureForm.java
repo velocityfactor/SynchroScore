@@ -21,17 +21,21 @@ package org.aquastarz.score.gui.dbform;
 
 import java.awt.EventQueue;
 import java.beans.Beans;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.RollbackException;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import org.aquastarz.score.ScoreApp;
+import org.aquastarz.score.controller.FigureController;
 
 public class FigureForm extends JPanel {
+
     EntityManager entityManager = null;
-    
+
     public FigureForm() {
         if (!Beans.isDesignTime()) {
             entityManager = ScoreApp.getNewEntityManager();
@@ -39,7 +43,7 @@ public class FigureForm extends JPanel {
         }
         initComponents();
     }
-    
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -86,6 +90,8 @@ public class FigureForm extends JPanel {
         degreeOfDifficultyLabel.setText("Degree Of Difficulty:");
 
         nameLabel.setText("Name:");
+
+        figureIdField.setEditable(false);
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.figureId}"), figureIdField, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceUnreadableValue(null);
@@ -203,7 +209,6 @@ public class FigureForm extends JPanel {
         }
     }// </editor-fold>//GEN-END:initComponents
 
-    
     @SuppressWarnings("unchecked")
     private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshButtonActionPerformed
         entityManager.getTransaction().rollback();
@@ -219,7 +224,7 @@ public class FigureForm extends JPanel {
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         int[] selected = masterTable.getSelectedRows();
         List<org.aquastarz.score.domain.Figure> toRemove = new ArrayList<org.aquastarz.score.domain.Figure>(selected.length);
-        for (int idx=0; idx<selected.length; idx++) {
+        for (int idx = 0; idx < selected.length; idx++) {
             org.aquastarz.score.domain.Figure f = list.get(masterTable.convertRowIndexToModel(selected[idx]));
             toRemove.add(f);
             entityManager.remove(f);
@@ -229,13 +234,23 @@ public class FigureForm extends JPanel {
 
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
         org.aquastarz.score.domain.Figure f = new org.aquastarz.score.domain.Figure();
+        String newFigureId = null;
+        while (newFigureId == null || FigureController.findById(newFigureId) != null) {
+            newFigureId = JOptionPane.showInputDialog(this, "Enter new figure number:", "New Figure", JOptionPane.QUESTION_MESSAGE);
+            if (newFigureId == null) {
+                return;
+            }
+        }
+        f.setFigureId(newFigureId);
+        f.setName("");
+        f.setDegreeOfDifficulty(BigDecimal.ZERO);
         entityManager.persist(f);
         list.add(f);
-        int row = list.size()-1;
+        int row = list.size() - 1;
         masterTable.setRowSelectionInterval(row, row);
         masterTable.scrollRectToVisible(masterTable.getCellRect(row, 0, true));
     }//GEN-LAST:event_newButtonActionPerformed
-    
+
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
         try {
             entityManager.getTransaction().commit();
@@ -250,9 +265,9 @@ public class FigureForm extends JPanel {
             list.clear();
             list.addAll(merged);
         }
+        refreshButtonActionPerformed(null);
+
     }//GEN-LAST:event_saveButtonActionPerformed
-    
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField degreeOfDifficultyField;
     private javax.swing.JLabel degreeOfDifficultyLabel;
@@ -270,9 +285,10 @@ public class FigureForm extends JPanel {
     private javax.swing.JButton saveButton;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
-    
+
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
+
             public void run() {
                 JFrame frame = new JFrame();
                 frame.setContentPane(new FigureForm());
@@ -282,5 +298,4 @@ public class FigureForm extends JPanel {
             }
         });
     }
-
 }

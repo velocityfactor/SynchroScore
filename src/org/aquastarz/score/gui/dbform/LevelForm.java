@@ -26,8 +26,10 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.RollbackException;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import org.aquastarz.score.ScoreApp;
+import org.aquastarz.score.controller.LevelController;
 
 public class LevelForm extends JPanel {
     EntityManager entityManager = null;
@@ -86,6 +88,8 @@ public class LevelForm extends JPanel {
         nameLabel.setText("Name:");
 
         sortOrderLabel.setText("Sort Order:");
+
+        levelIdField.setEditable(false);
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.levelId}"), levelIdField, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceUnreadableValue(null);
@@ -229,6 +233,14 @@ public class LevelForm extends JPanel {
 
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
         org.aquastarz.score.domain.Level l = new org.aquastarz.score.domain.Level();
+        String newLevelId=null;
+        while(newLevelId==null || LevelController.findById(newLevelId)!=null) {
+            newLevelId = JOptionPane.showInputDialog(this, "Enter new level id:", "New Level", JOptionPane.QUESTION_MESSAGE);
+            if(newLevelId == null) return;
+        }
+        l.setLevelId(newLevelId);
+        l.setName("");
+        l.setSortOrder(LevelController.getNextSortOrder());
         entityManager.persist(l);
         list.add(l);
         int row = list.size()-1;
@@ -250,6 +262,7 @@ public class LevelForm extends JPanel {
             list.clear();
             list.addAll(merged);
         }
+        refreshButtonActionPerformed(null);
     }//GEN-LAST:event_saveButtonActionPerformed
     
     

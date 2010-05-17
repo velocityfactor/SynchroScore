@@ -97,16 +97,16 @@
                       </Group>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="swimmerIdField" alignment="0" pref="317" max="32767" attributes="0"/>
-                          <Component id="lastNameField" alignment="0" pref="317" max="32767" attributes="0"/>
-                          <Component id="firstNameField" alignment="0" pref="317" max="32767" attributes="0"/>
-                          <Component id="jComboBox1" alignment="0" pref="317" max="32767" attributes="0"/>
-                          <Component id="jComboBox2" alignment="0" pref="317" max="32767" attributes="0"/>
+                          <Component id="swimmerIdField" alignment="0" pref="269" max="32767" attributes="0"/>
+                          <Component id="lastNameField" alignment="0" pref="269" max="32767" attributes="0"/>
+                          <Component id="firstNameField" alignment="0" pref="269" max="32767" attributes="0"/>
+                          <Component id="jComboBox1" alignment="0" pref="269" max="32767" attributes="0"/>
+                          <Component id="jComboBox2" alignment="0" pref="269" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" attributes="0">
                       <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="masterScrollPane" pref="380" max="32767" attributes="0"/>
+                      <Component id="masterScrollPane" pref="328" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -232,7 +232,7 @@
     </Container>
     <Component class="javax.swing.JLabel" name="swimmerIdLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Swimmer Id:"/>
+        <Property name="text" type="java.lang.String" value="League #:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="lastNameLabel">
@@ -257,7 +257,8 @@
     </Component>
     <Component class="javax.swing.JTextField" name="swimmerIdField">
       <BindingProperties>
-        <BindingProperty name="text" source="masterTable" sourcePath="${selectedElement.swimmerId}" target="swimmerIdField" targetPath="text" updateStrategy="0" immediately="false">
+        <BindingProperty name="text" source="masterTable" sourcePath="${selectedElement.leagueNum}" target="swimmerIdField" targetPath="text" updateStrategy="0" immediately="false">
+          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
           <Property name="incompletePathValue" type="java.lang.String" value="null"/>
         </BindingProperty>
         <BindingProperty name="enabled" source="masterTable" sourcePath="${selectedElement != null}" target="swimmerIdField" targetPath="enabled" updateStrategy="1" immediately="false"/>

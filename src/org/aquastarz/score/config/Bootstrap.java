@@ -125,9 +125,10 @@ public class Bootstrap {
         }
     }
 
-    public static void loadUpdateData(File zipFile) {
+    public static List<List<Object>> loadUpdateData(File zipFile) {
         //This must read through the zip entries in order, so it handles
         //any ordering
+        List<List<Object>> results = new ArrayList<List<Object>>();
         try {
             InputStream theFile = new FileInputStream(zipFile);
             ZipInputStream stream = new ZipInputStream(theFile);
@@ -146,12 +147,7 @@ public class Bootstrap {
                     if (i > 0) {
                         folder = fname.substring(0, i);
                     }
-                    String s = String.format("Entry: %s len %d added %TD",
-                            fname, entry.getSize(),
-                            new Date(entry.getTime()));
-                    System.out.println(s);
                     if (fname.toUpperCase().endsWith("ROSTER.CSV") && folder != null) {
-                        System.out.println("Season = " + folder);
                         Season season = SeasonController.findOrCreate(folder);
                         loadRoster(season, stream);
                     } else if (fname.toUpperCase().endsWith("RESULTS.CSV")) {
@@ -177,7 +173,7 @@ public class Bootstrap {
                     //Skip if we have a meet with same name
                     if (ScoreController.findMeet(season, lm.meetTitle) == null) {
                         if (lm.getResults() != null && season != null) {
-                            loadLegacyMeet(season, lm);
+                            results.add(loadLegacyMeet(season, lm));
                         }
                     }
                 }
@@ -185,6 +181,7 @@ public class Bootstrap {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return results;
     }
 
     public static void loadRoster(Season season, InputStream is) {
