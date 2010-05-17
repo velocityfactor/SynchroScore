@@ -77,6 +77,16 @@ public class ScoreController {
                 DateFormat df = SimpleDateFormat.getDateInstance(SimpleDateFormat.LONG);
                 meet.setMeetDate(df.format(new Date()));
                 meet.setSeason(ScoreApp.getCurrentSeason());
+                meet.setEu1Figure(FigureController.findById("101"));
+                meet.setEu2Figure(FigureController.findById("311"));
+                meet.setNov1Figure(FigureController.findById("101"));
+                meet.setNov2Figure(FigureController.findById("349"));
+                meet.setNov3Figure(FigureController.findById("311"));
+                meet.setNov4Figure(FigureController.findById("360"));
+                meet.setInt1Figure(FigureController.findById("342"));
+                meet.setInt2Figure(FigureController.findById("350"));
+                meet.setInt3Figure(FigureController.findById("316"));
+                meet.setInt4Figure(FigureController.findById("240"));
                 transaction.commit();
             } catch (Exception e) {
                 logger.error("Error creating new meet.", e);
