@@ -19,9 +19,9 @@
 // </editor-fold>
 package org.aquastarz.score.controller;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import org.aquastarz.score.ScoreApp;
 import org.aquastarz.score.config.Bootstrap;
 import org.aquastarz.score.config.Bootstrap.FigureScoreTracker;
 import org.aquastarz.score.config.Bootstrap.FiguresParticipantTracker;
@@ -43,10 +43,15 @@ public class ScoreControllerTest {
     @BeforeClass
     public static void setUpClass() throws Exception {
         Bootstrap.loadLeagueData();
-        Bootstrap.loadRoster(ScoreApp.getCurrentSeason());
-        List<Object> trackers = Bootstrap.loadLegacyMeet(ScoreApp.getCurrentSeason(), "DAVSUN");
-        figureScoreTrackers = (List<FigureScoreTracker>) trackers.get(0);
-        figuresParticipantTrackers = (List<FiguresParticipantTracker>) trackers.get(1);
+        File file = new File("c:/home/shayne/work/java/SynchroScore/data/2009.zip");    
+        List<List<Object>> trackerList = Bootstrap.loadUpdateData(file);
+
+        figureScoreTrackers = new ArrayList<FigureScoreTracker>();
+        figuresParticipantTrackers = new ArrayList<FiguresParticipantTracker>();
+        for(List<Object> trackers : trackerList) {
+            figureScoreTrackers.addAll((List<FigureScoreTracker>)trackers.get(0));
+            figuresParticipantTrackers.addAll((List<FiguresParticipantTracker>) trackers.get(1));
+        }
     }
 
     @AfterClass

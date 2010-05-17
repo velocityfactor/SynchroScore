@@ -25,26 +25,26 @@ import java.beans.Beans;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.RollbackException;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import org.aquastarz.score.ScoreApp;
+import org.aquastarz.score.controller.SwimmerController;
 import org.aquastarz.score.domain.Level;
 import org.aquastarz.score.domain.Team;
 
 public class SwimmerForm extends JPanel {
+
     EntityManager entityManager = null;
-    
+
     public SwimmerForm() {
         if (!Beans.isDesignTime()) {
-            entityManager = ScoreApp.getNewEntityManager();
-            entityManager.getTransaction().begin();
+            entityManager = ScoreApp.getEntityManager();
         }
         initComponents();
     }
-    
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -106,7 +106,7 @@ public class SwimmerForm extends JPanel {
         jTableBinding.bind();
         masterScrollPane.setViewportView(masterTable);
 
-        swimmerIdLabel.setText("Swimmer Id:");
+        swimmerIdLabel.setText("League #:");
 
         lastNameLabel.setText("Last Name:");
 
@@ -116,7 +116,7 @@ public class SwimmerForm extends JPanel {
 
         teamLabel.setText("Team:");
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.swimmerId}"), swimmerIdField, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.leagueNum}"), swimmerIdField, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(binding);
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement != null}"), swimmerIdField, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
@@ -210,14 +210,14 @@ public class SwimmerForm extends JPanel {
                             .addComponent(teamLabel))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(swimmerIdField, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE)
-                            .addComponent(lastNameField, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE)
-                            .addComponent(firstNameField, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE)
-                            .addComponent(jComboBox1, 0, 317, Short.MAX_VALUE)
-                            .addComponent(jComboBox2, 0, 317, Short.MAX_VALUE)))
+                            .addComponent(swimmerIdField, javax.swing.GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE)
+                            .addComponent(lastNameField, javax.swing.GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE)
+                            .addComponent(firstNameField, javax.swing.GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE)
+                            .addComponent(jComboBox1, 0, 269, Short.MAX_VALUE)
+                            .addComponent(jComboBox2, 0, 269, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(masterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)))
+                        .addComponent(masterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 328, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -280,11 +280,8 @@ public class SwimmerForm extends JPanel {
         }
     }// </editor-fold>//GEN-END:initComponents
 
-    
     @SuppressWarnings("unchecked")
     private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshButtonActionPerformed
-        entityManager.getTransaction().rollback();
-        entityManager.getTransaction().begin();
         java.util.Collection data = swimmerQuery.getResultList();
         for (Object entity : data) {
             entityManager.refresh(entity);
@@ -296,41 +293,46 @@ public class SwimmerForm extends JPanel {
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         int[] selected = masterTable.getSelectedRows();
         List<org.aquastarz.score.domain.Swimmer> toRemove = new ArrayList<org.aquastarz.score.domain.Swimmer>(selected.length);
-        for (int idx=0; idx<selected.length; idx++) {
+        entityManager.getTransaction().begin();
+        for (int idx = 0; idx < selected.length; idx++) {
             org.aquastarz.score.domain.Swimmer s = swimmerList.get(masterTable.convertRowIndexToModel(selected[idx]));
             toRemove.add(s);
             entityManager.remove(s);
         }
         swimmerList.removeAll(toRemove);
+        entityManager.getTransaction().commit();
     }//GEN-LAST:event_deleteButtonActionPerformed
 
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
         org.aquastarz.score.domain.Swimmer s = new org.aquastarz.score.domain.Swimmer();
         s.setSeason(ScoreApp.getCurrentSeason());
+        s.setFirstName("");
+        s.setLastName("");
+        s.setLeagueNum(SwimmerController.getNextLeagueNumber());
+        s.setLevel(levelList.get(0));
+        s.setTeam(teamList.get(0));
+        entityManager.getTransaction().begin();
         entityManager.persist(s);
+        entityManager.getTransaction().commit();
+
         swimmerList.add(s);
-        int row = swimmerList.size()-1;
+        int row = swimmerList.size() - 1;
         masterTable.setRowSelectionInterval(row, row);
         masterTable.scrollRectToVisible(masterTable.getCellRect(row, 0, true));
     }//GEN-LAST:event_newButtonActionPerformed
-    
+
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
-        try {
-            entityManager.getTransaction().commit();
-            entityManager.getTransaction().begin();
-        } catch (RollbackException rex) {
-            rex.printStackTrace();
-            entityManager.getTransaction().begin();
-            List<org.aquastarz.score.domain.Swimmer> merged = new ArrayList<org.aquastarz.score.domain.Swimmer>(swimmerList.size());
-            for (org.aquastarz.score.domain.Swimmer s : swimmerList) {
-                merged.add(entityManager.merge(s));
-            }
-            swimmerList.clear();
-            swimmerList.addAll(merged);
+        entityManager.getTransaction().begin();
+        List<org.aquastarz.score.domain.Swimmer> merged = new ArrayList<org.aquastarz.score.domain.Swimmer>(swimmerList.size());
+        for (org.aquastarz.score.domain.Swimmer s : swimmerList) {
+            merged.add(entityManager.merge(s));
+            SwimmerController.notifySwimmerUpdated(s);
         }
+        swimmerList.clear();
+        swimmerList.addAll(merged);
+        entityManager.getTransaction().commit();
+        refreshButtonActionPerformed(null);
     }//GEN-LAST:event_saveButtonActionPerformed
-    
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton deleteButton;
     private javax.swing.JTextField firstNameField;
@@ -356,9 +358,10 @@ public class SwimmerForm extends JPanel {
     private javax.persistence.Query teamQuery;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
-    
+
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
+
             public void run() {
                 JFrame frame = new JFrame();
                 frame.setContentPane(new SwimmerForm());
@@ -368,5 +371,4 @@ public class SwimmerForm extends JPanel {
             }
         });
     }
-
 }
