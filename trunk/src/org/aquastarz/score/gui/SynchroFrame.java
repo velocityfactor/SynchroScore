@@ -338,6 +338,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         saveFigureScoreButton = new javax.swing.JButton();
         routineScore = new javax.swing.JPanel();
+        routinesPanel1 = new org.aquastarz.score.gui.RoutinesPanel();
         reportPanel = new javax.swing.JPanel();
         reportNoviceFigures = new javax.swing.JButton();
         reportNovMeetSheet = new javax.swing.JButton();
@@ -383,7 +384,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         setMinimumSize(new java.awt.Dimension(603, 200));
         setName(""); // NOI18N
 
-        tabPane.setFont(new java.awt.Font("Tahoma", 0, 14));
+        tabPane.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tabPane.setMinimumSize(new java.awt.Dimension(603, 200));
         tabPane.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -580,11 +581,17 @@ public class SynchroFrame extends javax.swing.JFrame {
         routineScore.setLayout(routineScoreLayout);
         routineScoreLayout.setHorizontalGroup(
             routineScoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 739, Short.MAX_VALUE)
+            .addGroup(routineScoreLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(routinesPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         routineScoreLayout.setVerticalGroup(
             routineScoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 523, Short.MAX_VALUE)
+            .addGroup(routineScoreLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(routinesPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(65, Short.MAX_VALUE))
         );
 
         tabPane.addTab("Routines", routineScore);
@@ -1205,6 +1212,7 @@ public class SynchroFrame extends javax.swing.JFrame {
     private javax.swing.JPanel reportPanel;
     private javax.swing.JButton reportTeamResults;
     private javax.swing.JPanel routineScore;
+    private org.aquastarz.score.gui.RoutinesPanel routinesPanel1;
     private javax.swing.JProgressBar routinesProgress;
     private javax.swing.JButton saveFigureScoreButton;
     private javax.swing.JButton saveSwimmersButton;

@@ -65,8 +65,13 @@ public class Routine implements Serializable {
     @Column(name = "routineType", nullable = false, length = 4)
     private String routineType;
 
-    @ManyToMany
-    private List<Swimmer> swimmers = new Vector();
+    @Basic(optional = true)
+    @Column(nullable = true, length = 60)
+    private String swimmers1;
+
+    @Basic(optional = true)
+    @Column(nullable = true, length = 60)
+    private String swimmers2;
 
     @Basic(optional = true)
     @Column(name = "routineOrder", nullable = true)
@@ -75,8 +80,8 @@ public class Routine implements Serializable {
     public Routine() {
     }
 
-    public Routine(String name) {
-        this.name = name;
+    public Routine(Integer routineOrder) {
+        this.routineOrder = routineOrder;
     }
 
 }
