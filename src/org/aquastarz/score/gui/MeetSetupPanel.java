@@ -231,8 +231,8 @@ public class MeetSetupPanel extends javax.swing.JPanel {
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel3.setText("Novice Figures");
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14));
-        jLabel4.setText("Station 1 (A-1)");
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel4.setText("Station 1");
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel5.setText("Figure Description");
@@ -256,8 +256,8 @@ public class MeetSetupPanel extends javax.swing.JPanel {
 
         eightAndUnder1.setFont(new java.awt.Font("Tahoma", 0, 14));
 
-        jLabel9.setFont(new java.awt.Font("Tahoma", 0, 14));
-        jLabel9.setText("Station 2 (A-2)");
+        jLabel9.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel9.setText("Station 2");
 
         noviceFigNum2.setEditable(false);
         noviceFigNum2.setFont(new java.awt.Font("Tahoma", 0, 14));
@@ -269,8 +269,8 @@ public class MeetSetupPanel extends javax.swing.JPanel {
 
         eightAndUnder2.setFont(new java.awt.Font("Tahoma", 0, 14));
 
-        jLabel10.setFont(new java.awt.Font("Tahoma", 0, 14));
-        jLabel10.setText("Station 3 (B-1)");
+        jLabel10.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel10.setText("Station 3");
 
         noviceFigNum3.setEditable(false);
         noviceFigNum3.setFont(new java.awt.Font("Tahoma", 0, 14));
@@ -282,8 +282,8 @@ public class MeetSetupPanel extends javax.swing.JPanel {
 
         eightAndUnder3.setFont(new java.awt.Font("Tahoma", 0, 14));
 
-        jLabel11.setFont(new java.awt.Font("Tahoma", 0, 14));
-        jLabel11.setText("Station 4 (B-2)");
+        jLabel11.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel11.setText("Station 4");
 
         noviceFigNum4.setEditable(false);
         noviceFigNum4.setFont(new java.awt.Font("Tahoma", 0, 14));
@@ -295,11 +295,11 @@ public class MeetSetupPanel extends javax.swing.JPanel {
 
         eightAndUnder4.setFont(new java.awt.Font("Tahoma", 0, 14));
 
-        jLabel12.setFont(new java.awt.Font("Tahoma", 0, 14));
-        jLabel12.setText("Station 1 (A-1)");
+        jLabel12.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel12.setText("Station 1");
 
-        jLabel13.setFont(new java.awt.Font("Tahoma", 0, 14));
-        jLabel13.setText("Station 2 (A-2)");
+        jLabel13.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel13.setText("Station 2");
 
         jLabel14.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel14.setText("Fig. #");
@@ -329,8 +329,8 @@ public class MeetSetupPanel extends javax.swing.JPanel {
         jLabel17.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel17.setText("Intermediate Figures");
 
-        jLabel19.setFont(new java.awt.Font("Tahoma", 0, 14));
-        jLabel19.setText("Station 4 (B-2)");
+        jLabel19.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel19.setText("Station 4");
 
         intFigNum4.setEditable(false);
         intFigNum4.setFont(new java.awt.Font("Tahoma", 0, 14));
@@ -340,8 +340,8 @@ public class MeetSetupPanel extends javax.swing.JPanel {
         intDD4.setFont(new java.awt.Font("Tahoma", 0, 14));
         intDD4.setFocusable(false);
 
-        jLabel20.setFont(new java.awt.Font("Tahoma", 0, 14));
-        jLabel20.setText("Station 3 (B-1)");
+        jLabel20.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel20.setText("Station 3");
 
         intFigNum3.setEditable(false);
         intFigNum3.setFont(new java.awt.Font("Tahoma", 0, 14));
