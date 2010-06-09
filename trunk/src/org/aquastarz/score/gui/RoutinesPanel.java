@@ -178,8 +178,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
     private void calculate() {
         try {
             updateRoutine(curRoutine);
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.OK_OPTION);
             return;
         }
@@ -298,7 +297,9 @@ public class RoutinesPanel extends javax.swing.JPanel {
             penalty.selectAll();
             throw new Exception("Invalid entry");
         }
-        if(score==null) score = BigDecimal.ZERO.setScale(1);
+        if (score == null) {
+            score = BigDecimal.ZERO.setScale(1);
+        }
         routine.setPenalty(score);
     }
 
@@ -311,98 +312,82 @@ public class RoutinesPanel extends javax.swing.JPanel {
         teamCombo.setSelectedItem(curRoutine.getTeam());
         if (curRoutine.getTScore1() != null) {
             scoreTJ1.setText(curRoutine.getTScore1().toString());
-        }
-        else {
+        } else {
             scoreTJ1.setText("");
         }
         if (curRoutine.getTScore2() != null) {
             scoreTJ2.setText(curRoutine.getTScore2().toString());
-        }
-        else {
+        } else {
             scoreTJ2.setText("");
         }
         if (curRoutine.getTScore3() != null) {
             scoreTJ3.setText(curRoutine.getTScore3().toString());
-        }
-        else {
+        } else {
             scoreTJ3.setText("");
         }
         if (curRoutine.getTScore4() != null) {
             scoreTJ4.setText(curRoutine.getTScore4().toString());
-        }
-        else {
+        } else {
             scoreTJ4.setText("");
         }
         if (curRoutine.getTScore5() != null) {
             scoreTJ5.setText(curRoutine.getTScore5().toString());
-        }
-        else {
+        } else {
             scoreTJ5.setText("");
         }
         if (curRoutine.getTScore6() != null) {
             scoreTJ6.setText(curRoutine.getTScore6().toString());
-        }
-        else {
+        } else {
             scoreTJ6.setText("");
         }
         if (curRoutine.getTScore7() != null) {
             scoreTJ7.setText(curRoutine.getTScore7().toString());
-        }
-        else {
+        } else {
             scoreTJ7.setText("");
         }
         if (curRoutine.getAScore1() != null) {
             scoreAJ1.setText(curRoutine.getAScore1().toString());
-        }
-        else {
+        } else {
             scoreAJ1.setText("");
         }
         if (curRoutine.getAScore2() != null) {
             scoreAJ2.setText(curRoutine.getAScore2().toString());
-        }
-        else {
+        } else {
             scoreAJ2.setText("");
         }
         if (curRoutine.getAScore3() != null) {
             scoreAJ3.setText(curRoutine.getAScore3().toString());
-        }
-        else {
+        } else {
             scoreAJ3.setText("");
         }
         if (curRoutine.getAScore4() != null) {
             scoreAJ4.setText(curRoutine.getAScore4().toString());
-        }
-        else {
+        } else {
             scoreAJ4.setText("");
         }
         if (curRoutine.getAScore5() != null) {
             scoreAJ5.setText(curRoutine.getAScore5().toString());
-        }
-        else {
+        } else {
             scoreAJ5.setText("");
         }
         if (curRoutine.getAScore6() != null) {
             scoreAJ6.setText(curRoutine.getAScore6().toString());
-        }
-        else {
+        } else {
             scoreAJ6.setText("");
         }
         if (curRoutine.getAScore7() != null) {
             scoreAJ7.setText(curRoutine.getAScore7().toString());
-        }
-        else {
+        } else {
             scoreAJ7.setText("");
         }
         if (curRoutine.getPenalty() != null) {
             penalty.setText(curRoutine.getPenalty().toString());
-        }
-        else {
+        } else {
             penalty.setText("");
         }
         if (curRoutine.getTotalScore() != null) {
             totalScore.setText(curRoutine.getTotalScore().toString());
-        }
-        else {
+        } else {
             totalScore.setText("");
         }
     }

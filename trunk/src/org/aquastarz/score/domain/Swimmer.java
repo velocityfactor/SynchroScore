@@ -178,7 +178,7 @@ public class Swimmer implements Serializable {
 
     @Override
     public String toString() {
-        return "#" + swimmerId + " " + lastName + ", " + firstName + " (" + level.getLevelId() + ")";
+        return "#" + leagueNum + " " + lastName + ", " + firstName + " (" + level.getLevelId() + ")";
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
