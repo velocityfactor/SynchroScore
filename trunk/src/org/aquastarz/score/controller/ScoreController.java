@@ -43,11 +43,15 @@ import org.aquastarz.score.domain.FigureScore;
 import org.aquastarz.score.domain.FiguresParticipant;
 import org.aquastarz.score.domain.Level;
 import org.aquastarz.score.domain.Meet;
+import org.aquastarz.score.domain.Routine;
+import org.aquastarz.score.domain.RoutineLevel;
 import org.aquastarz.score.domain.Season;
 import org.aquastarz.score.domain.Swimmer;
 import org.aquastarz.score.domain.Team;
 import org.aquastarz.score.gui.MeetSelectionDialog;
 import org.aquastarz.score.gui.SynchroFrame;
+import org.aquastarz.score.manager.FigureManager;
+import org.aquastarz.score.manager.RoutineManager;
 import org.aquastarz.score.report.FiguresLabel;
 import org.aquastarz.score.report.FiguresMeetSheet;
 
@@ -77,16 +81,18 @@ public class ScoreController {
                 DateFormat df = SimpleDateFormat.getDateInstance(SimpleDateFormat.LONG);
                 meet.setMeetDate(df.format(new Date()));
                 meet.setSeason(ScoreApp.getCurrentSeason());
-                meet.setEu1Figure(FigureController.findById("101"));
-                meet.setEu2Figure(FigureController.findById("311"));
-                meet.setNov1Figure(FigureController.findById("101"));
-                meet.setNov2Figure(FigureController.findById("349"));
-                meet.setNov3Figure(FigureController.findById("311"));
-                meet.setNov4Figure(FigureController.findById("360"));
-                meet.setInt1Figure(FigureController.findById("342"));
-                meet.setInt2Figure(FigureController.findById("350"));
-                meet.setInt3Figure(FigureController.findById("316"));
-                meet.setInt4Figure(FigureController.findById("240"));
+                meet.setEu1(true);
+                meet.setEu2(false);
+                meet.setEu3(true);
+                meet.setEu4(false);
+                meet.setNov1Figure(FigureManager.findById("101"));
+                meet.setNov2Figure(FigureManager.findById("349"));
+                meet.setNov3Figure(FigureManager.findById("311"));
+                meet.setNov4Figure(FigureManager.findById("360"));
+                meet.setInt1Figure(FigureManager.findById("342"));
+                meet.setInt2Figure(FigureManager.findById("350"));
+                meet.setInt3Figure(FigureManager.findById("316"));
+                meet.setInt4Figure(FigureManager.findById("240"));
                 transaction.commit();
             } catch (Exception e) {
                 logger.error("Error creating new meet.", e);
@@ -287,6 +293,35 @@ public class ScoreController {
         return true;
     }
 
+    public static Figure getFigure(FigureScore fs) {
+        Meet meet = fs.getFiguresParticipant().getMeet();
+        String id = fs.getFiguresParticipant().getSwimmer().getLevel().getLevelId();
+        if (id.startsWith("N")) {
+            switch (fs.getStation()) {
+                case 1:
+                    return meet.getNov1Figure();
+                case 2:
+                    return meet.getNov2Figure();
+                case 3:
+                    return meet.getNov3Figure();
+                case 4:
+                    return meet.getNov4Figure();
+            }
+        } else {
+            switch (fs.getStation()) {
+                case 1:
+                    return meet.getInt1Figure();
+                case 2:
+                    return meet.getInt2Figure();
+                case 3:
+                    return meet.getInt3Figure();
+                case 4:
+                    return meet.getInt4Figure();
+            }
+        }
+        return null;
+    }
+
     public boolean saveFigureScores(FiguresParticipant figuresParticipant, Collection<FigureScore> figureScores) {
         //Mark meet as needing recalc
         figuresParticipant.getMeet().clearPoints();
@@ -294,7 +329,7 @@ public class ScoreController {
         //Calculate totals before saving
         for (FigureScore figureScore : figureScores) {
             if (logger.isDebugEnabled()) {
-                logger.debug("Getting total for " + figureScore.getFigure().getName());
+                logger.debug("Getting total for station=" + figureScore.getStation());
             }
             figureScore.setTotalScore(totalScore(figureScore));
             if (figureScore.getTotalScore() == null) {
@@ -310,15 +345,13 @@ public class ScoreController {
         EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
         try {
-            BigDecimal totalScore = BigDecimal.ZERO;
             for (FigureScore figureScore : figureScores) {
-                totalScore = totalScore.add(figureScore.getTotalScore());
                 entityManager.persist(figureScore);
                 if (!figuresParticipant.getFiguresScores().contains(figureScore)) {
                     figuresParticipant.getFiguresScores().add(figureScore);
                 }
             }
-            figuresParticipant.setTotalScore(totalScore);
+            figuresParticipant.setTotalScore(calculateTotalScore(figuresParticipant));
             figuresParticipant.setPlace(null);
             figuresParticipant.setPoints(null);
             entityManager.persist(figuresParticipant);
@@ -342,9 +375,10 @@ public class ScoreController {
             if (isNovice(fp) == isNovice) {
                 for (FigureScore fs : fp.getFiguresScores()) {
                     StationResult sr = new StationResult();
-                    sr.setFigureId(fs.getFigure().getFigureId());
-                    sr.setFigureName(fs.getFigure().getName());
-                    sr.setFigureDd(fs.getFigure().getDegreeOfDifficulty().toString());
+                    Figure figure = getFigure(fs);
+                    sr.setFigureId(figure.getFigureId());
+                    sr.setFigureName(figure.getName());
+                    sr.setFigureDd(figure.getDegreeOfDifficulty().toString());
                     sr.setLastName(fp.getSwimmer().getLastName());
                     sr.setFirstName(fp.getSwimmer().getFirstName());
                     sr.setFigureOrder(fp.getFigureOrder());
@@ -386,9 +420,11 @@ public class ScoreController {
     }
 
     public static boolean isValid(FigureScore figureScore) {
-        return figureScore.getScore1() != null && figureScore.getScore2() != null && figureScore.getScore3() != null
-                && figureScore.getScore4() != null && figureScore.getScore5() != null && figureScore.getPenalty() != null
-                && figureScore.getFiguresParticipant() != null && figureScore.getFigure() != null;
+        return figureScore.getScore1() != null && figureScore.getScore2() != null
+                && figureScore.getScore3() != null && figureScore.getScore4() != null
+                && figureScore.getScore5() != null && figureScore.getPenalty() != null
+                && figureScore.getFiguresParticipant() != null
+                && figureScore.getStation() >= 1 && figureScore.getStation() <= 4;
     }
 
     public static boolean isNovice(FiguresParticipant fp) {
@@ -476,7 +512,7 @@ public class ScoreController {
         }
 
         //Multiply by DD
-        BigDecimal ddSum = sum.multiply(fs.getFigure().getDegreeOfDifficulty());
+        BigDecimal ddSum = sum.multiply(getFigure(fs).getDegreeOfDifficulty());
 
         //Subtract penalty
         BigDecimal total = ddSum.subtract(fs.getPenalty());
@@ -514,8 +550,12 @@ public class ScoreController {
                 calcErrors.add("Swimmer #" + fp.getFigureOrder() + " does not have 4 figure scores.");
             }
             for (FigureScore fs : fp.getFiguresScores()) {
-                if (BigDecimal.ZERO.compareTo(fs.getTotalScore()) >= 0) {
-                    calcErrors.add("Swimmer #" + fp.getFigureOrder() + " score for " + fs.getFigure().getName() + " is zero.");
+                if (fs.getTotalScore() != null) {
+                    if (BigDecimal.ZERO.compareTo(fs.getTotalScore()) >= 0) {
+                        calcErrors.add("Swimmer #" + fp.getFigureOrder() + " score for " + getFigure(fs).getName() + " is zero.");
+                    }
+                } else {
+                    calcErrors.add("Swimmer #" + fp.getFigureOrder() + " score for " + getFigure(fs).getName() + " is blank.");
                 }
             }
             fp.setTotalScore(calculateTotalScore(fp));
@@ -533,7 +573,15 @@ public class ScoreController {
             Collections.sort(pointList, new Comparator<FiguresParticipant>() {
 
                 public int compare(FiguresParticipant fp1, FiguresParticipant fp2) {
-                    return fp2.getTotalScore().compareTo(fp1.getTotalScore());
+                    BigDecimal ts1 = fp1.getTotalScore();
+                    if (ts1 == null) {
+                        ts1 = BigDecimal.ZERO;
+                    }
+                    BigDecimal ts2 = fp2.getTotalScore();
+                    if (ts2 == null) {
+                        ts2 = BigDecimal.ZERO;
+                    }
+                    return ts2.compareTo(ts1); //Desc sort
                 }
             });
 
@@ -541,7 +589,12 @@ public class ScoreController {
             Map<Integer, Integer> tieMap = new HashMap<Integer, Integer>();
             int place = 0;
             for (FiguresParticipant fp : pointList) {
-                if (fp.getTotalScore().equals(lastTotal) && place > 0) {
+                BigDecimal totalScore = fp.getTotalScore();
+                if (totalScore == null) {
+                    totalScore = BigDecimal.ZERO;
+
+                }
+                if (totalScore.equals(lastTotal) && place > 0) {
                     //tie
                     fp.setPlace(place);
                 } else {
@@ -558,16 +611,23 @@ public class ScoreController {
                 }
                 tieCount++;
                 tieMap.put(place, tieCount);
-                lastTotal = fp.getTotalScore();
+                lastTotal = totalScore;
             }
             for (FiguresParticipant fp : pointList) {
                 int tieCount = 1;
                 if (tieMap.containsKey(fp.getPlace())) {
                     tieCount = tieMap.get(fp.getPlace());
                 }
-                fp.setPoints(calculateFigurePlacePoints(fp.getPlace(), tieCount, meet.getType()));
+                if (fp.getTotalScore() != null) {
+                    fp.setPoints(calculateFigurePlacePoints(fp.getPlace(), tieCount, meet.getType()));
+                } else {
+                    fp.setPoints(BigDecimal.ZERO);
+                }
             }
         }
+
+        assignRoutinePlaces(meet);
+        assignRoutinePoints(meet);
 
         //Sum points for teams
         Map<Team, BigDecimal> meetPointsMap = new HashMap<Team, BigDecimal>();
@@ -575,12 +635,22 @@ public class ScoreController {
         for (Team team : meet.getOpponents()) {
             meetPointsMap.put(team, BigDecimal.ZERO);
         }
+
+        //Figures Points
         for (FiguresParticipant fp : meet.getFiguresParticipants()) {
             Team team = fp.getSwimmer().getTeam();
             BigDecimal points = meetPointsMap.get(team);
             points = points.add(fp.getPoints());
             meetPointsMap.put(team, points);
         }
+
+        //Routine Points
+        for (Team team : meetPointsMap.keySet()) {
+            BigDecimal points = meetPointsMap.get(team);
+            points = points.add(getRoutinePointsTotal(meet, team));
+            meetPointsMap.put(team, points);
+        }
+
         meet.setPointsMap(meetPointsMap);
 
         //Assign places for teams
@@ -611,6 +681,90 @@ public class ScoreController {
             entityManager.persist(fp);
         }
         entityManager.getTransaction().commit();
+    }
+
+    private static BigDecimal getRoutinePointsTotal(Meet meet, Team team) {
+        BigDecimal sum = BigDecimal.ZERO;
+        if (meet.getType() == 'C') {
+            for (Routine routine : meet.getRoutines()) {
+                if (routine.getTeam().equals(team)) {
+                    sum = sum.add(routine.getPoints());
+                }
+            }
+        } else {
+            int c = countRoutines(meet, team);
+            if (c == 1) {
+                sum = new BigDecimal(5);
+            } else if (c > 1) {
+                sum = new BigDecimal(10);
+            }
+        }
+        return sum;
+    }
+
+    private static int countRoutines(Meet meet, Team team) {
+        int count = 0;
+        for (Routine routine : meet.getRoutines()) {
+            if (routine.getTeam().equals(team)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private static void assignRoutinePlaces(Meet meet) {
+        List<Routine> routines = new LinkedList<Routine>();
+        routines.addAll(meet.getRoutines());
+        Collections.sort(routines, new Comparator<Routine>() {
+
+            public int compare(Routine r1, Routine r2) {
+                int c = r1.getRoutineType().compareTo(r2.getRoutineType());
+                if (c != 0) {
+                    return c;
+                }
+                c = r1.getLevel().getSortOrder().compareTo(r2.getLevel().getSortOrder());
+                if (c != 0) {
+                    return c;
+                }
+                return r1.getTotalScore().compareTo(r2.getTotalScore());
+            }
+        });
+        EntityManager em = ScoreApp.getEntityManager();
+        em.getTransaction().begin();
+        int place = 0;
+        BigDecimal lastScore = BigDecimal.ZERO;
+        String lastRoutineType = null;
+        RoutineLevel lastRoutineLevel = null;
+        for (Routine routine : routines) {
+            if (lastRoutineType != null && (!lastRoutineLevel.equals(routine.getLevel()) || !lastRoutineType.equals(routine.getRoutineType()))) {
+                place = 0;
+                lastScore = BigDecimal.ZERO;
+            }
+            BigDecimal score = routine.getTotalScore();
+            if (!score.equals(lastScore) || place == 0) {
+                place++;
+            }
+            routine.setPlace(place);
+            em.persist(routine);
+            lastScore = score;
+            lastRoutineType = routine.getRoutineType();
+            lastRoutineLevel = routine.getLevel();
+        }
+        em.getTransaction().commit();
+    }
+
+    private static void assignRoutinePoints(Meet meet) {
+        EntityManager em = ScoreApp.getEntityManager();
+        em.getTransaction().begin();
+        for (Routine routine : meet.getRoutines()) {
+            if (meet.getType() == 'C') {
+                routine.setPoints(RoutineManager.calcChampsPlacePoints(routine.getPlace(), routine.getRoutineType()));
+                em.persist(routine);
+            } else {
+                routine.setPoints(BigDecimal.ZERO);
+            }
+        }
+        em.getTransaction().commit();
     }
 
     private static BigDecimal calculateFigurePlacePoints(int place, int tieCount, char meetType) {
@@ -668,6 +822,9 @@ public class ScoreController {
     }
 
     public static BigDecimal calculateTotalScore(FiguresParticipant fp) {
+        if (fp.getFiguresScores().size() == 0) {
+            return null;
+        }
         BigDecimal total = BigDecimal.ZERO;
         for (FigureScore fs : fp.getFiguresScores()) {
             total = total.add(fs.getTotalScore());

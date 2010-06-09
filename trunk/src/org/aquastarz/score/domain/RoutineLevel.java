@@ -112,7 +112,7 @@ public class RoutineLevel implements Serializable {
 
     @Override
     public String toString() {
-        return routineLevelId;
+        return name;
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {

@@ -27,7 +27,6 @@ import java.io.InputStreamReader;
 import org.aquastarz.score.domain.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,11 +35,14 @@ import java.util.zip.ZipInputStream;
 import javax.persistence.EntityManager;
 import org.aquastarz.score.ScoreApp;
 import org.aquastarz.score.controller.ScoreController;
-import org.aquastarz.score.controller.SeasonController;
-import org.aquastarz.score.controller.SwimmerController;
+import org.aquastarz.score.manager.SeasonManager;
+import org.aquastarz.score.manager.SwimmerManager;
 import org.aquastarz.score.domain.Season;
 
 public class Bootstrap {
+
+    private static org.apache.log4j.Logger logger =
+            org.apache.log4j.Logger.getLogger(Bootstrap.class.getName());
 
     public static void clearDB(EntityManager entityManager) {
         entityManager.getTransaction().begin();
@@ -148,7 +150,7 @@ public class Bootstrap {
                         folder = fname.substring(0, i);
                     }
                     if (fname.toUpperCase().endsWith("ROSTER.CSV") && folder != null) {
-                        Season season = SeasonController.findOrCreate(folder);
+                        Season season = SeasonManager.findOrCreate(folder);
                         loadRoster(season, stream);
                     } else if (fname.toUpperCase().endsWith("RESULTS.CSV")) {
                         lrMap.put(folder, readLegacyResults(stream));
@@ -168,8 +170,8 @@ public class Bootstrap {
                     String seasonName = folder.substring(0, i);
                     LegacyMeet lm = lmMap.get(folder);
                     lm.setResults(lrMap.get(folder));
-                    Season season = SeasonController.findOrCreate(seasonName);
-                    
+                    Season season = SeasonManager.findOrCreate(seasonName);
+
                     //Skip if we have a meet with same name
                     if (ScoreController.findMeet(season, lm.meetTitle) == null) {
                         if (lm.getResults() != null && season != null) {
@@ -213,9 +215,9 @@ public class Bootstrap {
                 Team team = (Team) entityManager.find(Team.class, ls.team.toUpperCase());
                 Level level = levels.get((ls.novInt + ls.ageGrp).toUpperCase());
                 if (level == null) {
-                    System.out.println("Level not found [" + ls.novInt + ls.ageGrp + "]");
+                    logger.error("Level not found [" + ls.novInt + ls.ageGrp + "]");
                 }
-                Swimmer swimmer = SwimmerController.findByLeagueNum(ls.code, season);
+                Swimmer swimmer = SwimmerManager.findByLeagueNum(ls.code, season);
                 if (swimmer == null) {
                     swimmer = new Swimmer(ls.code, season, team, level, ls.gName, ls.sName);
                 }
@@ -293,26 +295,10 @@ public class Bootstrap {
         meet.setInt2Figure(entityManager.find(Figure.class, legacyMeet.iSta2));
         meet.setInt3Figure(entityManager.find(Figure.class, legacyMeet.iSta3));
         meet.setInt4Figure(entityManager.find(Figure.class, legacyMeet.iSta4));
-        if (legacyMeet.n8USta1) {
-            meet.setEu1Figure(meet.getNov1Figure());
-        }
-        if (legacyMeet.n8USta2) {
-            if (meet.getEu1Figure() == null) {
-                meet.setEu1Figure(meet.getNov2Figure());
-            } else {
-                meet.setEu2Figure(meet.getNov2Figure());
-            }
-        }
-        if (legacyMeet.n8USta3) {
-            if (meet.getEu1Figure() == null) {
-                meet.setEu1Figure(meet.getNov3Figure());
-            } else {
-                meet.setEu2Figure(meet.getNov3Figure());
-            }
-        }
-        if (legacyMeet.n8USta4) {
-            meet.setEu2Figure(meet.getNov4Figure());
-        }
+        meet.setEu1(legacyMeet.n8USta1);
+        meet.setEu2(legacyMeet.n8USta2);
+        meet.setEu3(legacyMeet.n8USta3);
+        meet.setEu4(legacyMeet.n8USta4);
         meet.setFiguresOrderGenerated(true);
         entityManager.getTransaction().begin();
         entityManager.persist(meet);
@@ -322,7 +308,7 @@ public class Bootstrap {
             FiguresParticipant fp = new FiguresParticipant();
             fp.setFigureOrder(lr.swmrNo);
 
-            fp.setSwimmer(SwimmerController.findByLeagueNum(lr.leagueNo, season));
+            fp.setSwimmer(SwimmerManager.findByLeagueNum(lr.leagueNo, season));
             fp.setMeet(meet);
 
             entityManager.getTransaction().begin();
@@ -340,76 +326,37 @@ public class Bootstrap {
             List<FigureScore> scores = new ArrayList<FigureScore>();
             int figNum = 1;
             for (int i = 0; i < 4; i++) {
-                if (!"N8".equals(fp.getSwimmer().getLevel().getLevelId())
-                        || (i == 0 && legacyMeet.n8USta1)
-                        || (i == 1 && legacyMeet.n8USta2)
-                        || (i == 2 && legacyMeet.n8USta3)
-                        || (i == 3 && legacyMeet.n8USta4)) {
-                    FigureScore fs = new FigureScore();
-                    fs.setFiguresParticipant(fp);
-                    if ("N8".equals(fp.getSwimmer().getLevel().getLevelId())) {
-                        switch (figNum) {
-                            case 1:
-                                fs.setFigure(meet.getEu1Figure());
-                                break;
-                            case 2:
-                                fs.setFigure(meet.getEu2Figure());
-                                break;
-                        }
-
-                    } else if (fp.getSwimmer().getLevel().getLevelId().startsWith("N")) {
-                        switch (figNum) {
-                            case 1:
-                                fs.setFigure(meet.getNov1Figure());
-                                break;
-                            case 2:
-                                fs.setFigure(meet.getNov2Figure());
-                                break;
-                            case 3:
-                                fs.setFigure(meet.getNov3Figure());
-                                break;
-                            case 4:
-                                fs.setFigure(meet.getNov4Figure());
-                                break;
-                        }
-                    } else {
-                        switch (figNum) {
-                            case 1:
-                                fs.setFigure(meet.getInt1Figure());
-                                break;
-                            case 2:
-                                fs.setFigure(meet.getInt2Figure());
-                                break;
-                            case 3:
-                                fs.setFigure(meet.getInt3Figure());
-                                break;
-                            case 4:
-                                fs.setFigure(meet.getInt4Figure());
-                                break;
-                        }
-                    }
-                    try {
-                        fs.setScore1((BigDecimal) lr.getClass().getDeclaredField("s" + (i + 1) + "j1").get(lr));
-                        fs.setScore2((BigDecimal) lr.getClass().getDeclaredField("s" + (i + 1) + "j2").get(lr));
-                        fs.setScore3((BigDecimal) lr.getClass().getDeclaredField("s" + (i + 1) + "j3").get(lr));
-                        fs.setScore4((BigDecimal) lr.getClass().getDeclaredField("s" + (i + 1) + "j4").get(lr));
-                        fs.setScore5((BigDecimal) lr.getClass().getDeclaredField("s" + (i + 1) + "j5").get(lr));
-                        fs.setPenalty((BigDecimal) lr.getClass().getDeclaredField("s" + (i + 1) + "Pen").get(lr));
-                        fs.setTotalScore(ScoreController.totalScore(fs));
-                        FigureScoreTracker fst = new FigureScoreTracker();
-                        fst.figureScore = fs;
-                        fst.total = (BigDecimal) lr.getClass().getDeclaredField("s" + (i + 1) + "Tot").get(lr);
-                        figureScoreTrackers.add(fst);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    entityManager.getTransaction().begin();
-                    entityManager.persist(fs);
-                    entityManager.getTransaction().commit();
-
-                    scores.add(fs);
-                    figNum++;
+                if ("8 & UNDER".equals(lr.ageGrp.toUpperCase())
+                        && ((i == 0 && !meet.isEu1())
+                        || (i == 1 && !meet.isEu2())
+                        || (i == 2 && !meet.isEu3())
+                        || (i == 3 && !meet.isEu4()))) {
+                    continue;
                 }
+                FigureScore fs = new FigureScore();
+                fs.setFiguresParticipant(fp);
+                fs.setStation(i + 1);
+                try {
+                    fs.setScore1((BigDecimal) lr.getClass().getDeclaredField("s" + (i + 1) + "j1").get(lr));
+                    fs.setScore2((BigDecimal) lr.getClass().getDeclaredField("s" + (i + 1) + "j2").get(lr));
+                    fs.setScore3((BigDecimal) lr.getClass().getDeclaredField("s" + (i + 1) + "j3").get(lr));
+                    fs.setScore4((BigDecimal) lr.getClass().getDeclaredField("s" + (i + 1) + "j4").get(lr));
+                    fs.setScore5((BigDecimal) lr.getClass().getDeclaredField("s" + (i + 1) + "j5").get(lr));
+                    fs.setPenalty((BigDecimal) lr.getClass().getDeclaredField("s" + (i + 1) + "Pen").get(lr));
+                    fs.setTotalScore(ScoreController.totalScore(fs));
+                    FigureScoreTracker fst = new FigureScoreTracker();
+                    fst.figureScore = fs;
+                    fst.total = (BigDecimal) lr.getClass().getDeclaredField("s" + (i + 1) + "Tot").get(lr);
+                    figureScoreTrackers.add(fst);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                entityManager.getTransaction().begin();
+                entityManager.persist(fs);
+                entityManager.getTransaction().commit();
+
+                scores.add(fs);
+                figNum++;
             }
             fp.setFiguresScores(scores);
             meet.getFiguresParticipants().add(fp);

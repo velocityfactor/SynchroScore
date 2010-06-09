@@ -36,7 +36,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import org.aquastarz.score.ScoreApp;
-import org.aquastarz.score.controller.TeamController;
+import org.aquastarz.score.manager.TeamManager;
 
 public class TeamForm extends JPanel {
 
@@ -202,7 +202,7 @@ public class TeamForm extends JPanel {
         org.aquastarz.score.domain.Team t = new org.aquastarz.score.domain.Team();
 
         String newTeamId=null;
-        while(newTeamId==null || TeamController.findById(newTeamId)!=null) {
+        while(newTeamId==null || TeamManager.findById(newTeamId)!=null) {
             newTeamId = JOptionPane.showInputDialog(this, "Enter new team abbreviation:", "New Team", JOptionPane.QUESTION_MESSAGE);
             if(newTeamId == null) return;
         }

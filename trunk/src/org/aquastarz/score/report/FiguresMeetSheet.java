@@ -20,6 +20,8 @@
 package org.aquastarz.score.report;
 
 import java.math.BigDecimal;
+import org.aquastarz.score.controller.ScoreController;
+import org.aquastarz.score.domain.Figure;
 import org.aquastarz.score.domain.FigureScore;
 import org.aquastarz.score.domain.FiguresParticipant;
 
@@ -43,8 +45,8 @@ public class FiguresMeetSheet implements Comparable {
     BigDecimal penalty1;
     String figure2;
     BigDecimal dd2;
-    BigDecimal j12;
-    BigDecimal j22;
+    BigDecimal j12=null;
+    BigDecimal j22=null;
     BigDecimal j42;
     BigDecimal j52;
     BigDecimal j32;
@@ -80,12 +82,12 @@ public class FiguresMeetSheet implements Comparable {
         figuresOrder = fp.getFigureOrder();
         leagueNum = fp.getSwimmer().getLeagueNum();
         points = fp.getPoints();
-        int fig=1;
         for(FigureScore fs:fp.getFiguresScores()) {
-            switch(fig) {
+            Figure figure = ScoreController.getFigure(fs);
+            switch(fs.getStation()) {
                 case 1:
-                    figure1 = fs.getFigure().getName();
-                    dd1 = fs.getFigure().getDegreeOfDifficulty();
+                    figure1 = figure.getName();
+                    dd1 = figure.getDegreeOfDifficulty();
                     j11 = fs.getScore1();
                     j21 = fs.getScore2();
                     j31 = fs.getScore3();
@@ -95,8 +97,8 @@ public class FiguresMeetSheet implements Comparable {
                     score1 = fs.getTotalScore();
                     break;
                 case 2:
-                    figure2 = fs.getFigure().getName();
-                    dd2 = fs.getFigure().getDegreeOfDifficulty();
+                    figure2 = figure.getName();
+                    dd2 = figure.getDegreeOfDifficulty();
                     j12 = fs.getScore1();
                     j22 = fs.getScore2();
                     j32 = fs.getScore3();
@@ -106,8 +108,8 @@ public class FiguresMeetSheet implements Comparable {
                     score2 = fs.getTotalScore();
                     break;
                 case 3:
-                    figure3 = fs.getFigure().getName();
-                    dd3 = fs.getFigure().getDegreeOfDifficulty();
+                    figure3 = figure.getName();
+                    dd3 = figure.getDegreeOfDifficulty();
                     j13 = fs.getScore1();
                     j23 = fs.getScore2();
                     j33 = fs.getScore3();
@@ -117,8 +119,8 @@ public class FiguresMeetSheet implements Comparable {
                     score3 = fs.getTotalScore();
                     break;
                 case 4:
-                    figure4 = fs.getFigure().getName();
-                    dd4 = fs.getFigure().getDegreeOfDifficulty();
+                    figure4 = figure.getName();
+                    dd4 = figure.getDegreeOfDifficulty();
                     j14 = fs.getScore1();
                     j24 = fs.getScore2();
                     j34 = fs.getScore3();
@@ -128,7 +130,6 @@ public class FiguresMeetSheet implements Comparable {
                     score4 = fs.getTotalScore();
                     break;
             }
-            fig++;
         }
     }
 

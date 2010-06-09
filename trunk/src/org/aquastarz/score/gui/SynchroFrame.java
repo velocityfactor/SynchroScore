@@ -52,7 +52,7 @@ import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
 import org.aquastarz.score.ScoreApp;
 import org.aquastarz.score.controller.ScoreController;
-import org.aquastarz.score.controller.SwimmerController;
+import org.aquastarz.score.manager.SwimmerManager;
 import org.aquastarz.score.controller.listener.SwimmerControllerListener;
 import org.aquastarz.score.domain.FiguresParticipant;
 import org.aquastarz.score.domain.Meet;
@@ -72,7 +72,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         MEET_SETUP, SWIMMERS, FIGURES_ORDER, FIGURES, ROUTINES, REPORTS, LEAGUE, MAINTENANCE
     };
     private ScoreController controller = null;
-    private Meet meet = null;
+    private static Meet meet = null;
     Image appIcon = null;
 
     /** Creates new form Synchro */
@@ -93,6 +93,10 @@ public class SynchroFrame extends javax.swing.JFrame {
         setTabEnabled(SynchroFrame.Tab.MEET_SETUP, true);
         updateStatus();
         updateFiguresStatus();
+    }
+
+    public static Meet getMeet() {
+        return meet;
     }
 
     private void listenForHotKeys() {
@@ -140,7 +144,7 @@ public class SynchroFrame extends javax.swing.JFrame {
             updateSwimmerTab();
             if (meet.hasFiguresParticipants(meet)) {
                 if (meet.getFiguresOrderGenerated()) {
-                    setSetupStatus(Color.GREEN, 100);
+                    setSetupStatus(Color.GREEN.darker(), 100);
                     setTabEnabled(Tab.FIGURES_ORDER, true);
                     setTabEnabled(Tab.FIGURES, true);
                     setTabEnabled(Tab.ROUTINES, true);
@@ -164,8 +168,18 @@ public class SynchroFrame extends javax.swing.JFrame {
     }
 
     public void updateFiguresStatus() {
-        setNovFiguresStatus(Color.GREEN, ScoreController.percentCompleteFigures(meet, true));
-        setIntFiguresStatus(Color.GREEN, ScoreController.percentCompleteFigures(meet, false));
+        int p = ScoreController.percentCompleteFigures(meet, true);
+        if (p < 100) {
+            setNovFiguresStatus(Color.GREEN, p);
+        } else {
+            setNovFiguresStatus(Color.GREEN.darker(), p);
+        }
+        p = ScoreController.percentCompleteFigures(meet, false);
+        if (p < 100) {
+            setIntFiguresStatus(Color.GREEN, p);
+        } else {
+            setIntFiguresStatus(Color.GREEN.darker(), p);
+        }
     }
 
     private void disableAllTabs() {
@@ -205,7 +219,7 @@ public class SynchroFrame extends javax.swing.JFrame {
             }
         });
 
-        SwimmerController.addListener(new SwimmerControllerListener() {
+        SwimmerManager.addListener(new SwimmerControllerListener() {
 
             public void swimmerUpdated(Swimmer swimmer) {
                 updateSwimmerTab();
@@ -235,11 +249,11 @@ public class SynchroFrame extends javax.swing.JFrame {
         teamTabs.removeAll();
         SwimmerSelectionPanel panel = new SwimmerSelectionPanel(meet.getHomeTeam());
         teamTabs.add(meet.getHomeTeam().getTeamId(), panel);
-        panel.setSwimmers(SwimmerController.getSwimmers(meet.getHomeTeam()), meet.getSwimmers());
+        panel.setSwimmers(SwimmerManager.getSwimmers(meet.getHomeTeam()), meet.getSwimmers());
         for (Team opponent : meet.getOpponents()) {
             panel = new SwimmerSelectionPanel(opponent);
             teamTabs.add(opponent.getTeamId(), panel);
-            panel.setSwimmers(SwimmerController.getSwimmers(opponent), meet.getSwimmers());
+            panel.setSwimmers(SwimmerManager.getSwimmers(opponent), meet.getSwimmers());
         }
     }
 
@@ -261,9 +275,8 @@ public class SynchroFrame extends javax.swing.JFrame {
         Query swimmerQuery = null;
 
         String teamId = "%";
-        ComboBoxModel cbm = leagueTeamCombo.getModel();
-        Object o = cbm.getSelectedItem();
-        if (o != null && o instanceof Team) {
+        Object o = leagueTeamCombo.getSelectedItem();
+        if (o != null && o instanceof String) {
             teamId = (String) o;
             if ("[All]".equals(o)) {
                 teamId = "%";
