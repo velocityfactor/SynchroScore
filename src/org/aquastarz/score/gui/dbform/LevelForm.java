@@ -29,7 +29,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import org.aquastarz.score.ScoreApp;
-import org.aquastarz.score.controller.LevelController;
+import org.aquastarz.score.manager.LevelManager;
 
 public class LevelForm extends JPanel {
     EntityManager entityManager = null;
@@ -234,13 +234,13 @@ public class LevelForm extends JPanel {
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
         org.aquastarz.score.domain.Level l = new org.aquastarz.score.domain.Level();
         String newLevelId=null;
-        while(newLevelId==null || LevelController.findById(newLevelId)!=null) {
+        while(newLevelId==null || LevelManager.findById(newLevelId)!=null) {
             newLevelId = JOptionPane.showInputDialog(this, "Enter new level id:", "New Level", JOptionPane.QUESTION_MESSAGE);
             if(newLevelId == null) return;
         }
         l.setLevelId(newLevelId);
         l.setName("");
-        l.setSortOrder(LevelController.getNextSortOrder());
+        l.setSortOrder(LevelManager.getNextSortOrder());
         entityManager.persist(l);
         list.add(l);
         int row = list.size()-1;

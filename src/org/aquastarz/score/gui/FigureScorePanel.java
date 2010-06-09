@@ -86,7 +86,7 @@ public class FigureScorePanel extends javax.swing.JPanel {
         Collection<FigureScore> figureScores = figuresParticipant.getFiguresScores();
         figureScoreMap = new HashMap<Figure, FigureScore>();
         for (FigureScore figureScore : figureScores) {
-            figureScoreMap.put(figureScore.getFigure(), figureScore);
+            figureScoreMap.put(ScoreController.getFigure(figureScore), figureScore);
         }
         Figure[] fig = figures.toArray(new Figure[4]);
         this.figures = fig;
@@ -131,6 +131,14 @@ public class FigureScorePanel extends javax.swing.JPanel {
                 }
             }
         }
+        else {
+            fig1.setText("--");
+            dd1.setText("--");
+            penaltyHS1.setSelected(false);
+            penalty1S1.setSelected(false);
+            penalty2S1.setSelected(false);
+            total1.setText("--");
+        }
         if (fig[1] != null) {
             fig2.setText(fig[1].getName());
             dd2.setText(fig[1].getDegreeOfDifficulty().toString());
@@ -160,6 +168,14 @@ public class FigureScorePanel extends javax.swing.JPanel {
                     }
                 }
             }
+        }
+        else {
+            fig2.setText("--");
+            dd2.setText("--");
+            penaltyHS2.setSelected(false);
+            penalty1S2.setSelected(false);
+            penalty2S2.setSelected(false);
+            total2.setText("--");
         }
         if (fig[2] != null) {
             fig3.setText(fig[2].getName());
@@ -191,6 +207,14 @@ public class FigureScorePanel extends javax.swing.JPanel {
                 }
             }
         }
+        else {
+            fig3.setText("--");
+            dd3.setText("--");
+            penaltyHS3.setSelected(false);
+            penalty1S3.setSelected(false);
+            penalty2S3.setSelected(false);
+            total3.setText("--");
+        }
         if (fig[3] != null) {
             fig4.setText(fig[3].getName());
             dd4.setText(fig[3].getDegreeOfDifficulty().toString());
@@ -220,6 +244,14 @@ public class FigureScorePanel extends javax.swing.JPanel {
                     }
                 }
             }
+        }
+        else {
+            fig4.setText("--");
+            dd4.setText("--");
+            penaltyHS4.setSelected(false);
+            penalty1S4.setSelected(false);
+            penalty2S4.setSelected(false);
+            total4.setText("--");
         }
         for (int i = 1; i <= 4; i++) {
             for (int j = 1; j <= 5; j++) {
@@ -271,7 +303,7 @@ public class FigureScorePanel extends javax.swing.JPanel {
                 return;  //Don't make a new one if there's no score entered.
             }
             score = new FigureScore();
-            score.setFigure(figures[fig - 1]);
+            score.setStation(fig);
             score.setFiguresParticipant(figuresParticipant);
         }
         score.setScore1(getScoreValue(fig, 1));

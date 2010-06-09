@@ -45,9 +45,9 @@ public class FigureScore implements Serializable {
     public FigureScore() {
     }
 
-    public FigureScore(FiguresParticipant figuresParticipant, Figure figure) {
+    public FigureScore(FiguresParticipant figuresParticipant, int station) {
         this.figuresParticipant = figuresParticipant;
-        this.figure = figure;
+        this.station = station;
     }
     private Integer figureScoreId;
 
@@ -119,8 +119,8 @@ public class FigureScore implements Serializable {
     }
     private BigDecimal totalScore;
 
-    @Basic(optional = false)
-    @Column(name = "totalScore", nullable = false, precision = 2, scale = 1)
+    @Basic(optional = true)
+    @Column(name = "totalScore", nullable = true, precision = 2, scale = 1)
     public BigDecimal getTotalScore() {
         return totalScore;
     }
@@ -139,16 +139,14 @@ public class FigureScore implements Serializable {
     public void setPenalty(BigDecimal penalty) {
         this.penalty = penalty;
     }
-    private Figure figure;
+    private int station;
 
-    @JoinColumn(name = "figureId", referencedColumnName = "figureId", nullable = false)
-    @ManyToOne(optional = false)
-    public Figure getFigure() {
-        return figure;
+    public int getStation() {
+        return station;
     }
 
-    public void setFigure(Figure figure) {
-        this.figure = figure;
+    public void setStation(int station) {
+        this.station = station;
     }
     private FiguresParticipant figuresParticipant;
 
@@ -184,6 +182,6 @@ public class FigureScore implements Serializable {
 
     @Override
     public String toString() {
-        return "FigureScore #" + figureScoreId+" s1="+score1+" s2="+score2+" s3="+score3+" s4="+score4+" s5="+score5+" pen="+penalty+" dd="+figure.getDegreeOfDifficulty();
+        return "FigureScore #" + figureScoreId + " s1=" + score1 + " s2=" + score2 + " s3=" + score3 + " s4=" + score4 + " s5=" + score5 + " pen=" + penalty + " station=" + station;
     }
 }
