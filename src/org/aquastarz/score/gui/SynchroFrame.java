@@ -200,6 +200,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         meetSetup.addMeetSetupPanelListener(new MeetSetupPanelListener() {
 
             public void meetSetupSaved() {
+                meet.clearPoints();
                 controller.saveMeet(meet);
                 updateStatus();
                 if (!meet.isValid()) {
@@ -784,7 +785,12 @@ public class SynchroFrame extends javax.swing.JFrame {
         leagueSortButtonGroup.add(leagueSortByName);
         leagueSortByName.setFont(new java.awt.Font("Tahoma", 0, 14));
         leagueSortByName.setText("Name");
-
+        leagueSortByName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                leagueSortByNamefiguresOrderSortByNameActionPerformed(evt);
+            }
+        });
+		
         leagueSortButtonGroup.add(leagueSortByTeam);
         leagueSortByTeam.setFont(new java.awt.Font("Tahoma", 0, 14));
         leagueSortByTeam.setText("Team");
@@ -923,6 +929,7 @@ public class SynchroFrame extends javax.swing.JFrame {
             participatingSwimmers.addAll(ssp.getSelectedSwimmers());
         }
         controller.updateFiguresSwimmers(meet, participatingSwimmers);
+        meet.clearPoints();
         controller.saveMeet(meet);
         updateStatus();
         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
