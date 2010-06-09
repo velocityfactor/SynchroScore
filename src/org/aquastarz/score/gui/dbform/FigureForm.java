@@ -30,7 +30,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import org.aquastarz.score.ScoreApp;
-import org.aquastarz.score.controller.FigureController;
+import org.aquastarz.score.manager.FigureManager;
 
 public class FigureForm extends JPanel {
 
@@ -235,7 +235,7 @@ public class FigureForm extends JPanel {
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
         org.aquastarz.score.domain.Figure f = new org.aquastarz.score.domain.Figure();
         String newFigureId = null;
-        while (newFigureId == null || FigureController.findById(newFigureId) != null) {
+        while (newFigureId == null || FigureManager.findById(newFigureId) != null) {
             newFigureId = JOptionPane.showInputDialog(this, "Enter new figure number:", "New Figure", JOptionPane.QUESTION_MESSAGE);
             if (newFigureId == null) {
                 return;

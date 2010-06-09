@@ -51,6 +51,7 @@ public class ScoreApp {
             } else {
                 if (props == null) {
                     props = new TreeMap();
+                    props.put("hibernate.hbm2ddl.auto", "update");
                     props.put("hibernate.connection.url", dbUrl);
                 }
                 entityManager = getNewEntityManager();

@@ -21,6 +21,9 @@ package org.aquastarz.score.gui;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.Vector;
@@ -63,17 +66,26 @@ public class SwimmerSelectionPanel extends javax.swing.JPanel {
     }
 
     private Vector<CheckListItem<Swimmer>> sortList(Vector<CheckListItem<Swimmer>> list) {
-        TreeMap<Object,CheckListItem<Swimmer>> map = new TreeMap<Object,CheckListItem<Swimmer>>();
-        for(CheckListItem<Swimmer> item : list) {
-            if(sortByName.isSelected()) {
-                map.put(item.getItem().getLastName(), item);
+        LinkedList<CheckListItem<Swimmer>> sortList = new LinkedList<CheckListItem<Swimmer>>();
+        sortList.addAll(list);
+        Collections.sort(sortList, new Comparator() {
+            public int compare(Object o1, Object o2) {
+                CheckListItem<Swimmer> c1 = (CheckListItem<Swimmer>) o1;
+                CheckListItem<Swimmer> c2 = (CheckListItem<Swimmer>) o2;
+                if(sortByName.isSelected()) {
+                    int c = c1.getItem().getLastName().compareTo(c2.getItem().getLastName());
+                    if(c==0) {
+                        return c1.getItem().getFirstName().compareTo(c2.getItem().getFirstName());
+                    }
+                    else { return c;}
+                }
+                else {
+                    return c1.getItem().getLeagueNum().compareTo(c2.getItem().getLeagueNum());
+                }
             }
-            else {
-                map.put(item.getItem().getSwimmerId(), item);
-            }
-        }
+        });
         Vector<CheckListItem<Swimmer>> result = new Vector<CheckListItem<Swimmer>>();
-        result.addAll(map.values());
+        result.addAll(sortList);
         return result;
     }
 

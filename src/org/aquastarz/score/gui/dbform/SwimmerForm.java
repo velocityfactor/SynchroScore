@@ -30,7 +30,7 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import org.aquastarz.score.ScoreApp;
-import org.aquastarz.score.controller.SwimmerController;
+import org.aquastarz.score.manager.SwimmerManager;
 import org.aquastarz.score.domain.Level;
 import org.aquastarz.score.domain.Team;
 
@@ -308,7 +308,7 @@ public class SwimmerForm extends JPanel {
         s.setSeason(ScoreApp.getCurrentSeason());
         s.setFirstName("");
         s.setLastName("");
-        s.setLeagueNum(SwimmerController.getNextLeagueNumber());
+        s.setLeagueNum(SwimmerManager.getNextLeagueNumber());
         s.setLevel(levelList.get(0));
         s.setTeam(teamList.get(0));
         entityManager.getTransaction().begin();
@@ -326,7 +326,7 @@ public class SwimmerForm extends JPanel {
         List<org.aquastarz.score.domain.Swimmer> merged = new ArrayList<org.aquastarz.score.domain.Swimmer>(swimmerList.size());
         for (org.aquastarz.score.domain.Swimmer s : swimmerList) {
             merged.add(entityManager.merge(s));
-            SwimmerController.notifySwimmerUpdated(s);
+            SwimmerManager.notifySwimmerUpdated(s);
         }
         swimmerList.clear();
         swimmerList.addAll(merged);

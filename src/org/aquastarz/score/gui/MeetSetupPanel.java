@@ -116,14 +116,10 @@ public class MeetSetupPanel extends javax.swing.JPanel {
         intFigName4.setSelectedItem(meet.getInt4Figure());
 
         //Check 8 and under boxes
-        if(meet.getEu1Figure()!=null && meet.getEu1Figure().equals(meet.getNov1Figure())) eightAndUnder1.setSelected(true);
-        if(meet.getEu1Figure()!=null && meet.getEu1Figure().equals(meet.getNov2Figure())) eightAndUnder2.setSelected(true);
-        if(meet.getEu1Figure()!=null && meet.getEu1Figure().equals(meet.getNov3Figure())) eightAndUnder3.setSelected(true);
-        if(meet.getEu1Figure()!=null && meet.getEu1Figure().equals(meet.getNov4Figure())) eightAndUnder4.setSelected(true);
-        if(meet.getEu2Figure()!=null && meet.getEu2Figure().equals(meet.getNov1Figure())) eightAndUnder1.setSelected(true);
-        if(meet.getEu2Figure()!=null && meet.getEu2Figure().equals(meet.getNov2Figure())) eightAndUnder2.setSelected(true);
-        if(meet.getEu2Figure()!=null && meet.getEu2Figure().equals(meet.getNov3Figure())) eightAndUnder3.setSelected(true);
-        if(meet.getEu2Figure()!=null && meet.getEu2Figure().equals(meet.getNov4Figure())) eightAndUnder4.setSelected(true);
+        eightAndUnder1.setSelected(meet.isEu1());
+        eightAndUnder2.setSelected(meet.isEu2());
+        eightAndUnder3.setSelected(meet.isEu3());
+        eightAndUnder4.setSelected(meet.isEu4());
 
         homeTeam.setSelectedItem(meet.getHomeTeam());
 
@@ -762,37 +758,11 @@ public class MeetSetupPanel extends javax.swing.JPanel {
         meet.setInt2Figure((Figure)intFigName2.getSelectedItem());
         meet.setInt3Figure((Figure)intFigName3.getSelectedItem());
         meet.setInt4Figure((Figure)intFigName4.getSelectedItem());
-        
-        meet.setEu1Figure(null);
-        meet.setEu2Figure(null);
-        if (eightAndUnder1.isSelected()) {
-            if (meet.getEu1Figure() == null) {
-                meet.setEu1Figure(meet.getNov1Figure());
-            } else {
-                meet.setEu2Figure(meet.getNov1Figure());
-            }
-        }
-        if (eightAndUnder2.isSelected()) {
-            if (meet.getEu1Figure() == null) {
-                meet.setEu1Figure(meet.getNov2Figure());
-            } else {
-                meet.setEu2Figure(meet.getNov2Figure());
-            }
-        }
-        if (eightAndUnder3.isSelected()) {
-            if (meet.getEu1Figure() == null) {
-                meet.setEu1Figure(meet.getNov3Figure());
-            } else {
-                meet.setEu2Figure(meet.getNov3Figure());
-            }
-        }
-        if (eightAndUnder4.isSelected()) {
-            if (meet.getEu1Figure() == null) {
-                meet.setEu1Figure(meet.getNov4Figure());
-            } else {
-                meet.setEu2Figure(meet.getNov4Figure());
-            }
-        }
+
+        meet.setEu1(eightAndUnder1.isSelected());
+        meet.setEu2(eightAndUnder2.isSelected());
+        meet.setEu3(eightAndUnder3.isSelected());
+        meet.setEu4(eightAndUnder4.isSelected());
         fireSavedEvent();
 
         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));

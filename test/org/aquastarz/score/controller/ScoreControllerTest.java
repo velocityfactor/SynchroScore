@@ -43,7 +43,7 @@ public class ScoreControllerTest {
     @BeforeClass
     public static void setUpClass() throws Exception {
         Bootstrap.loadLeagueData();
-        File file = new File("c:/home/shayne/work/java/SynchroScore/data/2009.zip");    
+        File file = new File("C:/Users/shayne/Documents/SynchroScore/data/2009.zip");
         List<List<Object>> trackerList = Bootstrap.loadUpdateData(file);
 
         figureScoreTrackers = new ArrayList<FigureScoreTracker>();

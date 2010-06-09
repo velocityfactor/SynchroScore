@@ -42,7 +42,8 @@ import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(uniqueConstraints={@UniqueConstraint(columnNames={"season","name"})})
+@Table(uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"season", "name"})})
 @NamedQueries({
     @NamedQuery(name = "Meet.findAllBySeasonOrderByDateDesc", query = "SELECT m FROM Meet m where m.season like :season order by m.meetDate desc"),
     @NamedQuery(name = "Meet.findBySeasonAndName", query = "SELECT m FROM Meet m where m.season like :season and m.name like :name")})
@@ -62,17 +63,18 @@ public class Meet implements Serializable {
     private List<Team> opponents = new Vector();
     @OneToMany(mappedBy = "meet")
     private List<FiguresParticipant> figuresParticipants = new Vector<FiguresParticipant>();
+    @OneToMany(mappedBy = "meet")
+    private List<Routine> routines = new Vector<Routine>();
     private char type;
     private boolean figuresOrderGenerated = false;
+    private Boolean routinesOrderGenerated;
     @ManyToOne
     @JoinColumn(name = "homeTeam")
     private Team homeTeam;
-    @ManyToOne
-    @JoinColumn(name = "eu1Figure")
-    private Figure eu1Figure;
-    @ManyToOne
-    @JoinColumn(name = "eu2Figure")
-    private Figure eu2Figure;
+    private boolean eu1;
+    private boolean eu2;
+    private boolean eu3;
+    private boolean eu4;
     @ManyToOne
     @JoinColumn(name = "nov1Figure")
     private Figure nov1Figure;
@@ -201,20 +203,36 @@ public class Meet implements Serializable {
         this.nov4Figure = nov4Figure;
     }
 
-    public Figure getEu1Figure() {
-        return eu1Figure;
+    public boolean isEu1() {
+        return eu1;
     }
 
-    public void setEu1Figure(Figure eu1Figure) {
-        this.eu1Figure = eu1Figure;
+    public void setEu1(boolean eu1) {
+        this.eu1 = eu1;
     }
 
-    public Figure getEu2Figure() {
-        return eu2Figure;
+    public boolean isEu2() {
+        return eu2;
     }
 
-    public void setEu2Figure(Figure eu2Figure) {
-        this.eu2Figure = eu2Figure;
+    public void setEu2(boolean eu2) {
+        this.eu2 = eu2;
+    }
+
+    public boolean isEu3() {
+        return eu3;
+    }
+
+    public void setEu3(boolean eu3) {
+        this.eu3 = eu3;
+    }
+
+    public boolean isEu4() {
+        return eu4;
+    }
+
+    public void setEu4(boolean eu4) {
+        this.eu4 = eu4;
     }
 
     public Team getHomeTeam() {
@@ -281,6 +299,22 @@ public class Meet implements Serializable {
         this.season = season;
     }
 
+    public List<Routine> getRoutines() {
+        return routines;
+    }
+
+    public void setRoutines(List<Routine> routines) {
+        this.routines = routines;
+    }
+
+    public Boolean getRoutinesOrderGenerated() {
+        return routinesOrderGenerated;
+    }
+
+    public void setRoutinesOrderGenerated(Boolean routinesOrderGenerated) {
+        this.routinesOrderGenerated = routinesOrderGenerated;
+    }
+
     public boolean needsPointsCalc() {
         return placeMap == null || pointsMap == null;
     }
@@ -312,6 +346,18 @@ public class Meet implements Serializable {
 
     public void setCalcErrors(List<String> calcErrors) {
         this.calcErrors = calcErrors;
+    }
+
+    public boolean isRoutinesOrderGenerated() {
+        if (routinesOrderGenerated != null) {
+            return routinesOrderGenerated.booleanValue();
+        } else {
+            return false;
+        }
+    }
+
+    public void setRoutinesOrderGenerated(boolean routinesOrderGenerated) {
+        this.routinesOrderGenerated = new Boolean(routinesOrderGenerated);
     }
 
     public boolean hasCalcErrors() {
@@ -363,10 +409,23 @@ public class Meet implements Serializable {
         if (int4Figure == null) {
             valid = false;
         }
-        if (type == 'R' && eu1Figure == null) {
+        int euCount = 0;
+        if (eu1) {
+            euCount++;
+        }
+        if (eu2) {
+            euCount++;
+        }
+        if (eu3) {
+            euCount++;
+        }
+        if (eu4) {
+            euCount++;
+        }
+        if (type == 'R' && euCount != 2) {
             valid = false;
         }
-        if (type == 'R' && eu2Figure == null) {
+        if (type == 'C' && euCount != 4) {
             valid = false;
         }
         return valid;
@@ -377,8 +436,26 @@ public class Meet implements Serializable {
         String level = swimmer.getLevel().getLevelId();
         if (level.startsWith("N")) {
             if ("N8".equals(level)) {
-                figures.add(eu1Figure);
-                figures.add(eu2Figure);
+                if (eu1) {
+                    figures.add(nov1Figure);
+                } else {
+                    figures.add(null);
+                }
+                if (eu2) {
+                    figures.add(nov2Figure);
+                } else {
+                    figures.add(null);
+                }
+                if (eu3) {
+                    figures.add(nov3Figure);
+                } else {
+                    figures.add(null);
+                }
+                if (eu4) {
+                    figures.add(nov4Figure);
+                } else {
+                    figures.add(null);
+                }
             } else {
                 figures.add(nov1Figure);
                 figures.add(nov2Figure);
