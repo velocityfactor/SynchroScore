@@ -59,9 +59,6 @@ public class RoutineManager {
     }
 
     public static void save(Routine routine) {
-        if (routine.getRoutineOrder() == null) {
-        }
-
         EntityManager em = ScoreApp.getEntityManager();
         em.getTransaction().begin();
         em.persist(routine);
@@ -132,10 +129,10 @@ public class RoutineManager {
                 && (routine.getPenalty() != null);
     }
 
-    public static BigDecimal calculate(Routine routine) {
+    public static void calculate(Routine routine) {
         // Must be valid (values for all five scores, penalty, etc)
         if (!isScored(routine)) {
-            return null;
+            return;
         }
 
         char meetType = routine.getMeet().getType();
@@ -154,33 +151,52 @@ public class RoutineManager {
 
         BigDecimal max = BigDecimal.ZERO; // No score smaller than 0
         BigDecimal min = BigDecimal.TEN;  // No score larger than 10
+        BigDecimal max2 = BigDecimal.ZERO; // No score smaller than 0
+        BigDecimal min2 = BigDecimal.TEN;  // No score larger than 10
         for (BigDecimal score : scores) {
             if (score.compareTo(max) > 0) {
-                max = score;
+                if (score.compareTo(max2) > 0) {
+                    max = max2;
+                    max2 = score;
+                } else {
+                    max = score;
+                }
             }
             if (score.compareTo(min) < 0) {
-                min = score;
+                if (score.compareTo(min2) < 0) {
+                    min = min2;
+                    min2 = score;
+                } else {
+                    min = score;
+                }
             }
         }
         boolean minRemoved = false;
         boolean maxRemoved = false;
-        List<BigDecimal> adjScores = new ArrayList<BigDecimal>(5);
+        boolean min2Removed = false;
+        boolean max2Removed = false;
+        boolean isDropTwo = (scores.size() == 7);
+        List<BigDecimal> adjScores = new ArrayList<BigDecimal>(3);
         for (BigDecimal score : scores) {
-            if (!minRemoved && score.compareTo(min) == 0) {
+            if (isDropTwo && !minRemoved && score.compareTo(min) == 0) {
                 minRemoved = true;
-            } else if (!maxRemoved && score.compareTo(max) == 0) {
+            } else if (isDropTwo && !maxRemoved && score.compareTo(max) == 0) {
                 maxRemoved = true;
+            } else if (!min2Removed && score.compareTo(min2) == 0) {
+                min2Removed = true;
+            } else if (!max2Removed && score.compareTo(max2) == 0) {
+                max2Removed = true;
             } else {
                 adjScores.add(score);
             }
         }
 
         //We must now have the correct number of scores
-        if (!(adjScores.size() == 5 || (adjScores.size() == 3 && meetType == 'C' && "TEAM".equals(routine.getRoutineType())))) {
+        if (adjScores.size() != 3) {
             logger.error("Dropped min and max but didn't end up with three scores.");
-            logger.error("Scores = " + scores);
+            logger.error("Technical Scores = " + scores);
             logger.error("AdjScores = " + adjScores);
-            return null;
+            return;
         }
 
         //Sum the scores
@@ -190,7 +206,9 @@ public class RoutineManager {
         }
 
         //Multiply by DD
-        BigDecimal totalTechnical = sum.multiply(new BigDecimal(2));
+        sum = sum.multiply(new BigDecimal(2));
+
+        routine.setTechScore(sum);
 
         // Drop the lowest and highest artistic scores
         scores = new ArrayList<BigDecimal>(7);
@@ -206,33 +224,51 @@ public class RoutineManager {
 
         max = BigDecimal.ZERO; // No score smaller than 0
         min = BigDecimal.TEN;  // No score larger than 10
+        max2 = BigDecimal.ZERO; // No score smaller than 0
+        min2 = BigDecimal.TEN;  // No score larger than 10
         for (BigDecimal score : scores) {
             if (score.compareTo(max) > 0) {
-                max = score;
+                if (score.compareTo(max2) > 0) {
+                    max = max2;
+                    max2 = score;
+                } else {
+                    max = score;
+                }
             }
             if (score.compareTo(min) < 0) {
-                min = score;
+                if (score.compareTo(min2) < 0) {
+                    min = min2;
+                    min2 = score;
+                } else {
+                    min = score;
+                }
             }
         }
         minRemoved = false;
         maxRemoved = false;
-        adjScores = new ArrayList<BigDecimal>(5);
+        min2Removed = false;
+        max2Removed = false;
+        adjScores = new ArrayList<BigDecimal>(3);
         for (BigDecimal score : scores) {
-            if (!minRemoved && score.compareTo(min) == 0) {
+            if (isDropTwo && !minRemoved && score.compareTo(min) == 0) {
                 minRemoved = true;
-            } else if (!maxRemoved && score.compareTo(max) == 0) {
+            } else if (isDropTwo && !maxRemoved && score.compareTo(max) == 0) {
                 maxRemoved = true;
+            } else if (!min2Removed && score.compareTo(min2) == 0) {
+                min2Removed = true;
+            } else if (!max2Removed && score.compareTo(max2) == 0) {
+                max2Removed = true;
             } else {
                 adjScores.add(score);
             }
         }
 
         //We must now have the correct number of scores
-        if (!(adjScores.size() == 5 || (adjScores.size() == 3 && meetType == 'C' && "TEAM".equals(routine.getRoutineType())))) {
+        if (adjScores.size() != 3) {
             logger.error("Dropped min and max but didn't end up with three scores.");
-            logger.error("Scores = " + scores);
+            logger.error("Artistic Scores = " + scores);
             logger.error("AdjScores = " + adjScores);
-            return null;
+            return;
         }
 
         //Sum the scores
@@ -241,15 +277,17 @@ public class RoutineManager {
             sum = sum.add(score);
         }
 
+        routine.setArtScore(sum);
+
         //Total and subtract penalty
-        BigDecimal total = totalTechnical.add(sum).subtract(routine.getPenalty());
+        BigDecimal total = routine.getTechScore().add(routine.getArtScore()).subtract(routine.getPenalty());
 
         //Score can't be less than zero
         if (BigDecimal.ZERO.compareTo(total) >= 0) {
             total = BigDecimal.ZERO;
         }
 
-        return total;
+        routine.setTotalScore(total);
     }
 
     public static void delete(Routine routine) {
@@ -257,9 +295,6 @@ public class RoutineManager {
         em.getTransaction().begin();
         em.remove(routine);
         em.getTransaction().commit();
-    }
-
-    private static void calcPlacePoints(Meet meet) {
     }
 
     public static BigDecimal calcChampsPlacePoints(int place, String routineType) {

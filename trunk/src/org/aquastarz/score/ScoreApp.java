@@ -73,7 +73,6 @@ public class ScoreApp {
             query.setParameter("name", "2009");
             try {
                 curSeason = (Season) query.getSingleResult();
-                System.out.println("Found Season = " + curSeason.getSeasonId());
             } catch (Exception e) {
             }
             if (curSeason == null) {
@@ -144,6 +143,6 @@ public class ScoreApp {
     }
 
     public static String getVersion() {
-        return "0.81";
+        return "1.0";
     }
 }

@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Figures Labels" columnCount="2" printOrder="Horizontal" pageWidth="612" pageHeight="792" columnWidth="279" columnSpacing="18" leftMargin="18" rightMargin="18" topMargin="25" bottomMargin="18">
 	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="61"/>
+	<property name="ireport.y" value="227"/>
 	<parameter name="MeetDate" class="java.lang.String"/>
 	<parameter name="MeetName" class="java.lang.String"/>
 	<field name="firstName" class="java.lang.String"/>
@@ -50,6 +50,15 @@
 	<field name="penalty4" class="java.math.BigDecimal"/>
 	<field name="score4" class="java.math.BigDecimal"/>
 	<field name="points" class="java.math.BigDecimal"/>
+	<group name="Team" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{team}]]></groupExpression>
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
 	<background>
 		<band splitType="Stretch"/>
 	</background>

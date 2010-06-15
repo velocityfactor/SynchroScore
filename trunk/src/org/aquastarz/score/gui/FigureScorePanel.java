@@ -131,6 +131,9 @@ public class FigureScorePanel extends javax.swing.JPanel {
                     }
                 }
             }
+            if (station1Button.isSelected()) {
+                setEditableRow(1);
+            }
         } else {
             if (station1Button.isSelected()) {
                 setEditableRow(0);
@@ -172,6 +175,9 @@ public class FigureScorePanel extends javax.swing.JPanel {
                             break;
                     }
                 }
+            }
+            if (station2Button.isSelected()) {
+                setEditableRow(2);
             }
         } else {
             if (station2Button.isSelected()) {
@@ -215,6 +221,9 @@ public class FigureScorePanel extends javax.swing.JPanel {
                     }
                 }
             }
+            if (station3Button.isSelected()) {
+                setEditableRow(3);
+            }
         } else {
             if (station3Button.isSelected()) {
                 setEditableRow(0);
@@ -256,6 +265,9 @@ public class FigureScorePanel extends javax.swing.JPanel {
                             break;
                     }
                 }
+            }
+            if (station4Button.isSelected()) {
+                setEditableRow(4);
             }
         } else {
             if (station4Button.isSelected()) {
