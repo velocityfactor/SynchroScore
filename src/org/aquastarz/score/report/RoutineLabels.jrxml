@@ -60,49 +60,63 @@
 	<detail>
 		<band height="72" splitType="Prevent">
 			<textField>
-				<reportElement x="6" y="41" width="191" height="14"/>
+				<reportElement x="6" y="41" width="191" height="14">
+					<printWhenExpression><![CDATA[$F{name}!=null]]></printWhenExpression>
+				</reportElement>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["NAME: "+$F{name}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="6" y="5" width="191" height="14"/>
+				<reportElement x="6" y="5" width="191" height="14">
+					<printWhenExpression><![CDATA[$F{name}!=null]]></printWhenExpression>
+				</reportElement>
 				<textElement>
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[VFCAL SYNCHRONIZED SWIMMING]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="6" y="17" width="191" height="14"/>
+				<reportElement x="6" y="17" width="191" height="14">
+					<printWhenExpression><![CDATA[$F{name}!=null]]></printWhenExpression>
+				</reportElement>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["MEET: "+$P{MeetName}+" "+$P{MeetDate}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="6" y="29" width="191" height="14"/>
+				<reportElement x="6" y="29" width="191" height="14">
+					<printWhenExpression><![CDATA[$F{name}!=null]]></printWhenExpression>
+				</reportElement>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["LEVEL: "+$F{level}.toString()+" "+$F{routineType}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="6" y="53" width="50" height="14"/>
+				<reportElement x="6" y="53" width="50" height="14">
+					<printWhenExpression><![CDATA[$F{name}!=null]]></printWhenExpression>
+				</reportElement>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["PLACE: "+$F{place}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="55" y="53" width="60" height="14"/>
+				<reportElement x="55" y="53" width="60" height="14">
+					<printWhenExpression><![CDATA[$F{name}!=null]]></printWhenExpression>
+				</reportElement>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["TEAM: "+$F{team}.getTeamId()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="114" y="53" width="83" height="14"/>
+				<reportElement x="114" y="53" width="83" height="14">
+					<printWhenExpression><![CDATA[$F{name}!=null]]></printWhenExpression>
+				</reportElement>
 				<textElement>
 					<font size="9"/>
 				</textElement>
