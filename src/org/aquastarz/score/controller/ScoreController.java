@@ -19,6 +19,7 @@
 // </editor-fold>
 package org.aquastarz.score.controller;
 
+import com.sun.org.apache.xpath.internal.operations.Equals;
 import org.aquastarz.score.report.StationResult;
 import java.math.BigDecimal;
 import java.text.DateFormat;
@@ -394,6 +395,41 @@ public class ScoreController {
         return results;
     }
 
+    public static List<Routine> generateRoutinesResults(Meet meet, boolean isNovice) {
+        EntityManager entityManager = ScoreApp.getEntityManager();
+        Query query;
+        if (isNovice) {
+            query = entityManager.createNamedQuery("Routine.findByMeetAndLevelIsNoviceOrderByLevelAndPlace");
+        } else {
+            query = entityManager.createNamedQuery("Routine.findByMeetAndLevelIsIntermediateOrderByLevelAndPlace");
+        }
+        query.setParameter("meet", meet);
+        return query.getResultList();
+    }
+
+    public static List<Routine> generateRoutineLabels(Meet meet, boolean isNovice) {
+        List<Routine> routines = generateRoutinesResults(meet, isNovice);
+        LinkedList<Routine> labels = new LinkedList<Routine>();
+        for (Routine routine : routines) {
+            String routineType = routine.getRoutineType().toUpperCase();
+            if ("DUET".equals(routineType)) {
+                labels.add(routine);
+                labels.add(routine);
+            } else if ("TRIO".equals(routineType)) {
+                labels.add(routine);
+                labels.add(routine);
+                labels.add(routine);
+            } else if ("TEAM".equals(routineType)) {
+                for (int i = 0; i < 8; i++) {
+                    labels.add(routine);
+                }
+            } else { //SOLO
+                labels.add(routine);
+            }
+        }
+        return labels;
+    }
+
     public static List<FiguresLabel> generateFiguresLabels(Meet meet, boolean isNovice) {
         List<FiguresLabel> results = new ArrayList<FiguresLabel>();
 
@@ -694,9 +730,9 @@ public class ScoreController {
         } else {
             int c = countRoutines(meet, team);
             if (c == 1) {
-                sum = new BigDecimal(5);
+                sum = new BigDecimal(5).setScale(2);
             } else if (c > 1) {
-                sum = new BigDecimal(10);
+                sum = new BigDecimal(10).setScale(2);
             }
         }
         return sum;
@@ -726,7 +762,15 @@ public class ScoreController {
                 if (c != 0) {
                     return c;
                 }
-                return r1.getTotalScore().compareTo(r2.getTotalScore());
+                BigDecimal ts1 = r1.getTotalScore();
+                if (ts1 == null) {
+                    ts1 = BigDecimal.ZERO;
+                }
+                BigDecimal ts2 = r2.getTotalScore();
+                if (ts2 == null) {
+                    ts2 = BigDecimal.ZERO;
+                }
+                return ts2.compareTo(ts1);
             }
         });
         EntityManager em = ScoreApp.getEntityManager();
@@ -741,6 +785,9 @@ public class ScoreController {
                 lastScore = BigDecimal.ZERO;
             }
             BigDecimal score = routine.getTotalScore();
+            if (score == null) {
+                score = BigDecimal.ZERO;
+            }
             if (!score.equals(lastScore) || place == 0) {
                 place++;
             }
@@ -830,25 +877,5 @@ public class ScoreController {
             total = total.add(fs.getTotalScore());
         }
         return total;
-    }
-
-    public static Map<Team, BigDecimal> calculateTeamPoints(Meet meet) {
-        if (!ScoreController.meetResultsValid(meet)) {
-            return null;
-        }
-
-        Map<Team, BigDecimal> meetPoints = new HashMap<Team, BigDecimal>();
-        for (FiguresParticipant fp : meet.getFiguresParticipants()) {
-            if (fp.getPoints() == null) {
-                return null; //Points not calculated!
-            }
-            BigDecimal points = meetPoints.get(fp.getSwimmer().getTeam());
-            if (points == null) {
-                points = BigDecimal.ZERO;
-            }
-            points = points.add(fp.getPoints());
-            meetPoints.put(fp.getSwimmer().getTeam(), points);
-        }
-        return meetPoints;
     }
 }

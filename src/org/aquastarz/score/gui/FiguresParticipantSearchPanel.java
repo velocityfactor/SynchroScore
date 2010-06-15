@@ -19,11 +19,7 @@
 // </editor-fold>
 package org.aquastarz.score.gui;
 
-import java.awt.event.ActionEvent;
 import java.util.Vector;
-import javax.swing.AbstractAction;
-import javax.swing.JComponent;
-import javax.swing.KeyStroke;
 import org.aquastarz.score.domain.FiguresParticipant;
 import org.aquastarz.score.domain.Swimmer;
 import org.aquastarz.score.gui.event.FiguresParticipantSearchPanelListener;

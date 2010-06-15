@@ -116,7 +116,7 @@ public class MaintenancePanel extends javax.swing.JPanel {
             setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             Bootstrap.loadUpdateData(jfc.getSelectedFile());
             setCursor(Cursor.getDefaultCursor());
-            JOptionPane.showMessageDialog(this, "Done.");
+            JOptionPane.showMessageDialog(this, "Done.  Restart program to see changes.");
         }
 }//GEN-LAST:event_load2009TestDataButtonActionPerformed
 

@@ -234,10 +234,6 @@
                 <StringItem index="4" value="Item 5"/>
               </StringArray>
             </Property>
-            <Property name="selectionMode" type="int" value="0"/>
-            <Property name="selectionModel" type="javax.swing.ListSelectionModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="getRoutineListSelectionModel()" type="code"/>
-            </Property>
           </Properties>
           <Events>
             <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="routineListValueChanged"/>

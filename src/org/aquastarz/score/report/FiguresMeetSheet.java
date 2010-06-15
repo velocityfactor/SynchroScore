@@ -71,6 +71,7 @@ public class FiguresMeetSheet implements Comparable {
     BigDecimal penalty4;
     BigDecimal score4;
     BigDecimal points;
+    String sortKey;
 
     public FiguresMeetSheet(FiguresParticipant fp) {
         firstName = fp.getSwimmer().getFirstName();
@@ -131,6 +132,7 @@ public class FiguresMeetSheet implements Comparable {
                     break;
             }
         }
+        sortKey = team + String.format("%03d%03d", fp.getSwimmer().getLevel().getSortOrder(),fp.getPlace());
     }
 
     public BigDecimal getDd1() {
@@ -497,9 +499,7 @@ public class FiguresMeetSheet implements Comparable {
         if(o==null) throw new NullPointerException("Cannot compareTo null");
         if(!(o instanceof FiguresMeetSheet)) throw new ClassCastException("Cannot compareTo");
         FiguresMeetSheet fms = (FiguresMeetSheet)o;
-        int comp=lastName.compareTo(fms.getLastName());
-        if(comp!=0) return comp;
-        return firstName.compareTo(fms.getFirstName());
+        return sortKey.compareTo(fms.sortKey);
     }
 
 }
