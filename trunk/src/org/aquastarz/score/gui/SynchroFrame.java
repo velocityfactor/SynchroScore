@@ -28,6 +28,7 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -55,10 +56,12 @@ import org.aquastarz.score.manager.SwimmerManager;
 import org.aquastarz.score.controller.listener.SwimmerControllerListener;
 import org.aquastarz.score.domain.FiguresParticipant;
 import org.aquastarz.score.domain.Meet;
+import org.aquastarz.score.domain.Routine;
 import org.aquastarz.score.domain.Swimmer;
 import org.aquastarz.score.domain.Team;
 import org.aquastarz.score.gui.event.MeetSetupPanelListener;
 import org.aquastarz.score.gui.event.FiguresParticipantSearchPanelListener;
+import org.aquastarz.score.report.FiguresLabel;
 import org.aquastarz.score.report.TeamPoints;
 
 public class SynchroFrame extends javax.swing.JFrame {
@@ -318,6 +321,22 @@ public class SynchroFrame extends javax.swing.JFrame {
         } catch (Exception ex) {
             logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
         }
+    }
+
+    private int getSkipLabels() {
+        int skipLabels = -1;
+        while (skipLabels < 0) {
+            String s = JOptionPane.showInputDialog(this, "How many empty labels?", "Print labels", JOptionPane.QUESTION_MESSAGE+JOptionPane.OK_OPTION);
+            try {
+                skipLabels = Integer.parseInt(s);
+            } catch (NumberFormatException nfe) {
+                skipLabels = -1;
+            }
+            if (skipLabels < 0 || skipLabels > 30) {
+                skipLabels = -1;
+            }
+        }
+        return skipLabels;
     }
 
     /** This method is called from within the constructor to
@@ -971,10 +990,16 @@ public class SynchroFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
             return;
         }
+        int skipLabels=getSkipLabels();
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         try {
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/RoutineLabels.jasper"));
-            JRDataSource data = new JRBeanCollectionDataSource(ScoreController.generateRoutineLabels(meet, true));
+            List<Routine> routines = new LinkedList<Routine>();
+            for (int i = 0; i < skipLabels; i++) {
+                routines.add(null);
+            }
+            routines.addAll(ScoreController.generateRoutineLabels(meet, true));
+            JRDataSource data = new JRBeanCollectionDataSource(routines);
             Map<String, Object> params = new HashMap<String, Object>();
             params.put("MeetDate", meet.getMeetDate());
             params.put("MeetName", meet.getName());
@@ -991,10 +1016,16 @@ public class SynchroFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
             return;
         }
+        int skipLabels=getSkipLabels();
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         try {
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/RoutineLabels.jasper"));
-            JRDataSource data = new JRBeanCollectionDataSource(ScoreController.generateRoutineLabels(meet, false));
+            List<Routine> routines = new LinkedList<Routine>();
+            for (int i = 0; i < skipLabels; i++) {
+                routines.add(null);
+            }
+            routines.addAll(ScoreController.generateRoutineLabels(meet, false));
+            JRDataSource data = new JRBeanCollectionDataSource(routines);
             Map<String, Object> params = new HashMap<String, Object>();
             params.put("MeetDate", meet.getMeetDate());
             params.put("MeetName", meet.getName());
@@ -1049,10 +1080,16 @@ public class SynchroFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
             return;
         }
+        int skipLabels = getSkipLabels();
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         try {
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/FiguresLabels.jasper"));
-            JRDataSource data = new JRBeanCollectionDataSource(ScoreController.generateFiguresLabels(meet, false));
+            List<FiguresLabel> figuresLabels = new LinkedList<FiguresLabel>();
+            for (int i = 0; i < skipLabels; i++) {
+                figuresLabels.add(null);
+            }
+            figuresLabels.addAll(ScoreController.generateFiguresLabels(meet, false));
+            JRDataSource data = new JRBeanCollectionDataSource(figuresLabels);
             Map<String, Object> params = new HashMap<String, Object>();
             params.put("MeetDate", meet.getMeetDate());
             params.put("MeetName", meet.getName());
@@ -1069,10 +1106,16 @@ public class SynchroFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
             return;
         }
+        int skipLabels = getSkipLabels();
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         try {
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/FiguresLabels.jasper"));
-            JRDataSource data = new JRBeanCollectionDataSource(ScoreController.generateFiguresLabels(meet, true));
+            List<FiguresLabel> figuresLabels = new LinkedList<FiguresLabel>();
+            for (int i = 0; i < skipLabels; i++) {
+                figuresLabels.add(null);
+            }
+            figuresLabels.addAll(ScoreController.generateFiguresLabels(meet, true));
+            JRDataSource data = new JRBeanCollectionDataSource(figuresLabels);
             Map<String, Object> params = new HashMap<String, Object>();
             params.put("MeetDate", meet.getMeetDate());
             params.put("MeetName", meet.getName());
@@ -1279,7 +1322,6 @@ public class SynchroFrame extends javax.swing.JFrame {
         updateStatus();
         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 }//GEN-LAST:event_saveSwimmersButtonActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane figureOrderScrollPane;
     private javax.swing.JRadioButton figureOrderSortByName;
