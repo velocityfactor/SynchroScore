@@ -37,7 +37,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
@@ -351,8 +350,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         figureScorePanel = new org.aquastarz.score.gui.FigureScorePanel();
         jPanel3 = new javax.swing.JPanel();
         saveFigureScoreButton = new javax.swing.JButton();
-        routineScore = new javax.swing.JPanel();
-        routinesPanel1 = new org.aquastarz.score.gui.RoutinesPanel();
+        routinesPanel = new org.aquastarz.score.gui.RoutinesPanel();
         reportPanel = new javax.swing.JPanel();
         reportNoviceFigures = new javax.swing.JButton();
         reportNovMeetSheet = new javax.swing.JButton();
@@ -366,7 +364,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         reportNovRoutines = new javax.swing.JButton();
         reportNovRoutineLabels = new javax.swing.JButton();
         reportIntRoutines = new javax.swing.JButton();
-        reportIntRoutingLabels = new javax.swing.JButton();
+        reportIntRoutineLabels = new javax.swing.JButton();
         leaguePanel = new javax.swing.JPanel();
         leaguePrintButton = new javax.swing.JButton();
         swimmerScrollPane = new javax.swing.JScrollPane();
@@ -398,7 +396,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         setMinimumSize(new java.awt.Dimension(603, 200));
         setName(""); // NOI18N
 
-        tabPane.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        tabPane.setFont(new java.awt.Font("Tahoma", 0, 14));
         tabPane.setMinimumSize(new java.awt.Dimension(603, 200));
         tabPane.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -433,7 +431,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         swimmersLayout.setHorizontalGroup(
             swimmersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, swimmersLayout.createSequentialGroup()
-                .addComponent(teamTabs, javax.swing.GroupLayout.DEFAULT_SIZE, 610, Short.MAX_VALUE)
+                .addComponent(teamTabs, javax.swing.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(swimmersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(saveSwimmersButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -447,7 +445,7 @@ public class SynchroFrame extends javax.swing.JFrame {
                 .addComponent(saveSwimmersButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(generateRandomFiguresOrderButton)
-                .addContainerGap(452, Short.MAX_VALUE))
+                .addContainerGap(456, Short.MAX_VALUE))
             .addComponent(teamTabs, javax.swing.GroupLayout.DEFAULT_SIZE, 523, Short.MAX_VALUE)
         );
 
@@ -571,14 +569,14 @@ public class SynchroFrame extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(saveFigureScoreButton)
-                .addContainerGap(664, Short.MAX_VALUE))
+                .addContainerGap(666, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(saveFigureScoreButton)
-                .addContainerGap(257, Short.MAX_VALUE))
+                .addContainerGap(259, Short.MAX_VALUE))
         );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -590,25 +588,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         figureScore.add(jPanel3, gridBagConstraints);
 
         tabPane.addTab("Figures", figureScore);
-
-        javax.swing.GroupLayout routineScoreLayout = new javax.swing.GroupLayout(routineScore);
-        routineScore.setLayout(routineScoreLayout);
-        routineScoreLayout.setHorizontalGroup(
-            routineScoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(routineScoreLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(routinesPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        routineScoreLayout.setVerticalGroup(
-            routineScoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(routineScoreLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(routinesPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(65, Short.MAX_VALUE))
-        );
-
-        tabPane.addTab("Routines", routineScore);
+        tabPane.addTab("Routines", routinesPanel);
 
         reportNoviceFigures.setText("Nov. Figures");
         reportNoviceFigures.addActionListener(new java.awt.event.ActionListener() {
@@ -674,12 +654,32 @@ public class SynchroFrame extends javax.swing.JFrame {
         });
 
         reportNovRoutines.setText("Nov. Routines");
+        reportNovRoutines.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reportNovRoutinesActionPerformed(evt);
+            }
+        });
 
         reportNovRoutineLabels.setText("Nov. Routine Labels");
+        reportNovRoutineLabels.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reportNovRoutineLabelsActionPerformed(evt);
+            }
+        });
 
         reportIntRoutines.setText("Int. Routines");
+        reportIntRoutines.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reportIntRoutinesActionPerformed(evt);
+            }
+        });
 
-        reportIntRoutingLabels.setText("Int. Routine Labels");
+        reportIntRoutineLabels.setText("Int. Routine Labels");
+        reportIntRoutineLabels.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reportIntRoutineLabelsActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout reportPanelLayout = new javax.swing.GroupLayout(reportPanel);
         reportPanel.setLayout(reportPanelLayout);
@@ -696,7 +696,7 @@ public class SynchroFrame extends javax.swing.JFrame {
                     .addComponent(reportNoviceFigures))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(reportIntRoutingLabels)
+                    .addComponent(reportIntRoutineLabels)
                     .addComponent(reportIntRoutines)
                     .addComponent(reportIntStation)
                     .addComponent(reportIntMeetSheet)
@@ -705,10 +705,10 @@ public class SynchroFrame extends javax.swing.JFrame {
                         .addComponent(reportIntermediateFigures)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(reportTeamResults)))
-                .addContainerGap(302, Short.MAX_VALUE))
+                .addContainerGap(308, Short.MAX_VALUE))
         );
 
-        reportPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {reportIntFigureLabels, reportIntMeetSheet, reportIntRoutines, reportIntRoutingLabels, reportIntStation, reportIntermediateFigures, reportTeamResults});
+        reportPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {reportIntFigureLabels, reportIntMeetSheet, reportIntRoutineLabels, reportIntRoutines, reportIntStation, reportIntermediateFigures, reportTeamResults});
 
         reportPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {reportNovFigureLabels, reportNovMeetSheet, reportNovRoutineLabels, reportNovRoutines, reportNoviceFigures, reportNoviceStation});
 
@@ -742,7 +742,7 @@ public class SynchroFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(reportNovRoutineLabels)
-                    .addComponent(reportIntRoutingLabels))
+                    .addComponent(reportIntRoutineLabels))
                 .addContainerGap(351, Short.MAX_VALUE))
         );
 
@@ -785,12 +785,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         leagueSortButtonGroup.add(leagueSortByName);
         leagueSortByName.setFont(new java.awt.Font("Tahoma", 0, 14));
         leagueSortByName.setText("Name");
-        leagueSortByName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                leagueSortByNamefiguresOrderSortByNameActionPerformed(evt);
-            }
-        });
-		
+
         leagueSortButtonGroup.add(leagueSortByTeam);
         leagueSortByTeam.setFont(new java.awt.Font("Tahoma", 0, 14));
         leagueSortByTeam.setText("Team");
@@ -868,7 +863,7 @@ public class SynchroFrame extends javax.swing.JFrame {
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(leagueTeamCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 304, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 308, Short.MAX_VALUE)
                 .addComponent(leaguePrintButton)
                 .addContainerGap())
         );
@@ -921,60 +916,25 @@ public class SynchroFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void saveSwimmersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveSwimmersButtonActionPerformed
-        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        ArrayList<Swimmer> participatingSwimmers = new ArrayList<Swimmer>();
-        for (int i = 0; i < teamTabs.getTabCount(); i++) {
-            SwimmerSelectionPanel ssp = (SwimmerSelectionPanel) teamTabs.getComponentAt(i);
-            participatingSwimmers.addAll(ssp.getSelectedSwimmers());
-        }
-        controller.updateFiguresSwimmers(meet, participatingSwimmers);
-        meet.clearPoints();
-        controller.saveMeet(meet);
-        updateStatus();
-        setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-    }//GEN-LAST:event_saveSwimmersButtonActionPerformed
+    private void leagueSortByNamefiguresOrderSortByNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_leagueSortByNamefiguresOrderSortByNameActionPerformed
+        updateLeagueList();
+    }//GEN-LAST:event_leagueSortByNamefiguresOrderSortByNameActionPerformed
 
-    private void saveFigureScoreButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFigureScoreButtonActionPerformed
-        if (figureScorePanel.scoresValid()) {
-            if (controller.saveFigureScores(figureScorePanel.getFiguresParticipant(), figureScorePanel.getFigureScores())) {
-                doFiguresParticipantSearch(figureScorePanel.getFiguresParticipant().getFigureOrder());
-                swimmerSearchPanel.focus();
-            } else {
-                JOptionPane.showMessageDialog(figureScorePanel, "Check scores and try again.  Restart program if this error persists.", "Error Saving", JOptionPane.ERROR_MESSAGE);
-            }
-        } else {
-            JOptionPane.showMessageDialog(figureScorePanel, "Check scores and try again.", "Invalid Score", JOptionPane.WARNING_MESSAGE);
-        }
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_jButton3ActionPerformed
 
-    }//GEN-LAST:event_saveFigureScoreButtonActionPerformed
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    }//GEN-LAST:event_jButton6ActionPerformed
 
-    private void generateRandomFiguresOrderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateRandomFiguresOrderButtonActionPerformed
-        if (meet.getFiguresOrderGenerated()) {
-            int confirm = JOptionPane.showConfirmDialog(this, "You have already generated the random meet order.  Shall I do it again and overwrite the current ordering?", "Warning", JOptionPane.OK_CANCEL_OPTION);
-            if (confirm != JOptionPane.OK_OPTION) {
-                return;
-            }
+    private void reportNovRoutinesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportNovRoutinesActionPerformed
+        if (!ScoreController.meetResultsValid(meet)) {
+            JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
+            return;
         }
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        controller.generateRandomFiguresOrder(meet);
-        updateStatus();
-        selectTab(Tab.FIGURES_ORDER);
-        setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-    }//GEN-LAST:event_generateRandomFiguresOrderButtonActionPerformed
-
-    private void figuresOrderSortByNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_figuresOrderSortByNumberActionPerformed
-        updateFiguresOrderList();
-    }//GEN-LAST:event_figuresOrderSortByNumberActionPerformed
-
-    private void figuresOrderSortByNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_figuresOrderSortByNameActionPerformed
-        updateFiguresOrderList();
-    }//GEN-LAST:event_figuresOrderSortByNameActionPerformed
-
-    private void figuresOrderPrintButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_figuresOrderPrintButtonActionPerformed
         try {
-            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/FiguresOrder.jasper")); //JasperCompileManager.compileReport(jasperDesign);
-            JRDataSource data = new JRTableModelDataSource(figureOrderTable.getModel());
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/Routines.jasper"));
+            JRDataSource data = new JRBeanCollectionDataSource(ScoreController.generateRoutinesResults(meet, true));
             Map<String, Object> params = new HashMap<String, Object>();
             params.put("MeetDate", meet.getMeetDate());
             params.put("MeetName", meet.getName());
@@ -983,19 +943,68 @@ public class SynchroFrame extends javax.swing.JFrame {
         } catch (Exception ex) {
             logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
         }
-    }//GEN-LAST:event_figuresOrderPrintButtonActionPerformed
+        setCursor(Cursor.getDefaultCursor());
+    }//GEN-LAST:event_reportNovRoutinesActionPerformed
 
-    private void figureScorePanelPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_figureScorePanelPropertyChange
-        if ("FocusSave".equals(evt.getPropertyName())) {
-            saveFigureScoreButton.requestFocusInWindow();
+    private void reportIntRoutinesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportIntRoutinesActionPerformed
+        if (!ScoreController.meetResultsValid(meet)) {
+            JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
+            return;
         }
-    }//GEN-LAST:event_figureScorePanelPropertyChange
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        try {
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/Routines.jasper"));
+            JRDataSource data = new JRBeanCollectionDataSource(ScoreController.generateRoutinesResults(meet, false));
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put("MeetDate", meet.getMeetDate());
+            params.put("MeetName", meet.getName());
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, data);
+            JasperViewer.viewReport(jasperPrint, false);
+        } catch (Exception ex) {
+            logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
+        }
+        setCursor(Cursor.getDefaultCursor());
+    }//GEN-LAST:event_reportIntRoutinesActionPerformed
 
-    private void saveFigureScoreButtonKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_saveFigureScoreButtonKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            saveFigureScoreButton.doClick();
+    private void reportNovRoutineLabelsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportNovRoutineLabelsActionPerformed
+        if (!ScoreController.meetResultsValid(meet)) {
+            JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
+            return;
         }
-    }//GEN-LAST:event_saveFigureScoreButtonKeyPressed
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        try {
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/RoutineLabels.jasper"));
+            JRDataSource data = new JRBeanCollectionDataSource(ScoreController.generateRoutineLabels(meet, true));
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put("MeetDate", meet.getMeetDate());
+            params.put("MeetName", meet.getName());
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, data);
+            JasperViewer.viewReport(jasperPrint, false);
+        } catch (Exception ex) {
+            logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
+        }
+        setCursor(Cursor.getDefaultCursor());
+    }//GEN-LAST:event_reportNovRoutineLabelsActionPerformed
+
+    private void reportIntRoutineLabelsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportIntRoutingLabelsActionPerformed
+        if (!ScoreController.meetResultsValid(meet)) {
+            JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
+            return;
+        }
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        try {
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/RoutineLabels.jasper"));
+            JRDataSource data = new JRBeanCollectionDataSource(ScoreController.generateRoutineLabels(meet, false));
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put("MeetDate", meet.getMeetDate());
+            params.put("MeetName", meet.getName());
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, data);
+            JasperViewer.viewReport(jasperPrint, false);
+        } catch (Exception ex) {
+            logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
+        }
+        setCursor(Cursor.getDefaultCursor());
+    }//GEN-LAST:event_reportIntRoutingLabelsActionPerformed
 
     private void tabPaneStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabPaneStateChanged
         if (tabPane.getSelectedIndex() == Tab.FIGURES.ordinal()) {
@@ -1004,7 +1013,23 @@ public class SynchroFrame extends javax.swing.JFrame {
         if (tabPane.getSelectedIndex() == Tab.MAINTENANCE.ordinal()) {
             maintenancePanel.init();
         }
-    }//GEN-LAST:event_tabPaneStateChanged
+}//GEN-LAST:event_tabPaneStateChanged
+
+    private void leagueSortByLevelfiguresOrderSortByNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_leagueSortByLevelfiguresOrderSortByNameActionPerformed
+        updateLeagueList();
+}//GEN-LAST:event_leagueSortByLevelfiguresOrderSortByNameActionPerformed
+
+    private void leagueTeamComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_leagueTeamComboActionPerformed
+        updateLeagueList();
+}//GEN-LAST:event_leagueTeamComboActionPerformed
+
+    private void leagueSortByTeamfiguresOrderSortByNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_leagueSortByTeamfiguresOrderSortByNameActionPerformed
+        updateLeagueList();
+}//GEN-LAST:event_leagueSortByTeamfiguresOrderSortByNameActionPerformed
+
+    private void leagueSortByNumberfiguresOrderSortByNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_leagueSortByNumberfiguresOrderSortByNumberActionPerformed
+        updateLeagueList();
+}//GEN-LAST:event_leagueSortByNumberfiguresOrderSortByNumberActionPerformed
 
     private void leaguePrintButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_leaguePrintButtonActionPerformed
         try {
@@ -1017,35 +1042,47 @@ public class SynchroFrame extends javax.swing.JFrame {
         } catch (Exception ex) {
             logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
         }
-    }//GEN-LAST:event_leaguePrintButtonActionPerformed
+}//GEN-LAST:event_leaguePrintButtonActionPerformed
 
-    private void leagueSortByNumberfiguresOrderSortByNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_leagueSortByNumberfiguresOrderSortByNumberActionPerformed
-        updateLeagueList();
-    }//GEN-LAST:event_leagueSortByNumberfiguresOrderSortByNumberActionPerformed
+    private void reportIntFigureLabelsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportIntFigureLabelsActionPerformed
+        if (!ScoreController.meetResultsValid(meet)) {
+            JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
+            return;
+        }
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        try {
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/FiguresLabels.jasper"));
+            JRDataSource data = new JRBeanCollectionDataSource(ScoreController.generateFiguresLabels(meet, false));
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put("MeetDate", meet.getMeetDate());
+            params.put("MeetName", meet.getName());
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, data);
+            JasperViewer.viewReport(jasperPrint, false);
+        } catch (Exception ex) {
+            logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
+        }
+        setCursor(Cursor.getDefaultCursor());
+}//GEN-LAST:event_reportIntFigureLabelsActionPerformed
 
-    private void leagueSortByNamefiguresOrderSortByNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_leagueSortByNamefiguresOrderSortByNameActionPerformed
-        updateLeagueList();
-    }//GEN-LAST:event_leagueSortByNamefiguresOrderSortByNameActionPerformed
-
-    private void leagueSortByTeamfiguresOrderSortByNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_leagueSortByTeamfiguresOrderSortByNameActionPerformed
-        updateLeagueList();
-    }//GEN-LAST:event_leagueSortByTeamfiguresOrderSortByNameActionPerformed
-
-    private void leagueTeamComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_leagueTeamComboActionPerformed
-        updateLeagueList();
-    }//GEN-LAST:event_leagueTeamComboActionPerformed
-
-    private void leagueSortByLevelfiguresOrderSortByNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_leagueSortByLevelfiguresOrderSortByNameActionPerformed
-        updateLeagueList();
-    }//GEN-LAST:event_leagueSortByLevelfiguresOrderSortByNameActionPerformed
-
-    private void reportNoviceFiguresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportNoviceFiguresActionPerformed
-        viewFiguresResultsReport(ScoreController.findAllFiguresParticipantByMeetAndDivision(meet, true), "Meet Results - Novice Figures");
-    }//GEN-LAST:event_reportNoviceFiguresActionPerformed
-
-    private void reportIntermediateFiguresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportIntermediateFiguresActionPerformed
-        viewFiguresResultsReport(ScoreController.findAllFiguresParticipantByMeetAndDivision(meet, false), "Meet Results - Intermediate Figures");
-    }//GEN-LAST:event_reportIntermediateFiguresActionPerformed
+    private void reportNovFigureLabelsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportNovFigureLabelsActionPerformed
+        if (!ScoreController.meetResultsValid(meet)) {
+            JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
+            return;
+        }
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        try {
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/FiguresLabels.jasper"));
+            JRDataSource data = new JRBeanCollectionDataSource(ScoreController.generateFiguresLabels(meet, true));
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put("MeetDate", meet.getMeetDate());
+            params.put("MeetName", meet.getName());
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, data);
+            JasperViewer.viewReport(jasperPrint, false);
+        } catch (Exception ex) {
+            logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
+        }
+        setCursor(Cursor.getDefaultCursor());
+}//GEN-LAST:event_reportNovFigureLabelsActionPerformed
 
     private void reportTeamResultsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportTeamResultsActionPerformed
         if (!ScoreController.meetResultsValid(meet)) {
@@ -1053,7 +1090,7 @@ public class SynchroFrame extends javax.swing.JFrame {
             return;
         }
 
-        Map<Team, BigDecimal> points = ScoreController.calculateTeamPoints(meet);
+        Map<Team, BigDecimal> points = meet.getPointsMap();
 
         if (points == null) {
             JOptionPane.showMessageDialog(this, "Cannot display report.  Points not calculated.  " + meet.getCalcErrors() != null ? meet.getCalcErrors() : "");
@@ -1078,31 +1115,13 @@ public class SynchroFrame extends javax.swing.JFrame {
         } catch (Exception ex) {
             logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
         }
-    }//GEN-LAST:event_reportTeamResultsActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-    }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-    }//GEN-LAST:event_jButton6ActionPerformed
-
-    private void reportNoviceStationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportNoviceStationActionPerformed
-        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        try {
-            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/FiguresStation.jasper"));
-            JRDataSource data = new JRBeanCollectionDataSource(ScoreController.generateStationResults(meet, true));
-            Map<String, Object> params = new HashMap<String, Object>();
-            params.put("MeetDate", meet.getMeetDate());
-            params.put("MeetName", meet.getName());
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, data);
-            JasperViewer.viewReport(jasperPrint, false);
-        } catch (Exception ex) {
-            logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
-        }
-        setCursor(Cursor.getDefaultCursor());
-    }//GEN-LAST:event_reportNoviceStationActionPerformed
+}//GEN-LAST:event_reportTeamResultsActionPerformed
 
     private void reportIntStationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportIntStationActionPerformed
+        if (!ScoreController.meetResultsValid(meet)) {
+            JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
+            return;
+        }
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         try {
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/FiguresStation.jasper"));
@@ -1116,57 +1135,13 @@ public class SynchroFrame extends javax.swing.JFrame {
             logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
         }
         setCursor(Cursor.getDefaultCursor());
-    }//GEN-LAST:event_reportIntStationActionPerformed
-
-    private void reportNovFigureLabelsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportNovFigureLabelsActionPerformed
-        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        try {
-            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/FiguresLabels.jasper"));
-            JRDataSource data = new JRBeanCollectionDataSource(ScoreController.generateFiguresLabels(meet, true));
-            Map<String, Object> params = new HashMap<String, Object>();
-            params.put("MeetDate", meet.getMeetDate());
-            params.put("MeetName", meet.getName());
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, data);
-            JasperViewer.viewReport(jasperPrint, false);
-        } catch (Exception ex) {
-            logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
-        }
-        setCursor(Cursor.getDefaultCursor());
-    }//GEN-LAST:event_reportNovFigureLabelsActionPerformed
-
-    private void reportIntFigureLabelsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportIntFigureLabelsActionPerformed
-        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        try {
-            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/FiguresLabels.jasper"));
-            JRDataSource data = new JRBeanCollectionDataSource(ScoreController.generateFiguresLabels(meet, false));
-            Map<String, Object> params = new HashMap<String, Object>();
-            params.put("MeetDate", meet.getMeetDate());
-            params.put("MeetName", meet.getName());
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, data);
-            JasperViewer.viewReport(jasperPrint, false);
-        } catch (Exception ex) {
-            logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
-        }
-        setCursor(Cursor.getDefaultCursor());
-    }//GEN-LAST:event_reportIntFigureLabelsActionPerformed
-
-    private void reportNovMeetSheetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportNovMeetSheetActionPerformed
-        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        try {
-            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/FiguresMeetSheet.jasper"));
-            JRDataSource data = new JRBeanCollectionDataSource(ScoreController.generateFiguresMeetSheets(meet, true));
-            Map<String, Object> params = new HashMap<String, Object>();
-            params.put("MeetDate", meet.getMeetDate());
-            params.put("MeetName", meet.getName());
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, data);
-            JasperViewer.viewReport(jasperPrint, false);
-        } catch (Exception ex) {
-            logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
-        }
-        setCursor(Cursor.getDefaultCursor());
-    }//GEN-LAST:event_reportNovMeetSheetActionPerformed
+}//GEN-LAST:event_reportIntStationActionPerformed
 
     private void reportIntMeetSheetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportIntMeetSheetActionPerformed
+        if (!ScoreController.meetResultsValid(meet)) {
+            JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
+            return;
+        }
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         try {
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/FiguresMeetSheet.jasper"));
@@ -1180,8 +1155,131 @@ public class SynchroFrame extends javax.swing.JFrame {
             logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
         }
         setCursor(Cursor.getDefaultCursor());
-
     }//GEN-LAST:event_reportIntMeetSheetActionPerformed
+
+    private void reportIntermediateFiguresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportIntermediateFiguresActionPerformed
+        viewFiguresResultsReport(ScoreController.findAllFiguresParticipantByMeetAndDivision(meet, false), "Meet Results - Intermediate Figures");
+}//GEN-LAST:event_reportIntermediateFiguresActionPerformed
+
+    private void reportNoviceStationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportNoviceStationActionPerformed
+        if (!ScoreController.meetResultsValid(meet)) {
+            JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
+            return;
+        }
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        try {
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/FiguresStation.jasper"));
+            JRDataSource data = new JRBeanCollectionDataSource(ScoreController.generateStationResults(meet, true));
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put("MeetDate", meet.getMeetDate());
+            params.put("MeetName", meet.getName());
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, data);
+            JasperViewer.viewReport(jasperPrint, false);
+        } catch (Exception ex) {
+            logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
+        }
+        setCursor(Cursor.getDefaultCursor());
+}//GEN-LAST:event_reportNoviceStationActionPerformed
+
+    private void reportNovMeetSheetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportNovMeetSheetActionPerformed
+        if (!ScoreController.meetResultsValid(meet)) {
+            JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
+            return;
+        }
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        try {
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/FiguresMeetSheet.jasper"));
+            JRDataSource data = new JRBeanCollectionDataSource(ScoreController.generateFiguresMeetSheets(meet, true));
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put("MeetDate", meet.getMeetDate());
+            params.put("MeetName", meet.getName());
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, data);
+            JasperViewer.viewReport(jasperPrint, false);
+        } catch (Exception ex) {
+            logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
+        }
+        setCursor(Cursor.getDefaultCursor());
+}//GEN-LAST:event_reportNovMeetSheetActionPerformed
+
+    private void reportNoviceFiguresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportNoviceFiguresActionPerformed
+        viewFiguresResultsReport(ScoreController.findAllFiguresParticipantByMeetAndDivision(meet, true), "Meet Results - Novice Figures");
+}//GEN-LAST:event_reportNoviceFiguresActionPerformed
+
+    private void saveFigureScoreButtonKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_saveFigureScoreButtonKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            saveFigureScoreButton.doClick();
+        }
+}//GEN-LAST:event_saveFigureScoreButtonKeyPressed
+
+    private void saveFigureScoreButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFigureScoreButtonActionPerformed
+        if (figureScorePanel.scoresValid()) {
+            if (controller.saveFigureScores(figureScorePanel.getFiguresParticipant(), figureScorePanel.getFigureScores())) {
+                doFiguresParticipantSearch(figureScorePanel.getFiguresParticipant().getFigureOrder());
+                swimmerSearchPanel.focus();
+            } else {
+                JOptionPane.showMessageDialog(figureScorePanel, "Check scores and try again.  Restart program if this error persists.", "Error Saving", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(figureScorePanel, "Check scores and try again.", "Invalid Score", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_saveFigureScoreButtonActionPerformed
+
+    private void figureScorePanelPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_figureScorePanelPropertyChange
+        if ("FocusSave".equals(evt.getPropertyName())) {
+            saveFigureScoreButton.requestFocusInWindow();
+        }
+}//GEN-LAST:event_figureScorePanelPropertyChange
+
+    private void figuresOrderPrintButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_figuresOrderPrintButtonActionPerformed
+        try {
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/FiguresOrder.jasper")); //JasperCompileManager.compileReport(jasperDesign);
+            JRDataSource data = new JRTableModelDataSource(figureOrderTable.getModel());
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put("MeetDate", meet.getMeetDate());
+            params.put("MeetName", meet.getName());
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, data);
+            JasperViewer.viewReport(jasperPrint, false);
+        } catch (Exception ex) {
+            logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
+        }
+}//GEN-LAST:event_figuresOrderPrintButtonActionPerformed
+
+    private void figuresOrderSortByNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_figuresOrderSortByNameActionPerformed
+        updateFiguresOrderList();
+}//GEN-LAST:event_figuresOrderSortByNameActionPerformed
+
+    private void figuresOrderSortByNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_figuresOrderSortByNumberActionPerformed
+        updateFiguresOrderList();
+}//GEN-LAST:event_figuresOrderSortByNumberActionPerformed
+
+    private void generateRandomFiguresOrderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateRandomFiguresOrderButtonActionPerformed
+        if (meet.getFiguresOrderGenerated()) {
+            int confirm = JOptionPane.showConfirmDialog(this, "You have already generated the random meet order.  Shall I do it again and overwrite the current ordering?", "Warning", JOptionPane.OK_CANCEL_OPTION);
+            if (confirm != JOptionPane.OK_OPTION) {
+                return;
+            }
+        }
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        controller.generateRandomFiguresOrder(meet);
+        updateStatus();
+        selectTab(Tab.FIGURES_ORDER);
+        setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+}//GEN-LAST:event_generateRandomFiguresOrderButtonActionPerformed
+
+    private void saveSwimmersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveSwimmersButtonActionPerformed
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        ArrayList<Swimmer> participatingSwimmers = new ArrayList<Swimmer>();
+        for (int i = 0; i < teamTabs.getTabCount(); i++) {
+            SwimmerSelectionPanel ssp = (SwimmerSelectionPanel) teamTabs.getComponentAt(i);
+            participatingSwimmers.addAll(ssp.getSelectedSwimmers());
+        }
+        controller.updateFiguresSwimmers(meet, participatingSwimmers);
+        meet.clearPoints();
+        controller.saveMeet(meet);
+        updateStatus();
+        setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+}//GEN-LAST:event_saveSwimmersButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane figureOrderScrollPane;
     private javax.swing.JRadioButton figureOrderSortByName;
@@ -1219,8 +1317,8 @@ public class SynchroFrame extends javax.swing.JFrame {
     private javax.swing.JProgressBar novFiguresProgress;
     private javax.swing.JButton reportIntFigureLabels;
     private javax.swing.JButton reportIntMeetSheet;
+    private javax.swing.JButton reportIntRoutineLabels;
     private javax.swing.JButton reportIntRoutines;
-    private javax.swing.JButton reportIntRoutingLabels;
     private javax.swing.JButton reportIntStation;
     private javax.swing.JButton reportIntermediateFigures;
     private javax.swing.JButton reportNovFigureLabels;
@@ -1231,8 +1329,7 @@ public class SynchroFrame extends javax.swing.JFrame {
     private javax.swing.JButton reportNoviceStation;
     private javax.swing.JPanel reportPanel;
     private javax.swing.JButton reportTeamResults;
-    private javax.swing.JPanel routineScore;
-    private org.aquastarz.score.gui.RoutinesPanel routinesPanel1;
+    private org.aquastarz.score.gui.RoutinesPanel routinesPanel;
     private javax.swing.JProgressBar routinesProgress;
     private javax.swing.JButton saveFigureScoreButton;
     private javax.swing.JButton saveSwimmersButton;

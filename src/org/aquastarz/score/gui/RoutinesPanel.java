@@ -20,6 +20,7 @@
 package org.aquastarz.score.gui;
 
 import java.awt.event.KeyEvent;
+import java.beans.Beans;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyVetoException;
 import java.beans.VetoableChangeListener;
@@ -40,14 +41,18 @@ public class RoutinesPanel extends javax.swing.JPanel {
     private boolean modified = false;
     private List<Routine> routines = null;
     private Routine curRoutine = null;
-    private RoutinesController controller = new RoutinesController(this);
+    private RoutinesController controller = null;
 
     /** Creates new form RoutinesPanel */
     public RoutinesPanel() {
         initComponents();
-        updateRoutinesList();
-        updateComponentEnabledStatus();
-        updateCombos();
+        if (!Beans.isDesignTime()) {
+            controller = new RoutinesController(this);
+            routineList.setSelectionModel(getRoutineListSelectionModel());
+            updateRoutinesList();
+            updateComponentEnabledStatus();
+            updateCombos();
+        }
     }
 
     private ListSelectionModel getRoutineListSelectionModel() {
@@ -297,7 +302,8 @@ public class RoutinesPanel extends javax.swing.JPanel {
             penalty.selectAll();
             throw new Exception("Invalid entry");
         }
-        if (score == null) {
+        //blank penalty should get 0 if there are scores, but null otherwise
+        if (score == null && routine.getAScore7() != null) {
             score = BigDecimal.ZERO.setScale(1);
         }
         routine.setPenalty(score);
@@ -452,8 +458,6 @@ public class RoutinesPanel extends javax.swing.JPanel {
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        routineList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        routineList.setSelectionModel(getRoutineListSelectionModel());
         routineList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 routineListValueChanged(evt);
@@ -469,7 +473,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
             }
         });
 
-        deleteButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        deleteButton.setFont(new java.awt.Font("Tahoma", 0, 14));
         deleteButton.setText("Delete");
         deleteButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -525,7 +529,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel5.setText("Swimmer Names");
 
-        names1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        names1.setFont(new java.awt.Font("Tahoma", 0, 14));
         names1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 handleFieldChange(evt);
@@ -933,22 +937,13 @@ public class RoutinesPanel extends javax.swing.JPanel {
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
         if (modified && curRoutine != null) {
+            calculate();
             save();
             updateRoutinesList();
             routineList.setSelectedValue(curRoutine, true);
             updateComponentEnabledStatus();
         }
     }//GEN-LAST:event_saveButtonActionPerformed
-
-    private void routineListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_routineListValueChanged
-        Object o = routineList.getSelectedValue();
-        if (o != null && (o instanceof Routine)) {
-            curRoutine = (Routine) o;
-            updateFields();
-        }
-        modified = false;
-        updateComponentEnabledStatus();
-    }//GEN-LAST:event_routineListValueChanged
 
     private void levelComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_levelComboActionPerformed
         handleFieldChange(null);
@@ -1091,6 +1086,18 @@ public class RoutinesPanel extends javax.swing.JPanel {
             this.updateComponentEnabledStatus();
         }
     }//GEN-LAST:event_handleFieldChange
+
+    private void routineListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_routineListValueChanged
+        updateCombos();
+        Object o = routineList.getSelectedValue();
+        if (o != null && (o instanceof Routine)) {
+            curRoutine = (Routine) o;
+            updateFields();
+        }
+        modified = false;
+        updateComponentEnabledStatus();
+    }//GEN-LAST:event_routineListValueChanged
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
     private javax.swing.JButton deleteButton;

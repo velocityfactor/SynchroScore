@@ -60,7 +60,7 @@ public class RoutinesController {
 
     public void calculate(Routine routine) {
         if (RoutineManager.isValid(routine)) {
-            routine.setTotalScore(RoutineManager.calculate(routine));
+            RoutineManager.calculate(routine);
             save(routine);
         } else {
             JOptionPane.showMessageDialog(panel, "Routine must have a title and fully complete or fully blank score.", "Entry Error", JOptionPane.OK_OPTION);

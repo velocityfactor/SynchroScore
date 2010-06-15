@@ -1,15 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Figures Labels" columnCount="3" printOrder="Horizontal" pageWidth="612" pageHeight="792" columnWidth="187" columnSpacing="11" leftMargin="14" rightMargin="14" topMargin="36" bottomMargin="36">
 	<property name="ireport.zoom" value="3.0"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="122"/>
+	<property name="ireport.x" value="49"/>
+	<property name="ireport.y" value="95"/>
+	<import value="org.aquastarz.score.domain.Routine"/>
 	<parameter name="MeetDate" class="java.lang.String"/>
 	<parameter name="MeetName" class="java.lang.String"/>
-	<field name="name" class="java.lang.String"/>
-	<field name="levelName" class="java.lang.String"/>
-	<field name="place" class="java.lang.Integer"/>
-	<field name="team" class="java.lang.String"/>
-	<field name="score" class="java.math.BigDecimal"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="level" class="org.aquastarz.score.domain.RoutineLevel">
+		<fieldDescription><![CDATA[level]]></fieldDescription>
+	</field>
+	<field name="name" class="java.lang.String">
+		<fieldDescription><![CDATA[name]]></fieldDescription>
+	</field>
+	<field name="penalty" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[penalty]]></fieldDescription>
+	</field>
+	<field name="place" class="java.lang.Integer">
+		<fieldDescription><![CDATA[place]]></fieldDescription>
+	</field>
+	<field name="points" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[points]]></fieldDescription>
+	</field>
+	<field name="routineType" class="java.lang.String">
+		<fieldDescription><![CDATA[routineType]]></fieldDescription>
+	</field>
+	<field name="swimmers1" class="java.lang.String">
+		<fieldDescription><![CDATA[swimmers1]]></fieldDescription>
+	</field>
+	<field name="swimmers2" class="java.lang.String">
+		<fieldDescription><![CDATA[swimmers2]]></fieldDescription>
+	</field>
+	<field name="team" class="org.aquastarz.score.domain.Team">
+		<fieldDescription><![CDATA[team]]></fieldDescription>
+	</field>
+	<field name="artScore" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[artScore]]></fieldDescription>
+	</field>
+	<field name="techScore" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[techScore]]></fieldDescription>
+	</field>
+	<field name="totalScore" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[totalScore]]></fieldDescription>
+	</field>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -34,7 +69,7 @@
 			<staticText>
 				<reportElement x="6" y="5" width="191" height="14"/>
 				<textElement>
-					<font isBold="true"/>
+					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[VFCAL SYNCHRONIZED SWIMMING]]></text>
 			</staticText>
@@ -50,7 +85,7 @@
 				<textElement>
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["LEVEL: "+$F{levelName}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["LEVEL: "+$F{level}.toString()+" "+$F{routineType}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="6" y="53" width="50" height="14"/>
@@ -64,14 +99,14 @@
 				<textElement>
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["TEAM: "+$F{team}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["TEAM: "+$F{team}.getTeamId()]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="114" y="53" width="83" height="14"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["SCORE: "+$F{score}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["SCORE: "+$F{totalScore}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

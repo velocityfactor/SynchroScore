@@ -36,7 +36,9 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "routine")
 @NamedQueries({
-    @NamedQuery(name = "Routine.findByMeetOrderByRoutineOrder", query = "SELECT r FROM Routine r WHERE r.meet = :meet ORDER BY routineOrder")})
+    @NamedQuery(name = "Routine.findByMeetOrderByRoutineOrder", query = "SELECT r FROM Routine r WHERE r.meet = :meet ORDER BY routineOrder"),
+    @NamedQuery(name = "Routine.findByMeetAndLevelIsIntermediateOrderByLevelAndPlace", query = "SELECT r FROM Routine r WHERE r.meet = :meet and r.level.routineLevelId like 'I%' ORDER BY r.level.sortOrder,r.place"),
+    @NamedQuery(name = "Routine.findByMeetAndLevelIsNoviceOrderByLevelAndPlace", query = "SELECT r FROM Routine r WHERE r.meet = :meet and r.level.routineLevelId like 'N%' ORDER BY r.level.sortOrder, r.place")})
 public class Routine implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -114,7 +116,7 @@ public class Routine implements Serializable {
     @Column(name = "penalty", nullable = true, precision = 2, scale = 1)
     private BigDecimal penalty;
     @Basic(optional = true)
-    @Column(name = "totalScore", nullable = true, precision = 2, scale = 1)
+    @Column(name = "totalScore", nullable = true, precision = 2, scale = 2)
     private BigDecimal totalScore;
     @Basic(optional = true)
     @Column(name = "place", nullable = true)
@@ -122,6 +124,12 @@ public class Routine implements Serializable {
     @Basic(optional = true)
     @Column(name = "points", nullable = true, precision = 2, scale = 1)
     private BigDecimal points;
+    @Basic(optional = true)
+    @Column(name = "techScore", nullable = true, precision = 2, scale = 2)
+    BigDecimal techScore;
+    @Basic(optional = true)
+    @Column(name = "artScore", nullable = true, precision = 2, scale = 2)
+    BigDecimal artScore;
 
     public Routine() {
     }
@@ -344,6 +352,22 @@ public class Routine implements Serializable {
 
     public void setPoints(BigDecimal points) {
         this.points = points;
+    }
+
+    public BigDecimal getArtScore() {
+        return artScore;
+    }
+
+    public void setArtScore(BigDecimal artScore) {
+        this.artScore = artScore;
+    }
+
+    public BigDecimal getTechScore() {
+        return techScore;
+    }
+
+    public void setTechScore(BigDecimal techScore) {
+        this.techScore = techScore;
     }
 
     @Override

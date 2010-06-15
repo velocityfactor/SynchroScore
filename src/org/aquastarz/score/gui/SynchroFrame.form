@@ -334,7 +334,7 @@
             </Container>
           </SubComponents>
         </Container>
-        <Container class="javax.swing.JPanel" name="routineScore">
+        <Component class="org.aquastarz.score.gui.RoutinesPanel" name="routinesPanel">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
               <JTabbedPaneConstraints tabName="Routines">
@@ -342,32 +342,7 @@
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
-
-          <Layout>
-            <DimensionLayout dim="0">
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="routinesPanel1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
-                  </Group>
-              </Group>
-            </DimensionLayout>
-            <DimensionLayout dim="1">
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="routinesPanel1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="69" max="32767" attributes="0"/>
-                  </Group>
-              </Group>
-            </DimensionLayout>
-          </Layout>
-          <SubComponents>
-            <Component class="org.aquastarz.score.gui.RoutinesPanel" name="routinesPanel1">
-            </Component>
-          </SubComponents>
-        </Container>
+        </Component>
         <Container class="javax.swing.JPanel" name="reportPanel">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
@@ -392,7 +367,7 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="reportIntRoutingLabels" linkSize="3" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="reportIntRoutineLabels" linkSize="3" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="reportIntRoutines" linkSize="3" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="reportIntStation" linkSize="3" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="reportIntMeetSheet" linkSize="3" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -444,7 +419,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="reportNovRoutineLabels" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="reportIntRoutingLabels" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="reportIntRoutineLabels" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace pref="351" max="32767" attributes="0"/>
                   </Group>
@@ -528,21 +503,33 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Nov. Routines"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="reportNovRoutinesActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="reportNovRoutineLabels">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Nov. Routine Labels"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="reportNovRoutineLabelsActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="reportIntRoutines">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Int. Routines"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="reportIntRoutinesActionPerformed"/>
+              </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="reportIntRoutingLabels">
+            <Component class="javax.swing.JButton" name="reportIntRoutineLabels">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Int. Routine Labels"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="reportIntRoutineLabelsActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

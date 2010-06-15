@@ -7,10 +7,10 @@
     <ROW Property="BannerBitmap" MultiBuildValue="DefaultBuild:banner_image.jpg" Type="1"/>
     <ROW Property="DialogBitmap" MultiBuildValue="DefaultBuild:dialog_image.jpg" Type="1"/>
     <ROW Property="Manufacturer" Value="Shayne Hughes" ValueLocId="*"/>
-    <ROW Property="ProductCode" Value="1033:{AB45A79C-D1F7-4D7A-ABAB-0AF24AB6007F} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{89D08BEE-956E-4016-9EDA-65FCB69A3A81} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="SynchroScore" ValueLocId="*"/>
-    <ROW Property="ProductVersion" Value="0.81"/>
+    <ROW Property="ProductVersion" Value="0.90"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{246ECAFC-DC59-4A68-860F-5A733719F736}"/>
     <ROW Property="WindowsFamily9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
@@ -32,7 +32,7 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
     <ROW File="LICENSE.txt" Component_="classpath" FileName="LICENSE.txt" Attributes="0" SourcePath="LICENSE.txt" SelfReg="false" Sequence="1"/>
-    <ROW File="SynchroScore.exe" Component_="SynchroScore.exe" FileName="Synchr~1.exe|SynchroScore.exe" Attributes="0" SourcePath="SynchroScore.exe" SelfReg="false" Sequence="2"/>
+    <ROW File="SynchroScore.exe" Component_="SynchroScore.exe" FileName="Synchr~1.exe|SynchroScore.exe" Attributes="0" SourcePath="dist\SynchroScore.exe" SelfReg="false" Sequence="2"/>
     <ROW File="zip" Component_="classpath" FileName="2010.zip" Attributes="0" SourcePath="data\2010.zip" SelfReg="false" Sequence="3"/>
     <ROW File="zip_1" Component_="classpath" FileName="2009.zip" Attributes="0" SourcePath="data\2009.zip" SelfReg="false" Sequence="4"/>
   </COMPONENT>

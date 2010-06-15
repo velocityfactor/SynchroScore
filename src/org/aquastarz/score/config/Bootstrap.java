@@ -221,13 +221,18 @@ public class Bootstrap {
                 if (swimmer == null) {
                     swimmer = new Swimmer(ls.code, season, team, level, ls.gName, ls.sName);
                 }
+                else {
+                    swimmer.setFirstName(ls.gName);
+                    swimmer.setLastName(ls.sName);
+                    swimmer.setLevel(level);
+                    swimmer.setTeam(team);
+                }
                 entityManager.persist(swimmer);
             }
             entityManager.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     private static Map<String, LegacyResult> readLegacyResults(InputStream is) {
