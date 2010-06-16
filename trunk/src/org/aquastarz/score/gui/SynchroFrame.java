@@ -802,11 +802,16 @@ public class SynchroFrame extends javax.swing.JFrame {
         });
 
         leagueSortButtonGroup.add(leagueSortByName);
-        leagueSortByName.setFont(new java.awt.Font("Tahoma", 0, 14));
+        leagueSortByName.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         leagueSortByName.setText("Name");
+        leagueSortByName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                leagueSortByNamefiguresOrderSortByNameActionPerformed(evt);
+            }
+        });
 
         leagueSortButtonGroup.add(leagueSortByTeam);
-        leagueSortByTeam.setFont(new java.awt.Font("Tahoma", 0, 14));
+        leagueSortByTeam.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         leagueSortByTeam.setText("Team");
         leagueSortByTeam.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -934,16 +939,6 @@ public class SynchroFrame extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void leagueSortByNamefiguresOrderSortByNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_leagueSortByNamefiguresOrderSortByNameActionPerformed
-        updateLeagueList();
-    }//GEN-LAST:event_leagueSortByNamefiguresOrderSortByNameActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-    }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-    }//GEN-LAST:event_jButton6ActionPerformed
 
     private void reportNovRoutinesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportNovRoutinesActionPerformed
         if (!ScoreController.meetResultsValid(meet)) {
@@ -1168,7 +1163,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         try {
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/FiguresStation.jasper"));
-            JRDataSource data = new JRBeanCollectionDataSource(ScoreController.generateStationResults(meet, true));
+            JRDataSource data = new JRBeanCollectionDataSource(ScoreController.generateStationResults(meet, false));
             Map<String, Object> params = new HashMap<String, Object>();
             params.put("MeetDate", meet.getMeetDate());
             params.put("MeetName", meet.getName());
@@ -1322,6 +1317,11 @@ public class SynchroFrame extends javax.swing.JFrame {
         updateStatus();
         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 }//GEN-LAST:event_saveSwimmersButtonActionPerformed
+
+    private void leagueSortByNamefiguresOrderSortByNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_leagueSortByNamefiguresOrderSortByNameActionPerformed
+        updateLeagueList();
+    }//GEN-LAST:event_leagueSortByNamefiguresOrderSortByNameActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane figureOrderScrollPane;
     private javax.swing.JRadioButton figureOrderSortByName;

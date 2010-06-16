@@ -205,7 +205,7 @@ public class RoutineManager {
             sum = sum.add(score);
         }
 
-        //Multiply by DD
+        //Multiply by DD (scale becomes 2)
         sum = sum.multiply(new BigDecimal(2));
 
         routine.setTechScore(sum);
@@ -277,7 +277,7 @@ public class RoutineManager {
             sum = sum.add(score);
         }
 
-        routine.setArtScore(sum);
+        routine.setArtScore(sum.setScale(2));
 
         //Total and subtract penalty
         BigDecimal total = routine.getTechScore().add(routine.getArtScore()).subtract(routine.getPenalty());
