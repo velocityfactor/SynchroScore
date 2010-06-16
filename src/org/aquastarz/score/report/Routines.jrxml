@@ -110,14 +110,14 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{name}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="###0.00;(###0.00)">
 				<reportElement isPrintRepeatedValues="false" x="388" y="21" width="40" height="16"/>
 				<textElement textAlignment="Center">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{artScore}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="###0.0;(###0.0)">
 				<reportElement x="431" y="21" width="40" height="16"/>
 				<textElement textAlignment="Center">
 					<font size="12"/>
@@ -180,7 +180,7 @@
 				</textElement>
 				<text><![CDATA[Title]]></text>
 			</staticText>
-			<textField>
+			<textField pattern="###0.00;(###0.00)">
 				<reportElement x="518" y="21" width="40" height="16"/>
 				<textElement textAlignment="Center">
 					<font size="12"/>
@@ -201,7 +201,7 @@
 				</textElement>
 				<text><![CDATA[Total]]></text>
 			</staticText>
-			<textField>
+			<textField pattern="###0.00;(###0.00)">
 				<reportElement isPrintRepeatedValues="false" x="475" y="21" width="40" height="16"/>
 				<textElement textAlignment="Center">
 					<font size="12"/>
