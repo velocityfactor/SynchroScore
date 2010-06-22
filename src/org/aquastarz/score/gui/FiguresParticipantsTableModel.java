@@ -52,7 +52,7 @@ public class FiguresParticipantsTableModel implements TableModel {
     public FiguresParticipantsTableModel(Collection<FiguresParticipant> figuresParticipants) {
         for (FiguresParticipant fp : figuresParticipants) {
             Swimmer s = fp.getSwimmer();
-            TableItem item = new TableItem(fp.getFigureOrder(), s.getSwimmerId().toString(), s.getLastName(), s.getFirstName(), s.getTeam().getTeamId(), s.getLevel().toString());
+            TableItem item = new TableItem(fp.getFigureOrder(), s.getLeagueNum().toString(), s.getLastName(), s.getFirstName(), s.getTeam().getTeamId(), s.getLevel().toString());
             items.add(item);
         }
     }

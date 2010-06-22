@@ -63,7 +63,7 @@ public class FiguresParticipantSearchPanel extends javax.swing.JPanel {
     public void setFiguresParticipant(FiguresParticipant figuresParticipant) {
         figureOrder.setText(figuresParticipant.getFigureOrder());
         Swimmer s = figuresParticipant.getSwimmer();
-        leagueSwimmerNumber.setText(s.getSwimmerId().toString());
+        leagueSwimmerNumber.setText(s.getLeagueNum().toString());
         swimmerLevel.setText(s.getLevel().getLevelId());
         swimmerName.setText(s.getLastName() + ", " + s.getFirstName());
         swimmerTeam.setText(s.getTeam().getTeamId());
