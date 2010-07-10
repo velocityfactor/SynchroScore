@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.1" encoding="UTF-8" ?>
 
 <Form version="1.5" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
@@ -367,8 +367,16 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="reportIntRoutineLabels" linkSize="3" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="reportIntRoutines" linkSize="3" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="reportIntRoutineLabels" linkSize="3" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="reportAllRoutineLabels" linkSize="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="reportIntRoutines" linkSize="3" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="reportAllRoutines" linkSize="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
                           <Component id="reportIntStation" linkSize="3" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="reportIntMeetSheet" linkSize="3" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="reportIntFigureLabels" linkSize="3" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -409,6 +417,7 @@
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="reportNovRoutines" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="reportIntRoutines" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="reportAllRoutines" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
@@ -420,6 +429,7 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="reportNovRoutineLabels" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="reportIntRoutineLabels" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="reportAllRoutineLabels" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace pref="351" max="32767" attributes="0"/>
                   </Group>
@@ -529,6 +539,22 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="reportIntRoutineLabelsActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="reportAllRoutines">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="All Routines"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="reportAllRoutinesActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="reportAllRoutineLabels">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="All Routine Labels"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="reportAllRoutineLabelsActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>

@@ -29,4 +29,8 @@ public class RoutineLevelManager {
         Query query = ScoreApp.getEntityManager().createNamedQuery("RoutineLevel.findAllInOrder");
         return query.getResultList();
     }
+
+    public static RoutineLevel find(String id) {
+        return (RoutineLevel) ScoreApp.getEntityManager().find(RoutineLevel.class, id);
+    }
 }

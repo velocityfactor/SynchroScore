@@ -95,27 +95,33 @@ public class RoutinesPanel extends javax.swing.JPanel {
     }
 
     private void updateComponentEnabledStatus() {
-        title.setEnabled(curRoutine != null);
-        names1.setEnabled(curRoutine != null);
-        names2.setEnabled(curRoutine != null);
-        scoreTJ1.setEnabled(curRoutine != null);
-        scoreTJ2.setEnabled(curRoutine != null);
-        scoreTJ3.setEnabled(curRoutine != null);
-        scoreTJ4.setEnabled(curRoutine != null);
-        scoreTJ5.setEnabled(curRoutine != null);
-        scoreTJ6.setEnabled(curRoutine != null);
-        scoreTJ7.setEnabled(curRoutine != null);
-        scoreAJ1.setEnabled(curRoutine != null);
-        scoreAJ2.setEnabled(curRoutine != null);
-        scoreAJ3.setEnabled(curRoutine != null);
-        scoreAJ4.setEnabled(curRoutine != null);
-        scoreAJ5.setEnabled(curRoutine != null);
-        scoreAJ6.setEnabled(curRoutine != null);
-        scoreAJ7.setEnabled(curRoutine != null);
-        penalty.setEnabled(curRoutine != null);
-        levelCombo.setEnabled(curRoutine != null);
-        routineTypeCombo.setEnabled(curRoutine != null);
-        teamCombo.setEnabled(curRoutine != null);
+        boolean enable = curRoutine != null;
+        title.setEnabled(enable);
+        if ("Team".equals(routineTypeCombo.getSelectedItem())) {
+            numSwimmers.setEnabled(enable);
+        } else {
+            numSwimmers.setEnabled(false);
+        }
+        names1.setEnabled(enable);
+        names2.setEnabled(enable);
+        scoreTJ1.setEnabled(enable);
+        scoreTJ2.setEnabled(enable);
+        scoreTJ3.setEnabled(enable);
+        scoreTJ4.setEnabled(enable);
+        scoreTJ5.setEnabled(enable);
+        scoreTJ6.setEnabled(enable);
+        scoreTJ7.setEnabled(enable);
+        scoreAJ1.setEnabled(enable);
+        scoreAJ2.setEnabled(enable);
+        scoreAJ3.setEnabled(enable);
+        scoreAJ4.setEnabled(enable);
+        scoreAJ5.setEnabled(enable);
+        scoreAJ6.setEnabled(enable);
+        scoreAJ7.setEnabled(enable);
+        penalty.setEnabled(enable);
+        levelCombo.setEnabled(enable);
+        routineTypeCombo.setEnabled(enable);
+        teamCombo.setEnabled(enable);
         if (routines != null && routines.size() > 0) {
             randomizeButton.setEnabled(true);
             printButton.setEnabled(true);
@@ -197,6 +203,14 @@ public class RoutinesPanel extends javax.swing.JPanel {
         routine.setSwimmers2(names2.getText());
         routine.setLevel((RoutineLevel) levelCombo.getSelectedItem());
         routine.setRoutineType((String) routineTypeCombo.getSelectedItem());
+        try {
+            int numSwimmersValue = Integer.parseInt(numSwimmers.getText());
+            routine.setNumSwimmers(numSwimmersValue);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Invalid #Swmrs entry.", "Entry Error", JOptionPane.WARNING_MESSAGE);
+            numSwimmers.selectAll();
+            throw new Exception("Invalid entry");
+        }
         routine.setTeam((Team) teamCombo.getSelectedItem());
         BigDecimal score = TwoDigitScore.convert(scoreTJ1.getText());
         if (score == null && scoreTJ1.getText().trim().length() > 0) {
@@ -315,6 +329,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
         names2.setText(curRoutine.getSwimmers2());
         levelCombo.setSelectedItem(curRoutine.getLevel());
         routineTypeCombo.setSelectedItem(curRoutine.getRoutineType());
+        numSwimmers.setText(Integer.toString(curRoutine.getNumSwimmers()));
         teamCombo.setSelectedItem(curRoutine.getTeam());
         if (curRoutine.getTScore1() != null) {
             scoreTJ1.setText(curRoutine.getTScore1().toString());
@@ -452,6 +467,8 @@ public class RoutinesPanel extends javax.swing.JPanel {
         printButton = new javax.swing.JButton();
         randomizeButton = new javax.swing.JButton();
         saveButton = new javax.swing.JButton();
+        numSwimmers = new javax.swing.JTextField();
+        jLabel17 = new javax.swing.JLabel();
 
         routineList.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -489,7 +506,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14));
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Level");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14));
@@ -505,7 +522,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
             }
         });
 
-        teamCombo.setFont(new java.awt.Font("Tahoma", 0, 14));
+        teamCombo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         teamCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         teamCombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -513,13 +530,13 @@ public class RoutinesPanel extends javax.swing.JPanel {
             }
         });
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14));
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel3.setText("Team");
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14));
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setText("Title");
 
-        title.setFont(new java.awt.Font("Tahoma", 0, 14));
+        title.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         title.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 handleFieldChange(evt);
@@ -708,6 +725,16 @@ public class RoutinesPanel extends javax.swing.JPanel {
             }
         });
 
+        numSwimmers.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        numSwimmers.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                numSwimmersKeyPressed(evt);
+            }
+        });
+
+        jLabel17.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel17.setText("# Swmrs");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -722,9 +749,13 @@ public class RoutinesPanel extends javax.swing.JPanel {
                     .addComponent(jLabel2)
                     .addComponent(routineTypeCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(numSwimmers)
+                    .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(teamCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3)))
+                    .addComponent(jLabel3)
+                    .addComponent(teamCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)))
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -816,12 +847,14 @@ public class RoutinesPanel extends javax.swing.JPanel {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel1)
                                     .addComponent(jLabel2)
+                                    .addComponent(jLabel17)
                                     .addComponent(jLabel3))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(levelCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(routineTypeCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(teamCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(teamCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(numSwimmers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel4)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -953,6 +986,24 @@ public class RoutinesPanel extends javax.swing.JPanel {
     private void routineTypeComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_routineTypeComboActionPerformed
         handleFieldChange(null);
         this.updateComponentEnabledStatus();
+        if ("Solo".equals(routineTypeCombo.getSelectedItem())) {
+            numSwimmers.setText("1");
+        } else if ("Duet".equals(routineTypeCombo.getSelectedItem())) {
+            numSwimmers.setText("2");
+        } else if ("Trio".equals(routineTypeCombo.getSelectedItem())) {
+            numSwimmers.setText("3");
+        } else if ("Team".equals(routineTypeCombo.getSelectedItem())) {
+            int num = 4;
+            try {
+                num = Integer.parseInt(numSwimmers.getText());
+            } catch (Exception e) {
+                //Invalid just defaults to 4
+            }
+            if (num < 4 || num > 8) {
+                num = 4;
+            }
+            numSwimmers.setText(Integer.toString(num));
+        }
     }//GEN-LAST:event_routineTypeComboActionPerformed
 
     private void teamComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_teamComboActionPerformed
@@ -1098,6 +1149,11 @@ public class RoutinesPanel extends javax.swing.JPanel {
         updateComponentEnabledStatus();
     }//GEN-LAST:event_routineListValueChanged
 
+    private void numSwimmersKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_numSwimmersKeyPressed
+        handleFieldChange(null);
+        updateComponentEnabledStatus();
+    }//GEN-LAST:event_numSwimmersKeyPressed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
     private javax.swing.JButton deleteButton;
@@ -1109,6 +1165,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1121,6 +1178,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
     private javax.swing.JComboBox levelCombo;
     private javax.swing.JTextField names1;
     private javax.swing.JTextField names2;
+    private javax.swing.JTextField numSwimmers;
     private javax.swing.JTextField penalty;
     private javax.swing.JButton printButton;
     private javax.swing.JButton randomizeButton;

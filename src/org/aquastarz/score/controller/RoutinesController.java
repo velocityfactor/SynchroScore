@@ -20,8 +20,18 @@
 package org.aquastarz.score.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import javax.swing.JOptionPane;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 import org.aquastarz.score.domain.Meet;
 import org.aquastarz.score.domain.Routine;
 import org.aquastarz.score.domain.RoutineLevel;
@@ -30,10 +40,11 @@ import org.aquastarz.score.gui.RoutinesPanel;
 import org.aquastarz.score.gui.SynchroFrame;
 import org.aquastarz.score.manager.RoutineLevelManager;
 import org.aquastarz.score.manager.RoutineManager;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class RoutinesController {
 
+    private static org.apache.log4j.Logger logger =
+            org.apache.log4j.Logger.getLogger(RoutinesController.class.getName());
     private Meet meet = null;
     private RoutinesPanel panel;
 
@@ -81,7 +92,7 @@ public class RoutinesController {
     }
 
     public void print() {
-        throw new NotImplementedException();
+        showRoutinesOrderReport(meet);
     }
 
     public List<RoutineLevel> getRoutineLevels() {
@@ -94,4 +105,59 @@ public class RoutinesController {
         teams.addAll(meet.getOpponents());
         return teams;
     }
-}
+
+    private void showRoutinesOrderReport(Meet meet) {
+        try {
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/RoutinesOrder.jasper"));
+            JRDataSource data = new JRBeanCollectionDataSource(RoutineManager.findAll(meet));
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put("MeetDate", meet.getMeetDate());
+            params.put("MeetName", meet.getName());
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, data);
+            JasperViewer.viewReport(jasperPrint, false);
+        } catch (Exception ex) {
+            logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
+        }
+    }
+
+    public static void showRoutinesReport(Meet meet, boolean showNovice, boolean showIntermediate) {
+        if (!ScoreController.meetResultsValid(meet)) {
+            JOptionPane.showMessageDialog(null, "There were errors calculating results: " + meet.getCalcErrors());
+            return;
+        }
+        try {
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(RoutinesController.class.getResourceAsStream("/org/aquastarz/score/report/Routines.jasper"));
+            JRDataSource data = new JRBeanCollectionDataSource(ScoreController.generateRoutinesResults(meet, showNovice, showIntermediate));
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put("MeetDate", meet.getMeetDate());
+            params.put("MeetName", meet.getName());
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, data);
+            JasperViewer.viewReport(jasperPrint, false);
+        } catch (Exception ex) {
+            logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
+        }
+    }
+
+    public static void showRoutinesLabelsReport(Meet meet, int skipLabels, boolean showNovice, boolean showIntermediate) {
+        if (!ScoreController.meetResultsValid(meet)) {
+            JOptionPane.showMessageDialog(null, "There were errors calculating results: " + meet.getCalcErrors());
+            return;
+        }
+        try {
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(RoutinesController.class.getResourceAsStream("/org/aquastarz/score/report/RoutineLabels.jasper"));
+            List<Routine> routines = new LinkedList<Routine>();
+            for (int i = 0; i < skipLabels; i++) {
+                routines.add(null);
+            }
+            routines.addAll(ScoreController.generateRoutineLabels(meet, showNovice, showIntermediate));
+            JRDataSource data = new JRBeanCollectionDataSource(routines);
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put("MeetDate", meet.getMeetDate());
+            params.put("MeetName", meet.getName());
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, data);
+            JasperViewer.viewReport(jasperPrint, false);
+        } catch (Exception ex) {
+            logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
+        }
+    }
+ }

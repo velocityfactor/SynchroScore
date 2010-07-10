@@ -45,7 +45,7 @@
 	<field name="totalScore" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[totalScore]]></fieldDescription>
 	</field>
-	<group name="RoutineLevel" isStartNewPage="true" isReprintHeaderOnEachPage="true">
+	<group name="RoutineLevel" isReprintHeaderOnEachPage="true">
 		<groupExpression><![CDATA[$F{level}+" "+$F{routineType}]]></groupExpression>
 		<groupHeader>
 			<band height="30">
