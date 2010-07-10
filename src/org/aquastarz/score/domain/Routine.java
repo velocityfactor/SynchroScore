@@ -37,8 +37,9 @@ import javax.persistence.Table;
 @Table(name = "routine")
 @NamedQueries({
     @NamedQuery(name = "Routine.findByMeetOrderByRoutineOrder", query = "SELECT r FROM Routine r WHERE r.meet = :meet ORDER BY routineOrder"),
-    @NamedQuery(name = "Routine.findByMeetAndLevelIsIntermediateOrderByLevelAndPlace", query = "SELECT r FROM Routine r WHERE r.meet = :meet and r.level.routineLevelId like 'I%' ORDER BY r.level.sortOrder,r.place"),
-    @NamedQuery(name = "Routine.findByMeetAndLevelIsNoviceOrderByLevelAndPlace", query = "SELECT r FROM Routine r WHERE r.meet = :meet and r.level.routineLevelId like 'N%' ORDER BY r.level.sortOrder, r.place")})
+    @NamedQuery(name = "Routine.findByMeetOrderByLevelAndRoutineTypeAndPlace", query = "SELECT r FROM Routine r WHERE r.meet = :meet ORDER BY r.level.sortOrder, r.routineType,r.place"),
+    @NamedQuery(name = "Routine.findByMeetAndLevelIsIntermediateOrderByLevelAndRoutineTypeAndPlace", query = "SELECT r FROM Routine r WHERE r.meet = :meet and r.level.routineLevelId like 'I%' ORDER BY r.level.sortOrder, r.routineType,r.place"),
+    @NamedQuery(name = "Routine.findByMeetAndLevelIsNoviceOrderByLevelAndRoutineTypeAndPlace", query = "SELECT r FROM Routine r WHERE r.meet = :meet and r.level.routineLevelId like 'N%' ORDER BY r.level.sortOrder, r.routineType, r.place")})
 public class Routine implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -61,6 +62,9 @@ public class Routine implements Serializable {
     @Basic(optional = false)
     @Column(name = "routineType", nullable = false, length = 4)
     private String routineType;
+    @Basic(optional = false)
+    @Column(name = "numSwimmers", nullable = false)
+    private int numSwimmers;
     @Basic(optional = true)
     @Column(nullable = true, length = 60)
     private String swimmers1;
@@ -184,6 +188,14 @@ public class Routine implements Serializable {
 
     public void setRoutineType(String routineType) {
         this.routineType = routineType;
+    }
+
+    public int getNumSwimmers() {
+        return numSwimmers;
+    }
+
+    public void setNumSwimmers(int numSwimmers) {
+        this.numSwimmers = numSwimmers;
     }
 
     public String getSwimmers1() {

@@ -33,7 +33,7 @@ public class ScoreApp {
 
     private static org.apache.log4j.Logger logger =
             org.apache.log4j.Logger.getLogger(ScoreApp.class.getName());
-    private static final String productionFilename = System.getProperty("user.home") + "/.SynchroScore";
+    private static final String productionFilename = System.getProperty("user.home") + "/SynchroScore";
     private static final String productionUrl = "jdbc:hsqldb:file:" + productionFilename + "/Synchro;write_delay=false";
     private static final String testUrl = "jdbc:hsqldb:mem:Synchro";
     private static String dbUrl = null;
@@ -143,6 +143,6 @@ public class ScoreApp {
     }
 
     public static String getVersion() {
-        return "1.0";
+        return "1.01";
     }
 }

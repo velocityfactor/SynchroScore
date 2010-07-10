@@ -38,6 +38,9 @@ import org.aquastarz.score.controller.ScoreController;
 import org.aquastarz.score.manager.SeasonManager;
 import org.aquastarz.score.manager.SwimmerManager;
 import org.aquastarz.score.domain.Season;
+import org.aquastarz.score.manager.RoutineLevelManager;
+import org.aquastarz.score.manager.RoutineManager;
+import org.aquastarz.score.manager.TeamManager;
 
 public class Bootstrap {
 
@@ -99,6 +102,7 @@ public class Bootstrap {
         checkAndPersistFigure(entityManager, "240", new BigDecimal("2.2"), "Albatross");
         checkAndPersistFigure(entityManager, "301", new BigDecimal("2.0"), "Barracuda");
         checkAndPersistFigure(entityManager, "150", new BigDecimal("3.1"), "Knight");
+        checkAndPersistFigure(entityManager, "401", new BigDecimal("2.0"), "Swordfish");
 
         entityManager.getTransaction().commit();
     }
@@ -138,6 +142,7 @@ public class Bootstrap {
             //Save the meets and results for later and put them together for
             //processing
             Map<String, Map<String, LegacyResult>> lrMap = new HashMap<String, Map<String, LegacyResult>>();
+            Map<String, List<LegacyRoutine>> lroMap = new HashMap<String,List<LegacyRoutine>>();
             Map<String, LegacyMeet> lmMap = new HashMap<String, LegacyMeet>();
 
             try {
@@ -156,6 +161,8 @@ public class Bootstrap {
                         lrMap.put(folder, readLegacyResults(stream));
                     } else if (fname.toUpperCase().endsWith("FIGSTAT.CSV")) {
                         lmMap.put(folder, readLegacyMeet(stream));
+                    } else if (fname.toUpperCase().endsWith("ROUTINES.CSV")) {
+                        lroMap.put(folder, readLegacyRoutines(stream));
                     }
                 }
             } finally {
@@ -170,6 +177,7 @@ public class Bootstrap {
                     String seasonName = folder.substring(0, i);
                     LegacyMeet lm = lmMap.get(folder);
                     lm.setResults(lrMap.get(folder));
+                    lm.setRoutines(lroMap.get(folder));
                     Season season = SeasonManager.findOrCreate(seasonName);
 
                     //Skip if we have a meet with same name
@@ -181,7 +189,7 @@ public class Bootstrap {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return results;
     }
@@ -220,8 +228,7 @@ public class Bootstrap {
                 Swimmer swimmer = SwimmerManager.findByLeagueNum(ls.code, season);
                 if (swimmer == null) {
                     swimmer = new Swimmer(ls.code, season, team, level, ls.gName, ls.sName);
-                }
-                else {
+                } else {
                     swimmer.setFirstName(ls.gName);
                     swimmer.setLastName(ls.sName);
                     swimmer.setLevel(level);
@@ -231,7 +238,7 @@ public class Bootstrap {
             }
             entityManager.getTransaction().commit();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
     }
 
@@ -247,9 +254,26 @@ public class Bootstrap {
                 legacyResults.put(lr.swmrNo, lr);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return legacyResults;
+    }
+
+    private static List<LegacyRoutine> readLegacyRoutines(InputStream is) {
+        List<LegacyRoutine> legacyRoutines = new ArrayList<LegacyRoutine>();
+
+        CSVReader csv = new CSVReader(new InputStreamReader(is));
+        String[] nextLine;
+        try {
+            csv.readNext(); //skip header
+            while ((nextLine = csv.readNext()) != null) {
+                LegacyRoutine lr = new LegacyRoutine(nextLine);
+                legacyRoutines.add(lr);
+            }
+        } catch (Exception e) {
+            logger.error(e);
+        }
+        return legacyRoutines;
     }
 
     private static LegacyMeet readLegacyMeet(InputStream is) {
@@ -262,7 +286,7 @@ public class Bootstrap {
             nextLine = csv.readNext();
             legacyMeet = new LegacyMeet(nextLine);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return legacyMeet;
     }
@@ -277,6 +301,7 @@ public class Bootstrap {
         EntityManager entityManager = ScoreApp.getEntityManager();
 
         Map<String, LegacyResult> legacyResults = legacyMeet.getResults();
+        List<LegacyRoutine> legacyRoutines = legacyMeet.getRoutines();
 
         meet = new Meet();
         meet.setName(legacyMeet.meetTitle);
@@ -288,9 +313,17 @@ public class Bootstrap {
             meet.setType('C');
         }
 
-        meet.setHomeTeam(entityManager.find(Team.class, legacyMeet.homeTm));
+        meet.setHomeTeam(TeamManager.findById(legacyMeet.homeTm));
         List<Team> oppList = new ArrayList<Team>();
-        oppList.add(entityManager.find(Team.class, legacyMeet.oppnTm));
+        if (meet.getType() == 'R') {
+            oppList.add(TeamManager.findById(legacyMeet.oppnTm));
+        } else {
+            for (Team team : TeamManager.findAllTeams()) {
+                if (!team.equals(meet.getHomeTeam())) {
+                    oppList.add(team);
+                }
+            }
+        }
         meet.setOpponents(oppList);
         meet.setNov1Figure(entityManager.find(Figure.class, legacyMeet.nRestSta1));
         meet.setNov2Figure(entityManager.find(Figure.class, legacyMeet.nRestSta2));
@@ -309,11 +342,14 @@ public class Bootstrap {
         entityManager.persist(meet);
         entityManager.getTransaction().commit();
 
-        for (LegacyResult lr : legacyResults.values()) {
+        for (LegacyResult legacyResult : legacyResults.values()) {
             FiguresParticipant fp = new FiguresParticipant();
-            fp.setFigureOrder(lr.swmrNo);
+            fp.setFigureOrder(legacyResult.swmrNo);
 
-            fp.setSwimmer(SwimmerManager.findByLeagueNum(lr.leagueNo, season));
+            fp.setSwimmer(SwimmerManager.findByLeagueNum(legacyResult.leagueNo, season));
+            if (fp.getSwimmer() == null) {
+                logger.error("Swimmer not found.  league #=" + legacyResult.leagueNo + " season=" + season);
+            }
             fp.setMeet(meet);
 
             entityManager.getTransaction().begin();
@@ -323,15 +359,15 @@ public class Bootstrap {
 
             FiguresParticipantTracker fpt = new FiguresParticipantTracker();
             fpt.figuresParticipant = fp;
-            fpt.place = lr.place;
-            fpt.points = lr.points;
-            fpt.total = lr.finTot;
+            fpt.place = legacyResult.place;
+            fpt.points = legacyResult.points;
+            fpt.total = legacyResult.finTot;
             figuresParticipantTrackers.add(fpt);
 
             List<FigureScore> scores = new ArrayList<FigureScore>();
             int figNum = 1;
             for (int i = 0; i < 4; i++) {
-                if ("8 & UNDER".equals(lr.ageGrp.toUpperCase())
+                if ("8 & UNDER".equals(legacyResult.ageGrp.toUpperCase())
                         && ((i == 0 && !meet.isEu1())
                         || (i == 1 && !meet.isEu2())
                         || (i == 2 && !meet.isEu3())
@@ -342,19 +378,19 @@ public class Bootstrap {
                 fs.setFiguresParticipant(fp);
                 fs.setStation(i + 1);
                 try {
-                    fs.setScore1((BigDecimal) lr.getClass().getDeclaredField("s" + (i + 1) + "j1").get(lr));
-                    fs.setScore2((BigDecimal) lr.getClass().getDeclaredField("s" + (i + 1) + "j2").get(lr));
-                    fs.setScore3((BigDecimal) lr.getClass().getDeclaredField("s" + (i + 1) + "j3").get(lr));
-                    fs.setScore4((BigDecimal) lr.getClass().getDeclaredField("s" + (i + 1) + "j4").get(lr));
-                    fs.setScore5((BigDecimal) lr.getClass().getDeclaredField("s" + (i + 1) + "j5").get(lr));
-                    fs.setPenalty((BigDecimal) lr.getClass().getDeclaredField("s" + (i + 1) + "Pen").get(lr));
+                    fs.setScore1((BigDecimal) legacyResult.getClass().getDeclaredField("s" + (i + 1) + "j1").get(legacyResult));
+                    fs.setScore2((BigDecimal) legacyResult.getClass().getDeclaredField("s" + (i + 1) + "j2").get(legacyResult));
+                    fs.setScore3((BigDecimal) legacyResult.getClass().getDeclaredField("s" + (i + 1) + "j3").get(legacyResult));
+                    fs.setScore4((BigDecimal) legacyResult.getClass().getDeclaredField("s" + (i + 1) + "j4").get(legacyResult));
+                    fs.setScore5((BigDecimal) legacyResult.getClass().getDeclaredField("s" + (i + 1) + "j5").get(legacyResult));
+                    fs.setPenalty((BigDecimal) legacyResult.getClass().getDeclaredField("s" + (i + 1) + "Pen").get(legacyResult));
                     fs.setTotalScore(ScoreController.totalScore(fs));
                     FigureScoreTracker fst = new FigureScoreTracker();
                     fst.figureScore = fs;
-                    fst.total = (BigDecimal) lr.getClass().getDeclaredField("s" + (i + 1) + "Tot").get(lr);
+                    fst.total = (BigDecimal) legacyResult.getClass().getDeclaredField("s" + (i + 1) + "Tot").get(legacyResult);
                     figureScoreTrackers.add(fst);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error("Error loading figure score.",e);
                 }
                 entityManager.getTransaction().begin();
                 entityManager.persist(fs);
@@ -365,6 +401,37 @@ public class Bootstrap {
             }
             fp.setFiguresScores(scores);
             meet.getFiguresParticipants().add(fp);
+        }
+
+        for(LegacyRoutine legacyRoutine:legacyRoutines) {
+            Routine routine = new Routine();
+            routine.setMeet(meet);
+            routine.setName(legacyRoutine.title);
+            routine.setLevel(legacyRoutine.getRoutineLevel());
+            routine.setRoutineType(legacyRoutine.category);
+            routine.setNumSwimmers(legacyRoutine.noSwmr.intValueExact());
+            routine.setTeam(TeamManager.findById(legacyRoutine.team));
+            routine.setRoutineOrder(0);
+            routine.setSwimmers1(legacyRoutine.swrN1);
+            routine.setSwimmers2(legacyRoutine.swrN2);
+            routine.setAScore1(legacyRoutine.aJ1);
+            routine.setAScore2(legacyRoutine.aJ2);
+            routine.setAScore3(legacyRoutine.aJ3);
+            routine.setAScore4(legacyRoutine.aJ4);
+            routine.setAScore5(legacyRoutine.aJ5);
+            routine.setAScore6(legacyRoutine.aJ6);
+            routine.setAScore7(legacyRoutine.aJ7);
+            routine.setTScore1(legacyRoutine.tJ1);
+            routine.setTScore2(legacyRoutine.tJ2);
+            routine.setTScore3(legacyRoutine.tJ3);
+            routine.setTScore4(legacyRoutine.tJ4);
+            routine.setTScore5(legacyRoutine.tJ5);
+            routine.setTScore6(legacyRoutine.tJ6);
+            routine.setTScore7(legacyRoutine.tJ7);
+            routine.setPenalty(legacyRoutine.penalty);
+            RoutineManager.calculate(routine);
+            RoutineManager.save(routine);
+            meet.getRoutines().add(routine);
         }
         ScoreController.calculateMeetResults(meet);
         entityManager.getTransaction().begin();
@@ -520,6 +587,7 @@ public class Bootstrap {
         BigDecimal iS4DD;
         String iS4Des;
         Map<String, LegacyResult> results;
+        List<LegacyRoutine> routines;
 
         public Map<String, LegacyResult> getResults() {
             return results;
@@ -527,6 +595,14 @@ public class Bootstrap {
 
         public void setResults(Map<String, LegacyResult> results) {
             this.results = results;
+        }
+
+        public List<LegacyRoutine> getRoutines() {
+            return routines;
+        }
+
+        public void setRoutines(List<LegacyRoutine> routines) {
+            this.routines = routines;
         }
 
         LegacyMeet(String line[]) {
@@ -563,6 +639,80 @@ public class Bootstrap {
             iSta4 = line[30];
             iS4DD = new BigDecimal(line[31]).setScale(1);
             iS4Des = line[32];
+        }
+    }
+
+    public static class LegacyRoutine {
+
+        int ageTyp;
+        BigDecimal fTOT;
+        String title;
+        String ageGrp;
+        String category;
+        String team;
+        BigDecimal tJ1;
+        BigDecimal tJ2;
+        BigDecimal tJ3;
+        BigDecimal tJ4;
+        BigDecimal tJ5;
+        BigDecimal tJ6;
+        BigDecimal tJ7;
+        BigDecimal tTOT;
+        BigDecimal aJ1;
+        BigDecimal aJ2;
+        BigDecimal aJ3;
+        BigDecimal aJ4;
+        BigDecimal aJ5;
+        BigDecimal aJ6;
+        BigDecimal aJ7;
+        BigDecimal aTOT;
+        BigDecimal penalty;
+        BigDecimal noSwmr;
+        BigDecimal finTot;
+        String swrN1;
+        String swrN2;
+        int place;
+        BigDecimal points;
+
+        LegacyRoutine(String[] line) {
+            ageTyp = Integer.parseInt(line[0]);
+            fTOT = new BigDecimal(line[1]).setScale(2);
+            title = line[2];
+            ageGrp = line[3];
+            category = line[4];
+            team = line[5];
+            tJ1 = new BigDecimal(line[6]).setScale(1);
+            tJ2 = new BigDecimal(line[7]).setScale(1);
+            tJ3 = new BigDecimal(line[8]).setScale(1);
+            tJ4 = new BigDecimal(line[9]).setScale(1);
+            tJ5 = new BigDecimal(line[10]).setScale(1);
+            tJ6 = new BigDecimal(line[11]).setScale(1);
+            tJ7 = new BigDecimal(line[12]).setScale(1);
+            tTOT = new BigDecimal(line[13]).setScale(2);
+            aJ1 = new BigDecimal(line[14]).setScale(1);
+            aJ2 = new BigDecimal(line[15]).setScale(1);
+            aJ3 = new BigDecimal(line[16]).setScale(1);
+            aJ4 = new BigDecimal(line[17]).setScale(1);
+            aJ5 = new BigDecimal(line[18]).setScale(1);
+            aJ6 = new BigDecimal(line[19]).setScale(1);
+            aJ7 = new BigDecimal(line[20]).setScale(1);
+            aTOT = new BigDecimal(line[21]).setScale(2);
+            penalty = new BigDecimal(line[22]).setScale(1);
+            noSwmr = new BigDecimal(line[23]).setScale(1);
+            finTot = new BigDecimal(line[24]).setScale(2);
+            swrN1 = line[25];
+            swrN2 = line[26];
+            place = Integer.parseInt(line[27]);
+            points = new BigDecimal(line[28]).setScale(1);
+        }
+
+        RoutineLevel getRoutineLevel() {
+            if(ageGrp.equals("NOV 12 and Under")) return RoutineLevelManager.find("N12U");
+            else if(ageGrp.equals("NOV 13 and Over")) return RoutineLevelManager.find("N13O");
+            else if(ageGrp.equals("INT 11-14 (solo, duet, trio)")) return RoutineLevelManager.find("I11");
+            else if(ageGrp.equals("INT 15-18 (solo, duet, trio)")) return RoutineLevelManager.find("I15");
+            else if(ageGrp.equals("INT 11 and Over (team)")) return RoutineLevelManager.find("I11T");
+            else return null;
         }
     }
 

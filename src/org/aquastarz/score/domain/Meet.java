@@ -45,7 +45,7 @@ import javax.persistence.UniqueConstraint;
 @Table(uniqueConstraints = {
     @UniqueConstraint(columnNames = {"season", "name"})})
 @NamedQueries({
-    @NamedQuery(name = "Meet.findAllBySeasonOrderByDateDesc", query = "SELECT m FROM Meet m where m.season like :season order by m.meetDate desc"),
+    @NamedQuery(name = "Meet.findAllBySeasonOrderByIdDesc", query = "SELECT m FROM Meet m where m.season like :season order by m.meetId desc"),
     @NamedQuery(name = "Meet.findBySeasonAndName", query = "SELECT m FROM Meet m where m.season like :season and m.name like :name")})
 public class Meet implements Serializable {
 

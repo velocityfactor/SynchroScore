@@ -45,10 +45,13 @@ public class FigureScorePanel extends javax.swing.JPanel {
     /** Creates new form FigureScorePanel */
     public FigureScorePanel() {
         initComponents();
-        clear();
+// Try to block these fields from getting a period, but this isn't reliable
+//        scoreS1J1.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_PERIOD, 0), "none");
+
+        clearScores();
     }
 
-    public void clear() {
+    public final void clearScores() {
         figuresParticipant = null;
         figureScoreMap = null;
 
@@ -521,7 +524,14 @@ public class FigureScorePanel extends javax.swing.JPanel {
             scoreS4J1.requestFocusInWindow();
             scoreS4J1.selectAll();
         }
+    }
 
+    private void moveToNextEditableRow() {
+        if(currentRow>0 && currentRow<5) {
+            int newRow = currentRow+1;
+            if(newRow>4) newRow=1;
+            setEditableRow(newRow);
+        }
     }
 
     /** This method is called from within the constructor to
@@ -1367,12 +1377,20 @@ public class FigureScorePanel extends javax.swing.JPanel {
             scoreS1J3.requestFocusInWindow();
             scoreS1J3.selectAll();
         }
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreS1J2.getText().length()==0) {
+            scoreS1J1.requestFocusInWindow();
+            scoreS1J1.selectAll();
+        }
     }//GEN-LAST:event_scoreS1J2KeyPressed
 
     private void scoreS1J3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS1J3KeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             scoreS1J4.requestFocusInWindow();
             scoreS1J4.selectAll();
+        }
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreS1J3.getText().length()==0) {
+            scoreS1J2.requestFocusInWindow();
+            scoreS1J2.selectAll();
         }
     }//GEN-LAST:event_scoreS1J3KeyPressed
 
@@ -1381,11 +1399,19 @@ public class FigureScorePanel extends javax.swing.JPanel {
             scoreS1J5.requestFocusInWindow();
             scoreS1J5.selectAll();
         }
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreS1J4.getText().length()==0) {
+            scoreS1J3.requestFocusInWindow();
+            scoreS1J3.selectAll();
+        }
     }//GEN-LAST:event_scoreS1J4KeyPressed
 
     private void scoreS1J5KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS1J5KeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             readyToSave();
+        }
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreS1J5.getText().length()==0) {
+            scoreS1J4.requestFocusInWindow();
+            scoreS1J4.selectAll();
         }
     }//GEN-LAST:event_scoreS1J5KeyPressed
 
@@ -1401,12 +1427,20 @@ public class FigureScorePanel extends javax.swing.JPanel {
             scoreS2J3.requestFocusInWindow();
             scoreS2J3.selectAll();
         }
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreS2J2.getText().length()==0) {
+            scoreS2J1.requestFocusInWindow();
+            scoreS2J1.selectAll();
+        }
     }//GEN-LAST:event_scoreS2J2KeyPressed
 
     private void scoreS2J3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS2J3KeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             scoreS2J4.requestFocusInWindow();
             scoreS2J4.selectAll();
+        }
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreS2J3.getText().length()==0) {
+            scoreS2J2.requestFocusInWindow();
+            scoreS2J2.selectAll();
         }
     }//GEN-LAST:event_scoreS2J3KeyPressed
 
@@ -1415,11 +1449,19 @@ public class FigureScorePanel extends javax.swing.JPanel {
             scoreS2J5.requestFocusInWindow();
             scoreS2J5.selectAll();
         }
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreS2J4.getText().length()==0) {
+            scoreS2J3.requestFocusInWindow();
+            scoreS2J3.selectAll();
+        }
     }//GEN-LAST:event_scoreS2J4KeyPressed
 
     private void scoreS2J5KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS2J5KeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             readyToSave();
+        }
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreS2J5.getText().length()==0) {
+            scoreS2J4.requestFocusInWindow();
+            scoreS2J4.selectAll();
         }
     }//GEN-LAST:event_scoreS2J5KeyPressed
 
@@ -1435,12 +1477,20 @@ public class FigureScorePanel extends javax.swing.JPanel {
             scoreS3J3.requestFocusInWindow();
             scoreS3J3.selectAll();
         }
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreS3J2.getText().length()==0) {
+            scoreS3J1.requestFocusInWindow();
+            scoreS3J1.selectAll();
+        }
     }//GEN-LAST:event_scoreS3J2KeyPressed
 
     private void scoreS3J3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS3J3KeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             scoreS3J4.requestFocusInWindow();
             scoreS3J4.selectAll();
+        }
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreS3J3.getText().length()==0) {
+            scoreS3J2.requestFocusInWindow();
+            scoreS3J2.selectAll();
         }
     }//GEN-LAST:event_scoreS3J3KeyPressed
 
@@ -1449,11 +1499,19 @@ public class FigureScorePanel extends javax.swing.JPanel {
             scoreS3J5.requestFocusInWindow();
             scoreS3J5.selectAll();
         }
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreS3J4.getText().length()==0) {
+            scoreS3J3.requestFocusInWindow();
+            scoreS3J3.selectAll();
+        }
     }//GEN-LAST:event_scoreS3J4KeyPressed
 
     private void scoreS3J5KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS3J5KeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             readyToSave();
+        }
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreS3J5.getText().length()==0) {
+            scoreS3J4.requestFocusInWindow();
+            scoreS3J4.selectAll();
         }
     }//GEN-LAST:event_scoreS3J5KeyPressed
 
@@ -1462,12 +1520,20 @@ public class FigureScorePanel extends javax.swing.JPanel {
             scoreS4J2.requestFocusInWindow();
             scoreS4J2.selectAll();
         }
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreS4J2.getText().length()==0) {
+            scoreS4J1.requestFocusInWindow();
+            scoreS4J1.selectAll();
+        }
     }//GEN-LAST:event_scoreS4J1KeyPressed
 
     private void scoreS4J2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS4J2KeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             scoreS4J3.requestFocusInWindow();
             scoreS4J3.selectAll();
+        }
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreS4J3.getText().length()==0) {
+            scoreS4J2.requestFocusInWindow();
+            scoreS4J2.selectAll();
         }
     }//GEN-LAST:event_scoreS4J2KeyPressed
 
@@ -1476,6 +1542,10 @@ public class FigureScorePanel extends javax.swing.JPanel {
             scoreS4J4.requestFocusInWindow();
             scoreS4J4.selectAll();
         }
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreS4J3.getText().length()==0) {
+            scoreS4J2.requestFocusInWindow();
+            scoreS4J2.selectAll();
+        }
     }//GEN-LAST:event_scoreS4J3KeyPressed
 
     private void scoreS4J4KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS4J4KeyPressed
@@ -1483,11 +1553,19 @@ public class FigureScorePanel extends javax.swing.JPanel {
             scoreS4J5.requestFocusInWindow();
             scoreS4J5.selectAll();
         }
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreS4J4.getText().length()==0) {
+            scoreS4J3.requestFocusInWindow();
+            scoreS4J3.selectAll();
+        }
     }//GEN-LAST:event_scoreS4J4KeyPressed
 
     private void scoreS4J5KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS4J5KeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             readyToSave();
+        }
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreS4J5.getText().length()==0) {
+            scoreS4J4.requestFocusInWindow();
+            scoreS4J4.selectAll();
         }
     }//GEN-LAST:event_scoreS4J5KeyPressed
     // Variables declaration - do not modify//GEN-BEGIN:variables

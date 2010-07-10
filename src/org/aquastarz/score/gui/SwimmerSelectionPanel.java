@@ -133,8 +133,7 @@ public class SwimmerSelectionPanel extends javax.swing.JPanel {
             CheckListItem<Swimmer> item = (CheckListItem<Swimmer>) swimmerList.getModel().getElementAt(i);
             item.setSelected(selected);
         }
-        swimmerList.invalidate();
-        swimmerList.repaint();
+        updateCheckList();
     }
 
     /** This method is called from within the constructor to
