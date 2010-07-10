@@ -70,7 +70,32 @@ public class RoutineManager {
         List<Routine> routines = findAll(meet);
         TreeMap<Double, Routine> map = new TreeMap<Double, Routine>();
         for (Routine routine : routines) {
-            Double weight = Math.random() + routine.getLevel().getSortOrder();
+            double weight = Math.random();
+
+            //First sort Novice ahead of Intermediate
+            if (routine.getLevel().getLevelId().charAt(0) == 'N') {
+                weight += 100.0;
+            } else {
+                weight += 200.0;
+            }
+            
+            // Trio, Duet, Solo, Team order
+            if("Trio".equals(routine.getRoutineType())) {
+                weight += 10.0;
+            }
+            else if("Duet".equals(routine.getRoutineType())) {
+                weight += 20.0;
+            }
+            else if("Solo".equals(routine.getRoutineType())) {
+                weight += 30.0;
+            }
+            else if("Team".equals(routine.getRoutineType())) {
+                weight += 40.0;
+            }
+
+            // Lastly sort youngest first
+            weight += routine.getLevel().getSortOrder();
+
             map.put(weight, routine);
         }
         int order = 1;
@@ -144,7 +169,7 @@ public class RoutineManager {
         scores.add(routine.getTScore3());
         scores.add(routine.getTScore4());
         scores.add(routine.getTScore5());
-        if (!(meetType == 'C' && "TEAM".equals(routine.getRoutineType()))) {
+        if (!(meetType == 'C' && "Team".equals(routine.getRoutineType()))) {
             scores.add(routine.getTScore6());
             scores.add(routine.getTScore7());
         }
@@ -217,7 +242,7 @@ public class RoutineManager {
         scores.add(routine.getAScore3());
         scores.add(routine.getAScore4());
         scores.add(routine.getAScore5());
-        if (!(meetType == 'C' && "TEAM".equals(routine.getRoutineType()))) {
+        if (!(meetType == 'C' && "Team".equals(routine.getRoutineType()))) {
             scores.add(routine.getAScore6());
             scores.add(routine.getAScore7());
         }
@@ -279,8 +304,14 @@ public class RoutineManager {
 
         routine.setArtScore(sum.setScale(2));
 
-        //Total and subtract penalty
-        BigDecimal total = routine.getTechScore().add(routine.getArtScore()).subtract(routine.getPenalty());
+        //Calc bonus for team routines
+        BigDecimal bonus = BigDecimal.ZERO;
+        if ("Team".equals(routine.getRoutineType()) && routine.getNumSwimmers() > 4 && routine.getNumSwimmers() <= 8) {
+            bonus = (new BigDecimal(0.5)).multiply(new BigDecimal(routine.getNumSwimmers() - 4));
+        }
+
+        //Total, subtract penalty, add bonus
+        BigDecimal total = routine.getTechScore().add(routine.getArtScore()).subtract(routine.getPenalty()).add(bonus);
 
         //Score can't be less than zero
         if (BigDecimal.ZERO.compareTo(total) >= 0) {
@@ -300,84 +331,100 @@ public class RoutineManager {
     public static BigDecimal calcChampsPlacePoints(int place, String routineType) {
         switch (place) {
             case 1:
-                if ("SOLO".equals(routineType)) {
+                if ("Solo".equals(routineType)) {
                     return new BigDecimal(10);
-                } else if ("DUET".equals(routineType)) {
+                } else if ("Duet".equals(routineType)) {
                     return new BigDecimal(14);
-                } else if ("TRIO".equals(routineType)) {
+                } else if ("Trio".equals(routineType)) {
                     return new BigDecimal(16);
-                } else if ("TEAM".equals(routineType)) {
+                } else if ("Team".equals(routineType)) {
                     return new BigDecimal(18);
+                } else {
+                    throw new IllegalArgumentException("Unknown routineType = " + routineType);
                 }
             case 2:
-                if ("SOLO".equals(routineType)) {
+                if ("Solo".equals(routineType)) {
                     return new BigDecimal(8);
-                } else if ("DUET".equals(routineType)) {
+                } else if ("Duet".equals(routineType)) {
                     return new BigDecimal(11);
-                } else if ("TRIO".equals(routineType)) {
+                } else if ("Trio".equals(routineType)) {
                     return new BigDecimal(13);
-                } else if ("TEAM".equals(routineType)) {
+                } else if ("Team".equals(routineType)) {
                     return new BigDecimal(15);
+                } else {
+                    throw new IllegalArgumentException("Unknown routineType = " + routineType);
                 }
             case 3:
-                if ("SOLO".equals(routineType)) {
+                if ("Solo".equals(routineType)) {
                     return new BigDecimal(6);
-                } else if ("DUET".equals(routineType)) {
+                } else if ("Duet".equals(routineType)) {
                     return new BigDecimal(8);
-                } else if ("TRIO".equals(routineType)) {
+                } else if ("Trio".equals(routineType)) {
                     return new BigDecimal(10);
-                } else if ("TEAM".equals(routineType)) {
+                } else if ("Team".equals(routineType)) {
                     return new BigDecimal(12);
+                } else {
+                    throw new IllegalArgumentException("Unknown routineType = " + routineType);
                 }
             case 4:
-                if ("SOLO".equals(routineType)) {
+                if ("Solo".equals(routineType)) {
                     return new BigDecimal(5);
-                } else if ("DUET".equals(routineType)) {
+                } else if ("Duet".equals(routineType)) {
                     return new BigDecimal(6);
-                } else if ("TRIO".equals(routineType)) {
+                } else if ("Trio".equals(routineType)) {
                     return new BigDecimal(8);
-                } else if ("TEAM".equals(routineType)) {
+                } else if ("Team".equals(routineType)) {
                     return new BigDecimal(10);
+                } else {
+                    throw new IllegalArgumentException("Unknown routineType = " + routineType);
                 }
             case 5:
-                if ("SOLO".equals(routineType)) {
+                if ("Solo".equals(routineType)) {
                     return new BigDecimal(4);
-                } else if ("DUET".equals(routineType)) {
+                } else if ("Duet".equals(routineType)) {
                     return new BigDecimal(5);
-                } else if ("TRIO".equals(routineType)) {
+                } else if ("Trio".equals(routineType)) {
                     return new BigDecimal(7);
-                } else if ("TEAM".equals(routineType)) {
+                } else if ("Team".equals(routineType)) {
                     return new BigDecimal(9);
+                } else {
+                    throw new IllegalArgumentException("Unknown routineType = " + routineType);
                 }
             case 6:
-                if ("SOLO".equals(routineType)) {
+                if ("Solo".equals(routineType)) {
                     return new BigDecimal(3);
-                } else if ("DUET".equals(routineType)) {
+                } else if ("Duet".equals(routineType)) {
                     return new BigDecimal(4);
-                } else if ("TRIO".equals(routineType)) {
+                } else if ("Trio".equals(routineType)) {
                     return new BigDecimal(6);
-                } else if ("TEAM".equals(routineType)) {
+                } else if ("Team".equals(routineType)) {
                     return new BigDecimal(7);
+                } else {
+                    throw new IllegalArgumentException("Unknown routineType = " + routineType);
                 }
             case 7:
-                if ("SOLO".equals(routineType)) {
+                if ("Solo".equals(routineType)) {
                     return new BigDecimal(2);
-                } else if ("DUET".equals(routineType)) {
+                } else if ("Duet".equals(routineType)) {
                     return new BigDecimal(3);
-                } else if ("TRIO".equals(routineType)) {
+                } else if ("Trio".equals(routineType)) {
                     return new BigDecimal(4);
-                } else if ("TEAM".equals(routineType)) {
+                } else if ("Team".equals(routineType)) {
                     return new BigDecimal(5);
+                } else {
+                    throw new IllegalArgumentException("Unknown routineType = " + routineType);
                 }
             case 8:
-                if ("SOLO".equals(routineType)) {
+                if ("Solo".equals(routineType)) {
                     return new BigDecimal(1);
-                } else if ("DUET".equals(routineType)) {
+                } else if ("Duet".equals(routineType)) {
                     return new BigDecimal(2);
-                } else if ("TRIO".equals(routineType)) {
+                } else if ("Trio".equals(routineType)) {
                     return new BigDecimal(3);
-                } else if ("TEAM".equals(routineType)) {
+                } else if ("Team".equals(routineType)) {
                     return new BigDecimal(4);
+                } else {
+                    throw new IllegalArgumentException("Unknown routineType = " + routineType);
                 }
         }
         return BigDecimal.ZERO;

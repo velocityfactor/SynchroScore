@@ -51,6 +51,7 @@ import net.sf.jasperreports.engine.data.JRTableModelDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
 import org.aquastarz.score.ScoreApp;
+import org.aquastarz.score.controller.RoutinesController;
 import org.aquastarz.score.controller.ScoreController;
 import org.aquastarz.score.manager.SwimmerManager;
 import org.aquastarz.score.controller.listener.SwimmerControllerListener;
@@ -80,7 +81,7 @@ public class SynchroFrame extends javax.swing.JFrame {
     /** Creates new form Synchro */
     public SynchroFrame(ScoreController controller, Meet meet) {
         this.controller = controller;
-        this.meet = meet;
+        SynchroFrame.meet = meet;
         try {
             URL rsrcUrl = Thread.currentThread().getContextClassLoader().getResource("org/aquastarz/score/gui/synchro-icon.png");
             appIcon = ImageIO.read(rsrcUrl);
@@ -245,7 +246,7 @@ public class SynchroFrame extends javax.swing.JFrame {
 
     private void clearFiguresScorePanel() {
         swimmerSearchPanel.clear();
-        figureScorePanel.clear();
+        figureScorePanel.clearScores();
     }
 
     private void updateSwimmerTab() {
@@ -323,10 +324,14 @@ public class SynchroFrame extends javax.swing.JFrame {
         }
     }
 
-    private int getSkipLabels() {
-        int skipLabels = -1;
+    private Integer getSkipLabels() {
+        Integer skipLabels = -1;
         while (skipLabels < 0) {
-            String s = JOptionPane.showInputDialog(this, "How many empty labels?", "Print labels", JOptionPane.QUESTION_MESSAGE+JOptionPane.OK_OPTION);
+            String s = (String) JOptionPane.showInputDialog(this, "How many empty labels?", "Print labels", JOptionPane.QUESTION_MESSAGE+JOptionPane.OK_OPTION,null,null,"0");
+            if(s==null) {
+                skipLabels=null;
+                break;
+            }
             try {
                 skipLabels = Integer.parseInt(s);
             } catch (NumberFormatException nfe) {
@@ -384,6 +389,8 @@ public class SynchroFrame extends javax.swing.JFrame {
         reportNovRoutineLabels = new javax.swing.JButton();
         reportIntRoutines = new javax.swing.JButton();
         reportIntRoutineLabels = new javax.swing.JButton();
+        reportAllRoutines = new javax.swing.JButton();
+        reportAllRoutineLabels = new javax.swing.JButton();
         leaguePanel = new javax.swing.JPanel();
         leaguePrintButton = new javax.swing.JButton();
         swimmerScrollPane = new javax.swing.JScrollPane();
@@ -700,6 +707,20 @@ public class SynchroFrame extends javax.swing.JFrame {
             }
         });
 
+        reportAllRoutines.setText("All Routines");
+        reportAllRoutines.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reportAllRoutinesActionPerformed(evt);
+            }
+        });
+
+        reportAllRoutineLabels.setText("All Routine Labels");
+        reportAllRoutineLabels.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reportAllRoutineLabelsActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout reportPanelLayout = new javax.swing.GroupLayout(reportPanel);
         reportPanel.setLayout(reportPanelLayout);
         reportPanelLayout.setHorizontalGroup(
@@ -715,8 +736,14 @@ public class SynchroFrame extends javax.swing.JFrame {
                     .addComponent(reportNoviceFigures))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(reportIntRoutineLabels)
-                    .addComponent(reportIntRoutines)
+                    .addGroup(reportPanelLayout.createSequentialGroup()
+                        .addComponent(reportIntRoutineLabels)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(reportAllRoutineLabels))
+                    .addGroup(reportPanelLayout.createSequentialGroup()
+                        .addComponent(reportIntRoutines)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(reportAllRoutines))
                     .addComponent(reportIntStation)
                     .addComponent(reportIntMeetSheet)
                     .addComponent(reportIntFigureLabels)
@@ -727,7 +754,7 @@ public class SynchroFrame extends javax.swing.JFrame {
                 .addContainerGap(308, Short.MAX_VALUE))
         );
 
-        reportPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {reportIntFigureLabels, reportIntMeetSheet, reportIntRoutineLabels, reportIntRoutines, reportIntStation, reportIntermediateFigures, reportTeamResults});
+        reportPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {reportAllRoutineLabels, reportAllRoutines, reportIntFigureLabels, reportIntMeetSheet, reportIntRoutineLabels, reportIntRoutines, reportIntStation, reportIntermediateFigures, reportTeamResults});
 
         reportPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {reportNovFigureLabels, reportNovMeetSheet, reportNovRoutineLabels, reportNovRoutines, reportNoviceFigures, reportNoviceStation});
 
@@ -754,14 +781,16 @@ public class SynchroFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(reportNovRoutines)
-                            .addComponent(reportIntRoutines)))
+                            .addComponent(reportIntRoutines)
+                            .addComponent(reportAllRoutines)))
                     .addGroup(reportPanelLayout.createSequentialGroup()
                         .addGap(29, 29, 29)
                         .addComponent(reportIntStation)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(reportNovRoutineLabels)
-                    .addComponent(reportIntRoutineLabels))
+                    .addComponent(reportIntRoutineLabels)
+                    .addComponent(reportAllRoutineLabels))
                 .addContainerGap(351, Short.MAX_VALUE))
         );
 
@@ -802,7 +831,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         });
 
         leagueSortButtonGroup.add(leagueSortByName);
-        leagueSortByName.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        leagueSortByName.setFont(new java.awt.Font("Tahoma", 0, 14));
         leagueSortByName.setText("Name");
         leagueSortByName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -811,7 +840,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         });
 
         leagueSortButtonGroup.add(leagueSortByTeam);
-        leagueSortByTeam.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        leagueSortByTeam.setFont(new java.awt.Font("Tahoma", 0, 14));
         leagueSortByTeam.setText("Team");
         leagueSortByTeam.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -941,94 +970,30 @@ public class SynchroFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void reportNovRoutinesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportNovRoutinesActionPerformed
-        if (!ScoreController.meetResultsValid(meet)) {
-            JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
-            return;
-        }
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        try {
-            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/Routines.jasper"));
-            JRDataSource data = new JRBeanCollectionDataSource(ScoreController.generateRoutinesResults(meet, true));
-            Map<String, Object> params = new HashMap<String, Object>();
-            params.put("MeetDate", meet.getMeetDate());
-            params.put("MeetName", meet.getName());
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, data);
-            JasperViewer.viewReport(jasperPrint, false);
-        } catch (Exception ex) {
-            logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
-        }
+        RoutinesController.showRoutinesReport(meet, true, false);
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_reportNovRoutinesActionPerformed
 
     private void reportIntRoutinesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportIntRoutinesActionPerformed
-        if (!ScoreController.meetResultsValid(meet)) {
-            JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
-            return;
-        }
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        try {
-            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/Routines.jasper"));
-            JRDataSource data = new JRBeanCollectionDataSource(ScoreController.generateRoutinesResults(meet, false));
-            Map<String, Object> params = new HashMap<String, Object>();
-            params.put("MeetDate", meet.getMeetDate());
-            params.put("MeetName", meet.getName());
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, data);
-            JasperViewer.viewReport(jasperPrint, false);
-        } catch (Exception ex) {
-            logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
-        }
+        RoutinesController.showRoutinesReport(meet, false, true);
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_reportIntRoutinesActionPerformed
 
     private void reportNovRoutineLabelsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportNovRoutineLabelsActionPerformed
-        if (!ScoreController.meetResultsValid(meet)) {
-            JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
-            return;
-        }
-        int skipLabels=getSkipLabels();
+        Integer skipLabels=getSkipLabels();
+        if(skipLabels==null) return;
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        try {
-            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/RoutineLabels.jasper"));
-            List<Routine> routines = new LinkedList<Routine>();
-            for (int i = 0; i < skipLabels; i++) {
-                routines.add(null);
-            }
-            routines.addAll(ScoreController.generateRoutineLabels(meet, true));
-            JRDataSource data = new JRBeanCollectionDataSource(routines);
-            Map<String, Object> params = new HashMap<String, Object>();
-            params.put("MeetDate", meet.getMeetDate());
-            params.put("MeetName", meet.getName());
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, data);
-            JasperViewer.viewReport(jasperPrint, false);
-        } catch (Exception ex) {
-            logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
-        }
+        RoutinesController.showRoutinesLabelsReport(meet, skipLabels, true, false);
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_reportNovRoutineLabelsActionPerformed
 
     private void reportIntRoutineLabelsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportIntRoutingLabelsActionPerformed
-        if (!ScoreController.meetResultsValid(meet)) {
-            JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
-            return;
-        }
-        int skipLabels=getSkipLabels();
+        Integer skipLabels=getSkipLabels();
+        if(skipLabels==null) return;
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        try {
-            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/RoutineLabels.jasper"));
-            List<Routine> routines = new LinkedList<Routine>();
-            for (int i = 0; i < skipLabels; i++) {
-                routines.add(null);
-            }
-            routines.addAll(ScoreController.generateRoutineLabels(meet, false));
-            JRDataSource data = new JRBeanCollectionDataSource(routines);
-            Map<String, Object> params = new HashMap<String, Object>();
-            params.put("MeetDate", meet.getMeetDate());
-            params.put("MeetName", meet.getName());
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, data);
-            JasperViewer.viewReport(jasperPrint, false);
-        } catch (Exception ex) {
-            logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
-        }
+        RoutinesController.showRoutinesLabelsReport(meet, skipLabels, false, true);
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_reportIntRoutingLabelsActionPerformed
 
@@ -1075,7 +1040,8 @@ public class SynchroFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
             return;
         }
-        int skipLabels = getSkipLabels();
+        Integer skipLabels = getSkipLabels();
+        if(skipLabels==null) return;
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         try {
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/FiguresLabels.jasper"));
@@ -1101,7 +1067,8 @@ public class SynchroFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
             return;
         }
-        int skipLabels = getSkipLabels();
+        Integer skipLabels = getSkipLabels();
+        if(skipLabels==null) return;
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         try {
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/FiguresLabels.jasper"));
@@ -1322,6 +1289,20 @@ public class SynchroFrame extends javax.swing.JFrame {
         updateLeagueList();
     }//GEN-LAST:event_leagueSortByNamefiguresOrderSortByNameActionPerformed
 
+    private void reportAllRoutinesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportAllRoutinesActionPerformed
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        RoutinesController.showRoutinesReport(meet, true, true);
+        setCursor(Cursor.getDefaultCursor());
+    }//GEN-LAST:event_reportAllRoutinesActionPerformed
+
+    private void reportAllRoutineLabelsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportAllRoutineLabelsActionPerformed
+        Integer skipLabels=getSkipLabels();
+        if(skipLabels==null) return;
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        RoutinesController.showRoutinesLabelsReport(meet, skipLabels, true, true);
+        setCursor(Cursor.getDefaultCursor());
+    }//GEN-LAST:event_reportAllRoutineLabelsActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane figureOrderScrollPane;
     private javax.swing.JRadioButton figureOrderSortByName;
@@ -1357,6 +1338,8 @@ public class SynchroFrame extends javax.swing.JFrame {
     private org.aquastarz.score.gui.MaintenancePanel maintenancePanel;
     private org.aquastarz.score.gui.MeetSetupPanel meetSetup;
     private javax.swing.JProgressBar novFiguresProgress;
+    private javax.swing.JButton reportAllRoutineLabels;
+    private javax.swing.JButton reportAllRoutines;
     private javax.swing.JButton reportIntFigureLabels;
     private javax.swing.JButton reportIntMeetSheet;
     private javax.swing.JButton reportIntRoutineLabels;

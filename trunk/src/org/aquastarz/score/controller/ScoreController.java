@@ -19,7 +19,6 @@
 // </editor-fold>
 package org.aquastarz.score.controller;
 
-import com.sun.org.apache.xpath.internal.operations.Equals;
 import org.aquastarz.score.report.StationResult;
 import java.math.BigDecimal;
 import java.text.DateFormat;
@@ -132,7 +131,7 @@ public class ScoreController {
     }
 
     public static List<Meet> getMeets(Season season) {
-        javax.persistence.Query query = ScoreApp.getEntityManager().createNamedQuery("Meet.findAllBySeasonOrderByDateDesc");
+        javax.persistence.Query query = ScoreApp.getEntityManager().createNamedQuery("Meet.findAllBySeasonOrderByIdDesc");
         query.setParameter("season", season);
         return query.getResultList();
     }
@@ -296,8 +295,8 @@ public class ScoreController {
 
     public static Figure getFigure(FigureScore fs) {
         Meet meet = fs.getFiguresParticipant().getMeet();
-        String id = fs.getFiguresParticipant().getSwimmer().getLevel().getLevelId();
-        if (id.startsWith("N")) {
+        String levelId = fs.getFiguresParticipant().getSwimmer().getLevel().getLevelId();
+        if (levelId.startsWith("N")) {
             switch (fs.getStation()) {
                 case 1:
                     return meet.getNov1Figure();
@@ -395,32 +394,34 @@ public class ScoreController {
         return results;
     }
 
-    public static List<Routine> generateRoutinesResults(Meet meet, boolean isNovice) {
+    public static List<Routine> generateRoutinesResults(Meet meet, boolean showNovice, boolean showIntermediate) {
         EntityManager entityManager = ScoreApp.getEntityManager();
         Query query;
-        if (isNovice) {
-            query = entityManager.createNamedQuery("Routine.findByMeetAndLevelIsNoviceOrderByLevelAndPlace");
-        } else {
-            query = entityManager.createNamedQuery("Routine.findByMeetAndLevelIsIntermediateOrderByLevelAndPlace");
-        }
+        if (showNovice && !showIntermediate) {
+            query = entityManager.createNamedQuery("Routine.findByMeetAndLevelIsNoviceOrderByLevelAndRoutineTypeAndPlace");
+        } else if(!showNovice && showIntermediate) {
+            query = entityManager.createNamedQuery("Routine.findByMeetAndLevelIsIntermediateOrderByLevelAndRoutineTypeAndPlace");
+        } else if(showNovice && showIntermediate) {
+            query = entityManager.createNamedQuery("Routine.findByMeetOrderByLevelAndRoutineTypeAndPlace");
+        } else return new ArrayList<Routine>();
         query.setParameter("meet", meet);
         return query.getResultList();
     }
 
-    public static List<Routine> generateRoutineLabels(Meet meet, boolean isNovice) {
-        List<Routine> routines = generateRoutinesResults(meet, isNovice);
+    public static List<Routine> generateRoutineLabels(Meet meet, boolean showNovice, boolean showIntermediate) {
+        List<Routine> routines = generateRoutinesResults(meet, showNovice, showIntermediate);
         LinkedList<Routine> labels = new LinkedList<Routine>();
         for (Routine routine : routines) {
-            String routineType = routine.getRoutineType().toUpperCase();
-            if ("DUET".equals(routineType)) {
+            String routineType = routine.getRoutineType();
+            if ("Duet".equals(routineType)) {
                 labels.add(routine);
                 labels.add(routine);
-            } else if ("TRIO".equals(routineType)) {
+            } else if ("Trio".equals(routineType)) {
                 labels.add(routine);
                 labels.add(routine);
                 labels.add(routine);
-            } else if ("TEAM".equals(routineType)) {
-                for (int i = 0; i < 8; i++) {
+            } else if ("Team".equals(routineType)) {
+                for (int i = 0; i < routine.getNumSwimmers(); i++) {
                     labels.add(routine);
                 }
             } else { //SOLO
@@ -676,7 +677,11 @@ public class ScoreController {
         for (FiguresParticipant fp : meet.getFiguresParticipants()) {
             Team team = fp.getSwimmer().getTeam();
             BigDecimal points = meetPointsMap.get(team);
-            points = points.add(fp.getPoints());
+            try {
+                points = points.add(fp.getPoints());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             meetPointsMap.put(team, points);
         }
 
@@ -803,12 +808,15 @@ public class ScoreController {
     private static void assignRoutinePoints(Meet meet) {
         EntityManager em = ScoreApp.getEntityManager();
         em.getTransaction().begin();
-        for (Routine routine : meet.getRoutines()) {
-            if (meet.getType() == 'C') {
+        if (meet.getType() == 'C') {
+            for (Routine routine : meet.getRoutines()) {
                 routine.setPoints(RoutineManager.calcChampsPlacePoints(routine.getPlace(), routine.getRoutineType()));
                 em.persist(routine);
-            } else {
+            }
+        } else {
+            for (Routine routine : meet.getRoutines()) {
                 routine.setPoints(BigDecimal.ZERO);
+                em.persist(routine);
             }
         }
         em.getTransaction().commit();
