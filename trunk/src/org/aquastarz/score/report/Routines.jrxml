@@ -216,14 +216,14 @@
 				<text><![CDATA[Swimmers:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="135" y="37" width="340" height="16"/>
+				<reportElement x="135" y="37" width="439" height="16"/>
 				<textElement textAlignment="Left">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{swimmers1}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="135" y="53" width="340" height="16"/>
+				<reportElement x="135" y="53" width="439" height="16"/>
 				<textElement textAlignment="Left">
 					<font size="12"/>
 				</textElement>
