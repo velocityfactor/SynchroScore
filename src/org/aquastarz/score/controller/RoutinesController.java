@@ -66,6 +66,7 @@ public class RoutinesController {
     }
 
     public void save(Routine routine) {
+        RoutineManager.calculate(routine);
         RoutineManager.save(routine);
     }
 
@@ -81,7 +82,9 @@ public class RoutinesController {
     public void randomize() {
         boolean confirm = true;
         if (meet.isRoutinesOrderGenerated()) {
-            int ret = JOptionPane.showConfirmDialog(panel, "Routines order already randomized.  Randomize again?", "Confirm Randomize", JOptionPane.YES_NO_OPTION);
+            int ret = JOptionPane.showOptionDialog(panel, "Routines order already randomized.  Randomize again?", "Confirm Randomize",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+                    new String[]{"Yes", "No"}, "No");
             if (ret != JOptionPane.YES_OPTION) {
                 confirm = false;
             }
@@ -160,4 +163,4 @@ public class RoutinesController {
             logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
         }
     }
- }
+}

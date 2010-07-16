@@ -97,11 +97,6 @@ public class RoutinesPanel extends javax.swing.JPanel {
     private void updateComponentEnabledStatus() {
         boolean enable = curRoutine != null;
         title.setEnabled(enable);
-        if ("Team".equals(routineTypeCombo.getSelectedItem())) {
-            numSwimmers.setEnabled(enable);
-        } else {
-            numSwimmers.setEnabled(false);
-        }
         names1.setEnabled(enable);
         names2.setEnabled(enable);
         scoreTJ1.setEnabled(enable);
@@ -118,6 +113,17 @@ public class RoutinesPanel extends javax.swing.JPanel {
         scoreAJ5.setEnabled(enable);
         scoreAJ6.setEnabled(enable);
         scoreAJ7.setEnabled(enable);
+        if ("Team".equals(routineTypeCombo.getSelectedItem())) {
+            numSwimmers.setEnabled(enable);
+            if (curRoutine != null && curRoutine.getMeet().isChamps()) {
+                scoreAJ6.setEnabled(false);
+                scoreTJ6.setEnabled(false);
+                scoreAJ7.setEnabled(false);
+                scoreTJ7.setEnabled(false);
+            }
+        } else {
+            numSwimmers.setEnabled(false);
+        }
         penalty.setEnabled(enable);
         levelCombo.setEnabled(enable);
         routineTypeCombo.setEnabled(enable);
@@ -172,13 +178,10 @@ public class RoutinesPanel extends javax.swing.JPanel {
     }
 
     private void save() {
-        try {
-            updateRoutine(curRoutine);
+        if (updateRoutine(curRoutine)) {
             controller.save(curRoutine);
             modified = false;
             updateRoutinesList();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "There is an entry error.  Please check and try again.", "Entry Error", JOptionPane.WARNING_MESSAGE);
         }
     }
 
@@ -187,17 +190,13 @@ public class RoutinesPanel extends javax.swing.JPanel {
     }
 
     private void calculate() {
-        try {
-            updateRoutine(curRoutine);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.OK_OPTION);
-            return;
+        if (updateRoutine(curRoutine)) {
+            controller.calculate(curRoutine);
+            updateFields();
         }
-        controller.calculate(curRoutine);
-        updateFields();
     }
 
-    private void updateRoutine(Routine routine) throws Exception {
+    private boolean updateRoutine(Routine routine) {
         routine.setName(title.getText());
         routine.setSwimmers1(names1.getText());
         routine.setSwimmers2(names2.getText());
@@ -207,120 +206,112 @@ public class RoutinesPanel extends javax.swing.JPanel {
             int numSwimmersValue = Integer.parseInt(numSwimmers.getText());
             routine.setNumSwimmers(numSwimmersValue);
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Invalid #Swmrs entry.", "Entry Error", JOptionPane.WARNING_MESSAGE);
             numSwimmers.selectAll();
-            throw new Exception("Invalid entry");
+            JOptionPane.showMessageDialog(this, "Invalid #Swmrs Entry", "Entry Error", JOptionPane.WARNING_MESSAGE);
+            return false;
         }
-        routine.setTeam((Team) teamCombo.getSelectedItem());
-        BigDecimal score = TwoDigitScore.convert(scoreTJ1.getText());
-        if (score == null && scoreTJ1.getText().trim().length() > 0) {
-            JOptionPane.showMessageDialog(this, "Invalid score entry.", "Entry Error", JOptionPane.WARNING_MESSAGE);
-            scoreTJ1.selectAll();
-            throw new Exception("Invalid entry");
+        try {
+            routine.setTeam((Team) teamCombo.getSelectedItem());
+            BigDecimal score = TwoDigitScore.convert(scoreTJ1.getText());
+            if (score == null && scoreTJ1.getText().trim().length() > 0) {
+                scoreTJ1.selectAll();
+                throw new Exception("Invalid TJ1 entry");
+            }
+            routine.setTScore1(score);
+            score = TwoDigitScore.convert(scoreTJ2.getText());
+            if (score == null && scoreTJ2.getText().trim().length() > 0) {
+                scoreTJ2.selectAll();
+                throw new Exception("Invalid TJ2 entry");
+            }
+            routine.setTScore2(score);
+            score = TwoDigitScore.convert(scoreTJ3.getText());
+            if (score == null && scoreTJ3.getText().trim().length() > 0) {
+                scoreTJ3.selectAll();
+                throw new Exception("Invalid TJ3 entry");
+            }
+            routine.setTScore3(score);
+            score = TwoDigitScore.convert(scoreTJ4.getText());
+            if (score == null && scoreTJ4.getText().trim().length() > 0) {
+                scoreTJ4.selectAll();
+                throw new Exception("Invalid TJ4 entry");
+            }
+            routine.setTScore4(score);
+            score = TwoDigitScore.convert(scoreTJ5.getText());
+            if (score == null && scoreTJ5.getText().trim().length() > 0) {
+                scoreTJ5.selectAll();
+                throw new Exception("Invalid TJ5 entry");
+            }
+            routine.setTScore5(score);
+            score = TwoDigitScore.convert(scoreTJ6.getText());
+            if (score == null && scoreTJ6.getText().trim().length() > 0) {
+                scoreTJ6.selectAll();
+                throw new Exception("Invalid TJ6 entry");
+            }
+            routine.setTScore6(score);
+            score = TwoDigitScore.convert(scoreTJ7.getText());
+            if (score == null && scoreTJ7.getText().trim().length() > 0) {
+                scoreTJ7.selectAll();
+                throw new Exception("Invalid TJ7 entry");
+            }
+            routine.setTScore7(score);
+            score = TwoDigitScore.convert(scoreAJ1.getText());
+            if (score == null && scoreAJ1.getText().trim().length() > 0) {
+                scoreAJ1.selectAll();
+                throw new Exception("Invalid AJ1 entry");
+            }
+            routine.setAScore1(score);
+            score = TwoDigitScore.convert(scoreAJ2.getText());
+            if (score == null && scoreAJ2.getText().trim().length() > 0) {
+                scoreAJ2.selectAll();
+                throw new Exception("Invalid AJ2 entry");
+            }
+            routine.setAScore2(score);
+            score = TwoDigitScore.convert(scoreAJ3.getText());
+            if (score == null && scoreAJ3.getText().trim().length() > 0) {
+                scoreAJ3.selectAll();
+                throw new Exception("Invalid AJ3 entry");
+            }
+            routine.setAScore3(score);
+            score = TwoDigitScore.convert(scoreAJ4.getText());
+            if (score == null && scoreAJ4.getText().trim().length() > 0) {
+                scoreAJ4.selectAll();
+                throw new Exception("Invalid AJ4 entry");
+            }
+            routine.setAScore4(score);
+            score = TwoDigitScore.convert(scoreAJ5.getText());
+            if (score == null && scoreAJ5.getText().trim().length() > 0) {
+                scoreAJ5.selectAll();
+                throw new Exception("Invalid AJ5 entry");
+            }
+            routine.setAScore5(score);
+            score = TwoDigitScore.convert(scoreAJ6.getText());
+            if (score == null && scoreAJ6.getText().trim().length() > 0) {
+                scoreAJ6.selectAll();
+                throw new Exception("Invalid AJ6 entry");
+            }
+            routine.setAScore6(score);
+            score = TwoDigitScore.convert(scoreAJ7.getText());
+            if (score == null && scoreAJ7.getText().trim().length() > 0) {
+                scoreAJ7.selectAll();
+                throw new Exception("Invalid AJ7 entry");
+            }
+            routine.setAScore7(score);
+
+            score = TwoDigitScore.convert(penalty.getText());
+            if (score == null && penalty.getText().trim().length() > 0) {
+                penalty.selectAll();
+                throw new Exception("Invalid penalty entry");
+            }
+            //blank penalty should get 0 if there are scores, but null otherwise
+            if (score == null && routine.getAScore7() != null) {
+                score = BigDecimal.ZERO.setScale(1);
+            }
+            routine.setPenalty(score);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Entry Error", JOptionPane.WARNING_MESSAGE);
+            return false;
         }
-        routine.setTScore1(score);
-        score = TwoDigitScore.convert(scoreTJ2.getText());
-        if (score == null && scoreTJ2.getText().trim().length() > 0) {
-            JOptionPane.showMessageDialog(this, "Invalid score entry.", "Entry Error", JOptionPane.WARNING_MESSAGE);
-            scoreTJ2.selectAll();
-            throw new Exception("Invalid entry");
-        }
-        routine.setTScore2(score);
-        score = TwoDigitScore.convert(scoreTJ3.getText());
-        if (score == null && scoreTJ3.getText().trim().length() > 0) {
-            JOptionPane.showMessageDialog(this, "Invalid score entry.", "Entry Error", JOptionPane.WARNING_MESSAGE);
-            scoreTJ3.selectAll();
-            throw new Exception("Invalid entry");
-        }
-        routine.setTScore3(score);
-        score = TwoDigitScore.convert(scoreTJ4.getText());
-        if (score == null && scoreTJ4.getText().trim().length() > 0) {
-            JOptionPane.showMessageDialog(this, "Invalid score entry.", "Entry Error", JOptionPane.WARNING_MESSAGE);
-            scoreTJ4.selectAll();
-            throw new Exception("Invalid entry");
-        }
-        routine.setTScore4(score);
-        score = TwoDigitScore.convert(scoreTJ5.getText());
-        if (score == null && scoreTJ5.getText().trim().length() > 0) {
-            JOptionPane.showMessageDialog(this, "Invalid score entry.", "Entry Error", JOptionPane.WARNING_MESSAGE);
-            scoreTJ5.selectAll();
-            throw new Exception("Invalid entry");
-        }
-        routine.setTScore5(score);
-        score = TwoDigitScore.convert(scoreTJ6.getText());
-        if (score == null && scoreTJ6.getText().trim().length() > 0) {
-            JOptionPane.showMessageDialog(this, "Invalid score entry.", "Entry Error", JOptionPane.WARNING_MESSAGE);
-            scoreTJ6.selectAll();
-            throw new Exception("Invalid entry");
-        }
-        routine.setTScore6(score);
-        score = TwoDigitScore.convert(scoreTJ7.getText());
-        if (score == null && scoreTJ7.getText().trim().length() > 0) {
-            JOptionPane.showMessageDialog(this, "Invalid score entry.", "Entry Error", JOptionPane.WARNING_MESSAGE);
-            scoreTJ7.selectAll();
-            throw new Exception("Invalid entry");
-        }
-        routine.setTScore7(score);
-        score = TwoDigitScore.convert(scoreAJ1.getText());
-        if (score == null && scoreAJ1.getText().trim().length() > 0) {
-            JOptionPane.showMessageDialog(this, "Invalid score entry.", "Entry Error", JOptionPane.WARNING_MESSAGE);
-            scoreAJ1.selectAll();
-            throw new Exception("Invalid entry");
-        }
-        routine.setAScore1(score);
-        score = TwoDigitScore.convert(scoreAJ2.getText());
-        if (score == null && scoreAJ2.getText().trim().length() > 0) {
-            JOptionPane.showMessageDialog(this, "Invalid score entry.", "Entry Error", JOptionPane.WARNING_MESSAGE);
-            scoreAJ2.selectAll();
-            throw new Exception("Invalid entry");
-        }
-        routine.setAScore2(score);
-        score = TwoDigitScore.convert(scoreAJ3.getText());
-        if (score == null && scoreAJ3.getText().trim().length() > 0) {
-            JOptionPane.showMessageDialog(this, "Invalid score entry.", "Entry Error", JOptionPane.WARNING_MESSAGE);
-            scoreAJ3.selectAll();
-            throw new Exception("Invalid entry");
-        }
-        routine.setAScore3(score);
-        score = TwoDigitScore.convert(scoreAJ4.getText());
-        if (score == null && scoreAJ4.getText().trim().length() > 0) {
-            JOptionPane.showMessageDialog(this, "Invalid score entry.", "Entry Error", JOptionPane.WARNING_MESSAGE);
-            scoreAJ4.selectAll();
-            throw new Exception("Invalid entry");
-        }
-        routine.setAScore4(score);
-        score = TwoDigitScore.convert(scoreAJ5.getText());
-        if (score == null && scoreAJ5.getText().trim().length() > 0) {
-            JOptionPane.showMessageDialog(this, "Invalid score entry.", "Entry Error", JOptionPane.WARNING_MESSAGE);
-            scoreAJ5.selectAll();
-            throw new Exception("Invalid entry");
-        }
-        routine.setAScore5(score);
-        score = TwoDigitScore.convert(scoreAJ6.getText());
-        if (score == null && scoreAJ6.getText().trim().length() > 0) {
-            JOptionPane.showMessageDialog(this, "Invalid score entry.", "Entry Error", JOptionPane.WARNING_MESSAGE);
-            scoreAJ6.selectAll();
-            throw new Exception("Invalid entry");
-        }
-        routine.setAScore6(score);
-        score = TwoDigitScore.convert(scoreAJ7.getText());
-        if (score == null && scoreAJ7.getText().trim().length() > 0) {
-            JOptionPane.showMessageDialog(this, "Invalid score entry.", "Entry Error", JOptionPane.WARNING_MESSAGE);
-            scoreAJ7.selectAll();
-            throw new Exception("Invalid entry");
-        }
-        routine.setAScore7(score);
-        score = TwoDigitScore.convert(penalty.getText());
-        if (score == null && penalty.getText().trim().length() > 0) {
-            JOptionPane.showMessageDialog(this, "Invalid penalty entry.", "Entry Error", JOptionPane.WARNING_MESSAGE);
-            penalty.selectAll();
-            throw new Exception("Invalid entry");
-        }
-        //blank penalty should get 0 if there are scores, but null otherwise
-        if (score == null && routine.getAScore7() != null) {
-            score = BigDecimal.ZERO.setScale(1);
-        }
-        routine.setPenalty(score);
+        return true;
     }
 
     private void updateFields() {
@@ -970,7 +961,6 @@ public class RoutinesPanel extends javax.swing.JPanel {
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
         if (modified && curRoutine != null) {
-            calculate();
             save();
             updateRoutinesList();
             routineList.setSelectedValue(curRoutine, true);
@@ -1046,8 +1036,13 @@ public class RoutinesPanel extends javax.swing.JPanel {
     private void scoreTJ5KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreTJ5KeyPressed
         handleFieldChange(evt);
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            scoreTJ6.requestFocusInWindow();
-            scoreTJ6.selectAll();
+            if (scoreTJ6.isEnabled()) {
+                scoreTJ6.requestFocusInWindow();
+                scoreTJ6.selectAll();
+            } else {
+                scoreAJ1.requestFocusInWindow();
+                scoreAJ1.selectAll();
+            }
         }
     }//GEN-LAST:event_scoreTJ5KeyPressed
 
@@ -1102,8 +1097,13 @@ public class RoutinesPanel extends javax.swing.JPanel {
     private void scoreAJ5KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreAJ5KeyPressed
         handleFieldChange(evt);
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            scoreAJ6.requestFocusInWindow();
-            scoreAJ6.selectAll();
+            if (scoreAJ6.isEnabled()) {
+                scoreAJ6.requestFocusInWindow();
+                scoreAJ6.selectAll();
+            } else {
+                penalty.requestFocusInWindow();
+                penalty.selectAll();
+            }
         }
     }//GEN-LAST:event_scoreAJ5KeyPressed
 
@@ -1153,7 +1153,6 @@ public class RoutinesPanel extends javax.swing.JPanel {
         handleFieldChange(null);
         updateComponentEnabledStatus();
     }//GEN-LAST:event_numSwimmersKeyPressed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
     private javax.swing.JButton deleteButton;
