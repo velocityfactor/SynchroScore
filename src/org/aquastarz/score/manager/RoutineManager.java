@@ -36,7 +36,7 @@ public class RoutineManager {
 
     public static List<Routine> findAll(Meet meet) {
         if (ScoreApp.getEntityManager().contains(meet)) {
-            Query query = ScoreApp.getEntityManager().createNamedQuery("Routine.findByMeetOrderByRoutineOrder");
+            Query query = ScoreApp.getEntityManager().createNamedQuery("Routine.findByMeetOrderByRoutineOrderAndRoutineId");
             query.setParameter("meet", meet);
             return query.getResultList();
         } else {

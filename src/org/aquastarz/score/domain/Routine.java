@@ -36,7 +36,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "routine")
 @NamedQueries({
-    @NamedQuery(name = "Routine.findByMeetOrderByRoutineOrder", query = "SELECT r FROM Routine r WHERE r.meet = :meet ORDER BY routineOrder"),
+    @NamedQuery(name = "Routine.findByMeetOrderByRoutineOrderAndRoutineId", query = "SELECT r FROM Routine r WHERE r.meet = :meet ORDER BY routineOrder,routineId"),
     @NamedQuery(name = "Routine.findByMeetOrderByLevelAndRoutineTypeAndPlace", query = "SELECT r FROM Routine r WHERE r.meet = :meet ORDER BY r.level.sortOrder, r.routineType,r.place"),
     @NamedQuery(name = "Routine.findByMeetAndLevelIsIntermediateOrderByLevelAndRoutineTypeAndPlace", query = "SELECT r FROM Routine r WHERE r.meet = :meet and r.level.routineLevelId like 'I%' ORDER BY r.level.sortOrder, r.routineType,r.place"),
     @NamedQuery(name = "Routine.findByMeetAndLevelIsNoviceOrderByLevelAndRoutineTypeAndPlace", query = "SELECT r FROM Routine r WHERE r.meet = :meet and r.level.routineLevelId like 'N%' ORDER BY r.level.sortOrder, r.routineType, r.place")})
@@ -390,4 +390,28 @@ public class Routine implements Serializable {
             return routineOrder + ": " + name;
         }
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Routine other = (Routine) obj;
+        if (this.routineId != other.routineId && (this.routineId == null || !this.routineId.equals(other.routineId))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + (this.routineId != null ? this.routineId.hashCode() : 0);
+        return hash;
+    }
+
+    
 }

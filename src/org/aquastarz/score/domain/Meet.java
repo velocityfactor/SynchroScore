@@ -431,6 +431,10 @@ public class Meet implements Serializable {
         return valid;
     }
 
+    public boolean isChamps() {
+        return type=='C';
+    }
+
     public List<Figure> getFigureList(Swimmer swimmer) {
         List<Figure> figures = new ArrayList<Figure>();
         String level = swimmer.getLevel().getLevelId();

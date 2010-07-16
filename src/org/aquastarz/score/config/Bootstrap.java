@@ -142,7 +142,7 @@ public class Bootstrap {
             //Save the meets and results for later and put them together for
             //processing
             Map<String, Map<String, LegacyResult>> lrMap = new HashMap<String, Map<String, LegacyResult>>();
-            Map<String, List<LegacyRoutine>> lroMap = new HashMap<String,List<LegacyRoutine>>();
+            Map<String, List<LegacyRoutine>> lroMap = new HashMap<String, List<LegacyRoutine>>();
             Map<String, LegacyMeet> lmMap = new HashMap<String, LegacyMeet>();
 
             try {
@@ -159,6 +159,8 @@ public class Bootstrap {
                         loadRoster(season, stream);
                     } else if (fname.toUpperCase().endsWith("RESULTS.CSV")) {
                         lrMap.put(folder, readLegacyResults(stream));
+                    } else if (fname.toUpperCase().endsWith("MEETLST.CSV")) {
+                        lrMap.put(folder, readLegacyResults(stream));
                     } else if (fname.toUpperCase().endsWith("FIGSTAT.CSV")) {
                         lmMap.put(folder, readLegacyMeet(stream));
                     } else if (fname.toUpperCase().endsWith("ROUTINES.CSV")) {
@@ -174,6 +176,10 @@ public class Bootstrap {
             for (String folder : lmMap.keySet()) {
                 int i = folder.indexOf("/");
                 if (i > 0) {
+                    int j = folder.lastIndexOf("-"); //Season name can be suffixed by hyphen
+                    if (j > 0) {
+                        i = j;
+                    }
                     String seasonName = folder.substring(0, i);
                     LegacyMeet lm = lmMap.get(folder);
                     lm.setResults(lrMap.get(folder));
@@ -356,54 +362,55 @@ public class Bootstrap {
             entityManager.persist(fp);
             entityManager.getTransaction().commit();
 
+            if (legacyResult.finTot != null) {
+                FiguresParticipantTracker fpt = new FiguresParticipantTracker();
+                fpt.figuresParticipant = fp;
+                fpt.place = legacyResult.place;
+                fpt.points = legacyResult.points;
+                fpt.total = legacyResult.finTot;
+                figuresParticipantTrackers.add(fpt);
 
-            FiguresParticipantTracker fpt = new FiguresParticipantTracker();
-            fpt.figuresParticipant = fp;
-            fpt.place = legacyResult.place;
-            fpt.points = legacyResult.points;
-            fpt.total = legacyResult.finTot;
-            figuresParticipantTrackers.add(fpt);
+                List<FigureScore> scores = new ArrayList<FigureScore>();
+                int figNum = 1;
+                for (int i = 0; i < 4; i++) {
+                    if ("8 & UNDER".equals(legacyResult.ageGrp.toUpperCase())
+                            && ((i == 0 && !meet.isEu1())
+                            || (i == 1 && !meet.isEu2())
+                            || (i == 2 && !meet.isEu3())
+                            || (i == 3 && !meet.isEu4()))) {
+                        continue;
+                    }
+                    FigureScore fs = new FigureScore();
+                    fs.setFiguresParticipant(fp);
+                    fs.setStation(i + 1);
+                    try {
+                        fs.setScore1((BigDecimal) legacyResult.getClass().getDeclaredField("s" + (i + 1) + "j1").get(legacyResult));
+                        fs.setScore2((BigDecimal) legacyResult.getClass().getDeclaredField("s" + (i + 1) + "j2").get(legacyResult));
+                        fs.setScore3((BigDecimal) legacyResult.getClass().getDeclaredField("s" + (i + 1) + "j3").get(legacyResult));
+                        fs.setScore4((BigDecimal) legacyResult.getClass().getDeclaredField("s" + (i + 1) + "j4").get(legacyResult));
+                        fs.setScore5((BigDecimal) legacyResult.getClass().getDeclaredField("s" + (i + 1) + "j5").get(legacyResult));
+                        fs.setPenalty((BigDecimal) legacyResult.getClass().getDeclaredField("s" + (i + 1) + "Pen").get(legacyResult));
+                        fs.setTotalScore(ScoreController.totalScore(fs));
+                        FigureScoreTracker fst = new FigureScoreTracker();
+                        fst.figureScore = fs;
+                        fst.total = (BigDecimal) legacyResult.getClass().getDeclaredField("s" + (i + 1) + "Tot").get(legacyResult);
+                        figureScoreTrackers.add(fst);
+                    } catch (Exception e) {
+                        logger.error("Error loading figure score.", e);
+                    }
+                    entityManager.getTransaction().begin();
+                    entityManager.persist(fs);
+                    entityManager.getTransaction().commit();
 
-            List<FigureScore> scores = new ArrayList<FigureScore>();
-            int figNum = 1;
-            for (int i = 0; i < 4; i++) {
-                if ("8 & UNDER".equals(legacyResult.ageGrp.toUpperCase())
-                        && ((i == 0 && !meet.isEu1())
-                        || (i == 1 && !meet.isEu2())
-                        || (i == 2 && !meet.isEu3())
-                        || (i == 3 && !meet.isEu4()))) {
-                    continue;
+                    scores.add(fs);
+                    figNum++;
                 }
-                FigureScore fs = new FigureScore();
-                fs.setFiguresParticipant(fp);
-                fs.setStation(i + 1);
-                try {
-                    fs.setScore1((BigDecimal) legacyResult.getClass().getDeclaredField("s" + (i + 1) + "j1").get(legacyResult));
-                    fs.setScore2((BigDecimal) legacyResult.getClass().getDeclaredField("s" + (i + 1) + "j2").get(legacyResult));
-                    fs.setScore3((BigDecimal) legacyResult.getClass().getDeclaredField("s" + (i + 1) + "j3").get(legacyResult));
-                    fs.setScore4((BigDecimal) legacyResult.getClass().getDeclaredField("s" + (i + 1) + "j4").get(legacyResult));
-                    fs.setScore5((BigDecimal) legacyResult.getClass().getDeclaredField("s" + (i + 1) + "j5").get(legacyResult));
-                    fs.setPenalty((BigDecimal) legacyResult.getClass().getDeclaredField("s" + (i + 1) + "Pen").get(legacyResult));
-                    fs.setTotalScore(ScoreController.totalScore(fs));
-                    FigureScoreTracker fst = new FigureScoreTracker();
-                    fst.figureScore = fs;
-                    fst.total = (BigDecimal) legacyResult.getClass().getDeclaredField("s" + (i + 1) + "Tot").get(legacyResult);
-                    figureScoreTrackers.add(fst);
-                } catch (Exception e) {
-                    logger.error("Error loading figure score.",e);
-                }
-                entityManager.getTransaction().begin();
-                entityManager.persist(fs);
-                entityManager.getTransaction().commit();
-
-                scores.add(fs);
-                figNum++;
+                fp.setFiguresScores(scores);
             }
-            fp.setFiguresScores(scores);
             meet.getFiguresParticipants().add(fp);
         }
 
-        for(LegacyRoutine legacyRoutine:legacyRoutines) {
+        for (LegacyRoutine legacyRoutine : legacyRoutines) {
             Routine routine = new Routine();
             routine.setMeet(meet);
             routine.setName(legacyRoutine.title);
@@ -411,26 +418,29 @@ public class Bootstrap {
             routine.setRoutineType(legacyRoutine.category);
             routine.setNumSwimmers(legacyRoutine.noSwmr.intValueExact());
             routine.setTeam(TeamManager.findById(legacyRoutine.team));
-            routine.setRoutineOrder(0);
+            routine.setRoutineOrder(legacyRoutine.order);
             routine.setSwimmers1(legacyRoutine.swrN1);
             routine.setSwimmers2(legacyRoutine.swrN2);
-            routine.setAScore1(legacyRoutine.aJ1);
-            routine.setAScore2(legacyRoutine.aJ2);
-            routine.setAScore3(legacyRoutine.aJ3);
-            routine.setAScore4(legacyRoutine.aJ4);
-            routine.setAScore5(legacyRoutine.aJ5);
-            routine.setAScore6(legacyRoutine.aJ6);
-            routine.setAScore7(legacyRoutine.aJ7);
-            routine.setTScore1(legacyRoutine.tJ1);
-            routine.setTScore2(legacyRoutine.tJ2);
-            routine.setTScore3(legacyRoutine.tJ3);
-            routine.setTScore4(legacyRoutine.tJ4);
-            routine.setTScore5(legacyRoutine.tJ5);
-            routine.setTScore6(legacyRoutine.tJ6);
-            routine.setTScore7(legacyRoutine.tJ7);
-            routine.setPenalty(legacyRoutine.penalty);
-            RoutineManager.calculate(routine);
+            if (legacyRoutine.finTot != null) {
+                routine.setAScore1(legacyRoutine.aJ1);
+                routine.setAScore2(legacyRoutine.aJ2);
+                routine.setAScore3(legacyRoutine.aJ3);
+                routine.setAScore4(legacyRoutine.aJ4);
+                routine.setAScore5(legacyRoutine.aJ5);
+                routine.setAScore6(legacyRoutine.aJ6);
+                routine.setAScore7(legacyRoutine.aJ7);
+                routine.setTScore1(legacyRoutine.tJ1);
+                routine.setTScore2(legacyRoutine.tJ2);
+                routine.setTScore3(legacyRoutine.tJ3);
+                routine.setTScore4(legacyRoutine.tJ4);
+                routine.setTScore5(legacyRoutine.tJ5);
+                routine.setTScore6(legacyRoutine.tJ6);
+                routine.setTScore7(legacyRoutine.tJ7);
+                routine.setPenalty(legacyRoutine.penalty);
+                RoutineManager.calculate(routine);
+            }
             RoutineManager.save(routine);
+
             meet.getRoutines().add(routine);
         }
         ScoreController.calculateMeetResults(meet);
@@ -506,48 +516,54 @@ public class Bootstrap {
         BigDecimal points;
 
         LegacyResult(String[] line) {
-            niCat = Integer.valueOf(line[0]);
-            ageCat = Integer.valueOf(line[1]);
-            dFinTot = Integer.valueOf(line[2]);
-            swmrNo = line[3].toUpperCase();
-            finTot = new BigDecimal(line[4]).setScale(2);
-            novInt = line[5];
-            ageGrp = line[6];
-            fName = line[7];
-            gName = line[8];
-            team = line[9];
-            leagueNo = Integer.valueOf(line[10]);
-            s1j1 = new BigDecimal(line[11]).setScale(1);
-            s1j2 = new BigDecimal(line[12]).setScale(1);
-            s1j3 = new BigDecimal(line[13]).setScale(1);
-            s1j4 = new BigDecimal(line[14]).setScale(1);
-            s1j5 = new BigDecimal(line[15]).setScale(1);
-            s1Tot = new BigDecimal(line[16]).setScale(2);
-            s1Pen = new BigDecimal(line[17]).setScale(1);
-            s2j1 = new BigDecimal(line[18]).setScale(1);
-            s2j2 = new BigDecimal(line[19]).setScale(1);
-            s2j3 = new BigDecimal(line[20]).setScale(1);
-            s2j4 = new BigDecimal(line[21]).setScale(1);
-            s2j5 = new BigDecimal(line[22]).setScale(1);
-            s2Tot = new BigDecimal(line[23]).setScale(2);
-            s2Pen = new BigDecimal(line[24]).setScale(1);
-            s3j1 = new BigDecimal(line[25]).setScale(1);
-            s3j2 = new BigDecimal(line[26]).setScale(1);
-            s3j3 = new BigDecimal(line[27]).setScale(1);
-            s3j4 = new BigDecimal(line[28]).setScale(1);
-            s3j5 = new BigDecimal(line[29]).setScale(1);
-            s3Tot = new BigDecimal(line[30]).setScale(2);
-            s3Pen = new BigDecimal(line[31]).setScale(1);
-            s4j1 = new BigDecimal(line[32]).setScale(1);
-            s4j2 = new BigDecimal(line[33]).setScale(1);
-            s4j3 = new BigDecimal(line[34]).setScale(1);
-            s4j4 = new BigDecimal(line[35]).setScale(1);
-            s4j5 = new BigDecimal(line[36]).setScale(1);
-            s4Tot = new BigDecimal(line[37]).setScale(2);
-            s4Pen = new BigDecimal(line[38]).setScale(1);
-            totPen = new BigDecimal(line[39]).setScale(2);
-            place = Integer.valueOf(line[40]);
-            points = new BigDecimal(line[41]).setScale(2);
+            if (line.length == 36) { //This is a meetlst file
+                swmrNo = line[0].toUpperCase();
+                leagueNo = Integer.valueOf(line[1]);
+                finTot = null;
+            } else { //This is a results file
+                niCat = Integer.valueOf(line[0]);
+                ageCat = Integer.valueOf(line[1]);
+                dFinTot = Integer.valueOf(line[2]);
+                swmrNo = line[3].toUpperCase();
+                finTot = new BigDecimal(line[4]).setScale(2);
+                novInt = line[5];
+                ageGrp = line[6];
+                fName = line[7];
+                gName = line[8];
+                team = line[9];
+                leagueNo = Integer.valueOf(line[10]);
+                s1j1 = new BigDecimal(line[11]).setScale(1);
+                s1j2 = new BigDecimal(line[12]).setScale(1);
+                s1j3 = new BigDecimal(line[13]).setScale(1);
+                s1j4 = new BigDecimal(line[14]).setScale(1);
+                s1j5 = new BigDecimal(line[15]).setScale(1);
+                s1Tot = new BigDecimal(line[16]).setScale(2);
+                s1Pen = new BigDecimal(line[17]).setScale(1);
+                s2j1 = new BigDecimal(line[18]).setScale(1);
+                s2j2 = new BigDecimal(line[19]).setScale(1);
+                s2j3 = new BigDecimal(line[20]).setScale(1);
+                s2j4 = new BigDecimal(line[21]).setScale(1);
+                s2j5 = new BigDecimal(line[22]).setScale(1);
+                s2Tot = new BigDecimal(line[23]).setScale(2);
+                s2Pen = new BigDecimal(line[24]).setScale(1);
+                s3j1 = new BigDecimal(line[25]).setScale(1);
+                s3j2 = new BigDecimal(line[26]).setScale(1);
+                s3j3 = new BigDecimal(line[27]).setScale(1);
+                s3j4 = new BigDecimal(line[28]).setScale(1);
+                s3j5 = new BigDecimal(line[29]).setScale(1);
+                s3Tot = new BigDecimal(line[30]).setScale(2);
+                s3Pen = new BigDecimal(line[31]).setScale(1);
+                s4j1 = new BigDecimal(line[32]).setScale(1);
+                s4j2 = new BigDecimal(line[33]).setScale(1);
+                s4j3 = new BigDecimal(line[34]).setScale(1);
+                s4j4 = new BigDecimal(line[35]).setScale(1);
+                s4j5 = new BigDecimal(line[36]).setScale(1);
+                s4Tot = new BigDecimal(line[37]).setScale(2);
+                s4Pen = new BigDecimal(line[38]).setScale(1);
+                totPen = new BigDecimal(line[39]).setScale(2);
+                place = Integer.valueOf(line[40]);
+                points = new BigDecimal(line[41]).setScale(2);
+            }
         }
     }
 
@@ -673,46 +689,66 @@ public class Bootstrap {
         String swrN2;
         int place;
         BigDecimal points;
+        int order = 0;
 
         LegacyRoutine(String[] line) {
-            ageTyp = Integer.parseInt(line[0]);
-            fTOT = new BigDecimal(line[1]).setScale(2);
-            title = line[2];
-            ageGrp = line[3];
-            category = line[4];
-            team = line[5];
-            tJ1 = new BigDecimal(line[6]).setScale(1);
-            tJ2 = new BigDecimal(line[7]).setScale(1);
-            tJ3 = new BigDecimal(line[8]).setScale(1);
-            tJ4 = new BigDecimal(line[9]).setScale(1);
-            tJ5 = new BigDecimal(line[10]).setScale(1);
-            tJ6 = new BigDecimal(line[11]).setScale(1);
-            tJ7 = new BigDecimal(line[12]).setScale(1);
-            tTOT = new BigDecimal(line[13]).setScale(2);
-            aJ1 = new BigDecimal(line[14]).setScale(1);
-            aJ2 = new BigDecimal(line[15]).setScale(1);
-            aJ3 = new BigDecimal(line[16]).setScale(1);
-            aJ4 = new BigDecimal(line[17]).setScale(1);
-            aJ5 = new BigDecimal(line[18]).setScale(1);
-            aJ6 = new BigDecimal(line[19]).setScale(1);
-            aJ7 = new BigDecimal(line[20]).setScale(1);
-            aTOT = new BigDecimal(line[21]).setScale(2);
-            penalty = new BigDecimal(line[22]).setScale(1);
-            noSwmr = new BigDecimal(line[23]).setScale(1);
-            finTot = new BigDecimal(line[24]).setScale(2);
-            swrN1 = line[25];
-            swrN2 = line[26];
-            place = Integer.parseInt(line[27]);
-            points = new BigDecimal(line[28]).setScale(1);
+            if (line.length == 8) {
+                order = Integer.parseInt(line[0]);
+                ageGrp = line[1];
+                category = line[2];
+                noSwmr = new BigDecimal(line[3]).setScale(1);
+                title = line[4];
+                team = line[5];
+                swrN1 = line[6];
+                swrN2 = line[7];
+                finTot = null;
+            } else {
+                ageTyp = Integer.parseInt(line[0]);
+                fTOT = new BigDecimal(line[1]).setScale(2);
+                title = line[2];
+                ageGrp = line[3];
+                category = line[4];
+                team = line[5];
+                tJ1 = new BigDecimal(line[6]).setScale(1);
+                tJ2 = new BigDecimal(line[7]).setScale(1);
+                tJ3 = new BigDecimal(line[8]).setScale(1);
+                tJ4 = new BigDecimal(line[9]).setScale(1);
+                tJ5 = new BigDecimal(line[10]).setScale(1);
+                tJ6 = new BigDecimal(line[11]).setScale(1);
+                tJ7 = new BigDecimal(line[12]).setScale(1);
+                tTOT = new BigDecimal(line[13]).setScale(2);
+                aJ1 = new BigDecimal(line[14]).setScale(1);
+                aJ2 = new BigDecimal(line[15]).setScale(1);
+                aJ3 = new BigDecimal(line[16]).setScale(1);
+                aJ4 = new BigDecimal(line[17]).setScale(1);
+                aJ5 = new BigDecimal(line[18]).setScale(1);
+                aJ6 = new BigDecimal(line[19]).setScale(1);
+                aJ7 = new BigDecimal(line[20]).setScale(1);
+                aTOT = new BigDecimal(line[21]).setScale(2);
+                penalty = new BigDecimal(line[22]).setScale(1);
+                noSwmr = new BigDecimal(line[23]).setScale(1);
+                finTot = new BigDecimal(line[24]).setScale(2);
+                swrN1 = line[25];
+                swrN2 = line[26];
+                place = Integer.parseInt(line[27]);
+                points = new BigDecimal(line[28]).setScale(1);
+            }
         }
 
         RoutineLevel getRoutineLevel() {
-            if(ageGrp.equals("NOV 12 and Under")) return RoutineLevelManager.find("N12U");
-            else if(ageGrp.equals("NOV 13 and Over")) return RoutineLevelManager.find("N13O");
-            else if(ageGrp.equals("INT 11-14 (solo, duet, trio)")) return RoutineLevelManager.find("I11");
-            else if(ageGrp.equals("INT 15-18 (solo, duet, trio)")) return RoutineLevelManager.find("I15");
-            else if(ageGrp.equals("INT 11 and Over (team)")) return RoutineLevelManager.find("I11T");
-            else return null;
+            if (ageGrp.equals("NOV 12 and Under")) {
+                return RoutineLevelManager.find("N12U");
+            } else if (ageGrp.equals("NOV 13 and Over")) {
+                return RoutineLevelManager.find("N13O");
+            } else if (ageGrp.equals("INT 11-14 (solo, duet, trio)")) {
+                return RoutineLevelManager.find("I11");
+            } else if (ageGrp.equals("INT 15-18 (solo, duet, trio)")) {
+                return RoutineLevelManager.find("I15");
+            } else if (ageGrp.equals("INT 11 and Over (team)")) {
+                return RoutineLevelManager.find("I11T");
+            } else {
+                return null;
+            }
         }
     }
 
