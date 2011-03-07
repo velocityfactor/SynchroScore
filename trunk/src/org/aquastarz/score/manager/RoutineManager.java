@@ -78,18 +78,15 @@ public class RoutineManager {
             } else {
                 weight += 200.0;
             }
-            
+
             // Trio, Duet, Solo, Team order
-            if("Trio".equals(routine.getRoutineType())) {
+            if ("Trio".equals(routine.getRoutineType())) {
                 weight += 10.0;
-            }
-            else if("Duet".equals(routine.getRoutineType())) {
+            } else if ("Duet".equals(routine.getRoutineType())) {
                 weight += 20.0;
-            }
-            else if("Solo".equals(routine.getRoutineType())) {
+            } else if ("Solo".equals(routine.getRoutineType())) {
                 weight += 30.0;
-            }
-            else if("Team".equals(routine.getRoutineType())) {
+            } else if ("Team".equals(routine.getRoutineType())) {
                 weight += 40.0;
             }
 
@@ -137,21 +134,24 @@ public class RoutineManager {
     }
 
     public static boolean isScored(Routine routine) {
-        return (routine.getTScore1() != null)
+        boolean result = (routine.getTScore1() != null)
                 && (routine.getTScore2() != null)
                 && (routine.getTScore3() != null)
                 && (routine.getTScore4() != null)
                 && (routine.getTScore5() != null)
-                && (routine.getTScore6() != null)
-                && (routine.getTScore7() != null)
                 && (routine.getAScore1() != null)
                 && (routine.getAScore2() != null)
                 && (routine.getAScore3() != null)
                 && (routine.getAScore4() != null)
                 && (routine.getAScore5() != null)
-                && (routine.getAScore6() != null)
-                && (routine.getAScore7() != null)
                 && (routine.getPenalty() != null);
+        if (!(routine.getMeet().getType() == 'C' && "Team".equals(routine.getRoutineType()))) {
+            result &= (routine.getTScore6() != null)
+                    && (routine.getTScore7() != null)
+                    && (routine.getAScore6() != null)
+                    && (routine.getAScore7() != null);
+        }
+        return result;
     }
 
     public static void calculate(Routine routine) {
