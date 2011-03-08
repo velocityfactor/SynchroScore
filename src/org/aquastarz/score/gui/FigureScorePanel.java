@@ -1610,10 +1610,6 @@ public class FigureScorePanel extends javax.swing.JPanel {
             scoreS4J2.requestFocusInWindow();
             scoreS4J2.selectAll();
         }
-        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreS4J2.getText().length()==0) {
-            scoreS4J1.requestFocusInWindow();
-            scoreS4J1.selectAll();
-        }
     }//GEN-LAST:event_scoreS4J1KeyPressed
 
     private void scoreS4J2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreS4J2KeyPressed
@@ -1622,8 +1618,8 @@ public class FigureScorePanel extends javax.swing.JPanel {
             scoreS4J3.selectAll();
         }
         if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreS4J3.getText().length()==0) {
-            scoreS4J2.requestFocusInWindow();
-            scoreS4J2.selectAll();
+            scoreS4J1.requestFocusInWindow();
+            scoreS4J1.selectAll();
         }
     }//GEN-LAST:event_scoreS4J2KeyPressed
 
