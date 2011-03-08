@@ -1,0 +1,18 @@
+BS key should move back a score on routines, check that it works on last row of figures
+/ key should switch figures
+saving changes to figures participants updates status bars
+Confirm on remove figures participant that has scores and handle correctly
+Need a way to match randomize to other computer
+Mechanism to update program
+Mechanism to update league data and upload results
+
+Swimmer edit screen npe
+Score saved without total
+handle print errors
+Exception after save figures part, update swimmer, then press save again.
+Exception after blanking out a figures score and saving
+Need to clear a score
+Handle swimmers with no scores / scratch - should detect these and leave off report
+
+warn to save when change tab from figures or routines
+routines progress indicator
