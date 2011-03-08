@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import org.aquastarz.score.controller.ScoreController;
 import org.aquastarz.score.domain.Figure;
 import org.aquastarz.score.domain.FigureScore;
@@ -46,98 +47,8 @@ public class FigureScorePanel extends javax.swing.JPanel {
     public FigureScorePanel() {
         initComponents();
 // Try to block these fields from getting a period, but this isn't reliable
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
 //        scoreS1J1.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_PERIOD, 0), "none");
-
+        scoreS1J1.getKeymap().removeKeyStrokeBinding(KeyStroke.getKeyStroke(KeyEvent.VK_PERIOD,0));
         clearScores();
     }
 
@@ -616,12 +527,23 @@ public class FigureScorePanel extends javax.swing.JPanel {
         }
     }
 
-    private void moveToNextEditableRow() {
-        if(currentRow>0 && currentRow<5) {
-            int newRow = currentRow+1;
-            if(newRow>4) newRow=1;
-            setEditableRow(newRow);
+    protected void moveToNextEditableRow() {
+        int newRow = currentRow+1;
+        if(currentRow==0) newRow=1;
+        else if(currentRow>0 && currentRow<5) {
+                if(newRow>4) newRow=1;
         }
+        switch(newRow) {
+            case 1: station1Button.setSelected(true);
+                    break;
+            case 2: station2Button.setSelected(true);
+                    break;
+            case 3: station3Button.setSelected(true);
+                    break;
+            case 4: station4Button.setSelected(true);
+                    break;
+        }
+        setEditableRow(newRow);
     }
 
     /** This method is called from within the constructor to
@@ -1617,7 +1539,7 @@ public class FigureScorePanel extends javax.swing.JPanel {
             scoreS4J3.requestFocusInWindow();
             scoreS4J3.selectAll();
         }
-        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreS4J3.getText().length()==0) {
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreS4J2.getText().length()==0) {
             scoreS4J1.requestFocusInWindow();
             scoreS4J1.selectAll();
         }

@@ -24,6 +24,7 @@ import java.awt.Cursor;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ArrayList;
@@ -121,6 +122,23 @@ public class SynchroFrame extends javax.swing.JFrame {
         keyStroke = KeyStroke.getKeyStroke(keyStrokeAndKey);
         tabPane.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(keyStroke, keyStrokeAndKey);
         tabPane.getActionMap().put(keyStrokeAndKey, swimmerSearchAction);
+
+        Action nextFigureAction = new AbstractAction() {
+
+            public void actionPerformed(ActionEvent e) {
+                if (tabPane.getSelectedComponent() == figureScore) {
+                    figureScorePanel.moveToNextEditableRow();
+                }
+            }
+        };
+        keyStrokeAndKey = "SLASH";
+        keyStroke = KeyStroke.getKeyStroke(keyStrokeAndKey);
+        tabPane.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(keyStroke, keyStrokeAndKey);
+        tabPane.getActionMap().put(keyStrokeAndKey, nextFigureAction);
+        keyStrokeAndKey = "DIVIDE";
+        keyStroke = KeyStroke.getKeyStroke(keyStrokeAndKey);
+        tabPane.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(keyStroke, keyStrokeAndKey);
+        tabPane.getActionMap().put(keyStrokeAndKey, nextFigureAction);
     }
 
     private void setSetupStatus(Color color, int percent) {

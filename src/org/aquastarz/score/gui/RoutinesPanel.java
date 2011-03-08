@@ -1015,6 +1015,10 @@ public class RoutinesPanel extends javax.swing.JPanel {
             scoreTJ3.requestFocusInWindow();
             scoreTJ3.selectAll();
         }
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreTJ2.getText().length()==0) {
+            scoreTJ1.requestFocusInWindow();
+            scoreTJ1.selectAll();
+        }
     }//GEN-LAST:event_scoreTJ2KeyPressed
 
     private void scoreTJ3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreTJ3KeyPressed
@@ -1023,6 +1027,10 @@ public class RoutinesPanel extends javax.swing.JPanel {
             scoreTJ4.requestFocusInWindow();
             scoreTJ4.selectAll();
         }
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreTJ3.getText().length()==0) {
+            scoreTJ2.requestFocusInWindow();
+            scoreTJ2.selectAll();
+        }
     }//GEN-LAST:event_scoreTJ3KeyPressed
 
     private void scoreTJ4KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreTJ4KeyPressed
@@ -1030,6 +1038,10 @@ public class RoutinesPanel extends javax.swing.JPanel {
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             scoreTJ5.requestFocusInWindow();
             scoreTJ5.selectAll();
+        }
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreTJ4.getText().length()==0) {
+            scoreTJ3.requestFocusInWindow();
+            scoreTJ3.selectAll();
         }
     }//GEN-LAST:event_scoreTJ4KeyPressed
 
@@ -1044,6 +1056,10 @@ public class RoutinesPanel extends javax.swing.JPanel {
                 scoreAJ1.selectAll();
             }
         }
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreTJ5.getText().length()==0) {
+            scoreTJ4.requestFocusInWindow();
+            scoreTJ4.selectAll();
+        }
     }//GEN-LAST:event_scoreTJ5KeyPressed
 
     private void scoreTJ6KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreTJ6KeyPressed
@@ -1051,6 +1067,10 @@ public class RoutinesPanel extends javax.swing.JPanel {
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             scoreTJ7.requestFocusInWindow();
             scoreTJ7.selectAll();
+        }
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreTJ6.getText().length()==0) {
+            scoreTJ5.requestFocusInWindow();
+            scoreTJ5.selectAll();
         }
     }//GEN-LAST:event_scoreTJ6KeyPressed
 
@@ -1060,6 +1080,10 @@ public class RoutinesPanel extends javax.swing.JPanel {
             scoreAJ1.requestFocusInWindow();
             scoreAJ1.selectAll();
         }
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreTJ7.getText().length()==0) {
+            scoreTJ6.requestFocusInWindow();
+            scoreTJ6.selectAll();
+        }
     }//GEN-LAST:event_scoreTJ7KeyPressed
 
     private void scoreAJ1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreAJ1KeyPressed
@@ -1067,6 +1091,16 @@ public class RoutinesPanel extends javax.swing.JPanel {
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             scoreAJ2.requestFocusInWindow();
             scoreAJ2.selectAll();
+        }
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreAJ1.getText().length()==0) {
+            if(scoreTJ7.isEnabled()) {
+                scoreTJ7.requestFocusInWindow();
+                scoreTJ7.selectAll();
+            }
+            else {
+                scoreTJ5.requestFocusInWindow();
+                scoreTJ5.selectAll();
+            }
         }
     }//GEN-LAST:event_scoreAJ1KeyPressed
 
@@ -1076,6 +1110,10 @@ public class RoutinesPanel extends javax.swing.JPanel {
             scoreAJ3.requestFocusInWindow();
             scoreAJ3.selectAll();
         }
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreAJ2.getText().length()==0) {
+            scoreAJ1.requestFocusInWindow();
+            scoreAJ1.selectAll();
+        }
     }//GEN-LAST:event_scoreAJ2KeyPressed
 
     private void scoreAJ3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreAJ3KeyPressed
@@ -1084,6 +1122,10 @@ public class RoutinesPanel extends javax.swing.JPanel {
             scoreAJ4.requestFocusInWindow();
             scoreAJ4.selectAll();
         }
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreAJ3.getText().length()==0) {
+            scoreAJ2.requestFocusInWindow();
+            scoreAJ2.selectAll();
+        }
     }//GEN-LAST:event_scoreAJ3KeyPressed
 
     private void scoreAJ4KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreAJ4KeyPressed
@@ -1091,6 +1133,10 @@ public class RoutinesPanel extends javax.swing.JPanel {
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             scoreAJ5.requestFocusInWindow();
             scoreAJ5.selectAll();
+        }
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreAJ4.getText().length()==0) {
+            scoreAJ3.requestFocusInWindow();
+            scoreAJ3.selectAll();
         }
     }//GEN-LAST:event_scoreAJ4KeyPressed
 
@@ -1105,6 +1151,10 @@ public class RoutinesPanel extends javax.swing.JPanel {
                 penalty.selectAll();
             }
         }
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreAJ5.getText().length()==0) {
+            scoreAJ4.requestFocusInWindow();
+            scoreAJ4.selectAll();
+        }
     }//GEN-LAST:event_scoreAJ5KeyPressed
 
     private void scoreAJ6KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreAJ6KeyPressed
@@ -1113,6 +1163,10 @@ public class RoutinesPanel extends javax.swing.JPanel {
             scoreAJ7.requestFocusInWindow();
             scoreAJ7.selectAll();
         }
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreAJ6.getText().length()==0) {
+            scoreAJ5.requestFocusInWindow();
+            scoreAJ5.selectAll();
+        }
     }//GEN-LAST:event_scoreAJ6KeyPressed
 
     private void scoreAJ7KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreAJ7KeyPressed
@@ -1120,6 +1174,10 @@ public class RoutinesPanel extends javax.swing.JPanel {
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             penalty.requestFocusInWindow();
             penalty.selectAll();
+        }
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreAJ7.getText().length()==0) {
+            scoreAJ6.requestFocusInWindow();
+            scoreAJ6.selectAll();
         }
     }//GEN-LAST:event_scoreAJ7KeyPressed
 
