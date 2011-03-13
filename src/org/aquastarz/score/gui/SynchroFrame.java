@@ -392,6 +392,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         figureScorePanel = new org.aquastarz.score.gui.FigureScorePanel();
         jPanel3 = new javax.swing.JPanel();
         saveFigureScoreButton = new javax.swing.JButton();
+        clearFigureScoreButton = new javax.swing.JButton();
         routinesPanel = new org.aquastarz.score.gui.RoutinesPanel();
         reportPanel = new javax.swing.JPanel();
         reportNoviceFigures = new javax.swing.JButton();
@@ -489,8 +490,8 @@ public class SynchroFrame extends javax.swing.JFrame {
                 .addComponent(saveSwimmersButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(generateRandomFiguresOrderButton)
-                .addContainerGap(456, Short.MAX_VALUE))
-            .addComponent(teamTabs, javax.swing.GroupLayout.DEFAULT_SIZE, 523, Short.MAX_VALUE)
+                .addContainerGap(457, Short.MAX_VALUE))
+            .addComponent(teamTabs, javax.swing.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
         );
 
         tabPane.addTab("Swimmers", swimmers);
@@ -558,7 +559,7 @@ public class SynchroFrame extends javax.swing.JFrame {
             .addGroup(figuresOrderLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(figuresOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(figureOrderScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 501, Short.MAX_VALUE)
+                    .addComponent(figureOrderScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 502, Short.MAX_VALUE)
                     .addGroup(figuresOrderLayout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addGap(1, 1, 1)
@@ -593,7 +594,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
         figureScore.add(figureScorePanel, gridBagConstraints);
 
-        saveFigureScoreButton.setFont(new java.awt.Font("Tahoma", 0, 14));
+        saveFigureScoreButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         saveFigureScoreButton.setText("Save");
         saveFigureScoreButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -606,6 +607,14 @@ public class SynchroFrame extends javax.swing.JFrame {
             }
         });
 
+        clearFigureScoreButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        clearFigureScoreButton.setText("Clear");
+        clearFigureScoreButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearFigureScoreButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -613,14 +622,18 @@ public class SynchroFrame extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(saveFigureScoreButton)
-                .addContainerGap(666, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(clearFigureScoreButton)
+                .addContainerGap(585, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(saveFigureScoreButton)
-                .addContainerGap(259, Short.MAX_VALUE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(saveFigureScoreButton)
+                    .addComponent(clearFigureScoreButton))
+                .addContainerGap(260, Short.MAX_VALUE))
         );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -809,7 +822,7 @@ public class SynchroFrame extends javax.swing.JFrame {
                     .addComponent(reportNovRoutineLabels)
                     .addComponent(reportIntRoutineLabels)
                     .addComponent(reportAllRoutineLabels))
-                .addContainerGap(351, Short.MAX_VALUE))
+                .addContainerGap(352, Short.MAX_VALUE))
         );
 
         tabPane.addTab("Reports", reportPanel);
@@ -919,7 +932,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         );
         leaguePanelLayout.setVerticalGroup(
             leaguePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(swimmerScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 523, Short.MAX_VALUE)
+            .addComponent(swimmerScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
             .addGroup(leaguePanelLayout.createSequentialGroup()
                 .addComponent(jLabel6)
                 .addGap(1, 1, 1)
@@ -934,7 +947,7 @@ public class SynchroFrame extends javax.swing.JFrame {
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(leagueTeamCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 308, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 309, Short.MAX_VALUE)
                 .addComponent(leaguePrintButton)
                 .addContainerGap())
         );
@@ -1321,7 +1334,20 @@ public class SynchroFrame extends javax.swing.JFrame {
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_reportAllRoutineLabelsActionPerformed
 
+    private void clearFigureScoreButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearFigureScoreButtonActionPerformed
+        int yesno = JOptionPane.showConfirmDialog(figureScorePanel, "Are you sure that you want to clear all figures scores for swimmer #"+figureScorePanel.getFiguresParticipant().getFigureOrder()+"?","Confirm Clear",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+        if (yesno == JOptionPane.YES_OPTION) {
+            if (controller.saveFigureScores(figureScorePanel.getFiguresParticipant(),null)) {
+                doFiguresParticipantSearch(figureScorePanel.getFiguresParticipant().getFigureOrder());
+                swimmerSearchPanel.focus();
+            } else {
+                JOptionPane.showMessageDialog(figureScorePanel, "Clear failed.  Restart program if this error persists.", "Error Clearing", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_clearFigureScoreButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton clearFigureScoreButton;
     private javax.swing.JScrollPane figureOrderScrollPane;
     private javax.swing.JRadioButton figureOrderSortByName;
     private javax.swing.JRadioButton figureOrderSortByNumber;

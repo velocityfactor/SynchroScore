@@ -322,22 +322,27 @@ public class ScoreController {
         return null;
     }
 
+    /*
+     * figureScores=null clears all scores for figuresParticipant
+     */
     public boolean saveFigureScores(FiguresParticipant figuresParticipant, Collection<FigureScore> figureScores) {
         //Mark meet as needing recalc
         figuresParticipant.getMeet().clearPoints();
 
         //Calculate totals before saving
-        for (FigureScore figureScore : figureScores) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Getting total for station=" + figureScore.getStation());
-            }
-            figureScore.setTotalScore(totalScore(figureScore));
-            if (figureScore.getTotalScore() == null) {
-                logger.error("Saving figure scores aborted because of error getting totalScore.");
-                return false;
-            } else {
+        if (figureScores != null) {
+            for (FigureScore figureScore : figureScores) {
                 if (logger.isDebugEnabled()) {
-                    logger.debug("Total = " + figureScore.getTotalScore().toPlainString());
+                    logger.debug("Getting total for station=" + figureScore.getStation());
+                }
+                figureScore.setTotalScore(totalScore(figureScore));
+                if (figureScore.getTotalScore() == null) {
+                    logger.error("Saving figure scores aborted because of error getting totalScore.");
+                    return false;
+                } else {
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("Total = " + figureScore.getTotalScore().toPlainString());
+                    }
                 }
             }
         }
@@ -345,11 +350,18 @@ public class ScoreController {
         EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
         try {
-            for (FigureScore figureScore : figureScores) {
-                entityManager.persist(figureScore);
-                if (!figuresParticipant.getFiguresScores().contains(figureScore)) {
-                    figuresParticipant.getFiguresScores().add(figureScore);
+            if (figureScores != null) {
+                for (FigureScore figureScore : figureScores) {
+                    entityManager.persist(figureScore);
+                    if (!figuresParticipant.getFiguresScores().contains(figureScore)) {
+                        figuresParticipant.getFiguresScores().add(figureScore);
+                    }
                 }
+            } else {
+                for (FigureScore figureScore : figuresParticipant.getFiguresScores()) {
+                    entityManager.remove(figureScore);
+                }
+                figuresParticipant.setFiguresScores(new ArrayList<FigureScore>());
             }
             figuresParticipant.setTotalScore(calculateTotalScore(figuresParticipant));
             figuresParticipant.setPlace(null);
@@ -399,11 +411,14 @@ public class ScoreController {
         Query query;
         if (showNovice && !showIntermediate) {
             query = entityManager.createNamedQuery("Routine.findByMeetAndLevelIsNoviceOrderByLevelAndRoutineTypeAndPlace");
-        } else if(!showNovice && showIntermediate) {
+        } else if (!showNovice && showIntermediate) {
             query = entityManager.createNamedQuery("Routine.findByMeetAndLevelIsIntermediateOrderByLevelAndRoutineTypeAndPlace");
-        } else if(showNovice && showIntermediate) {
+        } else if (showNovice && showIntermediate) {
             query = entityManager.createNamedQuery("Routine.findByMeetOrderByLevelAndRoutineTypeAndPlace");
-        } else return new ArrayList<Routine>();
+        } else {
+            return new ArrayList<Routine>();
+            
+        }
         query.setParameter("meet", meet);
         return query.getResultList();
     }
