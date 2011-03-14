@@ -1071,6 +1071,9 @@ public class SynchroFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
             return;
         }
+        if (ScoreController.percentCompleteFigures(meet,false)<100) {
+            JOptionPane.showMessageDialog(this, "Intermediate figures scores are not complete.","Warning",JOptionPane.WARNING_MESSAGE);
+        }
         Integer skipLabels = getSkipLabels();
         if(skipLabels==null) return;
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -1097,6 +1100,9 @@ public class SynchroFrame extends javax.swing.JFrame {
         if (!ScoreController.meetResultsValid(meet)) {
             JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
             return;
+        }
+        if (ScoreController.percentCompleteFigures(meet,true)<100) {
+            JOptionPane.showMessageDialog(this, "Novice figures scores are not complete.","Warning",JOptionPane.WARNING_MESSAGE);
         }
         Integer skipLabels = getSkipLabels();
         if(skipLabels==null) return;
@@ -1158,6 +1164,9 @@ public class SynchroFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
             return;
         }
+        if (ScoreController.percentCompleteFigures(meet,false)<100) {
+            JOptionPane.showMessageDialog(this, "Intermediate figures scores are not complete.","Warning",JOptionPane.WARNING_MESSAGE);
+        }
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         try {
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/FiguresStation.jasper"));
@@ -1178,6 +1187,9 @@ public class SynchroFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
             return;
         }
+        if (ScoreController.percentCompleteFigures(meet,false)<100) {
+            JOptionPane.showMessageDialog(this, "Intermediate figures scores are not complete.","Warning",JOptionPane.WARNING_MESSAGE);
+        }
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         try {
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/FiguresMeetSheet.jasper"));
@@ -1194,6 +1206,9 @@ public class SynchroFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_reportIntMeetSheetActionPerformed
 
     private void reportIntermediateFiguresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportIntermediateFiguresActionPerformed
+        if (ScoreController.percentCompleteFigures(meet,false)<100) {
+            JOptionPane.showMessageDialog(this, "Intermediate figures scores are not complete.","Warning",JOptionPane.WARNING_MESSAGE);
+        }
         viewFiguresResultsReport(ScoreController.findAllFiguresParticipantByMeetAndDivision(meet, false), "Meet Results - Intermediate Figures");
 }//GEN-LAST:event_reportIntermediateFiguresActionPerformed
 
@@ -1201,6 +1216,9 @@ public class SynchroFrame extends javax.swing.JFrame {
         if (!ScoreController.meetResultsValid(meet)) {
             JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
             return;
+        }
+        if (ScoreController.percentCompleteFigures(meet,true)<100) {
+            JOptionPane.showMessageDialog(this, "Novice figures scores are not complete.","Warning",JOptionPane.WARNING_MESSAGE);
         }
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         try {
@@ -1222,6 +1240,9 @@ public class SynchroFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
             return;
         }
+        if (ScoreController.percentCompleteFigures(meet,true)<100) {
+            JOptionPane.showMessageDialog(this, "Novice figures scores are not complete.","Warning",JOptionPane.WARNING_MESSAGE);
+        }
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         try {
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/FiguresMeetSheet.jasper"));
@@ -1238,6 +1259,9 @@ public class SynchroFrame extends javax.swing.JFrame {
 }//GEN-LAST:event_reportNovMeetSheetActionPerformed
 
     private void reportNoviceFiguresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportNoviceFiguresActionPerformed
+        if (ScoreController.percentCompleteFigures(meet,true)<100) {
+            JOptionPane.showMessageDialog(this, "Novice figures scores are not complete.","Warning",JOptionPane.WARNING_MESSAGE);
+        }
         viewFiguresResultsReport(ScoreController.findAllFiguresParticipantByMeetAndDivision(meet, true), "Meet Results - Novice Figures");
 }//GEN-LAST:event_reportNoviceFiguresActionPerformed
 
