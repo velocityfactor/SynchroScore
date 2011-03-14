@@ -29,6 +29,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -181,7 +182,14 @@ public class ScoreController {
         Query figureOrderQuery = ScoreApp.getEntityManager().createNamedQuery("FiguresParticipant.findByMeetAndLevelOrderByTotalScore");
         figureOrderQuery.setParameter("meet", meet);
         figureOrderQuery.setParameter("level", isNovice ? "N%" : "I%");
-        return figureOrderQuery.getResultList();
+        List<FiguresParticipant> figuresParticipants = figureOrderQuery.getResultList();
+        for(Iterator<FiguresParticipant> it=figuresParticipants.iterator();it.hasNext();) {
+            FiguresParticipant fp = it.next();
+            if(!figuresParticipantHasAllScores(fp)) {
+                it.remove();
+            }
+        }
+        return figuresParticipants;
     }
 
     public FiguresParticipant findFiguresParticipantByFigureOrder(Meet meet, String figureOrder) {
@@ -450,7 +458,7 @@ public class ScoreController {
         List<FiguresLabel> results = new ArrayList<FiguresLabel>();
 
         for (FiguresParticipant fp : meet.getFiguresParticipants()) {
-            if (isNovice(fp) == isNovice) {
+            if (isNovice(fp) == isNovice && figuresParticipantHasAllScores(fp)) {
                 FiguresLabel fl = new FiguresLabel(fp.getSwimmer().getLevel().getName(), fp.getSwimmer().getLevel().getSortOrder(), fp.getSwimmer().getFirstName() + " " + fp.getSwimmer().getLastName(), fp.getPlace(), fp.getSwimmer().getTeam().getTeamId(), fp.getTotalScore());
                 results.add(fl);
             }
@@ -463,7 +471,7 @@ public class ScoreController {
         List<FiguresMeetSheet> results = new ArrayList<FiguresMeetSheet>();
 
         for (FiguresParticipant fp : meet.getFiguresParticipants()) {
-            if (isNovice(fp) == isNovice) {
+            if (isNovice(fp) == isNovice && figuresParticipantHasAllScores(fp)) {
                 results.add(new FiguresMeetSheet(fp));
             }
         }
@@ -584,7 +592,7 @@ public class ScoreController {
         return !meet.hasCalcErrors();
     }
 
-    public boolean figuresParticipantHasAllScores(FiguresParticipant fp) {
+    public static boolean figuresParticipantHasAllScores(FiguresParticipant fp) {
         //Regular meets N8U have 2 scores, otherwise 4
         if (fp.getMeet().getType() == 'R' && "N8U".equals(fp.getSwimmer().getLevel().getLevelId())) {
             return fp.getFiguresScores().size() == 2;
@@ -892,12 +900,12 @@ public class ScoreController {
     }
 
     public static BigDecimal calculateTotalScore(FiguresParticipant fp) {
-        if (fp.getFiguresScores().size() == 0) {
+        if (fp.getFiguresScores().isEmpty()) {
             return null;
         }
         BigDecimal total = BigDecimal.ZERO;
         for (FigureScore fs : fp.getFiguresScores()) {
-            total = total.add(fs.getTotalScore());
+            total = total.add(totalScore(fs));
         }
         return total;
     }
