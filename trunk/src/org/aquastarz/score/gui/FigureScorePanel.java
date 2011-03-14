@@ -337,6 +337,7 @@ public class FigureScorePanel extends javax.swing.JPanel {
             score = new FigureScore();
             score.setStation(fig);
             score.setFiguresParticipant(figuresParticipant);
+            figureScoreMap.put(figures[fig - 1], score);
         }
         score.setScore1(getScoreValue(fig, 1));
         score.setScore2(getScoreValue(fig, 2));
@@ -345,7 +346,6 @@ public class FigureScorePanel extends javax.swing.JPanel {
         score.setScore5(getScoreValue(fig, 5));
         score.setPenalty(getPenaltyValue(fig));
         score.setTotalScore(new BigDecimal("0.0"));
-        figureScoreMap.put(figures[fig - 1], score);
     }
 
     public boolean scoresValid() {
