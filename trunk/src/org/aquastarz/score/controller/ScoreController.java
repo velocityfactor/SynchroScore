@@ -175,6 +175,16 @@ public class ScoreController {
         }
     }
 
+    public static FiguresParticipant findFiguresParticipant(Meet meet, Swimmer swimmer) {
+        if (!ScoreController.meetResultsValid(meet)) {
+            return null;
+        }
+        Query figureOrderQuery = ScoreApp.getEntityManager().createNamedQuery("FiguresParticipant.findByMeetAndSwimmer");
+        figureOrderQuery.setParameter("meet", meet);
+        figureOrderQuery.setParameter("swimmer", swimmer);
+        return (FiguresParticipant) figureOrderQuery.getSingleResult();
+    }
+
     public static List<FiguresParticipant> findAllFiguresParticipantByMeetAndDivision(Meet meet, boolean isNovice) {
         if (!ScoreController.meetResultsValid(meet)) {
             return null;
@@ -265,6 +275,7 @@ public class ScoreController {
             }
         }
         meet.setFiguresParticipants(newList);
+        mainFrame.updateFiguresStatus();
     }
 
     public boolean generateRandomFiguresOrder(Meet meet) {

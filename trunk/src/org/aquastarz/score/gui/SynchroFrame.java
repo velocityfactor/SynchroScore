@@ -24,7 +24,6 @@ import java.awt.Cursor;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ArrayList;
@@ -58,7 +57,6 @@ import org.aquastarz.score.manager.SwimmerManager;
 import org.aquastarz.score.controller.listener.SwimmerControllerListener;
 import org.aquastarz.score.domain.FiguresParticipant;
 import org.aquastarz.score.domain.Meet;
-import org.aquastarz.score.domain.Routine;
 import org.aquastarz.score.domain.Swimmer;
 import org.aquastarz.score.domain.Team;
 import org.aquastarz.score.gui.event.MeetSetupPanelListener;
@@ -268,6 +266,13 @@ public class SynchroFrame extends javax.swing.JFrame {
     }
 
     private void updateSwimmerTab() {
+        int selectedIndex = teamTabs.getSelectedIndex();
+        String selectedTab = selectedIndex == -1 ? "" : teamTabs.getTitleAt(teamTabs.getSelectedIndex());
+        HashMap<String, Integer> sortMap = new HashMap<String, Integer>();
+        for (int i = 0; i < teamTabs.getTabCount(); i++) {
+            SwimmerSelectionPanel ssp = (SwimmerSelectionPanel) teamTabs.getComponentAt(i);
+            sortMap.put(teamTabs.getTitleAt(i), ssp.getSortIndex());
+        }
         teamTabs.removeAll();
         SwimmerSelectionPanel panel = new SwimmerSelectionPanel(meet.getHomeTeam());
         teamTabs.add(meet.getHomeTeam().getTeamId(), panel);
@@ -276,6 +281,17 @@ public class SynchroFrame extends javax.swing.JFrame {
             panel = new SwimmerSelectionPanel(opponent);
             teamTabs.add(opponent.getTeamId(), panel);
             panel.setSwimmers(SwimmerManager.getSwimmers(opponent), meet.getSwimmers());
+        }
+        selectedIndex=teamTabs.indexOfTab(selectedTab);
+        if(selectedIndex>-1) {
+            teamTabs.setSelectedIndex(selectedIndex);
+        }
+        for (String title : sortMap.keySet()) {
+            int i = teamTabs.indexOfTab(title);
+            if (i > -1) {
+                SwimmerSelectionPanel ssp = (SwimmerSelectionPanel) teamTabs.getComponentAt(i);
+                ssp.setSortIndex(sortMap.get(title));
+            }
         }
     }
 
@@ -345,9 +361,9 @@ public class SynchroFrame extends javax.swing.JFrame {
     private Integer getSkipLabels() {
         Integer skipLabels = -1;
         while (skipLabels < 0) {
-            String s = (String) JOptionPane.showInputDialog(this, "How many empty labels?", "Print labels", JOptionPane.QUESTION_MESSAGE+JOptionPane.OK_OPTION,null,null,"0");
-            if(s==null) {
-                skipLabels=null;
+            String s = (String) JOptionPane.showInputDialog(this, "How many empty labels?", "Print labels", JOptionPane.QUESTION_MESSAGE + JOptionPane.OK_OPTION, null, null, "0");
+            if (s == null) {
+                skipLabels = null;
                 break;
             }
             try {
@@ -1013,16 +1029,20 @@ public class SynchroFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_reportIntRoutinesActionPerformed
 
     private void reportNovRoutineLabelsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportNovRoutineLabelsActionPerformed
-        Integer skipLabels=getSkipLabels();
-        if(skipLabels==null) return;
+        Integer skipLabels = getSkipLabels();
+        if (skipLabels == null) {
+            return;
+        }
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         RoutinesController.showRoutinesLabelsReport(meet, skipLabels, true, false);
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_reportNovRoutineLabelsActionPerformed
 
     private void reportIntRoutineLabelsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportIntRoutingLabelsActionPerformed
-        Integer skipLabels=getSkipLabels();
-        if(skipLabels==null) return;
+        Integer skipLabels = getSkipLabels();
+        if (skipLabels == null) {
+            return;
+        }
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         RoutinesController.showRoutinesLabelsReport(meet, skipLabels, false, true);
         setCursor(Cursor.getDefaultCursor());
@@ -1071,11 +1091,13 @@ public class SynchroFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
             return;
         }
-        if (ScoreController.percentCompleteFigures(meet,false)<100) {
-            JOptionPane.showMessageDialog(this, "Intermediate figures scores are not complete.","Warning",JOptionPane.WARNING_MESSAGE);
+        if (ScoreController.percentCompleteFigures(meet, false) < 100) {
+            JOptionPane.showMessageDialog(this, "Intermediate figures scores are not complete.", "Warning", JOptionPane.WARNING_MESSAGE);
         }
         Integer skipLabels = getSkipLabels();
-        if(skipLabels==null) return;
+        if (skipLabels == null) {
+            return;
+        }
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         try {
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/FiguresLabels.jasper"));
@@ -1101,11 +1123,13 @@ public class SynchroFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
             return;
         }
-        if (ScoreController.percentCompleteFigures(meet,true)<100) {
-            JOptionPane.showMessageDialog(this, "Novice figures scores are not complete.","Warning",JOptionPane.WARNING_MESSAGE);
+        if (ScoreController.percentCompleteFigures(meet, true) < 100) {
+            JOptionPane.showMessageDialog(this, "Novice figures scores are not complete.", "Warning", JOptionPane.WARNING_MESSAGE);
         }
         Integer skipLabels = getSkipLabels();
-        if(skipLabels==null) return;
+        if (skipLabels == null) {
+            return;
+        }
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         try {
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/FiguresLabels.jasper"));
@@ -1164,8 +1188,8 @@ public class SynchroFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
             return;
         }
-        if (ScoreController.percentCompleteFigures(meet,false)<100) {
-            JOptionPane.showMessageDialog(this, "Intermediate figures scores are not complete.","Warning",JOptionPane.WARNING_MESSAGE);
+        if (ScoreController.percentCompleteFigures(meet, false) < 100) {
+            JOptionPane.showMessageDialog(this, "Intermediate figures scores are not complete.", "Warning", JOptionPane.WARNING_MESSAGE);
         }
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         try {
@@ -1187,8 +1211,8 @@ public class SynchroFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
             return;
         }
-        if (ScoreController.percentCompleteFigures(meet,false)<100) {
-            JOptionPane.showMessageDialog(this, "Intermediate figures scores are not complete.","Warning",JOptionPane.WARNING_MESSAGE);
+        if (ScoreController.percentCompleteFigures(meet, false) < 100) {
+            JOptionPane.showMessageDialog(this, "Intermediate figures scores are not complete.", "Warning", JOptionPane.WARNING_MESSAGE);
         }
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         try {
@@ -1206,8 +1230,8 @@ public class SynchroFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_reportIntMeetSheetActionPerformed
 
     private void reportIntermediateFiguresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportIntermediateFiguresActionPerformed
-        if (ScoreController.percentCompleteFigures(meet,false)<100) {
-            JOptionPane.showMessageDialog(this, "Intermediate figures scores are not complete.","Warning",JOptionPane.WARNING_MESSAGE);
+        if (ScoreController.percentCompleteFigures(meet, false) < 100) {
+            JOptionPane.showMessageDialog(this, "Intermediate figures scores are not complete.", "Warning", JOptionPane.WARNING_MESSAGE);
         }
         viewFiguresResultsReport(ScoreController.findAllFiguresParticipantByMeetAndDivision(meet, false), "Meet Results - Intermediate Figures");
 }//GEN-LAST:event_reportIntermediateFiguresActionPerformed
@@ -1217,8 +1241,8 @@ public class SynchroFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
             return;
         }
-        if (ScoreController.percentCompleteFigures(meet,true)<100) {
-            JOptionPane.showMessageDialog(this, "Novice figures scores are not complete.","Warning",JOptionPane.WARNING_MESSAGE);
+        if (ScoreController.percentCompleteFigures(meet, true) < 100) {
+            JOptionPane.showMessageDialog(this, "Novice figures scores are not complete.", "Warning", JOptionPane.WARNING_MESSAGE);
         }
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         try {
@@ -1240,8 +1264,8 @@ public class SynchroFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
             return;
         }
-        if (ScoreController.percentCompleteFigures(meet,true)<100) {
-            JOptionPane.showMessageDialog(this, "Novice figures scores are not complete.","Warning",JOptionPane.WARNING_MESSAGE);
+        if (ScoreController.percentCompleteFigures(meet, true) < 100) {
+            JOptionPane.showMessageDialog(this, "Novice figures scores are not complete.", "Warning", JOptionPane.WARNING_MESSAGE);
         }
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         try {
@@ -1259,8 +1283,8 @@ public class SynchroFrame extends javax.swing.JFrame {
 }//GEN-LAST:event_reportNovMeetSheetActionPerformed
 
     private void reportNoviceFiguresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportNoviceFiguresActionPerformed
-        if (ScoreController.percentCompleteFigures(meet,true)<100) {
-            JOptionPane.showMessageDialog(this, "Novice figures scores are not complete.","Warning",JOptionPane.WARNING_MESSAGE);
+        if (ScoreController.percentCompleteFigures(meet, true) < 100) {
+            JOptionPane.showMessageDialog(this, "Novice figures scores are not complete.", "Warning", JOptionPane.WARNING_MESSAGE);
         }
         viewFiguresResultsReport(ScoreController.findAllFiguresParticipantByMeetAndDivision(meet, true), "Meet Results - Novice Figures");
 }//GEN-LAST:event_reportNoviceFiguresActionPerformed
@@ -1329,14 +1353,27 @@ public class SynchroFrame extends javax.swing.JFrame {
     private void saveSwimmersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveSwimmersButtonActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         ArrayList<Swimmer> participatingSwimmers = new ArrayList<Swimmer>();
+        ArrayList<Swimmer> removedSwimmers = new ArrayList<Swimmer>();
         for (int i = 0; i < teamTabs.getTabCount(); i++) {
             SwimmerSelectionPanel ssp = (SwimmerSelectionPanel) teamTabs.getComponentAt(i);
             participatingSwimmers.addAll(ssp.getSelectedSwimmers());
+            removedSwimmers.addAll(ssp.getRemovedSwimmers());
         }
-        controller.updateFiguresSwimmers(meet, participatingSwimmers);
-        meet.clearPoints();
-        controller.saveMeet(meet);
-        updateStatus();
+        boolean okToSave = true;
+        for (Swimmer swimmer : removedSwimmers) {
+            FiguresParticipant fp = ScoreController.findFiguresParticipant(meet, swimmer);
+            if (fp != null && fp.getFiguresScores().size() > 0) {
+                okToSave = false;
+                JOptionPane.showMessageDialog(this, "Swimmer #" + swimmer.getLeagueNum() + " with meet #" + fp.getFigureOrder() + " has scores.  Please clear those scores and try again.", "Cannot remove swimmer", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        if (okToSave) {
+            controller.updateFiguresSwimmers(meet, participatingSwimmers);
+            meet.clearPoints();
+            controller.saveMeet(meet);
+            updateStatus();
+        }
+        updateSwimmerTab();
         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 }//GEN-LAST:event_saveSwimmersButtonActionPerformed
 
@@ -1351,17 +1388,19 @@ public class SynchroFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_reportAllRoutinesActionPerformed
 
     private void reportAllRoutineLabelsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportAllRoutineLabelsActionPerformed
-        Integer skipLabels=getSkipLabels();
-        if(skipLabels==null) return;
+        Integer skipLabels = getSkipLabels();
+        if (skipLabels == null) {
+            return;
+        }
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         RoutinesController.showRoutinesLabelsReport(meet, skipLabels, true, true);
         setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_reportAllRoutineLabelsActionPerformed
 
     private void clearFigureScoreButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearFigureScoreButtonActionPerformed
-        int yesno = JOptionPane.showConfirmDialog(figureScorePanel, "Are you sure that you want to clear all figures scores for swimmer #"+figureScorePanel.getFiguresParticipant().getFigureOrder()+"?","Confirm Clear",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+        int yesno = JOptionPane.showConfirmDialog(figureScorePanel, "Are you sure that you want to clear all figures scores for swimmer #" + figureScorePanel.getFiguresParticipant().getFigureOrder() + "?", "Confirm Clear", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (yesno == JOptionPane.YES_OPTION) {
-            if (controller.saveFigureScores(figureScorePanel.getFiguresParticipant(),null)) {
+            if (controller.saveFigureScores(figureScorePanel.getFiguresParticipant(), null)) {
                 doFiguresParticipantSearch(figureScorePanel.getFiguresParticipant().getFigureOrder());
                 swimmerSearchPanel.focus();
             } else {
@@ -1369,7 +1408,6 @@ public class SynchroFrame extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_clearFigureScoreButtonActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton clearFigureScoreButton;
     private javax.swing.JScrollPane figureOrderScrollPane;
