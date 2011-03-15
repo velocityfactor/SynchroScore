@@ -45,10 +45,8 @@ public class SwimmerSelectionPanel extends javax.swing.JPanel {
         swimmerList.removeAll();
         checkListItems = new Vector<CheckListItem<Swimmer>>();
         for (Swimmer swimmer : roster) {
-            CheckListItem<Swimmer> item = new CheckListItem<Swimmer>(swimmer, swimmer.toString());
-            if (participatingSwimmers == null || participatingSwimmers.contains(swimmer)) {
-                item.setSelected(true);
-            }
+            boolean selected=participatingSwimmers == null || participatingSwimmers.contains(swimmer);
+            CheckListItem<Swimmer> item = new CheckListItem<Swimmer>(swimmer, swimmer.toString(),selected);
             checkListItems.add(item);
         }
         updateCheckList();
@@ -117,6 +115,17 @@ public class SwimmerSelectionPanel extends javax.swing.JPanel {
         return swimmers;
     }
 
+    public Collection<Swimmer> getRemovedSwimmers() {
+        ArrayList<Swimmer> swimmers = new ArrayList<Swimmer>();
+        for (int i = 0; i < swimmerList.getModel().getSize(); i++) {
+            CheckListItem<Swimmer> item = (CheckListItem<Swimmer>) swimmerList.getModel().getElementAt(i);
+            if (item.isInitiallySelected() && !item.isSelected()) {
+                swimmers.add(item.getItem());
+            }
+        }
+        return swimmers;
+    }
+
     public int countSelectedSwimmers() {
         int c = 0;
         for (int i = 0; i < swimmerList.getModel().getSize(); i++) {
@@ -135,6 +144,20 @@ public class SwimmerSelectionPanel extends javax.swing.JPanel {
         }
         updateCheckList();
     }
+
+    public int getSortIndex() {
+        if(sortByLevel.isSelected()) return 1;
+        if(sortByName.isSelected()) return 2;
+        if(sortByNumber.isSelected()) return 3;
+        return 0;
+    }
+
+    public void setSortIndex(int index) {
+        if(index==1) sortByLevel.setSelected(true);
+        if(index==2) sortByName.setSelected(true);
+        if(index==3) sortByNumber.setSelected(true);
+    }
+
 
     /** This method is called from within the constructor to
      * initialize the form.

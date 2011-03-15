@@ -21,12 +21,15 @@ package org.aquastarz.score.gui;
 
 public class CheckListItem<U> {
     private boolean selected;
+    private boolean initiallySelected;
     private String value;
     private U item;
 
-    public CheckListItem(U item, String value) {
+    public CheckListItem(U item, String value, boolean initiallySelected) {
         this.item=item;
         this.value=value;
+        this.initiallySelected=initiallySelected;
+        this.selected=initiallySelected;
     }
 
     public U getItem() {
@@ -35,6 +38,10 @@ public class CheckListItem<U> {
 
     public void setItem(U item) {
         this.item = item;
+    }
+
+    public boolean isInitiallySelected() {
+        return initiallySelected;
     }
 
     public boolean isSelected() {
