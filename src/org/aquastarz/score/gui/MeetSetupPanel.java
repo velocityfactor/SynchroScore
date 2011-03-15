@@ -78,8 +78,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
         DefaultComboBoxModel cbm = new DefaultComboBoxModel();
         Vector<CheckListItem<Team>> v = new Vector<CheckListItem<Team>>();
         for (Team t : teams) {
-            CheckListItem cli=new CheckListItem(t, t.getName());
-            if(meet.getOpponents().contains(t)) cli.setSelected(true);
+            CheckListItem cli=new CheckListItem(t, t.getName(),meet.getOpponents().contains(t));
             v.add(cli);
             cbm.addElement(t);
         }
