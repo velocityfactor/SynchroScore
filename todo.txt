@@ -12,3 +12,4 @@ warn to save when change tab from figures or routines
 routines progress indicator
 
 new routines categories
+N8U swim 4 figures
