@@ -114,11 +114,21 @@ public class MeetSetupPanel extends javax.swing.JPanel {
         intFigName3.setSelectedItem(meet.getInt3Figure());
         intFigName4.setSelectedItem(meet.getInt4Figure());
 
-        //Check 8 and under boxes
-        eightAndUnder1.setSelected(meet.isEu1());
-        eightAndUnder2.setSelected(meet.isEu2());
-        eightAndUnder3.setSelected(meet.isEu3());
-        eightAndUnder4.setSelected(meet.isEu4());
+        if(meet.getSeason().getRulesRevision() < 2) {
+            //Check 8 and under boxes
+            eightAndUnder1.setSelected(meet.isEu1());
+            eightAndUnder2.setSelected(meet.isEu2());
+            eightAndUnder3.setSelected(meet.isEu3());
+            eightAndUnder4.setSelected(meet.isEu4());
+        }
+        else {
+            //Hide 8 and under boxes
+            n8ULabel.setVisible(false);
+            eightAndUnder1.setVisible(false);
+            eightAndUnder2.setVisible(false);
+            eightAndUnder3.setVisible(false);
+            eightAndUnder4.setVisible(false);
+        }
 
         homeTeam.setSelectedItem(meet.getHomeTeam());
 
@@ -168,7 +178,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        n8ULabel = new javax.swing.JLabel();
         noviceFigNum1 = new javax.swing.JTextField();
         noviceDD1 = new javax.swing.JTextField();
         eightAndUnder1 = new javax.swing.JCheckBox();
@@ -230,7 +240,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel3.setText("Novice Figures");
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel4.setText("Station 1");
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14));
@@ -242,8 +252,8 @@ public class MeetSetupPanel extends javax.swing.JPanel {
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel7.setText("Fig. #");
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 14));
-        jLabel8.setText("8 and Under");
+        n8ULabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        n8ULabel.setText("8 and Under");
 
         noviceFigNum1.setEditable(false);
         noviceFigNum1.setFont(new java.awt.Font("Tahoma", 0, 14));
@@ -255,7 +265,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
 
         eightAndUnder1.setFont(new java.awt.Font("Tahoma", 0, 14));
 
-        jLabel9.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel9.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel9.setText("Station 2");
 
         noviceFigNum2.setEditable(false);
@@ -268,7 +278,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
 
         eightAndUnder2.setFont(new java.awt.Font("Tahoma", 0, 14));
 
-        jLabel10.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel10.setText("Station 3");
 
         noviceFigNum3.setEditable(false);
@@ -281,7 +291,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
 
         eightAndUnder3.setFont(new java.awt.Font("Tahoma", 0, 14));
 
-        jLabel11.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel11.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel11.setText("Station 4");
 
         noviceFigNum4.setEditable(false);
@@ -294,10 +304,10 @@ public class MeetSetupPanel extends javax.swing.JPanel {
 
         eightAndUnder4.setFont(new java.awt.Font("Tahoma", 0, 14));
 
-        jLabel12.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel12.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel12.setText("Station 1");
 
-        jLabel13.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel13.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel13.setText("Station 2");
 
         jLabel14.setFont(new java.awt.Font("Tahoma", 0, 14));
@@ -328,7 +338,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
         jLabel17.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel17.setText("Intermediate Figures");
 
-        jLabel19.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel19.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel19.setText("Station 4");
 
         intFigNum4.setEditable(false);
@@ -339,7 +349,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
         intDD4.setFont(new java.awt.Font("Tahoma", 0, 14));
         intDD4.setFocusable(false);
 
-        jLabel20.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel20.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel20.setText("Station 3");
 
         intFigNum3.setEditable(false);
@@ -601,7 +611,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
                                     .addComponent(noviceFigName2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel8)
+                                    .addComponent(n8ULabel)
                                     .addComponent(eightAndUnder1)
                                     .addComponent(eightAndUnder2)
                                     .addComponent(eightAndUnder4)
@@ -661,7 +671,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
                             .addComponent(jLabel7)
                             .addComponent(jLabel6)
                             .addComponent(jLabel5)
-                            .addComponent(jLabel8))
+                            .addComponent(n8ULabel))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
@@ -871,12 +881,12 @@ public class MeetSetupPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField meetDate;
     private javax.swing.JTextField meetName;
     private javax.swing.ButtonGroup meetTypeButtonGroup;
+    private javax.swing.JLabel n8ULabel;
     private javax.swing.JTextField noviceDD1;
     private javax.swing.JTextField noviceDD2;
     private javax.swing.JTextField noviceDD3;

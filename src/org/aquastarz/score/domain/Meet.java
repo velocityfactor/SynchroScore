@@ -71,7 +71,7 @@ public class Meet implements Serializable {
     @ManyToOne
     @JoinColumn(name = "homeTeam")
     private Team homeTeam;
-    private boolean eu1;
+    private boolean eu1; /* Obsolete as of rules revision 2 - N8U swim all four */
     private boolean eu2;
     private boolean eu3;
     private boolean eu4;
