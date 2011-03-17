@@ -193,9 +193,9 @@ public class ScoreController {
         figureOrderQuery.setParameter("meet", meet);
         figureOrderQuery.setParameter("level", isNovice ? "N%" : "I%");
         List<FiguresParticipant> figuresParticipants = figureOrderQuery.getResultList();
-        for(Iterator<FiguresParticipant> it=figuresParticipants.iterator();it.hasNext();) {
+        for (Iterator<FiguresParticipant> it = figuresParticipants.iterator(); it.hasNext();) {
             FiguresParticipant fp = it.next();
-            if(!figuresParticipantHasAllScores(fp)) {
+            if (!figuresParticipantHasAllScores(fp)) {
                 it.remove();
             }
         }
@@ -436,7 +436,7 @@ public class ScoreController {
             query = entityManager.createNamedQuery("Routine.findByMeetOrderByLevelAndRoutineTypeAndPlace");
         } else {
             return new ArrayList<Routine>();
-            
+
         }
         query.setParameter("meet", meet);
         return query.getResultList();
@@ -503,10 +503,15 @@ public class ScoreController {
     }
 
     public static int numberOfFigures(FiguresParticipant fp) {
-        if ("N8".equals(fp.getSwimmer().getLevel().getLevelId())) {
-            return 2;  // Novice 8 & Under have two figures
+        if (fp.getMeet().getSeason().getRulesRevision() < 2) {
+            if ("N8".equals(fp.getSwimmer().getLevel().getLevelId())) {
+                return 2;  // Novice 8 & Under have two figures
+            } else {
+                return 4;  // All others have four figures
+
+            }
         } else {
-            return 4;  // All others have four figures
+            return 4;
         }
     }
 
@@ -604,9 +609,14 @@ public class ScoreController {
     }
 
     public static boolean figuresParticipantHasAllScores(FiguresParticipant fp) {
-        //Regular meets N8U have 2 scores, otherwise 4
-        if (fp.getMeet().getType() == 'R' && "N8U".equals(fp.getSwimmer().getLevel().getLevelId())) {
-            return fp.getFiguresScores().size() == 2;
+        if (fp.getMeet().getSeason().getRulesRevision() < 2) {
+            //Regular meets N8U have 2 scores, otherwise 4
+            if (fp.getMeet().getType() == 'R' && "N8U".equals(fp.getSwimmer().getLevel().getLevelId())) {
+                return fp.getFiguresScores().size() == 2;
+            } else {
+                return fp.getFiguresScores().size() == 4;
+
+            }
         } else {
             return fp.getFiguresScores().size() == 4;
         }
@@ -714,7 +724,7 @@ public class ScoreController {
             try {
                 points = points.add(fp.getPoints());
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("",e);
             }
             meetPointsMap.put(team, points);
         }

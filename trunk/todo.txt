@@ -1,7 +1,9 @@
 . and / should not overwrite figures scores
-Need a way to match randomize to other computer
 Mechanism to update program
-Mechanism to update league data and upload results
+Need a way to match randomize to other computer
+  -import/export meets/league data in xml
+  -verify league data matches and offer to update
+Mechanism to update league data
 
 Swimmer edit screen npe
 handle print errors
@@ -12,4 +14,5 @@ warn to save when change tab from figures or routines
 routines progress indicator
 
 new routines categories
-N8U swim 4 figures
+
+make maintenance tab faster to init
