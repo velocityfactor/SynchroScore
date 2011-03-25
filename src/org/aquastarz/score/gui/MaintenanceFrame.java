@@ -1,39 +1,35 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
- * MaintenancePanel.java
- *
- * Created on May 1, 2010, 7:34:07 PM
- */
-
+// <editor-fold defaultstate="collapsed" desc="GNU General Public License">
+//
+//   SynchroScore
+//   Copyright (C) 2009 Shayne Hughes
+//
+//   This program is free software: you can redistribute it and/or modify
+//   it under the terms of the GNU General Public License as published by
+//   the Free Software Foundation, either version 3 of the License, or
+//   (at your option) any later version.
+//
+//   This program is distributed in the hope that it will be useful,
+//   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//   GNU General Public License for more details.
+//
+//   You should have received a copy of the GNU General Public License
+//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
+// </editor-fold>
 package org.aquastarz.score.gui;
 
 import java.awt.Cursor;
-import java.beans.Beans;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.aquastarz.score.ScoreApp;
 import org.aquastarz.score.config.Bootstrap;
 
-/**
- *
- * @author shayne
- */
-public class MaintenancePanel extends javax.swing.JPanel {
+public class MaintenanceFrame extends javax.swing.JFrame {
 
-    /** Creates new form MaintenancePanel */
-    public MaintenancePanel() {
-        if (Beans.isDesignTime()) {
-            initComponents();
-        }
-    }
-
-    public void init() {
-        if(maintenanceTab == null) initComponents();
+    public MaintenanceFrame() {
+        initComponents();
     }
 
     /** This method is called from within the constructor to
@@ -47,21 +43,22 @@ public class MaintenancePanel extends javax.swing.JPanel {
 
         maintenanceTab = new javax.swing.JTabbedPane();
         updateForm = new javax.swing.JPanel();
-        load2009TestDataButton = new javax.swing.JButton();
+        loadDataButton = new javax.swing.JButton();
         clearDBButton = new javax.swing.JButton();
+        checkLeagueData = new javax.swing.JButton();
         swimmerForm1 = new org.aquastarz.score.gui.dbform.SwimmerForm();
         teamForm1 = new org.aquastarz.score.gui.dbform.TeamForm();
         figureForm1 = new org.aquastarz.score.gui.dbform.FigureForm();
         levelForm1 = new org.aquastarz.score.gui.dbform.LevelForm();
 
-        setLayout(new java.awt.CardLayout());
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         maintenanceTab.setTabPlacement(javax.swing.JTabbedPane.LEFT);
 
-        load2009TestDataButton.setText("Load Data File");
-        load2009TestDataButton.addActionListener(new java.awt.event.ActionListener() {
+        loadDataButton.setText("Load Data File");
+        loadDataButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                load2009TestDataButtonActionPerformed(evt);
+                loadDataButtonActionPerformed(evt);
             }
         });
 
@@ -69,6 +66,13 @@ public class MaintenancePanel extends javax.swing.JPanel {
         clearDBButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 clearDBButtonActionPerformed(evt);
+            }
+        });
+
+        checkLeagueData.setText("Check League Data");
+        checkLeagueData.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkLeagueDataActionPerformed(evt);
             }
         });
 
@@ -80,18 +84,23 @@ public class MaintenancePanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(updateFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(updateFormLayout.createSequentialGroup()
-                        .addComponent(load2009TestDataButton)
+                        .addComponent(loadDataButton)
                         .addContainerGap(757, Short.MAX_VALUE))
                     .addGroup(updateFormLayout.createSequentialGroup()
                         .addComponent(clearDBButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(766, 766, 766))))
+                        .addGap(766, 766, 766))
+                    .addGroup(updateFormLayout.createSequentialGroup()
+                        .addComponent(checkLeagueData)
+                        .addContainerGap(733, Short.MAX_VALUE))))
         );
         updateFormLayout.setVerticalGroup(
             updateFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(updateFormLayout.createSequentialGroup()
                 .addGap(33, 33, 33)
-                .addComponent(load2009TestDataButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 368, Short.MAX_VALUE)
+                .addComponent(loadDataButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(checkLeagueData)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 339, Short.MAX_VALUE)
                 .addComponent(clearDBButton)
                 .addContainerGap())
         );
@@ -102,10 +111,31 @@ public class MaintenancePanel extends javax.swing.JPanel {
         maintenanceTab.addTab("Figures", figureForm1);
         maintenanceTab.addTab("Levels", levelForm1);
 
-        add(maintenanceTab, "card2");
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 936, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(maintenanceTab, javax.swing.GroupLayout.PREFERRED_SIZE, 936, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 463, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(maintenanceTab, javax.swing.GroupLayout.PREFERRED_SIZE, 463, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+
+        pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void load2009TestDataButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_load2009TestDataButtonActionPerformed
+    private void loadDataButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadDataButtonActionPerformed
         Bootstrap.loadLeagueData();  //Just in case we cleared the db
 
         JFileChooser jfc = new JFileChooser();
@@ -118,7 +148,7 @@ public class MaintenancePanel extends javax.swing.JPanel {
             setCursor(Cursor.getDefaultCursor());
             JOptionPane.showMessageDialog(this, "Done.  Restart program to see changes.");
         }
-}//GEN-LAST:event_load2009TestDataButtonActionPerformed
+}//GEN-LAST:event_loadDataButtonActionPerformed
 
     private void clearDBButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearDBButtonActionPerformed
         int ret = JOptionPane.showConfirmDialog(maintenanceTab, "Are you sure you want to wipe out all meets, swimmers, scores, etc?","Confirm Delete",JOptionPane.YES_NO_OPTION);
@@ -129,12 +159,16 @@ public class MaintenancePanel extends javax.swing.JPanel {
         JOptionPane.showMessageDialog(this, "Done.");
 }//GEN-LAST:event_clearDBButtonActionPerformed
 
+    private void checkLeagueDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkLeagueDataActionPerformed
+        Bootstrap.loadLeagueData();
+}//GEN-LAST:event_checkLeagueDataActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton checkLeagueData;
     private javax.swing.JButton clearDBButton;
     private org.aquastarz.score.gui.dbform.FigureForm figureForm1;
     private org.aquastarz.score.gui.dbform.LevelForm levelForm1;
-    private javax.swing.JButton load2009TestDataButton;
+    private javax.swing.JButton loadDataButton;
     private javax.swing.JTabbedPane maintenanceTab;
     private org.aquastarz.score.gui.dbform.SwimmerForm swimmerForm1;
     private org.aquastarz.score.gui.dbform.TeamForm teamForm1;

@@ -82,6 +82,9 @@ public class Bootstrap {
         checkAndPersistRoutineLevel(entityManager, "I11", "Intermediate 11-14", 3);
         checkAndPersistRoutineLevel(entityManager, "I15", "Intermediate 15-18", 4);
         checkAndPersistRoutineLevel(entityManager, "I11T", "Int. 11 and Over Team", 5);
+        checkAndPersistRoutineLevel(entityManager, "I11-14T", "Int. 11-14 Team", 5); // Added for rev 2
+        checkAndPersistRoutineLevel(entityManager, "I15-18T", "Int. 15-18 Team", 6);
+        checkAndPersistRoutineLevel(entityManager, "I11-18CT", "Int. 11-18 Combo Team", 7);
 
         checkAndPersistTeam(entityManager, "AUB", "Auburn Mermaids");
         checkAndPersistTeam(entityManager, "COR", "Cordova Cordettes");

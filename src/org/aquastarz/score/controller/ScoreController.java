@@ -67,12 +67,7 @@ public class ScoreController {
     EntityManager entityManager = ScoreApp.getEntityManager();
     private SynchroFrame mainFrame;
 
-    public ScoreController() {
-        init();
-    }
-
-    private void init() {
-        Meet meet = selectMeetFromList();
+    public ScoreController(Meet meet) {
         if (meet == null) {
             EntityTransaction transaction = entityManager.getTransaction();
             transaction.begin();
@@ -104,16 +99,6 @@ public class ScoreController {
         }
         mainFrame = new SynchroFrame(this, meet);
         mainFrame.setVisible(true);
-    }
-
-    private Meet selectMeetFromList() {
-        try {
-            return MeetSelectionDialog.selectMeet();
-        } catch (MeetSelectionDialog.MeetSelectionCanceledException e) {
-            System.exit(0);
-        }
-
-        return null;
     }
 
     public List<Team> getTeams() {

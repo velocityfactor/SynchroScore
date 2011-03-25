@@ -28,6 +28,8 @@ import javax.persistence.Query;
 import org.aquastarz.score.config.Bootstrap;
 import org.aquastarz.score.controller.ScoreController;
 import org.aquastarz.score.domain.Season;
+import org.aquastarz.score.gui.MaintenanceFrame;
+import org.aquastarz.score.gui.MeetSelectionDialog;
 
 public class ScoreApp {
 
@@ -41,7 +43,7 @@ public class ScoreApp {
     private static EntityManager entityManager = null;
 
     public static EntityManager getEntityManager() {
-        if(entityManager == null) {
+        if (entityManager == null) {
             if (dbUrl == null) { //test mode
                 dbUrl = testUrl;
                 Map initProps = new TreeMap();
@@ -63,7 +65,6 @@ public class ScoreApp {
     public static EntityManager getNewEntityManager() {
         return javax.persistence.Persistence.createEntityManagerFactory("synchroPU", props).createEntityManager();
     }
-
     private static Season curSeason = null;
 
     public static Season getCurrentSeason() {
@@ -92,17 +93,32 @@ public class ScoreApp {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {        
+    public static void main(String[] args) {
         dbUrl = productionUrl;
         initDB();
         getEntityManager();
 
         // Set up hooks to shutdown and signals.
-	Runtime.getRuntime().addShutdownHook(new AppSignalHandler());
-	AppSignalHandler.installAll();
+        Runtime.getRuntime().addShutdownHook(new AppSignalHandler());
+        AppSignalHandler.installAll();
 
         findCurrentSeason();
-        new ScoreController();
+
+        MeetSelectionDialog dialog = new MeetSelectionDialog(new javax.swing.JFrame(), true);
+
+        int ret = dialog.showMeetSelectionDialog();
+        if (ret == MeetSelectionDialog.MSD_CANCEL) {
+            System.exit(0);
+        } else if (ret == MeetSelectionDialog.MSD_MAINTENANCE) {
+            java.awt.EventQueue.invokeLater(new Runnable() {
+
+                public void run() {
+                    new MaintenanceFrame().setVisible(true);
+                }
+            });
+        } else {
+            new ScoreController(dialog.getSelectedMeet());
+        }
     }
 
     public static void initDB() {
