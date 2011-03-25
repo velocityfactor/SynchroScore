@@ -19,6 +19,7 @@
 // </editor-fold>
 package org.aquastarz.score.gui;
 
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -623,7 +624,7 @@ public class FigureScorePanel extends javax.swing.JPanel {
         setLayout(new java.awt.GridBagLayout());
 
         stationSelected.add(station1Button);
-        station1Button.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        station1Button.setFont(new java.awt.Font("Tahoma", 0, 14));
         station1Button.setText("One");
         station1Button.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         station1Button.addActionListener(new java.awt.event.ActionListener() {
@@ -639,7 +640,7 @@ public class FigureScorePanel extends javax.swing.JPanel {
         add(station1Button, gridBagConstraints);
 
         stationSelected.add(station2Button);
-        station2Button.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        station2Button.setFont(new java.awt.Font("Tahoma", 0, 14));
         station2Button.setText("Two");
         station2Button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -654,7 +655,7 @@ public class FigureScorePanel extends javax.swing.JPanel {
         add(station2Button, gridBagConstraints);
 
         stationSelected.add(station3Button);
-        station3Button.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        station3Button.setFont(new java.awt.Font("Tahoma", 0, 14));
         station3Button.setText("Three");
         station3Button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -669,7 +670,7 @@ public class FigureScorePanel extends javax.swing.JPanel {
         add(station3Button, gridBagConstraints);
 
         stationSelected.add(station4Button);
-        station4Button.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        station4Button.setFont(new java.awt.Font("Tahoma", 0, 14));
         station4Button.setText("Four");
         station4Button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -683,10 +684,13 @@ public class FigureScorePanel extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         add(station4Button, gridBagConstraints);
 
-        scoreS1J1.setFont(new java.awt.Font("Tahoma", 0, 14));
+        scoreS1J1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         scoreS1J1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 scoreS1J1KeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                scoreKeyTyped(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -700,6 +704,9 @@ public class FigureScorePanel extends javax.swing.JPanel {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 scoreS1J2KeyPressed(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                scoreKeyTyped(evt);
+            }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -711,6 +718,9 @@ public class FigureScorePanel extends javax.swing.JPanel {
         scoreS1J3.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 scoreS1J3KeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                scoreKeyTyped(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -724,6 +734,9 @@ public class FigureScorePanel extends javax.swing.JPanel {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 scoreS1J4KeyPressed(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                scoreKeyTyped(evt);
+            }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
@@ -735,6 +748,9 @@ public class FigureScorePanel extends javax.swing.JPanel {
         scoreS1J5.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 scoreS1J5KeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                scoreKeyTyped(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -791,7 +807,7 @@ public class FigureScorePanel extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         add(dd1, gridBagConstraints);
 
-        total1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        total1.setFont(new java.awt.Font("Tahoma", 0, 14));
         total1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         total1.setText("0");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -806,6 +822,9 @@ public class FigureScorePanel extends javax.swing.JPanel {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 scoreS2J1KeyPressed(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                scoreKeyTyped(evt);
+            }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -817,6 +836,9 @@ public class FigureScorePanel extends javax.swing.JPanel {
         scoreS2J2.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 scoreS2J2KeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                scoreKeyTyped(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -830,6 +852,9 @@ public class FigureScorePanel extends javax.swing.JPanel {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 scoreS2J3KeyPressed(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                scoreKeyTyped(evt);
+            }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
@@ -842,6 +867,9 @@ public class FigureScorePanel extends javax.swing.JPanel {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 scoreS2J4KeyPressed(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                scoreKeyTyped(evt);
+            }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
@@ -853,6 +881,9 @@ public class FigureScorePanel extends javax.swing.JPanel {
         scoreS2J5.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 scoreS2J5KeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                scoreKeyTyped(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -924,6 +955,9 @@ public class FigureScorePanel extends javax.swing.JPanel {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 scoreS3J1KeyPressed(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                scoreKeyTyped(evt);
+            }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -935,6 +969,9 @@ public class FigureScorePanel extends javax.swing.JPanel {
         scoreS3J2.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 scoreS3J2KeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                scoreKeyTyped(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -948,6 +985,9 @@ public class FigureScorePanel extends javax.swing.JPanel {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 scoreS3J3KeyPressed(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                scoreKeyTyped(evt);
+            }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
@@ -960,6 +1000,9 @@ public class FigureScorePanel extends javax.swing.JPanel {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 scoreS3J4KeyPressed(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                scoreKeyTyped(evt);
+            }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
@@ -971,6 +1014,9 @@ public class FigureScorePanel extends javax.swing.JPanel {
         scoreS3J5.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 scoreS3J5KeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                scoreKeyTyped(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1042,6 +1088,9 @@ public class FigureScorePanel extends javax.swing.JPanel {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 scoreS4J1KeyPressed(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                scoreKeyTyped(evt);
+            }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -1053,6 +1102,9 @@ public class FigureScorePanel extends javax.swing.JPanel {
         scoreS4J2.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 scoreS4J2KeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                scoreKeyTyped(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1066,6 +1118,9 @@ public class FigureScorePanel extends javax.swing.JPanel {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 scoreS4J3KeyPressed(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                scoreKeyTyped(evt);
+            }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
@@ -1078,6 +1133,9 @@ public class FigureScorePanel extends javax.swing.JPanel {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 scoreS4J4KeyPressed(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                scoreKeyTyped(evt);
+            }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
@@ -1089,6 +1147,9 @@ public class FigureScorePanel extends javax.swing.JPanel {
         scoreS4J5.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 scoreS4J5KeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                scoreKeyTyped(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1576,6 +1637,25 @@ public class FigureScorePanel extends javax.swing.JPanel {
             scoreS4J4.selectAll();
         }
     }//GEN-LAST:event_scoreS4J5KeyPressed
+
+    private void scoreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreKeyTyped
+                if(evt.getKeyChar()=='/') {
+                    moveToNextEditableRow();
+                    evt.consume();
+                    return;
+                }
+                if(evt.getKeyChar()=='.') {
+                    firePropertyChange("SwimmerSearch", null, null);
+                    evt.consume();
+                    return;
+                }
+                if("0123456789".indexOf(evt.getKeyChar())<0) {
+                    Toolkit.getDefaultToolkit().beep();
+                    evt.consume();
+                    return;
+                }
+    }//GEN-LAST:event_scoreKeyTyped
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel dd1;
     private javax.swing.JLabel dd2;
