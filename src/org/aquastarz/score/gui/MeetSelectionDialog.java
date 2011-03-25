@@ -45,7 +45,11 @@ import org.aquastarz.score.domain.Season;
  */
 public class MeetSelectionDialog extends javax.swing.JDialog {
 
-    public boolean canceled = false;
+    public static final int MSD_SELECTED = 1;
+    public static final int MSD_CANCEL = 2;
+    public static final int MSD_MAINTENANCE = 3;
+    private boolean canceled = false;
+    private boolean maintenance = false;
 
     /** Creates new form MeetSelectionDialog */
     public MeetSelectionDialog(java.awt.Frame parent, boolean modal) {
@@ -76,6 +80,7 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         seasonLabel = new javax.swing.JLabel();
         seasonCombo = new javax.swing.JComboBox();
+        maintenanceButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("SynchroScore");
@@ -104,7 +109,7 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
             }
         });
 
-        okButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        okButton.setFont(new java.awt.Font("Tahoma", 0, 14));
         okButton.setText("OK");
         okButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -160,6 +165,14 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
             }
         });
 
+        maintenanceButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        maintenanceButton.setText("Maintenance");
+        maintenanceButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                maintenanceButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -181,7 +194,9 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(okButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cancelButton))
+                                .addComponent(cancelButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
+                                .addComponent(maintenanceButton))
                             .addComponent(meetCombo, 0, 304, Short.MAX_VALUE))))
                 .addContainerGap())
         );
@@ -204,11 +219,12 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
                         .addComponent(existingMeetButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(meetCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(cancelButton)
-                            .addComponent(okButton)))
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE)))
+                            .addComponent(okButton)
+                            .addComponent(maintenanceButton)))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)))
         );
 
         pack();
@@ -228,9 +244,9 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
 }//GEN-LAST:event_okButtonActionPerformed
 
     private void seasonComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seasonComboActionPerformed
-        ScoreApp.setCurrentSeason((Season)seasonCombo.getSelectedItem());
+        ScoreApp.setCurrentSeason((Season) seasonCombo.getSelectedItem());
         fillMeetCombo(ScoreController.getMeets(ScoreApp.getCurrentSeason()));
-        if(seasonCombo.getSelectedIndex()==0 && meetCombo.getItemCount()>0) {
+        if (seasonCombo.getSelectedIndex() == 0 && meetCombo.getItemCount() > 0) {
             existingMeetButton.setSelected(true);
         }
     }//GEN-LAST:event_seasonComboActionPerformed
@@ -239,27 +255,31 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
         existingMeetButton.setSelected(true);
     }//GEN-LAST:event_meetComboActionPerformed
 
+    private void maintenanceButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_maintenanceButtonActionPerformed
+        maintenance = true;
+        setVisible(false);
+    }//GEN-LAST:event_maintenanceButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    public static Meet selectMeet() throws MeetSelectionCanceledException {
-        MeetSelectionDialog dialog = new MeetSelectionDialog(new javax.swing.JFrame(), true);
-        Dimension dim = dialog.getToolkit().getScreenSize();
-        Rectangle abounds = dialog.getBounds();
-        dialog.setLocation((dim.width - abounds.width) / 2,
+    public int showMeetSelectionDialog() {
+        Dimension dim = getToolkit().getScreenSize();
+        Rectangle abounds = getBounds();
+        setLocation((dim.width - abounds.width) / 2,
                 (dim.height - abounds.height) / 2);
-        dialog.setVisible(true);
-        if (dialog.canceled) {
-            throw new MeetSelectionCanceledException();
-        }
-        return dialog.getSelectedMeet();
-    }
-
-    public static class MeetSelectionCanceledException extends Exception {
-    }
-
-    private Meet getSelectedMeet() {
+        setVisible(true);
         if (canceled) {
+            return MSD_CANCEL;
+        }
+        if (maintenance) {
+            return MSD_MAINTENANCE;
+        }
+        return MSD_SELECTED;
+    }
+
+    public Meet getSelectedMeet() {
+        if (canceled || maintenance) {
             return null;
         } else if (newMeetButton.isSelected()) {
             return null;
@@ -272,13 +292,13 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
 
     private void fillSeasonCombo(List<Season> seasons) {
         DefaultComboBoxModel cbm = new DefaultComboBoxModel();
-        for(Season s : seasons) {
+        for (Season s : seasons) {
             cbm.addElement(s);
         }
         seasonCombo.setModel(cbm);
         seasonCombo.setSelectedItem(ScoreApp.getCurrentSeason());
     }
-    
+
     private void fillMeetCombo(List<Meet> meets) {
         DefaultComboBoxModel cbm = new DefaultComboBoxModel();
         for (Meet m : meets) {
@@ -301,15 +321,14 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
 
                 if (isToday(d)) {
                     existingMeetButton.setSelected(true);
-                }
-                else {
+                } else {
                     newMeetButton.setSelected(true);
                 }
-            }
-            catch(Exception e) { //don't care
+            } catch (Exception e) { //don't care
             }
         }
     }
+
     private boolean isToday(Date inp) {
 
         Calendar cal1 = new GregorianCalendar();
@@ -318,10 +337,9 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
         cal1.setTime(new Date());
         cal2.setTime(inp);
 
-        return ((cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)) &&
-                (cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)));
+        return ((cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR))
+                && (cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)));
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton cancelButton;
@@ -329,6 +347,7 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JButton maintenanceButton;
     private javax.swing.JComboBox meetCombo;
     private javax.swing.JRadioButton newMeetButton;
     private javax.swing.JButton okButton;

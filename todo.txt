@@ -1,4 +1,3 @@
-. and / should not overwrite figures scores
 Mechanism to update program
 Need a way to match randomize to other computer
   -import/export meets/league data in xml
@@ -14,5 +13,6 @@ warn to save when change tab from figures or routines
 routines progress indicator
 
 new routines categories
+select swimmers for routines
 
-make maintenance tab faster to init
+make maintenance window faster to init
