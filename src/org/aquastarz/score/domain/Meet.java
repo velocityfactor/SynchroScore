@@ -72,6 +72,7 @@ public class Meet implements Serializable {
     @JoinColumn(name = "homeTeam")
     private Team homeTeam;
     private boolean eu1; /* Obsolete as of rules revision 2 - N8U swim all four */
+
     private boolean eu2;
     private boolean eu3;
     private boolean eu4;
@@ -422,24 +423,26 @@ public class Meet implements Serializable {
         if (eu4) {
             euCount++;
         }
-        if (type == 'R' && euCount != 2) {
-            valid = false;
-        }
-        if (type == 'C' && euCount != 4) {
-            valid = false;
+        if (season.getRulesRevision() < 2) {
+            if (type == 'R' && euCount != 2) {
+                valid = false;
+            }
+            if (type == 'C' && euCount != 4) {
+                valid = false;
+            }
         }
         return valid;
     }
 
     public boolean isChamps() {
-        return type=='C';
+        return type == 'C';
     }
 
     public List<Figure> getFigureList(Swimmer swimmer) {
         List<Figure> figures = new ArrayList<Figure>();
         String level = swimmer.getLevel().getLevelId();
         if (level.startsWith("N")) {
-            if ("N8".equals(level)) {
+            if (getSeason().getRulesRevision() < 2 && "N8".equals(level)) {
                 if (eu1) {
                     figures.add(nov1Figure);
                 } else {

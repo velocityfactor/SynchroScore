@@ -24,8 +24,8 @@ import org.aquastarz.score.ScoreApp;
 import org.aquastarz.score.controller.ScoreController;
 import org.aquastarz.score.domain.Season;
 
-
 public class SeasonManager {
+
     public static Season findOrCreate(String name) {
         EntityManager entityManager = ScoreApp.getEntityManager();
         Season season = ScoreController.getSeason(name);
@@ -36,5 +36,9 @@ public class SeasonManager {
             entityManager.getTransaction().commit();
         }
         return season;
+    }
+
+    public static Season find(String name) {
+        return ScoreController.getSeason(name);
     }
 }

@@ -33,11 +33,21 @@ public class RoutineLevelManager {
         ArrayList<RoutineLevel> routineLevels = new ArrayList<RoutineLevel>();
         for (RoutineLevel rl : allRoutineLevels) {
             if (ScoreApp.getCurrentSeason().getRulesRevision() < 2) {
-                if ("N12U".equals(rl.getLevelId()) || "N13O".equals(rl.getLevelId()) || "I11".equals(rl.getLevelId()) || "I15".equals(rl.getLevelId()) || "I11T".equals(rl.getLevelId())) {
+                if ("N12U".equals(rl.getLevelId())
+                        || "N13O".equals(rl.getLevelId())
+                        || "I11".equals(rl.getLevelId())
+                        || "I15".equals(rl.getLevelId())
+                        || "I11T".equals(rl.getLevelId())) {
                     routineLevels.add(rl);
                 }
-            } else {
-                if ("N12U".equals(rl.getLevelId()) || "N13O".equals(rl.getLevelId()) || "I11".equals(rl.getLevelId()) || "I15".equals(rl.getLevelId()) || "I11-14T".equals(rl.getLevelId()) || "I15-18T".equals(rl.getLevelId()) || "I11-18CT".equals(rl.getLevelId())) {
+            } else { // Rules Rev 2+
+                if ("N12U".equals(rl.getLevelId())
+                        || "N13O".equals(rl.getLevelId())
+                        || "I11".equals(rl.getLevelId())
+                        || "I15".equals(rl.getLevelId())
+                        || "I11-14T".equals(rl.getLevelId())
+                        || "I15-18T".equals(rl.getLevelId())
+                        || "I11-18CT".equals(rl.getLevelId())) {
                     routineLevels.add(rl);
                 }
             }

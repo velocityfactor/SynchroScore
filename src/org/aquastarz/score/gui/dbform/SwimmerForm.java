@@ -326,7 +326,6 @@ public class SwimmerForm extends JPanel {
         List<org.aquastarz.score.domain.Swimmer> merged = new ArrayList<org.aquastarz.score.domain.Swimmer>(swimmerList.size());
         for (org.aquastarz.score.domain.Swimmer s : swimmerList) {
             merged.add(entityManager.merge(s));
-            SwimmerManager.notifySwimmerUpdated(s);
         }
         swimmerList.clear();
         swimmerList.addAll(merged);

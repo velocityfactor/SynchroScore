@@ -475,6 +475,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
 
         addButton.setFont(new java.awt.Font("Tahoma", 0, 14));
         addButton.setText("Add");
+        addButton.setFocusable(false);
         addButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addButtonActionPerformed(evt);
@@ -483,6 +484,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
 
         deleteButton.setFont(new java.awt.Font("Tahoma", 0, 14));
         deleteButton.setText("Delete");
+        deleteButton.setFocusable(false);
         deleteButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 deleteButtonActionPerformed(evt);
@@ -497,7 +499,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel1.setText("Level");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14));
@@ -513,7 +515,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
             }
         });
 
-        teamCombo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        teamCombo.setFont(new java.awt.Font("Tahoma", 0, 14));
         teamCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         teamCombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -521,13 +523,13 @@ public class RoutinesPanel extends javax.swing.JPanel {
             }
         });
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel3.setText("Team");
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel4.setText("Title");
 
-        title.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        title.setFont(new java.awt.Font("Tahoma", 0, 14));
         title.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 handleFieldChange(evt);
@@ -679,7 +681,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
         jLabel15.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel15.setText("Penalty:");
 
-        penalty.setFont(new java.awt.Font("Tahoma", 0, 14));
+        penalty.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         penalty.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 penaltyKeyPressed(evt);
@@ -691,9 +693,11 @@ public class RoutinesPanel extends javax.swing.JPanel {
 
         totalScore.setEditable(false);
         totalScore.setFont(new java.awt.Font("Tahoma", 0, 14));
+        totalScore.setFocusable(false);
 
         printButton.setFont(new java.awt.Font("Tahoma", 0, 14));
         printButton.setText("Print");
+        printButton.setFocusable(false);
         printButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 printButtonActionPerformed(evt);
@@ -702,6 +706,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
 
         randomizeButton.setFont(new java.awt.Font("Tahoma", 0, 14));
         randomizeButton.setText("Randomize");
+        randomizeButton.setFocusable(false);
         randomizeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 randomizeButtonActionPerformed(evt);
@@ -715,15 +720,20 @@ public class RoutinesPanel extends javax.swing.JPanel {
                 saveButtonActionPerformed(evt);
             }
         });
+        saveButton.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                saveButtonKeyPressed(evt);
+            }
+        });
 
-        numSwimmers.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        numSwimmers.setFont(new java.awt.Font("Tahoma", 0, 14));
         numSwimmers.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 numSwimmersKeyPressed(evt);
             }
         });
 
-        jLabel17.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel17.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel17.setText("# Swmrs");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -734,7 +744,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
                 .addGap(189, 189, 189)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
-                    .addComponent(levelCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(levelCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
@@ -746,7 +756,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
-                    .addComponent(teamCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(teamCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)))
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -1211,6 +1221,13 @@ public class RoutinesPanel extends javax.swing.JPanel {
         handleFieldChange(null);
         updateComponentEnabledStatus();
     }//GEN-LAST:event_numSwimmersKeyPressed
+
+    private void saveButtonKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_saveButtonKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            saveButton.doClick();
+        }
+    }//GEN-LAST:event_saveButtonKeyPressed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
     private javax.swing.JButton deleteButton;

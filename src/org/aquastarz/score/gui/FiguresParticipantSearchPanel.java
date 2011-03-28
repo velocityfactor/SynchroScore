@@ -39,9 +39,15 @@ public class FiguresParticipantSearchPanel extends javax.swing.JPanel {
     }
 
     private void fireFiguresParticipantSearchRequested(String figureOrder) {
-        for (FiguresParticipantSearchPanelListener listener : listeners) {
-            String s = figureOrder.replaceAll("\\.", "");
+        String s = null;
+        if(figureOrder == null) {
+            this.figureOrder.setText("");
+        }
+        else {
+            s = figureOrder.replaceAll("\\.", "");
             this.figureOrder.setText(s);
+        }
+        for (FiguresParticipantSearchPanelListener listener : listeners) {
             listener.figuresParticipantSearchRequested(s);
         }
     }
@@ -110,7 +116,7 @@ public class FiguresParticipantSearchPanel extends javax.swing.JPanel {
         meetLabel.setFont(new java.awt.Font("Tahoma", 0, 14));
         meetLabel.setText("Meet #:");
 
-        figureOrder.setFont(new java.awt.Font("Tahoma", 0, 14));
+        figureOrder.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         figureOrder.setText("99");
         figureOrder.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -220,6 +226,7 @@ public class FiguresParticipantSearchPanel extends javax.swing.JPanel {
         figureOrder.selectAll();
         figureOrder.requestFocus();
     }//GEN-LAST:event_formFocusGained
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField figureOrder;
     private javax.swing.JLabel leagueLabel;
