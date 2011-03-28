@@ -58,6 +58,8 @@ public class Bootstrap {
         entityManager.createQuery("delete from Team").executeUpdate();
         entityManager.createQuery("delete from Figure").executeUpdate();
         entityManager.createQuery("delete from Season").executeUpdate();
+        entityManager.createQuery("delete from Routine").executeUpdate();
+        entityManager.createQuery("delete from RoutineLevel").executeUpdate();
 
         entityManager.getTransaction().commit();
 
