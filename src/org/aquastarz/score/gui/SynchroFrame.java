@@ -54,7 +54,6 @@ import org.aquastarz.score.ScoreApp;
 import org.aquastarz.score.controller.RoutinesController;
 import org.aquastarz.score.controller.ScoreController;
 import org.aquastarz.score.manager.SwimmerManager;
-import org.aquastarz.score.controller.listener.SwimmerControllerListener;
 import org.aquastarz.score.domain.FiguresParticipant;
 import org.aquastarz.score.domain.Meet;
 import org.aquastarz.score.domain.Swimmer;
@@ -120,7 +119,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         keyStroke = KeyStroke.getKeyStroke(keyStrokeAndKey);
         tabPane.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(keyStroke, keyStrokeAndKey);
         tabPane.getActionMap().put(keyStrokeAndKey, swimmerSearchAction);
-     }
+    }
 
     private void setSetupStatus(Color color, int percent) {
         setupProgress.setForeground(color);
@@ -220,14 +219,6 @@ public class SynchroFrame extends javax.swing.JFrame {
                 figureScorePanel.requestFocus();
             }
         });
-
-        SwimmerManager.addListener(new SwimmerControllerListener() {
-
-            public void swimmerUpdated(Swimmer swimmer) {
-                updateSwimmerTab();
-                updateFiguresOrderList();
-            }
-        });
     }
 
     private void doFiguresParticipantSearch(String figureOrder) {
@@ -264,8 +255,8 @@ public class SynchroFrame extends javax.swing.JFrame {
             teamTabs.add(opponent.getTeamId(), panel);
             panel.setSwimmers(SwimmerManager.getSwimmers(opponent), meet.getSwimmers());
         }
-        selectedIndex=teamTabs.indexOfTab(selectedTab);
-        if(selectedIndex>-1) {
+        selectedIndex = teamTabs.indexOfTab(selectedTab);
+        if (selectedIndex > -1) {
             teamTabs.setSelectedIndex(selectedIndex);
         }
         for (String title : sortMap.keySet()) {
@@ -1386,7 +1377,6 @@ public class SynchroFrame extends javax.swing.JFrame {
         updateSwimmerTab();
         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 }//GEN-LAST:event_saveSwimmersButtonActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton clearFigureScoreButton;
     private javax.swing.JScrollPane figureOrderScrollPane;

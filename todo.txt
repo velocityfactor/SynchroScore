@@ -1,18 +1,16 @@
-Mechanism to update program
-Need a way to match randomize to other computer
-  -import/export meets/league data in xml
-  -verify league data matches and offer to update
-Mechanism to update league data
+Import/export meets
+Lines on figures order report
 
 Swimmer edit screen npe
 handle print errors
 Exception after save figures part, update swimmer, then press save again.
 Exception after blanking out a figures score and saving
 
+tab from swimmer search should do search
+
 warn to save when change tab from figures or routines
 routines progress indicator
 
-new routines categories
 select swimmers for routines
 
 make maintenance window faster to init
