@@ -383,7 +383,7 @@ public class Meet implements Serializable {
         if (homeTeam == null) {
             valid = false;
         }
-        if (opponents == null || opponents.size() < 1) {
+        if (opponents == null || opponents.size() < 1 || opponents.contains(homeTeam)) {
             valid = false;
         }
         if (nov1Figure == null) {
