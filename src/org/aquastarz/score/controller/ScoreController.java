@@ -221,12 +221,17 @@ public class ScoreController {
             for (Swimmer s : swimmers) {
                 FiguresParticipant fp = map.remove(s);
                 if (fp == null) { //Adding a new swimmer
-                    FiguresParticipant newFp = new FiguresParticipant(meet, s);
-                    newList.add(newFp);
+                    fp = new FiguresParticipant(meet, s);
                     if (meet.getFiguresOrderGenerated()) {
                         String maxOrder = "";
-                        Integer newLevelOrder = newFp.getSwimmer().getLevel().getSortOrder();
+                        Integer newLevelOrder = fp.getSwimmer().getLevel().getSortOrder();
                         for (FiguresParticipant levelFp : meet.getFiguresParticipants()) {
+                            Integer levelOrder = levelFp.getSwimmer().getLevel().getSortOrder();
+                            if (levelFp.getFigureOrder().compareTo(maxOrder) > 0 && newLevelOrder >= levelOrder) {
+                                maxOrder = levelFp.getFigureOrder();
+                            }
+                        }
+                        for (FiguresParticipant levelFp : newList) {
                             Integer levelOrder = levelFp.getSwimmer().getLevel().getSortOrder();
                             if (levelFp.getFigureOrder().compareTo(maxOrder) > 0 && newLevelOrder >= levelOrder) {
                                 maxOrder = levelFp.getFigureOrder();
@@ -240,12 +245,11 @@ public class ScoreController {
                         } else {
                             nextOrder = maxOrder + "A";
                         }
-                        newFp.setFigureOrder(nextOrder);
+                        fp.setFigureOrder(nextOrder);
                     }
-                    entityManager.persist(newFp);
-                } else {  //Keep existing swimmer
-                    newList.add(fp);
+                    entityManager.persist(fp);
                 }
+                newList.add(fp);
             }
 
             //Remaining FiguresParticipants in map not needed, delete them
@@ -489,6 +493,7 @@ public class ScoreController {
 
     public static int numberOfFigures(FiguresParticipant fp) {
         if (fp.getMeet().getSeason().getRulesRevision() < 2) {
+            //Before 2011
             if ("N8".equals(fp.getSwimmer().getLevel().getLevelId())) {
                 return 2;  // Novice 8 & Under have two figures
             } else {
