@@ -28,9 +28,10 @@ import org.aquastarz.score.domain.FiguresParticipant;
 import org.aquastarz.score.domain.Swimmer;
 
 public class FiguresParticipantsTableModel implements TableModel {
+    public final static int FIGURES_ORDER_COL=0;
+    public final static int LEVEL_COL=5;
 
     class TableItem {
-
         String figuresOrder;
         String leagueNum;
         String lastName;

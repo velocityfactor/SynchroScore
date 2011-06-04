@@ -123,4 +123,9 @@ public class Level implements Serializable {
         changeSupport.removePropertyChangeListener(listener);
     }
 
+    @Transient
+    public boolean isNovice() {
+        return levelId.startsWith("N");
+    }
+
 }

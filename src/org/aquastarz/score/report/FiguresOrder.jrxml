@@ -1,27 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-   SynchroScore
-   Copyright (C) 2009 Shayne Hughes
-
-   This program is free software: you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation, either version 3 of the License, or
-   (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see <http://www.gnu.org/licenses/>.
--->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Figures Order" pageWidth="612" pageHeight="792" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="MeetDate" class="java.lang.String"/>
 	<parameter name="MeetName" class="java.lang.String"/>
+	<parameter name="Breaks" class="java.util.List"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -150,7 +134,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{Last Name}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement isPrintRepeatedValues="false" x="504" y="0" width="68" height="16"/>
+				<reportElement x="504" y="0" width="68" height="16"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
@@ -170,6 +154,11 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{Team}]]></textFieldExpression>
 			</textField>
+			<line>
+				<reportElement x="0" y="15" width="572" height="1">
+					<printWhenExpression><![CDATA[$P{Breaks}.contains( $F{Figures Order} )]]></printWhenExpression>
+				</reportElement>
+			</line>
 		</band>
 	</detail>
 	<columnFooter>

@@ -204,7 +204,7 @@ public class SynchroFrame extends javax.swing.JFrame {
                 controller.saveMeet(meet);
                 updateStatus();
                 if (!meet.isValid()) {
-                    JOptionPane.showMessageDialog(rootPane, "The Meet setup that you have saved is not complete.", "Warning", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(rootPane, "The Meet setup that you have saved is not complete/correct.", "Warning", JOptionPane.WARNING_MESSAGE);
                 }
             }
         });
@@ -376,6 +376,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         figureOrderScrollPane = new javax.swing.JScrollPane();
         figureOrderTable = new javax.swing.JTable();
         figuresOrderPrintButton = new javax.swing.JButton();
+        figuresOrderLinesCheckbox = new javax.swing.JCheckBox();
         figureScore = new javax.swing.JPanel();
         swimmerSearchPanel = new org.aquastarz.score.gui.FiguresParticipantSearchPanel();
         figureScorePanel = new org.aquastarz.score.gui.FigureScorePanel();
@@ -498,7 +499,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         });
 
         figuresOrderSortButtonGroup.add(figureOrderSortByName);
-        figureOrderSortByName.setFont(new java.awt.Font("Tahoma", 0, 14));
+        figureOrderSortByName.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         figureOrderSortByName.setText("Name");
         figureOrderSortByName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -519,13 +520,17 @@ public class SynchroFrame extends javax.swing.JFrame {
         ));
         figureOrderScrollPane.setViewportView(figureOrderTable);
 
-        figuresOrderPrintButton.setFont(new java.awt.Font("Tahoma", 0, 14));
+        figuresOrderPrintButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         figuresOrderPrintButton.setText("Print");
         figuresOrderPrintButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 figuresOrderPrintButtonActionPerformed(evt);
             }
         });
+
+        figuresOrderLinesCheckbox.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        figuresOrderLinesCheckbox.setSelected(true);
+        figuresOrderLinesCheckbox.setText("Lines");
 
         javax.swing.GroupLayout figuresOrderLayout = new javax.swing.GroupLayout(figuresOrder);
         figuresOrder.setLayout(figuresOrderLayout);
@@ -539,6 +544,7 @@ public class SynchroFrame extends javax.swing.JFrame {
                     .addComponent(jLabel5)
                     .addComponent(figureOrderSortByNumber)
                     .addComponent(figureOrderSortByName)
+                    .addComponent(figuresOrderLinesCheckbox)
                     .addComponent(figuresOrderPrintButton))
                 .addContainerGap())
         );
@@ -554,6 +560,8 @@ public class SynchroFrame extends javax.swing.JFrame {
                         .addComponent(figureOrderSortByNumber)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(figureOrderSortByName)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(figuresOrderLinesCheckbox)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(figuresOrderPrintButton)))
                 .addContainerGap())
@@ -1318,14 +1326,49 @@ public class SynchroFrame extends javax.swing.JFrame {
     private void figuresOrderPrintButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_figuresOrderPrintButtonActionPerformed
         try {
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/FiguresOrder.jasper")); //JasperCompileManager.compileReport(jasperDesign);
-            JRDataSource data = new JRTableModelDataSource(figureOrderTable.getModel());
+            FiguresParticipantsTableModel fptm = (FiguresParticipantsTableModel)figureOrderTable.getModel();
+            JRDataSource data = new JRTableModelDataSource(fptm);
             Map<String, Object> params = new HashMap<String, Object>();
             params.put("MeetDate", meet.getMeetDate());
             params.put("MeetName", meet.getName());
+            if (figureOrderSortByNumber.isSelected()) {
+                ArrayList<String> breaks = new ArrayList<String>();
+                if(figuresOrderLinesCheckbox.isSelected()) {
+                    int startInt=-1;
+                    for(int i=0;i<fptm.getRowCount();i++) {
+                        String s = (String) fptm.getValueAt(i, FiguresParticipantsTableModel.LEVEL_COL);
+                        if(s.startsWith("I")) {
+                            startInt=i;
+                            break;
+                        }
+                    }
+                    int numGroups=((meet.getType()=='R')?2:4);
+                    if(startInt>0) {
+                        double groupSize=(double)startInt/(double)numGroups;
+                        for(int i=1;i<numGroups;i++) {
+                            int breakAt=(int)Math.ceil(groupSize*(double)i)-1;
+                            if(breakAt<startInt) {
+                                breaks.add((String)fptm.getValueAt(breakAt, FiguresParticipantsTableModel.FIGURES_ORDER_COL));
+                            }
+                        }
+                        breaks.add((String)fptm.getValueAt(startInt-1, FiguresParticipantsTableModel.FIGURES_ORDER_COL));
+                    }
+                    if(startInt>-1) {
+                        double groupSize=(double)(fptm.getRowCount()-startInt)/(double)numGroups;
+                        for(int i=1;i<numGroups;i++) {
+                            int breakAt=(int)Math.ceil(groupSize*(double)i)+startInt-1;
+                            if(breakAt<fptm.getRowCount()) {
+                                breaks.add((String)fptm.getValueAt(breakAt, FiguresParticipantsTableModel.FIGURES_ORDER_COL));
+                            }
+                        }
+                    }
+                }
+                params.put("Breaks", breaks);
+            }
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, data);
             JasperViewer.viewReport(jasperPrint, false);
         } catch (Exception ex) {
-            logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
+            logger.error("Could not create the report.\n" + ex.getLocalizedMessage(),ex);
         }
 }//GEN-LAST:event_figuresOrderPrintButtonActionPerformed
 
@@ -1386,6 +1429,7 @@ public class SynchroFrame extends javax.swing.JFrame {
     private javax.swing.JPanel figureScore;
     private org.aquastarz.score.gui.FigureScorePanel figureScorePanel;
     private javax.swing.JPanel figuresOrder;
+    private javax.swing.JCheckBox figuresOrderLinesCheckbox;
     private javax.swing.JButton figuresOrderPrintButton;
     private javax.swing.ButtonGroup figuresOrderSortButtonGroup;
     private javax.swing.JButton generateRandomFiguresOrderButton;
