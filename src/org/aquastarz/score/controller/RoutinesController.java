@@ -68,6 +68,7 @@ public class RoutinesController {
     public void save(Routine routine) {
         RoutineManager.calculate(routine);
         RoutineManager.save(routine);
+        routine.getMeet().setRoutinesChanged(true);
     }
 
     public void calculate(Routine routine) {

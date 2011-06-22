@@ -54,6 +54,7 @@ public class RoutineManager {
         routine.setRoutineType("Solo");
         routine.setTeam(meet.getHomeTeam());
         save(routine);
+        meet.getRoutines().add(routine);
 
         return routine;
     }

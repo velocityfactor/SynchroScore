@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import org.aquastarz.score.ScoreApp;
+import org.aquastarz.score.controller.ScoreController;
 import org.aquastarz.score.domain.FigureScore;
 import org.aquastarz.score.domain.FiguresParticipant;
 import org.aquastarz.score.domain.Meet;
@@ -153,6 +154,7 @@ public class MeetManager {
                     fs.setScore4(new BigDecimal(sa[6]));
                     fs.setScore5(new BigDecimal(sa[7]));
                     fs.setPenalty(new BigDecimal(sa[8]));
+                    fs.setTotalScore(ScoreController.totalScore(fs));
                     fp.getFiguresScores().add(fs);
                 }
                 if ("Routine".equals(sa[0])) {

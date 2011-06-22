@@ -32,6 +32,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import org.aquastarz.score.controller.ScoreController;
 
 @Entity
 @Table(name = "figurescore")
@@ -122,6 +123,9 @@ public class FigureScore implements Serializable {
     @Basic(optional = true)
     @Column(name = "totalScore", nullable = true, precision = 2, scale = 1)
     public BigDecimal getTotalScore() {
+        if(totalScore==null) {
+            totalScore=ScoreController.totalScore(this);
+        }
         return totalScore;
     }
 
