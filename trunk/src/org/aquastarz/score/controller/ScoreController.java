@@ -699,6 +699,7 @@ public class ScoreController {
 
         assignRoutinePlaces(meet);
         assignRoutinePoints(meet);
+        meet.setRoutinesChanged(false);
 
         //Sum points for teams
         Map<Team, BigDecimal> meetPointsMap = new HashMap<Team, BigDecimal>();

@@ -109,6 +109,8 @@ public class Meet implements Serializable {
     private Map<Team, Integer> placeMap = null;
     @Transient
     private List<String> calcErrors = null;
+    @Transient
+    private boolean routinesChanged = false;
 
     public Meet() {
     }
@@ -317,7 +319,7 @@ public class Meet implements Serializable {
     }
 
     public boolean needsPointsCalc() {
-        return placeMap == null || pointsMap == null;
+        return placeMap == null || pointsMap == null || routinesChanged;
     }
 
     public void clearPoints() {
@@ -476,6 +478,10 @@ public class Meet implements Serializable {
             figures.add(int4Figure);
         }
         return figures;
+    }
+
+    public void setRoutinesChanged(boolean routinesChanged) {
+        this.routinesChanged = routinesChanged;
     }
 
     @Override
