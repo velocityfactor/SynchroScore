@@ -159,6 +159,7 @@ public class MeetManager {
                 }
                 if ("Routine".equals(sa[0])) {
                     Routine r = new Routine();
+                    r.setMeet(meet);
                     r.setRoutineOrder(Integer.parseInt(sa[1]));
                     r.setTeam(TeamManager.findById(sa[2]));
                     r.setLevel(RoutineLevelManager.find(sa[3]));
