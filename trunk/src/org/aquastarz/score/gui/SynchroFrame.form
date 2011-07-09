@@ -363,6 +363,9 @@
           </SubComponents>
         </Container>
         <Component class="org.aquastarz.score.gui.RoutinesPanel" name="routinesPanel">
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="routinesPanel.addRoutinesPanelEventListener(new RoutinesPanelEventListener() {&#xa;    public void routineSaved() {&#xa;        updateRoutinesStatus();&#xa;    }&#xa;});"/>
+          </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
               <JTabbedPaneConstraints tabName="Routines">
@@ -396,11 +399,6 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="reportIntRoutineLabels" linkSize="3" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="reportAllRoutineLabels" linkSize="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
                               <Component id="reportIntRoutines" linkSize="3" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="reportAllRoutines" linkSize="3" min="-2" max="-2" attributes="0"/>
@@ -412,6 +410,14 @@
                               <Component id="reportIntermediateFigures" linkSize="3" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="reportTeamResults" linkSize="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="reportIntRoutineLabels" linkSize="3" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="exportMeetDataButton" alignment="0" max="32767" attributes="1"/>
+                                  <Component id="reportAllRoutineLabels" linkSize="3" alignment="0" max="32767" attributes="1"/>
+                              </Group>
                           </Group>
                       </Group>
                       <EmptySpace pref="308" max="32767" attributes="0"/>
@@ -459,7 +465,9 @@
                           <Component id="reportIntRoutineLabels" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="reportAllRoutineLabels" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="354" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="exportMeetDataButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="325" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -583,6 +591,14 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="reportAllRoutineLabelsActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="exportMeetDataButton">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Export Meet Data"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="exportMeetDataButtonActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>
