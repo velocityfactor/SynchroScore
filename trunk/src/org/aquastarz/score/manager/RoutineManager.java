@@ -326,14 +326,12 @@ public class RoutineManager {
 		BigDecimal bonus = BigDecimal.ZERO;
 		if ("Team".equals(routine.getRoutineType())
 				&& routine.getNumSwimmers() > 4) {
-			bonus = (new BigDecimal(0.5)).multiply(new BigDecimal(routine
+			bonus = (new BigDecimal("0.5")).multiply(new BigDecimal(routine
 					.getNumSwimmers() - 4));
-			if (BigDecimal.valueOf(2.0).compareTo(bonus) < 0) { // Bonus is
-																// limited to
-																// 2.0 points
-				bonus = BigDecimal.valueOf(2.0);
+            // Bonus is limited to 2.0 points
+            if (BigDecimal.valueOf(2.0).compareTo(bonus) < 0) {
+				bonus = new BigDecimal("2.0");
 			}
-
 		}
 		return bonus;
 	}
