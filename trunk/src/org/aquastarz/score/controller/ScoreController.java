@@ -69,6 +69,7 @@ public class ScoreController {
 
     public ScoreController(Meet meet) {
         if (meet == null) {
+        	logger.info("ScoreController initialize new Meet.");
             EntityTransaction transaction = entityManager.getTransaction();
             transaction.begin();
             try {
@@ -97,6 +98,7 @@ public class ScoreController {
                 System.exit(-1);
             }
         }
+    	logger.info("ScoreController starting for meetId="+meet.getMeetId()+" \""+meet.getName()+"\"");
         mainFrame = new SynchroFrame(this, meet);
         mainFrame.setVisible(true);
     }
@@ -334,7 +336,8 @@ public class ScoreController {
      * figureScores=null clears all scores for figuresParticipant
      */
     public boolean saveFigureScores(FiguresParticipant figuresParticipant, Collection<FigureScore> figureScores) {
-        //Mark meet as needing recalc
+    	logger.info("Saving figures score for figureOrder="+figuresParticipant.getFigureOrder());
+    	//Mark meet as needing recalc
         figuresParticipant.getMeet().clearPoints();
 
         //Calculate totals before saving
@@ -379,11 +382,11 @@ public class ScoreController {
             transaction.commit();
 
             mainFrame.updateFiguresStatus();
-
+        	logger.info("Saving figures score complete.");
             return true;
         } catch (Exception e) {
-            logger.error("Error saving figures scores.", e);
             transaction.rollback();
+            logger.error("Error saving figures scores.", e);
             return false;
         }
     }

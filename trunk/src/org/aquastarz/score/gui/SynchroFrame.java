@@ -1004,7 +1004,8 @@ public class SynchroFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_reportIntRoutingLabelsActionPerformed
 
     private void tabPaneStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabPaneStateChanged
-        if (tabPane.getSelectedIndex() == Tab.FIGURES.ordinal()) {
+    	logger.info("Tab selected = "+tabPane.getSelectedIndex());
+    	if (tabPane.getSelectedIndex() == Tab.FIGURES.ordinal()) {
             swimmerSearchPanel.focus();
         }
 }//GEN-LAST:event_tabPaneStateChanged
@@ -1302,7 +1303,8 @@ public class SynchroFrame extends javax.swing.JFrame {
 }//GEN-LAST:event_saveFigureScoreButtonKeyPressed
 
     private void saveFigureScoreButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFigureScoreButtonActionPerformed
-        if (figureScorePanel.scoresValid()) {
+    	logger.info("Save figures score start.");
+    	if (figureScorePanel.scoresValid()) {
             if (controller.saveFigureScores(figureScorePanel.getFiguresParticipant(), figureScorePanel.getFigureScores())) {
                 doFiguresParticipantSearch(figureScorePanel.getFiguresParticipant().getFigureOrder());
                 swimmerSearchPanel.focus();
@@ -1312,6 +1314,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(figureScorePanel, "Check scores and try again.", "Invalid Score", JOptionPane.WARNING_MESSAGE);
         }
+    	logger.info("Save figures score complete.");
 }//GEN-LAST:event_saveFigureScoreButtonActionPerformed
 
     private void figureScorePanelPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_figureScorePanelPropertyChange
@@ -1381,21 +1384,26 @@ public class SynchroFrame extends javax.swing.JFrame {
 }//GEN-LAST:event_figuresOrderSortByNumberActionPerformed
 
     private void generateRandomFiguresOrderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateRandomFiguresOrderButtonActionPerformed
-        if (meet.getFiguresOrderGenerated()) {
+    	logger.info("Randomize figures order started.");
+    	if (meet.getFiguresOrderGenerated()) {
             int confirm = JOptionPane.showConfirmDialog(this, "You have already generated the random meet order.  Shall I do it again and overwrite the current ordering?", "Warning", JOptionPane.OK_CANCEL_OPTION);
             if (confirm != JOptionPane.OK_OPTION) {
+            	logger.info("Randomize figures order cancelled.");
                 return;
             }
+        	logger.info("Randomize figures order override.");
         }
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         controller.generateRandomFiguresOrder(meet);
         updateStatus();
         selectTab(Tab.FIGURES_ORDER);
         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+    	logger.info("Randomize figures order complete.");
 }//GEN-LAST:event_generateRandomFiguresOrderButtonActionPerformed
 
     private void saveSwimmersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveSwimmersButtonActionPerformed
-        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+    	logger.info("Save swimmers start.");
+    	setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         ArrayList<Swimmer> participatingSwimmers = new ArrayList<Swimmer>();
         ArrayList<Swimmer> removedSwimmers = new ArrayList<Swimmer>();
         for (int i = 0; i < teamTabs.getTabCount(); i++) {
@@ -1417,6 +1425,7 @@ public class SynchroFrame extends javax.swing.JFrame {
             controller.saveMeet(meet);
             updateStatus();
         }
+    	logger.info("Save swimmers complete.");
         updateSwimmerTab();
         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 }//GEN-LAST:event_saveSwimmersButtonActionPerformed
