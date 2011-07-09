@@ -30,6 +30,7 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.aquastarz.score.ScoreApp;
 import org.aquastarz.score.config.Bootstrap;
+import org.aquastarz.score.controller.ScoreController;
 import org.aquastarz.score.domain.Meet;
 import org.aquastarz.score.domain.Season;
 import org.aquastarz.score.manager.MeetManager;
@@ -263,25 +264,8 @@ public class MaintenanceFrame extends javax.swing.JFrame {
         SimpleMeetSelectionDialog dialog = new SimpleMeetSelectionDialog(this, true);
         dialog.showMeetSelectionDialog();
         Meet meet = dialog.getSelectedMeet();
-        if (meet != null) {
-            JFileChooser jfc = new JFileChooser();
-            jfc.setDialogTitle("Save Meet data file");
-            jfc.setFileFilter(new FileNameExtensionFilter("csv file", "csv"));
-            int ret = jfc.showSaveDialog(this);
-            if (ret == JFileChooser.APPROVE_OPTION) {
-                setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                try {
-                    File f = jfc.getSelectedFile();
-                    if (!f.getName().endsWith(".csv")) {
-                        f = new File(f.getAbsolutePath() + ".csv");
-                    }
-                    MeetManager.exportMeet(meet, f);
-                    JOptionPane.showMessageDialog(this, "Done.");
-                } catch (IOException e) {
-                    JOptionPane.showMessageDialog(this, "Error exporting\n" + e.getMessage());
-                }
-                setCursor(Cursor.getDefaultCursor());
-            }
+        if(meet != null) {
+            ScoreController.exportMeetData(meet,this);
         } else {
             JOptionPane.showMessageDialog(this, "Meet export canceled.", "Canceled", JOptionPane.WARNING_MESSAGE);
         }

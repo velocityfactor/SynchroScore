@@ -158,6 +158,10 @@ public class RoutineManager {
 	}
 
 	public static void calculate(Routine routine) {
+        routine.setArtScore(null);
+        routine.setTechScore(null);
+        routine.setTotalScore(null);
+        
 		// Must be valid (values for all five scores, penalty, etc)
 		if (!isScored(routine)) {
 			return;

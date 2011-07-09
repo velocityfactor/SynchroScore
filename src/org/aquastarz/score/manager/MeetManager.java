@@ -64,12 +64,7 @@ public class MeetManager {
         writer.write("IntFigure4,\"" + meet.getInt4Figure().getFigureId() + "\",\"" + meet.getInt4Figure().getName() + "\"\n");
         writer.write("EUFigs,\"" + meet.isEu1() + "\",\"" + meet.isEu2() + "\",\"" + meet.isEu3() + "\",\"" + meet.isEu4() + "\"\n");
         for (FiguresParticipant fp : meet.getFiguresParticipants()) {
-            writer.write("FiguresParticipant,\"" + fp.getFigureOrder() + "\"," + fp.getSwimmer().getLeagueNum()
-                    + ",\"" + fp.getSwimmer().getFirstName() + "\",\"" + fp.getSwimmer().getLastName() + "\",\"" + fp.getSwimmer().getLevel().getLevelId() + "\",\"" + fp.getSwimmer().getTeam().getTeamId() + "\"\n");
-            for (FigureScore fs : fp.getFiguresScores()) {
-                writer.write("FigureScore,\"" + fp.getFigureOrder() + "\"," + fs.getStation() + "," + fs.getScore1() + "," + fs.getScore2() + ","
-                        + fs.getScore3() + "," + fs.getScore4() + "," + fs.getScore5() + "," + fs.getPenalty() + "\n");
-            }
+            writer.write(getFiguresParticipantExport(fp));
         }
         for (Routine r : meet.getRoutines()) {
             writer.write("Routine," + r.getRoutineOrder() + "," + r.getTeam().getTeamId() + "," + r.getLevel().getLevelId()
@@ -80,6 +75,17 @@ public class MeetManager {
                     + "," + r.getPenalty() + "\n");
         }
         writer.close();
+    }
+
+    public static String getFiguresParticipantExport(FiguresParticipant fp) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("FiguresParticipant,\"" + fp.getFigureOrder() + "\"," + fp.getSwimmer().getLeagueNum()
+                + ",\"" + fp.getSwimmer().getFirstName() + "\",\"" + fp.getSwimmer().getLastName() + "\",\"" + fp.getSwimmer().getLevel().getLevelId() + "\",\"" + fp.getSwimmer().getTeam().getTeamId() + "\"\n");
+        for (FigureScore fs : fp.getFiguresScores()) {
+            sb.append("FigureScore,\"" + fp.getFigureOrder() + "\"," + fs.getStation() + "," + fs.getScore1() + "," + fs.getScore2() + ","
+                    + fs.getScore3() + "," + fs.getScore4() + "," + fs.getScore5() + "," + fs.getPenalty() + "\n");
+        }
+        return sb.toString();
     }
 
     public static void importMeet(File file) throws IOException {
