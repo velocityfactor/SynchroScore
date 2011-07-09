@@ -351,6 +351,7 @@ public class FigureScorePanel extends javax.swing.JPanel {
         if (figuresParticipant == null || figureScoreMap == null) {
             return false;
         }
+        storeScores();
         boolean valid = true;
         for (FigureScore score : figureScoreMap.values()) {
             valid &= ScoreController.isValid(score);

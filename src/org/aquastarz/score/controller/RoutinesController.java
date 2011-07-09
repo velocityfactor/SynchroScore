@@ -164,4 +164,18 @@ public class RoutinesController {
             logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
         }
     }
+
+    public static int percentCompleteRoutines(Meet meet) {
+        if (meet.getRoutines().isEmpty()) {
+            return 0;
+        } else {
+            int count = 0;
+            for (Routine routine : meet.getRoutines()) {
+                if (routine.getTotalScore() != null) {
+                    count++;
+                }
+            }
+            return (count * 100) / meet.getRoutines().size();
+        }
+    }
 }

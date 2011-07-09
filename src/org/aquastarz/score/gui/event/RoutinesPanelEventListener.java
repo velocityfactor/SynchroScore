@@ -19,12 +19,8 @@
 // </editor-fold>
 package org.aquastarz.score.gui.event;
 
-import org.aquastarz.score.domain.Routine;
+import java.util.EventListener;
 
-public interface RoutinePanelListener {
-    public void addRoutine();
-    public void deleteRoutine(Routine routine);
-    public void randomizeRoutines();
-    public void printRoutines();
-    public void saveRoutine(Routine routine);
+public interface RoutinesPanelEventListener extends EventListener {
+    public void routineSaved();
 }

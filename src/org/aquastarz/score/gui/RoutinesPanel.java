@@ -34,6 +34,7 @@ import org.aquastarz.score.controller.RoutinesController;
 import org.aquastarz.score.domain.Routine;
 import org.aquastarz.score.domain.RoutineLevel;
 import org.aquastarz.score.domain.Team;
+import org.aquastarz.score.gui.event.RoutinesPanelEventListener;
 import org.aquastarz.score.util.TwoDigitScore;
 
 public class RoutinesPanel extends javax.swing.JPanel {
@@ -52,6 +53,25 @@ public class RoutinesPanel extends javax.swing.JPanel {
             updateRoutinesList();
             updateComponentEnabledStatus();
             updateCombos();
+        }
+    }
+
+    //Event Handling
+    protected javax.swing.event.EventListenerList listenerList =
+            new javax.swing.event.EventListenerList();
+
+    public void addRoutinesPanelEventListener(RoutinesPanelEventListener listener) {
+        listenerList.add(RoutinesPanelEventListener.class, listener);
+    }
+
+    public void removeRoutinesPanelEventListener(RoutinesPanelEventListener listener) {
+        listenerList.remove(RoutinesPanelEventListener.class, listener);
+    }
+
+    void fireRoutineSaved() {
+        for (RoutinesPanelEventListener listener :
+                listenerList.getListeners(RoutinesPanelEventListener.class)) {
+            listener.routineSaved();
         }
     }
 
@@ -975,6 +995,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
             updateRoutinesList();
             routineList.setSelectedValue(curRoutine, true);
             updateComponentEnabledStatus();
+            fireRoutineSaved();
         }
     }//GEN-LAST:event_saveButtonActionPerformed
 
@@ -1025,7 +1046,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
             scoreTJ3.requestFocusInWindow();
             scoreTJ3.selectAll();
         }
-        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreTJ2.getText().length()==0) {
+        if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreTJ2.getText().length() == 0) {
             scoreTJ1.requestFocusInWindow();
             scoreTJ1.selectAll();
         }
@@ -1037,7 +1058,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
             scoreTJ4.requestFocusInWindow();
             scoreTJ4.selectAll();
         }
-        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreTJ3.getText().length()==0) {
+        if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreTJ3.getText().length() == 0) {
             scoreTJ2.requestFocusInWindow();
             scoreTJ2.selectAll();
         }
@@ -1049,7 +1070,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
             scoreTJ5.requestFocusInWindow();
             scoreTJ5.selectAll();
         }
-        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreTJ4.getText().length()==0) {
+        if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreTJ4.getText().length() == 0) {
             scoreTJ3.requestFocusInWindow();
             scoreTJ3.selectAll();
         }
@@ -1066,7 +1087,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
                 scoreAJ1.selectAll();
             }
         }
-        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreTJ5.getText().length()==0) {
+        if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreTJ5.getText().length() == 0) {
             scoreTJ4.requestFocusInWindow();
             scoreTJ4.selectAll();
         }
@@ -1078,7 +1099,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
             scoreTJ7.requestFocusInWindow();
             scoreTJ7.selectAll();
         }
-        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreTJ6.getText().length()==0) {
+        if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreTJ6.getText().length() == 0) {
             scoreTJ5.requestFocusInWindow();
             scoreTJ5.selectAll();
         }
@@ -1090,7 +1111,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
             scoreAJ1.requestFocusInWindow();
             scoreAJ1.selectAll();
         }
-        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreTJ7.getText().length()==0) {
+        if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreTJ7.getText().length() == 0) {
             scoreTJ6.requestFocusInWindow();
             scoreTJ6.selectAll();
         }
@@ -1102,12 +1123,11 @@ public class RoutinesPanel extends javax.swing.JPanel {
             scoreAJ2.requestFocusInWindow();
             scoreAJ2.selectAll();
         }
-        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreAJ1.getText().length()==0) {
-            if(scoreTJ7.isEnabled()) {
+        if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreAJ1.getText().length() == 0) {
+            if (scoreTJ7.isEnabled()) {
                 scoreTJ7.requestFocusInWindow();
                 scoreTJ7.selectAll();
-            }
-            else {
+            } else {
                 scoreTJ5.requestFocusInWindow();
                 scoreTJ5.selectAll();
             }
@@ -1120,7 +1140,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
             scoreAJ3.requestFocusInWindow();
             scoreAJ3.selectAll();
         }
-        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreAJ2.getText().length()==0) {
+        if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreAJ2.getText().length() == 0) {
             scoreAJ1.requestFocusInWindow();
             scoreAJ1.selectAll();
         }
@@ -1132,7 +1152,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
             scoreAJ4.requestFocusInWindow();
             scoreAJ4.selectAll();
         }
-        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreAJ3.getText().length()==0) {
+        if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreAJ3.getText().length() == 0) {
             scoreAJ2.requestFocusInWindow();
             scoreAJ2.selectAll();
         }
@@ -1144,7 +1164,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
             scoreAJ5.requestFocusInWindow();
             scoreAJ5.selectAll();
         }
-        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreAJ4.getText().length()==0) {
+        if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreAJ4.getText().length() == 0) {
             scoreAJ3.requestFocusInWindow();
             scoreAJ3.selectAll();
         }
@@ -1161,7 +1181,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
                 penalty.selectAll();
             }
         }
-        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreAJ5.getText().length()==0) {
+        if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreAJ5.getText().length() == 0) {
             scoreAJ4.requestFocusInWindow();
             scoreAJ4.selectAll();
         }
@@ -1173,7 +1193,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
             scoreAJ7.requestFocusInWindow();
             scoreAJ7.selectAll();
         }
-        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreAJ6.getText().length()==0) {
+        if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreAJ6.getText().length() == 0) {
             scoreAJ5.requestFocusInWindow();
             scoreAJ5.selectAll();
         }
@@ -1185,7 +1205,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
             penalty.requestFocusInWindow();
             penalty.selectAll();
         }
-        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreAJ7.getText().length()==0) {
+        if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreAJ7.getText().length() == 0) {
             scoreAJ6.requestFocusInWindow();
             scoreAJ6.selectAll();
         }
@@ -1227,7 +1247,6 @@ public class RoutinesPanel extends javax.swing.JPanel {
             saveButton.doClick();
         }
     }//GEN-LAST:event_saveButtonKeyPressed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
     private javax.swing.JButton deleteButton;

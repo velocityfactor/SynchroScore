@@ -19,6 +19,9 @@
 // </editor-fold>
 package org.aquastarz.score.controller;
 
+import java.awt.Cursor;
+import java.io.File;
+import java.io.IOException;
 import org.aquastarz.score.report.StationResult;
 import java.math.BigDecimal;
 import java.text.DateFormat;
@@ -38,6 +41,9 @@ import java.util.TreeMap;
 import javax.persistence.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import org.aquastarz.score.ScoreApp;
 import org.aquastarz.score.domain.Figure;
 import org.aquastarz.score.domain.FigureScore;
@@ -49,9 +55,9 @@ import org.aquastarz.score.domain.RoutineLevel;
 import org.aquastarz.score.domain.Season;
 import org.aquastarz.score.domain.Swimmer;
 import org.aquastarz.score.domain.Team;
-import org.aquastarz.score.gui.MeetSelectionDialog;
 import org.aquastarz.score.gui.SynchroFrame;
 import org.aquastarz.score.manager.FigureManager;
+import org.aquastarz.score.manager.MeetManager;
 import org.aquastarz.score.manager.RoutineManager;
 import org.aquastarz.score.report.FiguresLabel;
 import org.aquastarz.score.report.FiguresMeetSheet;
@@ -617,19 +623,21 @@ public class ScoreController {
 
     public static void calculateMeetResults(Meet meet) {
         List<String> calcErrors = new ArrayList<String>();
+        meet.setCalcErrors(calcErrors);
 
         //Calculate total score for figures participants
         for (FiguresParticipant fp : meet.getFiguresParticipants()) {
             if (fp.getFiguresScores().size() < 4) {
-                calcErrors.add("Swimmer #" + fp.getFigureOrder() + " does not have 4 figure scores.");
+                calcErrors.add("ERROR: Swimmer #" + fp.getFigureOrder() + " does not have 4 figure scores.");
             }
             for (FigureScore fs : fp.getFiguresScores()) {
+                fs.setTotalScore(totalScore(fs));
                 if (fs.getTotalScore() != null) {
                     if (BigDecimal.ZERO.compareTo(fs.getTotalScore()) >= 0) {
-                        calcErrors.add("Swimmer #" + fp.getFigureOrder() + " score for " + getFigure(fs).getName() + " is zero.");
+                        calcErrors.add("WARNING: Swimmer #" + fp.getFigureOrder() + " score for " + getFigure(fs).getName() + " is zero.");
                     }
                 } else {
-                    calcErrors.add("Swimmer #" + fp.getFigureOrder() + " score for " + getFigure(fs).getName() + " is blank.");
+                    calcErrors.add("ERROR: Swimmer #" + fp.getFigureOrder() + " score for " + getFigure(fs).getName() + " is blank or invalid.");
                 }
             }
             fp.setTotalScore(calculateTotalScore(fp));
@@ -798,6 +806,9 @@ public class ScoreController {
             if(routine.getTotalScore()==null) {
                 RoutineManager.calculate(routine);
                 RoutineManager.save(routine);
+                if(routine.getTotalScore()==null) {
+                    meet.getCalcErrors().add("ERROR: Routine \""+routine.getName()+"\" not scored.");
+                }
             }
         }
         Collections.sort(routines, new Comparator<Routine>() {
@@ -929,5 +940,29 @@ public class ScoreController {
             total = total.add(totalScore(fs));
         }
         return total;
+    }
+
+    public static void exportMeetData(Meet meet, java.awt.Component component) {
+        if (meet != null) {
+            JFileChooser jfc = new JFileChooser();
+            jfc.setDialogTitle("Save Meet data file");
+            jfc.setFileFilter(new FileNameExtensionFilter("csv file", "csv"));
+            jfc.setSelectedFile(new File(meet.getName()+".csv"));
+            int ret = jfc.showSaveDialog(component);
+            if (ret == JFileChooser.APPROVE_OPTION) {
+                component.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                try {
+                    File f = jfc.getSelectedFile();
+                    if (!f.getName().endsWith(".csv")) {
+                        f = new File(f.getAbsolutePath() + ".csv");
+                    }
+                    MeetManager.exportMeet(meet, f);
+                    JOptionPane.showMessageDialog(component, "Done.");
+                } catch (IOException e) {
+                    JOptionPane.showMessageDialog(component, "Error exporting\n" + e.getMessage());
+                }
+                component.setCursor(Cursor.getDefaultCursor());
+            }
+        }
     }
 }

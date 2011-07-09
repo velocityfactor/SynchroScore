@@ -60,6 +60,8 @@ import org.aquastarz.score.domain.Swimmer;
 import org.aquastarz.score.domain.Team;
 import org.aquastarz.score.gui.event.MeetSetupPanelListener;
 import org.aquastarz.score.gui.event.FiguresParticipantSearchPanelListener;
+import org.aquastarz.score.gui.event.RoutinesPanelEventListener;
+import org.aquastarz.score.manager.MeetManager;
 import org.aquastarz.score.report.FiguresLabel;
 import org.aquastarz.score.report.NumMeets;
 import org.aquastarz.score.report.TeamPoints;
@@ -95,6 +97,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         setTabEnabled(SynchroFrame.Tab.MEET_SETUP, true);
         updateStatus();
         updateFiguresStatus();
+        updateRoutinesStatus();
     }
 
     public static Meet getMeet() {
@@ -137,6 +140,11 @@ public class SynchroFrame extends javax.swing.JFrame {
         intFiguresProgress.setValue(percent);
     }
 
+    public void setRoutinesStatus(Color color, int percent) {
+        routinesProgress.setForeground(color);
+        routinesProgress.setValue(percent);
+    }
+
     private void updateStatus() {
         updateLeagueList();
         setTabEnabled(Tab.LEAGUE, true);
@@ -168,7 +176,7 @@ public class SynchroFrame extends javax.swing.JFrame {
 
     }
 
-    public void updateFiguresStatus() {
+    final public void updateFiguresStatus() {
         int p = ScoreController.percentCompleteFigures(meet, true);
         if (p < 100) {
             setNovFiguresStatus(Color.GREEN, p);
@@ -180,6 +188,15 @@ public class SynchroFrame extends javax.swing.JFrame {
             setIntFiguresStatus(Color.GREEN, p);
         } else {
             setIntFiguresStatus(Color.GREEN.darker(), p);
+        }
+    }
+
+    final public void updateRoutinesStatus() {
+        int p = RoutinesController.percentCompleteRoutines(meet);
+        if (p < 100) {
+            setRoutinesStatus(Color.GREEN, p);
+        } else {
+            setRoutinesStatus(Color.GREEN.darker(), p);
         }
     }
 
@@ -404,6 +421,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         reportIntRoutineLabels = new javax.swing.JButton();
         reportAllRoutines = new javax.swing.JButton();
         reportAllRoutineLabels = new javax.swing.JButton();
+        exportMeetDataButton = new javax.swing.JButton();
         leaguePanel = new javax.swing.JPanel();
         leaguePrintButton = new javax.swing.JButton();
         swimmerScrollPane = new javax.swing.JScrollPane();
@@ -647,6 +665,11 @@ public class SynchroFrame extends javax.swing.JFrame {
 
         tabPane.addTab("Figures", figureScore);
         tabPane.addTab("Routines", routinesPanel);
+        routinesPanel.addRoutinesPanelEventListener(new RoutinesPanelEventListener() {
+            public void routineSaved() {
+                updateRoutinesStatus();
+            }
+        });
 
         reportNoviceFigures.setText("Nov. Figures");
         reportNoviceFigures.addActionListener(new java.awt.event.ActionListener() {
@@ -753,6 +776,13 @@ public class SynchroFrame extends javax.swing.JFrame {
             }
         });
 
+        exportMeetDataButton.setText("Export Meet Data");
+        exportMeetDataButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exportMeetDataButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout reportPanelLayout = new javax.swing.GroupLayout(reportPanel);
         reportPanel.setLayout(reportPanelLayout);
         reportPanelLayout.setHorizontalGroup(
@@ -769,10 +799,6 @@ public class SynchroFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(reportPanelLayout.createSequentialGroup()
-                        .addComponent(reportIntRoutineLabels)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(reportAllRoutineLabels))
-                    .addGroup(reportPanelLayout.createSequentialGroup()
                         .addComponent(reportIntRoutines)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(reportAllRoutines))
@@ -782,7 +808,13 @@ public class SynchroFrame extends javax.swing.JFrame {
                     .addGroup(reportPanelLayout.createSequentialGroup()
                         .addComponent(reportIntermediateFigures)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(reportTeamResults)))
+                        .addComponent(reportTeamResults))
+                    .addGroup(reportPanelLayout.createSequentialGroup()
+                        .addComponent(reportIntRoutineLabels)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(exportMeetDataButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(reportAllRoutineLabels, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(308, Short.MAX_VALUE))
         );
 
@@ -823,12 +855,14 @@ public class SynchroFrame extends javax.swing.JFrame {
                     .addComponent(reportNovRoutineLabels)
                     .addComponent(reportIntRoutineLabels)
                     .addComponent(reportAllRoutineLabels))
-                .addContainerGap(354, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(exportMeetDataButton)
+                .addContainerGap(325, Short.MAX_VALUE))
         );
 
         tabPane.addTab("Reports", reportPanel);
 
-        leaguePrintButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        leaguePrintButton.setFont(new java.awt.Font("Tahoma", 0, 14));
         leaguePrintButton.setText("Print");
         leaguePrintButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -906,7 +940,7 @@ public class SynchroFrame extends javax.swing.JFrame {
             }
         });
 
-        numMeetsPrintButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        numMeetsPrintButton.setFont(new java.awt.Font("Tahoma", 0, 14));
         numMeetsPrintButton.setText("# Meets");
         numMeetsPrintButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1021,7 +1055,7 @@ public class SynchroFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_reportIntRoutingLabelsActionPerformed
 
     private void tabPaneStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabPaneStateChanged
-    	logger.info("Tab selected = "+tabPane.getSelectedIndex());
+    	logger.info("Tab selected = "+Tab.values()[tabPane.getSelectedIndex()]);
     	if (tabPane.getSelectedIndex() == Tab.FIGURES.ordinal()) {
             swimmerSearchPanel.focus();
         }
@@ -1327,9 +1361,11 @@ public class SynchroFrame extends javax.swing.JFrame {
                 swimmerSearchPanel.focus();
             } else {
                 JOptionPane.showMessageDialog(figureScorePanel, "Check scores and try again.  Restart program if this error persists.", "Error Saving", JOptionPane.ERROR_MESSAGE);
+                logger.warn("saveFigureScores failed data="+MeetManager.getFiguresParticipantExport(figureScorePanel.getFiguresParticipant()));
             }
         } else {
             JOptionPane.showMessageDialog(figureScorePanel, "Check scores and try again.", "Invalid Score", JOptionPane.WARNING_MESSAGE);
+            logger.warn("scoresValid is false data="+MeetManager.getFiguresParticipantExport(figureScorePanel.getFiguresParticipant()));
         }
     	logger.info("Save figures score complete.");
 }//GEN-LAST:event_saveFigureScoreButtonActionPerformed
@@ -1461,8 +1497,13 @@ public class SynchroFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_numMeetsPrintButtonActionPerformed
 
+    private void exportMeetDataButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportMeetDataButtonActionPerformed
+        ScoreController.exportMeetData(meet, this);
+    }//GEN-LAST:event_exportMeetDataButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton clearFigureScoreButton;
+    private javax.swing.JButton exportMeetDataButton;
     private javax.swing.JScrollPane figureOrderScrollPane;
     private javax.swing.JRadioButton figureOrderSortByName;
     private javax.swing.JRadioButton figureOrderSortByNumber;
