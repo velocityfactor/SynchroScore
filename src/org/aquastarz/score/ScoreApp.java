@@ -94,6 +94,8 @@ public class ScoreApp {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+    	logger.info("SynchroScore version "+getVersion()+" Starting...");
+    	
         dbUrl = productionUrl;
         initDB();
         getEntityManager();
@@ -112,11 +114,13 @@ public class ScoreApp {
         } else if (ret == MeetSelectionDialog.MSD_MAINTENANCE) {
             java.awt.EventQueue.invokeLater(new Runnable() {
 
-                public void run() {
-                    new MaintenanceFrame().setVisible(true);
+                public void run() {    	
+                	logger.info("Start Maintenance");
+                	new MaintenanceFrame().setVisible(true);
                 }
             });
         } else {
+        	logger.info("Start ScoreController");
             new ScoreController(dialog.getSelectedMeet());
         }
     }

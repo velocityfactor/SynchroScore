@@ -15,13 +15,13 @@ public class AppSignalHandler extends Thread implements SignalHandler {
 	public static void installAll() {
 		install("SEGV");
 		install("ILL");
-		//install("FPE");
+		// install("FPE");
 		install("ABRT");
 		install("INT");
 		install("TERM");
-		//install("BREAK");		
+		// install("BREAK");
 	}
-	
+
 	// Static method to install the signal handler
 	public static SignalHandler install(String signalName) {
 		Signal diagSignal = new Signal(signalName);
@@ -51,14 +51,15 @@ public class AppSignalHandler extends Thread implements SignalHandler {
 			logger.error("Signal handler failed, reason ", e);
 		}
 	}
-	
+
 	public void run() {
 		logger.setLevel(Level.INFO);
-		logger.info("Shutdown");
-                EntityManager em = ScoreApp.getEntityManager();
-                em.getTransaction().begin();
-	        em.createNativeQuery("SHUTDOWN").executeUpdate();
-	        em.getTransaction().commit();
-	        em.close();
+		logger.info("Shutting down db.");
+		EntityManager em = ScoreApp.getEntityManager();
+		em.getTransaction().begin();
+		em.createNativeQuery("SHUTDOWN").executeUpdate();
+		em.getTransaction().commit();
+		em.close();
+    	logger.info("DB shutdown complete.");
 	}
 }

@@ -35,6 +35,8 @@ import org.aquastarz.score.domain.Team;
 import org.aquastarz.score.gui.event.MeetSetupPanelListener;
 
 public class MeetSetupPanel extends javax.swing.JPanel {
+    private static org.apache.log4j.Logger logger =
+        org.apache.log4j.Logger.getLogger(MeetSetupPanel.class.getName());
 
     private Meet meet;
     
@@ -745,6 +747,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
+    	logger.info("Save meet start.");
 
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
@@ -773,6 +776,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
         meet.setEu3(eightAndUnder3.isSelected());
         meet.setEu4(eightAndUnder4.isSelected());
         fireSavedEvent();
+    	logger.info("Save meet complete.");
 
         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_saveButtonActionPerformed
