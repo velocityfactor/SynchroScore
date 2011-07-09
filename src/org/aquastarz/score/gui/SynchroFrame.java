@@ -61,6 +61,7 @@ import org.aquastarz.score.domain.Team;
 import org.aquastarz.score.gui.event.MeetSetupPanelListener;
 import org.aquastarz.score.gui.event.FiguresParticipantSearchPanelListener;
 import org.aquastarz.score.report.FiguresLabel;
+import org.aquastarz.score.report.NumMeets;
 import org.aquastarz.score.report.TeamPoints;
 
 public class SynchroFrame extends javax.swing.JFrame {
@@ -281,7 +282,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         figureOrderTable.setModel(new FiguresParticipantsTableModel(sortedFiguresParticipants.values()));
     }
 
-    private void updateLeagueList() {
+    private List<Swimmer> getLeagueTabSwimmerList() {
         EntityManager entityManager = ScoreApp.getEntityManager();
         Query swimmerQuery = null;
 
@@ -303,10 +304,13 @@ public class SynchroFrame extends javax.swing.JFrame {
         } else {
             swimmerQuery = entityManager.createNamedQuery("Swimmer.findByTeamIdAndSeasonOrderByLeagueNum");
         }
-
         swimmerQuery.setParameter("teamId", teamId);
         swimmerQuery.setParameter("season", ScoreApp.getCurrentSeason());
-        List<Swimmer> swimmerList = swimmerQuery.getResultList();
+        return swimmerQuery.getResultList();
+    }
+
+     private void updateLeagueList() {
+        List<Swimmer> swimmerList = getLeagueTabSwimmerList();
         swimmerTable.setModel(new SwimmersTableModel(swimmerList));
     }
 
@@ -411,6 +415,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         leagueTeamCombo = new javax.swing.JComboBox();
         leagueSortByLevel = new javax.swing.JRadioButton();
+        numMeetsPrintButton = new javax.swing.JButton();
         jToolBar1 = new javax.swing.JToolBar();
         jLabel1 = new javax.swing.JLabel();
         setupProgress = new javax.swing.JProgressBar();
@@ -479,8 +484,8 @@ public class SynchroFrame extends javax.swing.JFrame {
                 .addComponent(saveSwimmersButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(generateRandomFiguresOrderButton)
-                .addContainerGap(457, Short.MAX_VALUE))
-            .addComponent(teamTabs, javax.swing.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
+                .addContainerGap(459, Short.MAX_VALUE))
+            .addComponent(teamTabs, javax.swing.GroupLayout.DEFAULT_SIZE, 526, Short.MAX_VALUE)
         );
 
         tabPane.addTab("Swimmers", swimmers);
@@ -499,7 +504,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         });
 
         figuresOrderSortButtonGroup.add(figureOrderSortByName);
-        figureOrderSortByName.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        figureOrderSortByName.setFont(new java.awt.Font("Tahoma", 0, 14));
         figureOrderSortByName.setText("Name");
         figureOrderSortByName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -520,7 +525,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         ));
         figureOrderScrollPane.setViewportView(figureOrderTable);
 
-        figuresOrderPrintButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        figuresOrderPrintButton.setFont(new java.awt.Font("Tahoma", 0, 14));
         figuresOrderPrintButton.setText("Print");
         figuresOrderPrintButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -528,7 +533,7 @@ public class SynchroFrame extends javax.swing.JFrame {
             }
         });
 
-        figuresOrderLinesCheckbox.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        figuresOrderLinesCheckbox.setFont(new java.awt.Font("Tahoma", 0, 14));
         figuresOrderLinesCheckbox.setSelected(true);
         figuresOrderLinesCheckbox.setText("Lines");
 
@@ -553,7 +558,7 @@ public class SynchroFrame extends javax.swing.JFrame {
             .addGroup(figuresOrderLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(figuresOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(figureOrderScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 502, Short.MAX_VALUE)
+                    .addComponent(figureOrderScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 504, Short.MAX_VALUE)
                     .addGroup(figuresOrderLayout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addGap(1, 1, 1)
@@ -629,7 +634,7 @@ public class SynchroFrame extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(saveFigureScoreButton)
                     .addComponent(clearFigureScoreButton))
-                .addContainerGap(260, Short.MAX_VALUE))
+                .addContainerGap(262, Short.MAX_VALUE))
         );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -818,12 +823,12 @@ public class SynchroFrame extends javax.swing.JFrame {
                     .addComponent(reportNovRoutineLabels)
                     .addComponent(reportIntRoutineLabels)
                     .addComponent(reportAllRoutineLabels))
-                .addContainerGap(352, Short.MAX_VALUE))
+                .addContainerGap(354, Short.MAX_VALUE))
         );
 
         tabPane.addTab("Reports", reportPanel);
 
-        leaguePrintButton.setFont(new java.awt.Font("Tahoma", 0, 14));
+        leaguePrintButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         leaguePrintButton.setText("Print");
         leaguePrintButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -901,12 +906,20 @@ public class SynchroFrame extends javax.swing.JFrame {
             }
         });
 
+        numMeetsPrintButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        numMeetsPrintButton.setText("# Meets");
+        numMeetsPrintButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                numMeetsPrintButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout leaguePanelLayout = new javax.swing.GroupLayout(leaguePanel);
         leaguePanel.setLayout(leaguePanelLayout);
         leaguePanelLayout.setHorizontalGroup(
             leaguePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, leaguePanelLayout.createSequentialGroup()
-                .addComponent(swimmerScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 658, Short.MAX_VALUE)
+                .addComponent(swimmerScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE)
                 .addGroup(leaguePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(leaguePanelLayout.createSequentialGroup()
                         .addGap(6, 6, 6)
@@ -922,13 +935,15 @@ public class SynchroFrame extends javax.swing.JFrame {
                             .addComponent(leagueTeamCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(leaguePanelLayout.createSequentialGroup()
                                 .addComponent(jLabel7)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE))
-                            .addComponent(leaguePrintButton))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE))
+                            .addGroup(leaguePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(leaguePrintButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(numMeetsPrintButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         leaguePanelLayout.setVerticalGroup(
             leaguePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(swimmerScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
+            .addComponent(swimmerScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 526, Short.MAX_VALUE)
             .addGroup(leaguePanelLayout.createSequentialGroup()
                 .addComponent(jLabel6)
                 .addGap(1, 1, 1)
@@ -943,9 +958,11 @@ public class SynchroFrame extends javax.swing.JFrame {
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(leagueTeamCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 309, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(leaguePrintButton)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(numMeetsPrintButton)
+                .addContainerGap(268, Short.MAX_VALUE))
         );
 
         tabPane.addTab("League", leaguePanel);
@@ -1429,6 +1446,21 @@ public class SynchroFrame extends javax.swing.JFrame {
         updateSwimmerTab();
         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 }//GEN-LAST:event_saveSwimmersButtonActionPerformed
+
+    private void numMeetsPrintButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numMeetsPrintButtonActionPerformed
+        try {
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/NumMeets.jasper"));
+            List<NumMeets> numMeetsList = NumMeets.generateList(getLeagueTabSwimmerList(),ScoreApp.getCurrentSeason());
+            JRDataSource data = new JRBeanCollectionDataSource(numMeetsList);
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put("Title", "Count of Meets Attended");
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, data);
+            JasperViewer.viewReport(jasperPrint, false);
+        } catch (Exception ex) {
+            logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
+        }
+    }//GEN-LAST:event_numMeetsPrintButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton clearFigureScoreButton;
     private javax.swing.JScrollPane figureOrderScrollPane;
@@ -1465,6 +1497,7 @@ public class SynchroFrame extends javax.swing.JFrame {
     private javax.swing.JComboBox leagueTeamCombo;
     private org.aquastarz.score.gui.MeetSetupPanel meetSetup;
     private javax.swing.JProgressBar novFiguresProgress;
+    private javax.swing.JButton numMeetsPrintButton;
     private javax.swing.JButton reportAllRoutineLabels;
     private javax.swing.JButton reportAllRoutines;
     private javax.swing.JButton reportIntFigureLabels;

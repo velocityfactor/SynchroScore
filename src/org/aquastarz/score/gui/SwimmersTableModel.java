@@ -24,7 +24,6 @@ import java.util.Collection;
 import java.util.List;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
-import org.aquastarz.score.domain.FiguresParticipant;
 import org.aquastarz.score.domain.Swimmer;
 
 public class SwimmersTableModel implements TableModel {
