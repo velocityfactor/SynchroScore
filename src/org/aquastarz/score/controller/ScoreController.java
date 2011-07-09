@@ -794,6 +794,12 @@ public class ScoreController {
     private static void assignRoutinePlaces(Meet meet) {
         List<Routine> routines = new LinkedList<Routine>();
         routines.addAll(meet.getRoutines());
+        for(Routine routine:routines) {
+            if(routine.getTotalScore()==null) {
+                RoutineManager.calculate(routine);
+                RoutineManager.save(routine);
+            }
+        }
         Collections.sort(routines, new Comparator<Routine>() {
 
             public int compare(Routine r1, Routine r2) {

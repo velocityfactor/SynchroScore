@@ -19,12 +19,8 @@
 // </editor-fold>
 package org.aquastarz.score.manager;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import org.aquastarz.score.config.Bootstrap;
-import org.aquastarz.score.config.Bootstrap.FigureScoreTracker;
-import org.aquastarz.score.config.Bootstrap.FiguresParticipantTracker;
+import java.math.BigDecimal;
+import org.aquastarz.score.domain.Routine;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -34,24 +30,41 @@ import static org.junit.Assert.*;
 
 public class RoutineManagerTest {
 
-	@BeforeClass
-	public static void setUpClass() throws Exception {
-	}
+    @BeforeClass
+    public static void setUpClass() throws Exception {
+    }
 
-	@AfterClass
-	public static void tearDownClass() throws Exception {
-	}
+    @AfterClass
+    public static void tearDownClass() throws Exception {
+    }
 
-	@Before
-	public void setUp() {
-	}
+    @Before
+    public void setUp() {
+    }
 
-	@After
-	public void tearDown() {
-	}
+    @After
+    public void tearDown() {
+    }
 
-	@Test
-	public void testCalculateRoutineBonus() {
-
-	}
+    @Test
+    public void testCalculateRoutineBonus() {
+        Routine routine = new Routine();
+        routine.setRoutineType("Team");
+        routine.setNumSwimmers(3);
+        assertTrue(BigDecimal.valueOf(0.0).compareTo(RoutineManager.calculateRoutineBonus(routine))==0);
+        routine.setNumSwimmers(4);
+        assertTrue(BigDecimal.valueOf(0.0).compareTo(RoutineManager.calculateRoutineBonus(routine))==0);
+        routine.setNumSwimmers(5);
+        assertTrue(BigDecimal.valueOf(0.5).compareTo(RoutineManager.calculateRoutineBonus(routine))==0);
+        routine.setNumSwimmers(6);
+        assertTrue(BigDecimal.valueOf(1.0).compareTo(RoutineManager.calculateRoutineBonus(routine))==0);
+        routine.setNumSwimmers(7);
+        assertTrue(BigDecimal.valueOf(1.5).compareTo(RoutineManager.calculateRoutineBonus(routine))==0);
+        routine.setNumSwimmers(8);
+        assertTrue(BigDecimal.valueOf(2.0).compareTo(RoutineManager.calculateRoutineBonus(routine))==0);
+        routine.setNumSwimmers(9);
+        assertTrue(BigDecimal.valueOf(2.0).compareTo(RoutineManager.calculateRoutineBonus(routine))==0);
+        routine.setNumSwimmers(10);
+        assertTrue(BigDecimal.valueOf(2.0).compareTo(RoutineManager.calculateRoutineBonus(routine))==0);
+    }
 }
