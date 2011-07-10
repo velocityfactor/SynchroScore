@@ -125,10 +125,7 @@ public class RoutinesController {
     }
 
     public static void showRoutinesReport(Meet meet, boolean showNovice, boolean showIntermediate) {
-        if (!ScoreController.meetResultsValid(meet)) {
-            JOptionPane.showMessageDialog(null, "There were errors calculating results: " + meet.getCalcErrors());
-            return;
-        }
+        ScoreController.calculateMeetResultsIfNeeded(meet);
         try {
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(RoutinesController.class.getResourceAsStream("/org/aquastarz/score/report/Routines.jasper"));
             JRDataSource data = new JRBeanCollectionDataSource(ScoreController.generateRoutinesResults(meet, showNovice, showIntermediate));
@@ -143,10 +140,7 @@ public class RoutinesController {
     }
 
     public static void showRoutinesLabelsReport(Meet meet, int skipLabels, boolean showNovice, boolean showIntermediate) {
-        if (!ScoreController.meetResultsValid(meet)) {
-            JOptionPane.showMessageDialog(null, "There were errors calculating results: " + meet.getCalcErrors());
-            return;
-        }
+        ScoreController.calculateMeetResultsIfNeeded(meet);
         try {
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(RoutinesController.class.getResourceAsStream("/org/aquastarz/score/report/RoutineLabels.jasper"));
             List<Routine> routines = new LinkedList<Routine>();

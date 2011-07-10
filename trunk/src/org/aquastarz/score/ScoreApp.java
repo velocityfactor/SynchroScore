@@ -95,6 +95,7 @@ public class ScoreApp {
      */
     public static void main(String[] args) {
     	logger.info("SynchroScore version "+getVersion()+" Starting...");
+        Thread.setDefaultUncaughtExceptionHandler(new LoggingExceptionHandler());
     	
         dbUrl = productionUrl;
         initDB();

@@ -21,6 +21,7 @@ package org.aquastarz.score.gui;
 
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -33,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.TreeSet;
 import javax.imageio.ImageIO;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -40,7 +42,9 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -326,16 +330,13 @@ public class SynchroFrame extends javax.swing.JFrame {
         return swimmerQuery.getResultList();
     }
 
-     private void updateLeagueList() {
+    private void updateLeagueList() {
         List<Swimmer> swimmerList = getLeagueTabSwimmerList();
         swimmerTable.setModel(new SwimmersTableModel(swimmerList));
     }
 
     private void viewFiguresResultsReport(List<FiguresParticipant> figuresParticipants, String title) {
-        if (!ScoreController.meetResultsValid(meet)) {
-            JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
-            return;
-        }
+        ScoreController.calculateMeetResultsIfNeeded(meet);
 
         try {
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/FiguresResults.jasper"));
@@ -370,6 +371,26 @@ public class SynchroFrame extends javax.swing.JFrame {
             }
         }
         return skipLabels;
+    }
+
+    private void showMeetCalcErrors() {
+        if (meet.hasCalcErrors()) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("<html><p>");
+            TreeSet<String> sortedErrors = new TreeSet<String>();
+            sortedErrors.addAll(meet.getCalcErrors());
+            for (String s : sortedErrors) {
+                sb.append(s).append("<br>");
+            }
+            sb.append("</p></html>");
+            JScrollPane scrollPane = new JScrollPane(new JLabel(sb.toString()));
+            scrollPane.setPreferredSize(new Dimension(600, 100));
+            Object message = scrollPane;
+            JOptionPane.showMessageDialog(this,
+                    message,
+                    "Errors calculating meet results",
+                    JOptionPane.OK_OPTION);
+        }
     }
 
     /** This method is called from within the constructor to
@@ -1055,8 +1076,8 @@ public class SynchroFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_reportIntRoutingLabelsActionPerformed
 
     private void tabPaneStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabPaneStateChanged
-    	logger.info("Tab selected = "+Tab.values()[tabPane.getSelectedIndex()]);
-    	if (tabPane.getSelectedIndex() == Tab.FIGURES.ordinal()) {
+        logger.info("Tab selected = " + Tab.values()[tabPane.getSelectedIndex()]);
+        if (tabPane.getSelectedIndex() == Tab.FIGURES.ordinal()) {
             swimmerSearchPanel.focus();
         }
 }//GEN-LAST:event_tabPaneStateChanged
@@ -1133,10 +1154,8 @@ public class SynchroFrame extends javax.swing.JFrame {
 }//GEN-LAST:event_reportNovRoutinesActionPerformed
 
     private void reportIntFigureLabelsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportIntFigureLabelsActionPerformed
-        if (!ScoreController.meetResultsValid(meet)) {
-            JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
-            return;
-        }
+        ScoreController.calculateMeetResultsIfNeeded(meet);
+
         if (ScoreController.percentCompleteFigures(meet, false) < 100) {
             JOptionPane.showMessageDialog(this, "Intermediate figures scores are not complete.", "Warning", JOptionPane.WARNING_MESSAGE);
         }
@@ -1165,10 +1184,8 @@ public class SynchroFrame extends javax.swing.JFrame {
 }//GEN-LAST:event_reportIntFigureLabelsActionPerformed
 
     private void reportNovFigureLabelsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportNovFigureLabelsActionPerformed
-        if (!ScoreController.meetResultsValid(meet)) {
-            JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
-            return;
-        }
+        ScoreController.calculateMeetResultsIfNeeded(meet);
+
         if (ScoreController.percentCompleteFigures(meet, true) < 100) {
             JOptionPane.showMessageDialog(this, "Novice figures scores are not complete.", "Warning", JOptionPane.WARNING_MESSAGE);
         }
@@ -1197,16 +1214,15 @@ public class SynchroFrame extends javax.swing.JFrame {
 }//GEN-LAST:event_reportNovFigureLabelsActionPerformed
 
     private void reportTeamResultsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportTeamResultsActionPerformed
-        if (!ScoreController.meetResultsValid(meet)) {
-            JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors() != null ? meet.getCalcErrors() : "");
-            return;
-        }
+        ScoreController.calculateMeetResultsIfNeeded(meet);
 
         Map<Team, BigDecimal> points = meet.getPointsMap();
 
-        if (points == null) {
-            JOptionPane.showMessageDialog(this, "Cannot display report.  Points not calculated.  " + meet.getCalcErrors() != null ? meet.getCalcErrors() : "");
-            return;
+        if (points == null || meet.hasCalcErrors()) {
+            showMeetCalcErrors();
+            if (points == null) {
+                return;
+            }
         }
 
         //Sort by points
@@ -1230,10 +1246,8 @@ public class SynchroFrame extends javax.swing.JFrame {
 }//GEN-LAST:event_reportTeamResultsActionPerformed
 
     private void reportIntStationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportIntStationActionPerformed
-        if (!ScoreController.meetResultsValid(meet)) {
-            JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
-            return;
-        }
+        ScoreController.calculateMeetResultsIfNeeded(meet);
+
         if (ScoreController.percentCompleteFigures(meet, false) < 100) {
             JOptionPane.showMessageDialog(this, "Intermediate figures scores are not complete.", "Warning", JOptionPane.WARNING_MESSAGE);
         }
@@ -1253,10 +1267,8 @@ public class SynchroFrame extends javax.swing.JFrame {
 }//GEN-LAST:event_reportIntStationActionPerformed
 
     private void reportIntMeetSheetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportIntMeetSheetActionPerformed
-        if (!ScoreController.meetResultsValid(meet)) {
-            JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
-            return;
-        }
+        ScoreController.calculateMeetResultsIfNeeded(meet);
+
         if (ScoreController.percentCompleteFigures(meet, false) < 100) {
             JOptionPane.showMessageDialog(this, "Intermediate figures scores are not complete.", "Warning", JOptionPane.WARNING_MESSAGE);
         }
@@ -1276,6 +1288,8 @@ public class SynchroFrame extends javax.swing.JFrame {
 }//GEN-LAST:event_reportIntMeetSheetActionPerformed
 
     private void reportIntermediateFiguresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportIntermediateFiguresActionPerformed
+        ScoreController.calculateMeetResultsIfNeeded(meet);
+
         if (ScoreController.percentCompleteFigures(meet, false) < 100) {
             JOptionPane.showMessageDialog(this, "Intermediate figures scores are not complete.", "Warning", JOptionPane.WARNING_MESSAGE);
         }
@@ -1283,10 +1297,8 @@ public class SynchroFrame extends javax.swing.JFrame {
 }//GEN-LAST:event_reportIntermediateFiguresActionPerformed
 
     private void reportNoviceStationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportNoviceStationActionPerformed
-        if (!ScoreController.meetResultsValid(meet)) {
-            JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
-            return;
-        }
+        ScoreController.calculateMeetResultsIfNeeded(meet);
+
         if (ScoreController.percentCompleteFigures(meet, true) < 100) {
             JOptionPane.showMessageDialog(this, "Novice figures scores are not complete.", "Warning", JOptionPane.WARNING_MESSAGE);
         }
@@ -1306,10 +1318,8 @@ public class SynchroFrame extends javax.swing.JFrame {
 }//GEN-LAST:event_reportNoviceStationActionPerformed
 
     private void reportNovMeetSheetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportNovMeetSheetActionPerformed
-        if (!ScoreController.meetResultsValid(meet)) {
-            JOptionPane.showMessageDialog(this, "There were errors calculating results: " + meet.getCalcErrors());
-            return;
-        }
+        ScoreController.calculateMeetResultsIfNeeded(meet);
+
         if (ScoreController.percentCompleteFigures(meet, true) < 100) {
             JOptionPane.showMessageDialog(this, "Novice figures scores are not complete.", "Warning", JOptionPane.WARNING_MESSAGE);
         }
@@ -1329,9 +1339,12 @@ public class SynchroFrame extends javax.swing.JFrame {
 }//GEN-LAST:event_reportNovMeetSheetActionPerformed
 
     private void reportNoviceFiguresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportNoviceFiguresActionPerformed
+        ScoreController.calculateMeetResultsIfNeeded(meet);
+
         if (ScoreController.percentCompleteFigures(meet, true) < 100) {
             JOptionPane.showMessageDialog(this, "Novice figures scores are not complete.", "Warning", JOptionPane.WARNING_MESSAGE);
         }
+
         viewFiguresResultsReport(ScoreController.findAllFiguresParticipantByMeetAndDivision(meet, true), "Meet Results - Novice Figures");
 }//GEN-LAST:event_reportNoviceFiguresActionPerformed
 
@@ -1354,20 +1367,20 @@ public class SynchroFrame extends javax.swing.JFrame {
 }//GEN-LAST:event_saveFigureScoreButtonKeyPressed
 
     private void saveFigureScoreButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFigureScoreButtonActionPerformed
-    	logger.info("Save figures score start.");
-    	if (figureScorePanel.scoresValid()) {
+        logger.info("Save figures score start.");
+        if (figureScorePanel.scoresValid()) {
             if (controller.saveFigureScores(figureScorePanel.getFiguresParticipant(), figureScorePanel.getFigureScores())) {
                 doFiguresParticipantSearch(figureScorePanel.getFiguresParticipant().getFigureOrder());
                 swimmerSearchPanel.focus();
             } else {
                 JOptionPane.showMessageDialog(figureScorePanel, "Check scores and try again.  Restart program if this error persists.", "Error Saving", JOptionPane.ERROR_MESSAGE);
-                logger.warn("saveFigureScores failed data="+MeetManager.getFiguresParticipantExport(figureScorePanel.getFiguresParticipant()));
+                logger.warn("saveFigureScores failed data=" + MeetManager.getFiguresParticipantExport(figureScorePanel.getFiguresParticipant()));
             }
         } else {
             JOptionPane.showMessageDialog(figureScorePanel, "Check scores and try again.", "Invalid Score", JOptionPane.WARNING_MESSAGE);
-            logger.warn("scoresValid is false data="+MeetManager.getFiguresParticipantExport(figureScorePanel.getFiguresParticipant()));
+            logger.warn("scoresValid is false data=" + MeetManager.getFiguresParticipantExport(figureScorePanel.getFiguresParticipant()));
         }
-    	logger.info("Save figures score complete.");
+        logger.info("Save figures score complete.");
 }//GEN-LAST:event_saveFigureScoreButtonActionPerformed
 
     private void figureScorePanelPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_figureScorePanelPropertyChange
@@ -1382,39 +1395,39 @@ public class SynchroFrame extends javax.swing.JFrame {
     private void figuresOrderPrintButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_figuresOrderPrintButtonActionPerformed
         try {
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/FiguresOrder.jasper")); //JasperCompileManager.compileReport(jasperDesign);
-            FiguresParticipantsTableModel fptm = (FiguresParticipantsTableModel)figureOrderTable.getModel();
+            FiguresParticipantsTableModel fptm = (FiguresParticipantsTableModel) figureOrderTable.getModel();
             JRDataSource data = new JRTableModelDataSource(fptm);
             Map<String, Object> params = new HashMap<String, Object>();
             params.put("MeetDate", meet.getMeetDate());
             params.put("MeetName", meet.getName());
             if (figureOrderSortByNumber.isSelected()) {
                 ArrayList<String> breaks = new ArrayList<String>();
-                if(figuresOrderLinesCheckbox.isSelected()) {
-                    int startInt=-1;
-                    for(int i=0;i<fptm.getRowCount();i++) {
+                if (figuresOrderLinesCheckbox.isSelected()) {
+                    int startInt = -1;
+                    for (int i = 0; i < fptm.getRowCount(); i++) {
                         String s = (String) fptm.getValueAt(i, FiguresParticipantsTableModel.LEVEL_COL);
-                        if(s.startsWith("I")) {
-                            startInt=i;
+                        if (s.startsWith("I")) {
+                            startInt = i;
                             break;
                         }
                     }
-                    int numGroups=((meet.getType()=='R')?2:4);
-                    if(startInt>0) {
-                        double groupSize=(double)startInt/(double)numGroups;
-                        for(int i=1;i<numGroups;i++) {
-                            int breakAt=(int)Math.ceil(groupSize*(double)i)-1;
-                            if(breakAt<startInt) {
-                                breaks.add((String)fptm.getValueAt(breakAt, FiguresParticipantsTableModel.FIGURES_ORDER_COL));
+                    int numGroups = ((meet.getType() == 'R') ? 2 : 4);
+                    if (startInt > 0) {
+                        double groupSize = (double) startInt / (double) numGroups;
+                        for (int i = 1; i < numGroups; i++) {
+                            int breakAt = (int) Math.ceil(groupSize * (double) i) - 1;
+                            if (breakAt < startInt) {
+                                breaks.add((String) fptm.getValueAt(breakAt, FiguresParticipantsTableModel.FIGURES_ORDER_COL));
                             }
                         }
-                        breaks.add((String)fptm.getValueAt(startInt-1, FiguresParticipantsTableModel.FIGURES_ORDER_COL));
+                        breaks.add((String) fptm.getValueAt(startInt - 1, FiguresParticipantsTableModel.FIGURES_ORDER_COL));
                     }
-                    if(startInt>-1) {
-                        double groupSize=(double)(fptm.getRowCount()-startInt)/(double)numGroups;
-                        for(int i=1;i<numGroups;i++) {
-                            int breakAt=(int)Math.ceil(groupSize*(double)i)+startInt-1;
-                            if(breakAt<fptm.getRowCount()) {
-                                breaks.add((String)fptm.getValueAt(breakAt, FiguresParticipantsTableModel.FIGURES_ORDER_COL));
+                    if (startInt > -1) {
+                        double groupSize = (double) (fptm.getRowCount() - startInt) / (double) numGroups;
+                        for (int i = 1; i < numGroups; i++) {
+                            int breakAt = (int) Math.ceil(groupSize * (double) i) + startInt - 1;
+                            if (breakAt < fptm.getRowCount()) {
+                                breaks.add((String) fptm.getValueAt(breakAt, FiguresParticipantsTableModel.FIGURES_ORDER_COL));
                             }
                         }
                     }
@@ -1424,7 +1437,7 @@ public class SynchroFrame extends javax.swing.JFrame {
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, data);
             JasperViewer.viewReport(jasperPrint, false);
         } catch (Exception ex) {
-            logger.error("Could not create the report.\n" + ex.getLocalizedMessage(),ex);
+            logger.error("Could not create the report.\n" + ex.getLocalizedMessage(), ex);
         }
 }//GEN-LAST:event_figuresOrderPrintButtonActionPerformed
 
@@ -1437,26 +1450,26 @@ public class SynchroFrame extends javax.swing.JFrame {
 }//GEN-LAST:event_figuresOrderSortByNumberActionPerformed
 
     private void generateRandomFiguresOrderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateRandomFiguresOrderButtonActionPerformed
-    	logger.info("Randomize figures order started.");
-    	if (meet.getFiguresOrderGenerated()) {
+        logger.info("Randomize figures order started.");
+        if (meet.getFiguresOrderGenerated()) {
             int confirm = JOptionPane.showConfirmDialog(this, "You have already generated the random meet order.  Shall I do it again and overwrite the current ordering?", "Warning", JOptionPane.OK_CANCEL_OPTION);
             if (confirm != JOptionPane.OK_OPTION) {
-            	logger.info("Randomize figures order cancelled.");
+                logger.info("Randomize figures order cancelled.");
                 return;
             }
-        	logger.info("Randomize figures order override.");
+            logger.info("Randomize figures order override.");
         }
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         controller.generateRandomFiguresOrder(meet);
         updateStatus();
         selectTab(Tab.FIGURES_ORDER);
         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-    	logger.info("Randomize figures order complete.");
+        logger.info("Randomize figures order complete.");
 }//GEN-LAST:event_generateRandomFiguresOrderButtonActionPerformed
 
     private void saveSwimmersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveSwimmersButtonActionPerformed
-    	logger.info("Save swimmers start.");
-    	setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        logger.info("Save swimmers start.");
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         ArrayList<Swimmer> participatingSwimmers = new ArrayList<Swimmer>();
         ArrayList<Swimmer> removedSwimmers = new ArrayList<Swimmer>();
         for (int i = 0; i < teamTabs.getTabCount(); i++) {
@@ -1478,7 +1491,7 @@ public class SynchroFrame extends javax.swing.JFrame {
             controller.saveMeet(meet);
             updateStatus();
         }
-    	logger.info("Save swimmers complete.");
+        logger.info("Save swimmers complete.");
         updateSwimmerTab();
         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 }//GEN-LAST:event_saveSwimmersButtonActionPerformed
@@ -1486,7 +1499,7 @@ public class SynchroFrame extends javax.swing.JFrame {
     private void numMeetsPrintButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numMeetsPrintButtonActionPerformed
         try {
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/NumMeets.jasper"));
-            List<NumMeets> numMeetsList = NumMeets.generateList(getLeagueTabSwimmerList(),ScoreApp.getCurrentSeason());
+            List<NumMeets> numMeetsList = NumMeets.generateList(getLeagueTabSwimmerList(), ScoreApp.getCurrentSeason());
             JRDataSource data = new JRBeanCollectionDataSource(numMeetsList);
             Map<String, Object> params = new HashMap<String, Object>();
             params.put("Title", "Count of Meets Attended");
@@ -1500,7 +1513,6 @@ public class SynchroFrame extends javax.swing.JFrame {
     private void exportMeetDataButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportMeetDataButtonActionPerformed
         ScoreController.exportMeetData(meet, this);
     }//GEN-LAST:event_exportMeetDataButtonActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton clearFigureScoreButton;
     private javax.swing.JButton exportMeetDataButton;
