@@ -75,7 +75,7 @@ public class ScoreController {
 
     public ScoreController(Meet meet) {
         if (meet == null) {
-        	logger.info("ScoreController initialize new Meet.");
+            logger.info("ScoreController initialize new Meet.");
             EntityTransaction transaction = entityManager.getTransaction();
             transaction.begin();
             try {
@@ -104,7 +104,7 @@ public class ScoreController {
                 System.exit(-1);
             }
         }
-    	logger.info("ScoreController starting for meetId="+meet.getMeetId()+" \""+meet.getName()+"\"");
+        logger.info("ScoreController starting for meetId=" + meet.getMeetId() + " \"" + meet.getName() + "\"");
         mainFrame = new SynchroFrame(this, meet);
         mainFrame.setVisible(true);
     }
@@ -169,9 +169,6 @@ public class ScoreController {
     }
 
     public static FiguresParticipant findFiguresParticipant(Meet meet, Swimmer swimmer) {
-        if (!ScoreController.meetResultsValid(meet)) {
-            return null;
-        }
         Query figureOrderQuery = ScoreApp.getEntityManager().createNamedQuery("FiguresParticipant.findByMeetAndSwimmer");
         figureOrderQuery.setParameter("meet", meet);
         figureOrderQuery.setParameter("swimmer", swimmer);
@@ -179,9 +176,6 @@ public class ScoreController {
     }
 
     public static List<FiguresParticipant> findAllFiguresParticipantByMeetAndDivision(Meet meet, boolean isNovice) {
-        if (!ScoreController.meetResultsValid(meet)) {
-            return null;
-        }
         Query figureOrderQuery = ScoreApp.getEntityManager().createNamedQuery("FiguresParticipant.findByMeetAndLevelOrderByTotalScore");
         figureOrderQuery.setParameter("meet", meet);
         figureOrderQuery.setParameter("level", isNovice ? "N%" : "I%");
@@ -311,8 +305,8 @@ public class ScoreController {
 
     public static Figure getFigure(FigureScore fs) {
         Meet meet = fs.getFiguresParticipant().getMeet();
-        String levelId = fs.getFiguresParticipant().getSwimmer().getLevel().getLevelId();
-        if (levelId.startsWith("N")) {
+        Level level = fs.getFiguresParticipant().getSwimmer().getLevel();
+        if (level.isNovice()) {
             switch (fs.getStation()) {
                 case 1:
                     return meet.getNov1Figure();
@@ -342,8 +336,8 @@ public class ScoreController {
      * figureScores=null clears all scores for figuresParticipant
      */
     public boolean saveFigureScores(FiguresParticipant figuresParticipant, Collection<FigureScore> figureScores) {
-    	logger.info("Saving figures score for figureOrder="+figuresParticipant.getFigureOrder());
-    	//Mark meet as needing recalc
+        logger.info("Saving figures score for figureOrder=" + figuresParticipant.getFigureOrder());
+        //Mark meet as needing recalc
         figuresParticipant.getMeet().clearPoints();
 
         //Calculate totals before saving
@@ -388,7 +382,7 @@ public class ScoreController {
             transaction.commit();
 
             mainFrame.updateFiguresStatus();
-        	logger.info("Saving figures score complete.");
+            logger.info("Saving figures score complete.");
             return true;
         } catch (Exception e) {
             transaction.rollback();
@@ -503,7 +497,7 @@ public class ScoreController {
     public static int numberOfFigures(FiguresParticipant fp) {
         if (fp.getMeet().getSeason().getRulesRevision() < 2) {
             //Before 2011
-            if ("N8".equals(fp.getSwimmer().getLevel().getLevelId())) {
+            if (fp.getMeet().getType() != 'C' && "N8".equals(fp.getSwimmer().getLevel().getLevelId())) {
                 return 2;  // Novice 8 & Under have two figures
             } else {
                 return 4;  // All others have four figures
@@ -523,7 +517,11 @@ public class ScoreController {
                 count += fp.getFiguresScores().size();
             }
         }
-        int percent = possible > 0 ? count * 100 / possible : 0;
+        int percent = possible > 0 ? (count * 100) / possible : 0;
+
+        if (percent > 100) {
+            logger.error("percent = " + percent);
+        }
 
         if (logger.isDebugEnabled()) {
             if (countNovice) {
@@ -600,25 +598,30 @@ public class ScoreController {
         return total;
     }
 
-    public static boolean meetResultsValid(Meet meet) {
+    public static void calculateMeetResultsIfNeeded(Meet meet) {
         if (meet.needsPointsCalc()) {
             calculateMeetResults(meet);
         }
-        return !meet.hasCalcErrors();
     }
 
     public static boolean figuresParticipantHasAllScores(FiguresParticipant fp) {
+        boolean result = true;
         if (fp.getMeet().getSeason().getRulesRevision() < 2) {
             //Regular meets N8U have 2 scores, otherwise 4
             if (fp.getMeet().getType() == 'R' && "N8U".equals(fp.getSwimmer().getLevel().getLevelId())) {
-                return fp.getFiguresScores().size() == 2;
+                result = fp.getFiguresScores().size() == 2;
             } else {
-                return fp.getFiguresScores().size() == 4;
+                result = fp.getFiguresScores().size() == 4;
 
             }
         } else {
-            return fp.getFiguresScores().size() == 4;
+            result = fp.getFiguresScores().size() == 4;
         }
+        BigDecimal ts = fp.getTotalScore();
+        if (ts == null || BigDecimal.ZERO.compareTo(ts) >= 0) {
+            result = false;
+        }
+        return result;
     }
 
     public static void calculateMeetResults(Meet meet) {
@@ -628,16 +631,16 @@ public class ScoreController {
         //Calculate total score for figures participants
         for (FiguresParticipant fp : meet.getFiguresParticipants()) {
             if (fp.getFiguresScores().size() < 4) {
-                calcErrors.add("ERROR: Swimmer #" + fp.getFigureOrder() + " does not have 4 figure scores.");
+                calcErrors.add("ERROR: " + ((fp.getSwimmer().getLevel().isNovice()) ? "NOVICE:" : "INTERMEDIATE:") + " Swimmer #" + fp.getFigureOrder() + " does not have 4 figure scores.");
             }
             for (FigureScore fs : fp.getFiguresScores()) {
                 fs.setTotalScore(totalScore(fs));
                 if (fs.getTotalScore() != null) {
                     if (BigDecimal.ZERO.compareTo(fs.getTotalScore()) >= 0) {
-                        calcErrors.add("WARNING: Swimmer #" + fp.getFigureOrder() + " score for " + getFigure(fs).getName() + " is zero.");
+                        calcErrors.add("WARNING: " + ((fp.getSwimmer().getLevel().isNovice()) ? "NOVICE:" : "INTERMEDIATE:") + " Swimmer #" + fp.getFigureOrder() + " score for " + getFigure(fs).getName() + " is zero.");
                     }
                 } else {
-                    calcErrors.add("ERROR: Swimmer #" + fp.getFigureOrder() + " score for " + getFigure(fs).getName() + " is blank or invalid.");
+                    calcErrors.add("ERROR: " + ((fp.getSwimmer().getLevel().isNovice()) ? "NOVICE:" : "INTERMEDIATE:") + " Swimmer #" + fp.getFigureOrder() + " score for " + getFigure(fs).getName() + " is blank or invalid.");
                 }
             }
             fp.setTotalScore(calculateTotalScore(fp));
@@ -674,7 +677,6 @@ public class ScoreController {
                 BigDecimal totalScore = fp.getTotalScore();
                 if (totalScore == null) {
                     totalScore = BigDecimal.ZERO;
-
                 }
                 if (totalScore.equals(lastTotal) && place > 0) {
                     //tie
@@ -700,7 +702,7 @@ public class ScoreController {
                 if (tieMap.containsKey(fp.getPlace())) {
                     tieCount = tieMap.get(fp.getPlace());
                 }
-                if (fp.getTotalScore() != null) {
+                if (fp.getTotalScore() != null && BigDecimal.ZERO.compareTo(fp.getTotalScore()) < 0) {
                     fp.setPoints(calculateFigurePlacePoints(fp.getPlace(), tieCount, meet.getType()));
                 } else {
                     fp.setPoints(BigDecimal.ZERO);
@@ -726,7 +728,7 @@ public class ScoreController {
             try {
                 points = points.add(fp.getPoints());
             } catch (Exception e) {
-                logger.error("",e);
+                logger.error("", e);
             }
             meetPointsMap.put(team, points);
         }
@@ -802,12 +804,12 @@ public class ScoreController {
     private static void assignRoutinePlaces(Meet meet) {
         List<Routine> routines = new LinkedList<Routine>();
         routines.addAll(meet.getRoutines());
-        for(Routine routine:routines) {
-            if(routine.getTotalScore()==null) {
+        for (Routine routine : routines) {
+            if (routine.getTotalScore() == null) {
                 RoutineManager.calculate(routine);
                 RoutineManager.save(routine);
-                if(routine.getTotalScore()==null) {
-                    meet.getCalcErrors().add("ERROR: Routine \""+routine.getName()+"\" not scored.");
+                if (routine.getTotalScore() == null) {
+                    meet.getCalcErrors().add("ERROR: Routine \"" + routine.getName() + "\" not scored.");
                 }
             }
         }
@@ -947,7 +949,7 @@ public class ScoreController {
             JFileChooser jfc = new JFileChooser();
             jfc.setDialogTitle("Save Meet data file");
             jfc.setFileFilter(new FileNameExtensionFilter("csv file", "csv"));
-            jfc.setSelectedFile(new File(meet.getName()+".csv"));
+            jfc.setSelectedFile(new File(meet.getName() + ".csv"));
             int ret = jfc.showSaveDialog(component);
             if (ret == JFileChooser.APPROVE_OPTION) {
                 component.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));

@@ -126,6 +126,14 @@ public class Meet implements Serializable {
         this.type = type;
     }
 
+    public List<String> getCalcErrors() {
+        return calcErrors;
+    }
+
+    public void setCalcErrors(List<String> calcErrors) {
+        this.calcErrors = calcErrors;
+    }
+
     public Integer getMeetId() {
         return meetId;
     }
@@ -343,14 +351,6 @@ public class Meet implements Serializable {
         this.pointsMap = pointsMap;
     }
 
-    public List<String> getCalcErrors() {
-        return calcErrors;
-    }
-
-    public void setCalcErrors(List<String> calcErrors) {
-        this.calcErrors = calcErrors;
-    }
-
     public boolean isRoutinesOrderGenerated() {
         if (routinesOrderGenerated != null) {
             return routinesOrderGenerated.booleanValue();
@@ -360,7 +360,7 @@ public class Meet implements Serializable {
     }
 
     public void setRoutinesOrderGenerated(boolean routinesOrderGenerated) {
-        this.routinesOrderGenerated = new Boolean(routinesOrderGenerated);
+        this.routinesOrderGenerated = routinesOrderGenerated;
     }
 
     public boolean hasCalcErrors() {
