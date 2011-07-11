@@ -154,13 +154,13 @@ public class SynchroFrame extends javax.swing.JFrame {
         setTabEnabled(Tab.LEAGUE, true);
         if (meet.isValid()) {
             setTabEnabled(SynchroFrame.Tab.SWIMMERS, true);
+            setTabEnabled(Tab.ROUTINES, true);
             updateSwimmerTab();
             if (meet.hasFiguresParticipants(meet)) {
                 if (meet.getFiguresOrderGenerated()) {
                     setSetupStatus(Color.GREEN.darker(), 100);
                     setTabEnabled(Tab.FIGURES_ORDER, true);
                     setTabEnabled(Tab.FIGURES, true);
-                    setTabEnabled(Tab.ROUTINES, true);
                     setTabEnabled(Tab.REPORTS, true);
                     updateFiguresOrderList();
                 } else {
@@ -170,12 +170,12 @@ public class SynchroFrame extends javax.swing.JFrame {
                 setSetupStatus(Color.YELLOW, 45);
                 setTabEnabled(Tab.FIGURES_ORDER, false);
                 setTabEnabled(Tab.FIGURES, false);
-                setTabEnabled(Tab.ROUTINES, false);
                 setTabEnabled(Tab.REPORTS, false);
             }
         } else {
             setSetupStatus(Color.RED, 5);
             setTabEnabled(SynchroFrame.Tab.SWIMMERS, false);
+            setTabEnabled(Tab.ROUTINES, false);
         }
 
     }
