@@ -123,8 +123,8 @@ public class FigureScore implements Serializable {
     @Basic(optional = true)
     @Column(name = "totalScore", nullable = true, precision = 2, scale = 1)
     public BigDecimal getTotalScore() {
-        if(totalScore==null) {
-            totalScore=ScoreController.totalScore(this);
+        if (totalScore == null) {
+            totalScore = ScoreController.totalScore(this);
         }
         return totalScore;
     }
@@ -173,15 +173,36 @@ public class FigureScore implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof FigureScore)) {
             return false;
         }
         FigureScore other = (FigureScore) object;
-        if ((this.figureScoreId == null && other.figureScoreId != null) || (this.figureScoreId != null && !this.figureScoreId.equals(other.figureScoreId))) {
-            return false;
+        if (this.figureScoreId != null && this.figureScoreId.equals(other.figureScoreId)) {
+            return true;
+        } else {
+            if ((this.score1 == null && other.score1 != null) || (this.score1 != null && !this.score1.equals(other.score1))) {
+                return false;
+            }
+            if ((this.score2 == null && other.score2 != null) || (this.score2 != null && !this.score2.equals(other.score2))) {
+                return false;
+            }
+            if ((this.score3 == null && other.score3 != null) || (this.score3 != null && !this.score3.equals(other.score3))) {
+                return false;
+            }
+            if ((this.score4 == null && other.score4 != null) || (this.score4 != null && !this.score4.equals(other.score4))) {
+                return false;
+            }
+            if ((this.score5 == null && other.score5 != null) || (this.score5 != null && !this.score5.equals(other.score5))) {
+                return false;
+            }
+            if ((this.penalty == null && other.penalty != null) || (this.penalty != null && !this.penalty.equals(other.penalty))) {
+                return false;
+            }
+            if (this.station != other.station) {
+                return false;
+            }
+            return true;
         }
-        return true;
     }
 
     @Override

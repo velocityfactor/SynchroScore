@@ -55,7 +55,7 @@ public class NumMeets {
 
     public static List<NumMeets> generateList(List<Swimmer> swimmers, Season season) {
         EntityManager entityManager = ScoreApp.getEntityManager();
-        Query numMeetsQuery = entityManager.createNamedQuery("FiguresParticipant.countBySeasonAndSwimmerAndHasScore");
+        Query numMeetsQuery = entityManager.createNamedQuery("FiguresParticipant.countBySeasonAndSwimmerAndHasScoreAndRegularMeet");
         ArrayList<NumMeets> numMeetsList = new ArrayList<NumMeets>();
         for(Swimmer swimmer:swimmers) {
             numMeetsQuery.setParameter("swimmer", swimmer);

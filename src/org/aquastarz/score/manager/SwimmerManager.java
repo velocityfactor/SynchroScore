@@ -51,6 +51,29 @@ public class SwimmerManager {
         return swimmer;
     }
 
+    public static String findNameLikeName(String firstName, String lastName, Season season) {
+        Query swimmerQuery = ScoreApp.getEntityManager().createQuery("SELECT s FROM Swimmer s where upper(s.firstName) like :firstName and upper(s.lastName) like :lastName and s.season = :season");
+        swimmerQuery.setParameter("firstName", firstName.toUpperCase() + "%");
+        swimmerQuery.setParameter("lastName", lastName.toUpperCase() + "%");
+        swimmerQuery.setParameter("season", season);
+        Swimmer swimmer = null;
+        try {
+            List<Swimmer> swimmers = (List<Swimmer>) swimmerQuery.getResultList();
+            if (swimmers.isEmpty() || swimmers.size() > 1) {
+                return null;
+            } else {
+                swimmer = swimmers.get(0);
+            }
+        } catch (Exception e) {
+            logger.error("Query error", e);
+        }
+        if (swimmer == null) {
+            return null;
+        } else {
+            return swimmer.getFirstName() + " " + swimmer.getLastName();
+        }
+    }
+
     public static List<Swimmer> getSwimmers(Team team) {
         Query swimmerQuery = ScoreApp.getEntityManager().createNamedQuery("Swimmer.findByTeamIdAndSeasonOrderByName");
         swimmerQuery.setParameter("teamId", team.getTeamId());

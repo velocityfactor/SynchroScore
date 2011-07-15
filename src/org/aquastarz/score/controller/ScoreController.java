@@ -866,8 +866,20 @@ public class ScoreController {
         EntityManager em = ScoreApp.getEntityManager();
         em.getTransaction().begin();
         if (meet.getType() == 'C') {
+            HashMap<String, Integer> tieCountMap = new HashMap<String, Integer>();
             for (Routine routine : meet.getRoutines()) {
-                routine.setPoints(RoutineManager.calcChampsPlacePoints(routine.getPlace(), routine.getRoutineType()));
+                String key = routine.getRoutineType() + "-" + routine.getLevel().getLevelId() + "-" + routine.getPlace().toString();
+                Integer tieCount = tieCountMap.get(key);
+                if (tieCount == null) {
+                    tieCount = 1;
+                } else {
+                    tieCount++;
+                }
+                tieCountMap.put(key, tieCount);
+            }
+            for (Routine routine : meet.getRoutines()) {
+                String key = routine.getRoutineType() + "-" + routine.getLevel().getLevelId() + "-" + routine.getPlace().toString();
+                routine.setPoints(RoutineManager.calcChampsPlacePoints(routine.getPlace(), routine.getRoutineType(), tieCountMap.get(key)));
                 em.persist(routine);
             }
         } else {
