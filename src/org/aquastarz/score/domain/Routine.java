@@ -400,10 +400,56 @@ public class Routine implements Serializable {
             return false;
         }
         final Routine other = (Routine) obj;
-        if (this.routineId != other.routineId && (this.routineId == null || !this.routineId.equals(other.routineId))) {
-            return false;
+        if (this.routineId != null && this.routineId.equals(other.routineId)) {
+            return true;
+        } else {
+            if ((this.aScore1 == null && other.aScore1 != null) || (this.aScore1 != null && !this.aScore1.equals(other.aScore1))) {
+                return false;
+            }
+            if ((this.aScore2 == null && other.aScore2 != null) || (this.aScore2 != null && !this.aScore2.equals(other.aScore2))) {
+                return false;
+            }
+            if ((this.aScore3 == null && other.aScore3 != null) || (this.aScore3 != null && !this.aScore3.equals(other.aScore3))) {
+                return false;
+            }
+            if ((this.aScore4 == null && other.aScore4 != null) || (this.aScore4 != null && !this.aScore4.equals(other.aScore4))) {
+                return false;
+            }
+            if ((this.aScore5 == null && other.aScore5 != null) || (this.aScore5 != null && !this.aScore5.equals(other.aScore5))) {
+                return false;
+            }
+            if ((this.aScore6 == null && other.aScore6 != null) || (this.aScore6 != null && !this.aScore6.equals(other.aScore6))) {
+                return false;
+            }
+            if ((this.aScore7 == null && other.aScore7 != null) || (this.aScore7 != null && !this.aScore7.equals(other.aScore7))) {
+                return false;
+            }
+            if ((this.tScore1 == null && other.tScore1 != null) || (this.tScore1 != null && !this.tScore1.equals(other.tScore1))) {
+                return false;
+            }
+            if ((this.tScore2 == null && other.tScore2 != null) || (this.tScore2 != null && !this.tScore2.equals(other.tScore2))) {
+                return false;
+            }
+            if ((this.tScore3 == null && other.tScore3 != null) || (this.tScore3 != null && !this.tScore3.equals(other.tScore3))) {
+                return false;
+            }
+            if ((this.tScore4 == null && other.tScore4 != null) || (this.tScore4 != null && !this.tScore4.equals(other.tScore4))) {
+                return false;
+            }
+            if ((this.tScore5 == null && other.tScore5 != null) || (this.tScore5 != null && !this.tScore5.equals(other.tScore5))) {
+                return false;
+            }
+            if ((this.tScore6 == null && other.tScore6 != null) || (this.tScore6 != null && !this.tScore6.equals(other.tScore6))) {
+                return false;
+            }
+            if ((this.tScore7 == null && other.tScore7 != null) || (this.tScore7 != null && !this.tScore7.equals(other.tScore7))) {
+                return false;
+            }
+            if ((this.penalty == null && other.penalty != null) || (this.penalty != null && !this.penalty.equals(other.penalty))) {
+                return false;
+            }
+            return true;
         }
-        return true;
     }
 
     @Override
@@ -412,6 +458,4 @@ public class Routine implements Serializable {
         hash = 97 * hash + (this.routineId != null ? this.routineId.hashCode() : 0);
         return hash;
     }
-
-    
 }

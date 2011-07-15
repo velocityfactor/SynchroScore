@@ -19,6 +19,7 @@
 // </editor-fold>
 package org.aquastarz.score.gui;
 
+import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.beans.Beans;
 import java.beans.PropertyChangeEvent;
@@ -28,17 +29,25 @@ import java.math.BigDecimal;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import org.aquastarz.score.ScoreApp;
 import org.aquastarz.score.controller.RoutinesController;
 import org.aquastarz.score.domain.Routine;
 import org.aquastarz.score.domain.RoutineLevel;
 import org.aquastarz.score.domain.Team;
 import org.aquastarz.score.gui.event.RoutinesPanelEventListener;
+import org.aquastarz.score.manager.RoutineManager;
+import org.aquastarz.score.manager.SwimmerManager;
 import org.aquastarz.score.util.TwoDigitScore;
 
 public class RoutinesPanel extends javax.swing.JPanel {
 
+    private static org.apache.log4j.Logger logger =
+            org.apache.log4j.Logger.getLogger(RoutinesPanel.class.getName());
     private boolean modified = false;
     private List<Routine> routines = null;
     private Routine curRoutine = null;
@@ -55,7 +64,6 @@ public class RoutinesPanel extends javax.swing.JPanel {
             updateCombos();
         }
     }
-
     //Event Handling
     protected javax.swing.event.EventListenerList listenerList =
             new javax.swing.event.EventListenerList();
@@ -98,19 +106,24 @@ public class RoutinesPanel extends javax.swing.JPanel {
     }
 
     private void updateRoutinesList() {
-        Object o = routineList.getSelectedValue();
-        Routine selectedRoutine = null;
-        if (o instanceof Routine) {
-            selectedRoutine = (Routine) o;
-        }
+        //Object o = routineList.getSelectedValue();
+        int oldIndex = routineList.getSelectedIndex();
+        int oldCount = routineList.getModel().getSize();
+//        Routine selectedRoutine = null;
+//        if (o instanceof Routine) {
+//            selectedRoutine = (Routine) o;
+//        }
         routines = controller.getRoutinesList();
         DefaultListModel dlm = new DefaultListModel();
         for (Routine routine : routines) {
             dlm.addElement(routine);
         }
         routineList.setModel(dlm);
-        if (selectedRoutine != null) {
-            routineList.setSelectedValue(selectedRoutine, true);
+//        if (selectedRoutine != null) {
+//            //routineList.setSelectedValue(selectedRoutine, true);
+//        }
+        if(oldCount==routineList.getModel().getSize()) {
+            routineList.setSelectedIndex(oldIndex);
         }
     }
 
@@ -331,6 +344,10 @@ public class RoutinesPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, e.getMessage(), "Entry Error", JOptionPane.WARNING_MESSAGE);
             return false;
         }
+        String spellingErrors = RoutineManager.getMisspelledNames(routine);
+        if (!spellingErrors.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please check spelling of " + spellingErrors, "Spell check", JOptionPane.WARNING_MESSAGE);
+        }
         return true;
     }
 
@@ -481,6 +498,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
         numSwimmers = new javax.swing.JTextField();
         jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
+        spellCheckButton = new javax.swing.JButton();
 
         routineList.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -494,7 +512,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(routineList);
 
-        addButton.setFont(new java.awt.Font("Tahoma", 0, 14));
+        addButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         addButton.setText("Add");
         addButton.setFocusable(false);
         addButton.addActionListener(new java.awt.event.ActionListener() {
@@ -503,7 +521,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
             }
         });
 
-        deleteButton.setFont(new java.awt.Font("Tahoma", 0, 14));
+        deleteButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         deleteButton.setText("Delete");
         deleteButton.setFocusable(false);
         deleteButton.addActionListener(new java.awt.event.ActionListener() {
@@ -560,10 +578,11 @@ public class RoutinesPanel extends javax.swing.JPanel {
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel5.setText("Swimmer Names");
 
-        names1.setFont(new java.awt.Font("Tahoma", 0, 14));
+        names1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         names1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 handleFieldChange(evt);
+                swimmerSearch(evt);
             }
         });
 
@@ -571,6 +590,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
         names2.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 handleFieldChange(evt);
+                swimmerSearch(evt);
             }
         });
 
@@ -716,7 +736,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
         totalScore.setFont(new java.awt.Font("Tahoma", 0, 14));
         totalScore.setFocusable(false);
 
-        printButton.setFont(new java.awt.Font("Tahoma", 0, 14));
+        printButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         printButton.setText("Print");
         printButton.setFocusable(false);
         printButton.addActionListener(new java.awt.event.ActionListener() {
@@ -725,7 +745,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
             }
         });
 
-        randomizeButton.setFont(new java.awt.Font("Tahoma", 0, 14));
+        randomizeButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         randomizeButton.setText("Randomize");
         randomizeButton.setFocusable(false);
         randomizeButton.addActionListener(new java.awt.event.ActionListener() {
@@ -758,6 +778,14 @@ public class RoutinesPanel extends javax.swing.JPanel {
         jLabel17.setText("# Swmrs");
 
         jLabel18.setText("0.5, 1.0, etc.");
+
+        spellCheckButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        spellCheckButton.setText("Spell Check");
+        spellCheckButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                spellCheckButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -844,14 +872,17 @@ public class RoutinesPanel extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(totalScore, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))))
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(addButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(deleteButton)
+                .addGap(6, 6, 6)
+                .addComponent(spellCheckButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(randomizeButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(printButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 268, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 151, Short.MAX_VALUE)
                 .addComponent(saveButton)
                 .addContainerGap())
         );
@@ -865,85 +896,82 @@ public class RoutinesPanel extends javax.swing.JPanel {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jScrollPane1)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel17)
+                            .addComponent(jLabel3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(levelCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(routineTypeCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(teamCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(numSwimmers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(title, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(names1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(names2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(35, 35, 35)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel10)
+                            .addComponent(jLabel11)
+                            .addComponent(jLabel12)
+                            .addComponent(jLabel13)
+                            .addComponent(jLabel14))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(scoreTJ1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(scoreTJ2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(scoreTJ3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(scoreTJ4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(scoreTJ5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(scoreTJ6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(scoreTJ7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel7)
+                            .addComponent(scoreAJ1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(scoreAJ2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(scoreAJ3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(scoreAJ4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(scoreAJ5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(scoreAJ6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(scoreAJ7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(penalty)
+                            .addComponent(totalScore)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel15)
+                                .addComponent(jLabel16)))
+                        .addGap(16, 16, 16)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jScrollPane1)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel1)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel17)
-                                    .addComponent(jLabel3))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(levelCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(routineTypeCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(teamCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(numSwimmers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(title, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(names1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(names2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(35, 35, 35)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel8)
-                                    .addComponent(jLabel9)
-                                    .addComponent(jLabel10)
-                                    .addComponent(jLabel11)
-                                    .addComponent(jLabel12)
-                                    .addComponent(jLabel13)
-                                    .addComponent(jLabel14))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel6)
-                                    .addComponent(scoreTJ1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(scoreTJ2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(scoreTJ3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(scoreTJ4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(scoreTJ5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(scoreTJ6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(scoreTJ7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel7)
-                                    .addComponent(scoreAJ1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(scoreAJ2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(scoreAJ3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(scoreAJ4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(scoreAJ5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(scoreAJ6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(scoreAJ7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jLabel15)
-                                        .addComponent(penalty)
-                                        .addComponent(jLabel16)
-                                        .addComponent(totalScore)))
-                                .addGap(16, 16, 16)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(deleteButton)
-                                    .addComponent(randomizeButton)
-                                    .addComponent(printButton)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(saveButton))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(deleteButton)
+                            .addComponent(randomizeButton)
+                            .addComponent(printButton)
+                            .addComponent(addButton)
+                            .addComponent(spellCheckButton)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(352, 352, 352)
-                        .addComponent(addButton)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(saveButton)))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {levelCombo, routineTypeCombo, teamCombo});
@@ -1001,8 +1029,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
         if (modified && curRoutine != null) {
             save();
-            updateRoutinesList();
-            routineList.setSelectedValue(curRoutine, true);
+//            routineList.setSelectedValue(curRoutine, true);
             updateComponentEnabledStatus();
             fireRoutineSaved();
         }
@@ -1256,6 +1283,51 @@ public class RoutinesPanel extends javax.swing.JPanel {
             saveButton.doClick();
         }
     }//GEN-LAST:event_saveButtonKeyPressed
+
+    private void swimmerSearch(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_swimmerSearch
+        try {
+            if (evt.getKeyChar() == ',') {
+                JTextField tf = (JTextField) evt.getComponent();
+                String s = tf.getText();
+                if (tf.getCaretPosition() == s.length()) {
+                    int prevComma = s.lastIndexOf(',', s.length() - 1) + 1;
+                    String search = s.substring(prevComma, s.length()).trim();
+                    String result;
+                    int halfLen = search.length() / 2;
+                    if (halfLen * 2 == search.length()) {
+                        String firstName = search.substring(0, halfLen);
+                        String lastName = search.substring(halfLen);
+                        result = SwimmerManager.findNameLikeName(firstName, lastName, ScoreApp.getCurrentSeason());
+                        if (result == null) {
+                            result = search;
+                        }
+                    } else {
+                        result = search;
+                    }
+                    if (prevComma == 0) {
+                        tf.setText(result);
+                    } else {
+                        tf.setText(s.substring(0, prevComma) + " " + result);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            logger.error("Swimmer search failed", e);
+        }
+    }//GEN-LAST:event_swimmerSearch
+
+    private void spellCheckButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_spellCheckButtonActionPerformed
+        String spellingErrors = RoutineManager.getMisspelledNamesHtmlMessage(controller.getRoutinesList());
+        if (!spellingErrors.isEmpty()) {
+            JScrollPane scrollPane = new JScrollPane(new JLabel(spellingErrors));
+            scrollPane.setPreferredSize(new Dimension(600, 100));
+            Object message = scrollPane;
+            JOptionPane.showMessageDialog(this,
+                    message,
+                    "Spell Check",
+                    JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_spellCheckButtonActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
     private javax.swing.JButton deleteButton;
@@ -1302,6 +1374,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
     private javax.swing.JTextField scoreTJ5;
     private javax.swing.JTextField scoreTJ6;
     private javax.swing.JTextField scoreTJ7;
+    private javax.swing.JButton spellCheckButton;
     private javax.swing.JComboBox teamCombo;
     private javax.swing.JTextField title;
     private javax.swing.JTextField totalScore;

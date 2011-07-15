@@ -415,8 +415,9 @@
                               <Component id="reportIntRoutineLabels" linkSize="3" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="exportMeetDataButton" alignment="0" max="32767" attributes="1"/>
                                   <Component id="reportAllRoutineLabels" linkSize="3" alignment="0" max="32767" attributes="1"/>
+                                  <Component id="exportMeetDataButton" alignment="0" max="32767" attributes="1"/>
+                                  <Component id="compareMeetButton" alignment="0" max="32767" attributes="1"/>
                               </Group>
                           </Group>
                       </Group>
@@ -467,7 +468,9 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="exportMeetDataButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="325" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="compareMeetButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="296" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -599,6 +602,14 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="exportMeetDataButtonActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="compareMeetButton">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Compare Meet"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="compareMeetButtonActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>
