@@ -25,6 +25,7 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ArrayList;
@@ -42,10 +43,12 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -389,7 +392,7 @@ public class SynchroFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this,
                     message,
                     "Errors calculating meet results",
-                    JOptionPane.OK_OPTION);
+                    JOptionPane.WARNING_MESSAGE);
         }
     }
 
@@ -443,6 +446,7 @@ public class SynchroFrame extends javax.swing.JFrame {
         reportAllRoutines = new javax.swing.JButton();
         reportAllRoutineLabels = new javax.swing.JButton();
         exportMeetDataButton = new javax.swing.JButton();
+        compareMeetButton = new javax.swing.JButton();
         leaguePanel = new javax.swing.JPanel();
         leaguePrintButton = new javax.swing.JButton();
         swimmerScrollPane = new javax.swing.JScrollPane();
@@ -804,6 +808,13 @@ public class SynchroFrame extends javax.swing.JFrame {
             }
         });
 
+        compareMeetButton.setText("Compare Meet");
+        compareMeetButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                compareMeetButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout reportPanelLayout = new javax.swing.GroupLayout(reportPanel);
         reportPanel.setLayout(reportPanelLayout);
         reportPanelLayout.setHorizontalGroup(
@@ -834,8 +845,9 @@ public class SynchroFrame extends javax.swing.JFrame {
                         .addComponent(reportIntRoutineLabels)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(reportPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(reportAllRoutineLabels, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(exportMeetDataButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(reportAllRoutineLabels, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(compareMeetButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(308, Short.MAX_VALUE))
         );
 
@@ -878,7 +890,9 @@ public class SynchroFrame extends javax.swing.JFrame {
                     .addComponent(reportAllRoutineLabels))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(exportMeetDataButton)
-                .addContainerGap(325, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(compareMeetButton)
+                .addContainerGap(296, Short.MAX_VALUE))
         );
 
         tabPane.addTab("Reports", reportPanel);
@@ -961,7 +975,7 @@ public class SynchroFrame extends javax.swing.JFrame {
             }
         });
 
-        numMeetsPrintButton.setFont(new java.awt.Font("Tahoma", 0, 14));
+        numMeetsPrintButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         numMeetsPrintButton.setText("# Meets");
         numMeetsPrintButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1513,8 +1527,39 @@ public class SynchroFrame extends javax.swing.JFrame {
     private void exportMeetDataButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportMeetDataButtonActionPerformed
         ScoreController.exportMeetData(meet, this);
     }//GEN-LAST:event_exportMeetDataButtonActionPerformed
+
+    private void compareMeetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_compareMeetButtonActionPerformed
+        JFileChooser jfc = new JFileChooser();
+        jfc.setDialogTitle("Open Meet data file");
+        jfc.setFileFilter(new FileNameExtensionFilter("csv file", "csv"));
+        int ret = jfc.showOpenDialog(this);
+        if (ret == JFileChooser.APPROVE_OPTION) {
+            setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            Meet meet2 = MeetManager.readMeet(jfc.getSelectedFile());
+            List<String> errors = MeetManager.compareMeets(meet, meet2);
+            setCursor(Cursor.getDefaultCursor());
+            if (errors.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Data matches.");
+            } else {
+                StringBuilder sb = new StringBuilder();
+                sb.append("<html><p>Errors found:</p><p>");
+                for (String s : errors) {
+                    sb.append(s).append("<br>");
+                }
+                sb.append("</p></html>");
+                JScrollPane scrollPane = new JScrollPane(new JLabel(sb.toString()));
+                scrollPane.setPreferredSize(new Dimension(600, 100));
+                Object message = scrollPane;
+                JOptionPane.showMessageDialog(this,
+                        message,
+                        "Comparison Errors",
+                        JOptionPane.WARNING_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_compareMeetButtonActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton clearFigureScoreButton;
+    private javax.swing.JButton compareMeetButton;
     private javax.swing.JButton exportMeetDataButton;
     private javax.swing.JScrollPane figureOrderScrollPane;
     private javax.swing.JRadioButton figureOrderSortByName;
