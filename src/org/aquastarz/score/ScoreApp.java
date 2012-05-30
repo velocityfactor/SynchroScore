@@ -23,8 +23,10 @@ import java.io.File;
 import java.util.Calendar;
 import java.util.Map;
 import java.util.TreeMap;
+
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+
 import org.aquastarz.score.config.Bootstrap;
 import org.aquastarz.score.controller.ScoreController;
 import org.aquastarz.score.domain.Season;
@@ -33,137 +35,148 @@ import org.aquastarz.score.gui.MeetSelectionDialog;
 
 public class ScoreApp {
 
-    private static org.apache.log4j.Logger logger =
-            org.apache.log4j.Logger.getLogger(ScoreApp.class.getName());
-    private static final String productionFilename = System.getProperty("user.home") + "/SynchroScore";
-    private static final String productionUrl = "jdbc:hsqldb:file:" + productionFilename + "/Synchro;write_delay=false";
-    private static final String testUrl = "jdbc:hsqldb:mem:Synchro";
-    private static String dbUrl = null;
-    private static Map props = null;
-    private static EntityManager entityManager = null;
+	private static org.apache.log4j.Logger logger = org.apache.log4j.Logger
+			.getLogger(ScoreApp.class.getName());
+	private static final String productionFilename = System
+			.getProperty("user.home") + "/SynchroScore";
+	private static final String productionUrl = "jdbc:hsqldb:file:"
+			+ productionFilename + "/Synchro;write_delay=false";
+	private static final String testUrl = "jdbc:hsqldb:mem:Synchro";
+	private static String dbUrl = null;
+	private static Map props = null;
+	private static EntityManager entityManager = null;
 
-    public static EntityManager getEntityManager() {
-        if (entityManager == null) {
-            if (dbUrl == null) { //test mode
-                dbUrl = testUrl;
-                Map initProps = new TreeMap();
-                initProps.put("hibernate.hbm2ddl.auto", "create-drop");
-                initProps.put("hibernate.connection.url", dbUrl);
-                entityManager = javax.persistence.Persistence.createEntityManagerFactory("synchroPU", initProps).createEntityManager();
-            } else {
-                if (props == null) {
-                    props = new TreeMap();
-                    props.put("hibernate.hbm2ddl.auto", "update");
-                    props.put("hibernate.connection.url", dbUrl);
-                }
-                entityManager = getNewEntityManager();
-            }
-        }
-        return entityManager;
-    }
+	public static EntityManager getEntityManager() {
+		if (entityManager == null) {
+			if (dbUrl == null) { // test mode
+				dbUrl = testUrl;
+				Map initProps = new TreeMap();
+				initProps.put("hibernate.hbm2ddl.auto", "create-drop");
+				initProps.put("hibernate.connection.url", dbUrl);
+				entityManager = javax.persistence.Persistence
+						.createEntityManagerFactory("synchroPU", initProps)
+						.createEntityManager();
+			} else {
+				if (props == null) {
+					props = new TreeMap();
+					props.put("hibernate.hbm2ddl.auto", "update");
+					props.put("hibernate.connection.url", dbUrl);
+				}
+				entityManager = getNewEntityManager();
+			}
+		}
+		return entityManager;
+	}
 
-    public static EntityManager getNewEntityManager() {
-        return javax.persistence.Persistence.createEntityManagerFactory("synchroPU", props).createEntityManager();
-    }
-    private static Season curSeason = null;
+	public static EntityManager getNewEntityManager() {
+		return javax.persistence.Persistence.createEntityManagerFactory(
+				"synchroPU", props).createEntityManager();
+	}
 
-    public static Season getCurrentSeason() {
-        if (curSeason == null) {
-            EntityManager entityManager = getEntityManager();
-            Query query = entityManager.createNamedQuery("Season.findByName");
-            query.setParameter("name", "2009");
-            try {
-                curSeason = (Season) query.getSingleResult();
-            } catch (Exception e) {
-            }
-            if (curSeason == null) {
-                curSeason = new Season("2009");
-                entityManager.getTransaction().begin();
-                entityManager.persist(curSeason);
-                entityManager.getTransaction().commit();
-            }
-        }
-        return curSeason;
-    }
+	private static Season curSeason = null;
 
-    public static void setCurrentSeason(Season season) {
-        curSeason = season;
-    }
+	public static Season getCurrentSeason() {
+		if (curSeason == null) {
+			EntityManager entityManager = getEntityManager();
+			Query query = entityManager.createNamedQuery("Season.findByName");
+			query.setParameter("name", "2009");
+			try {
+				curSeason = (Season) query.getSingleResult();
+			} catch (Exception e) {
+			}
+			if (curSeason == null) {
+				curSeason = new Season("2009");
+				entityManager.getTransaction().begin();
+				entityManager.persist(curSeason);
+				entityManager.getTransaction().commit();
+			}
+		}
+		return curSeason;
+	}
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-    	logger.info("SynchroScore version "+getVersion()+" Starting...");
-        Thread.setDefaultUncaughtExceptionHandler(new LoggingExceptionHandler());
-    	
-        dbUrl = productionUrl;
-        initDB();
-        getEntityManager();
+	public static void setCurrentSeason(Season season) {
+		curSeason = season;
+	}
 
-        // Set up hooks to shutdown and signals.
-        Runtime.getRuntime().addShutdownHook(new AppSignalHandler());
-        AppSignalHandler.installAll();
+	/**
+	 * @param args
+	 *            the command line arguments
+	 */
+	public static void main(String[] args) {
+		logger.info("SynchroScore version " + getVersion() + " Starting...");
+		Thread.setDefaultUncaughtExceptionHandler(new LoggingExceptionHandler());
 
-        findCurrentSeason();
+		dbUrl = productionUrl;
+		initDB();
+		getEntityManager();
 
-        MeetSelectionDialog dialog = new MeetSelectionDialog(new javax.swing.JFrame(), true);
+		// Set up hooks to shutdown and signals.
+		Runtime.getRuntime().addShutdownHook(new AppSignalHandler());
+		AppSignalHandler.installAll();
 
-        int ret = dialog.showMeetSelectionDialog();
-        if (ret == MeetSelectionDialog.MSD_CANCEL) {
-            System.exit(0);
-        } else if (ret == MeetSelectionDialog.MSD_MAINTENANCE) {
-            java.awt.EventQueue.invokeLater(new Runnable() {
+		findCurrentSeason();
 
-                public void run() {    	
-                	logger.info("Start Maintenance");
-                	new MaintenanceFrame().setVisible(true);
-                }
-            });
-        } else {
-        	logger.info("Start ScoreController");
-            new ScoreController(dialog.getSelectedMeet());
-        }
-    }
+		MeetSelectionDialog dialog = new MeetSelectionDialog(
+				new javax.swing.JFrame(), true);
 
-    public static void initDB() {
-        File db = new File(productionFilename);
+		int ret = dialog.showMeetSelectionDialog();
+		if (ret == MeetSelectionDialog.MSD_CANCEL) {
+			System.exit(0);
+		} else if (ret == MeetSelectionDialog.MSD_MAINTENANCE) {
+			java.awt.EventQueue.invokeLater(new Runnable() {
 
-        if (!db.exists()) {
-            logger.info("No db file found, create...");
-            db.mkdir();
-            Map initProps = new TreeMap();
-            initProps.put("hibernate.hbm2ddl.auto", "create");
-            initProps.put("hibernate.connection.url", dbUrl);
-            EntityManager entityManager = javax.persistence.Persistence.createEntityManagerFactory("synchroPU", initProps).createEntityManager();
-            entityManager.close();
-        }
-    }
+				@Override
+				public void run() {
+					logger.info("Start Maintenance");
+					new MaintenanceFrame().setVisible(true);
+				}
+			});
+		} else {
+			logger.info("Start ScoreController");
+			new ScoreController(dialog.getSelectedMeet());
+		}
+	}
 
-    public static void findCurrentSeason() {
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
+	public static void initDB() {
+		File db = new File(productionFilename);
 
-        EntityManager entityManager = getEntityManager();
-        Query query = entityManager.createNamedQuery("Season.findByName");
-        query.setParameter("name", Integer.toString(year));
-        try {
-            curSeason = (Season) query.getSingleResult();
-            logger.debug("Found Season = " + curSeason.getSeasonId());
-        } catch (Exception e) {
-        }
-        if (curSeason == null) {
-            curSeason = new Season(Integer.toString(year));
-            entityManager.getTransaction().begin();
-            entityManager.persist(curSeason);
-            entityManager.getTransaction().commit();
-            logger.debug("New Season = " + curSeason.getSeasonId());
-            Bootstrap.loadLeagueData();
-        }
+		if (!db.exists()) {
+			logger.info("No db file found, create...");
+			db.mkdir();
+			Map initProps = new TreeMap();
+			initProps.put("hibernate.hbm2ddl.auto", "create");
+			initProps.put("hibernate.connection.url", dbUrl);
+			EntityManager entityManager = javax.persistence.Persistence
+					.createEntityManagerFactory("synchroPU", initProps)
+					.createEntityManager();
+			entityManager.close();
+		}
+	}
 
-    }
+	public static void findCurrentSeason() {
+		Calendar cal = Calendar.getInstance();
+		int year = cal.get(Calendar.YEAR);
 
-    public static String getVersion() {
-        return "1.07";
-    }
+		EntityManager entityManager = getEntityManager();
+		Query query = entityManager.createNamedQuery("Season.findByName");
+		query.setParameter("name", Integer.toString(year));
+		try {
+			curSeason = (Season) query.getSingleResult();
+			logger.debug("Found Season = " + curSeason.getSeasonId());
+		} catch (Exception e) {
+		}
+		if (curSeason == null) {
+			curSeason = new Season(Integer.toString(year));
+			entityManager.getTransaction().begin();
+			entityManager.persist(curSeason);
+			entityManager.getTransaction().commit();
+			logger.debug("New Season = " + curSeason.getSeasonId());
+			Bootstrap.loadLeagueData();
+		}
+
+	}
+
+	public static String getVersion() {
+		return "1.08";
+	}
 }
