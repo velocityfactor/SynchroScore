@@ -1,8 +1,8 @@
 <launch4jConfig>
   <dontWrapJar>false</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>release\SynchroScore107.jar</jar>
-  <outfile>release\SynchroScore107.exe</outfile>
+  <jar>dist\SynchroScore108.jar</jar>
+  <outfile>dist\SynchroScore108.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
   <chdir></chdir>
@@ -26,12 +26,12 @@
     <timeoutErr>true</timeoutErr>
   </splash>
   <versionInfo>
-    <fileVersion>1.07.0.0</fileVersion>
-    <txtFileVersion>1.07</txtFileVersion>
+    <fileVersion>1.08.0.0</fileVersion>
+    <txtFileVersion>1.08</txtFileVersion>
     <fileDescription>Synchronized Swimming Scoring Application</fileDescription>
-    <copyright>(C) Shayne Hughes 2011</copyright>
-    <productVersion>0.07.0.0</productVersion>
-    <txtProductVersion>1.07</txtProductVersion>
+    <copyright>(C) Shayne Hughes 2012</copyright>
+    <productVersion>0.08.0.0</productVersion>
+    <txtProductVersion>1.08</txtProductVersion>
     <productName>SynchroScore</productName>
     <companyName></companyName>
     <internalName>SynchroScore</internalName>
