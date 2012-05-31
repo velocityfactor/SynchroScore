@@ -173,7 +173,7 @@ public class ScoreApp {
 			logger.debug("New Season = " + curSeason.getSeasonId());
 			Bootstrap.loadLeagueData();
 		}
-
+		Bootstrap.loadLateLeagueData();
 	}
 
 	public static String getVersion() {
