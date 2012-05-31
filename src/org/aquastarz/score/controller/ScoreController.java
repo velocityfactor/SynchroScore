@@ -99,6 +99,45 @@ public class ScoreController {
 				meet.setInt2Figure(FigureManager.findById("355d"));
 				meet.setInt3Figure(null);
 				meet.setInt4Figure(null);
+
+				// 2012 Schedule
+				if ("June 6, 2012".equals(meet.getMeetDate())) { // Group 3
+					meet.setNov3Figure(FigureManager.findById("315"));
+					meet.setNov4Figure(FigureManager.findById("344"));
+					meet.setInt3Figure(FigureManager.findById("240"));
+					meet.setInt4Figure(FigureManager.findById("346"));
+				}
+				if ("June 13, 2012".equals(meet.getMeetDate())) { // Group 2
+					meet.setNov3Figure(FigureManager.findById("349"));
+					meet.setNov4Figure(FigureManager.findById("321"));
+					meet.setInt3Figure(FigureManager.findById("140"));
+					meet.setInt4Figure(FigureManager.findById("420"));
+				}
+				if ("June 20, 2012".equals(meet.getMeetDate())) { // Group 1
+					meet.setNov3Figure(FigureManager.findById("301"));
+					meet.setNov4Figure(FigureManager.findById("361"));
+					meet.setInt3Figure(FigureManager.findById("311a"));
+					meet.setInt4Figure(FigureManager.findById("326"));
+				}
+				if ("June 27, 2012".equals(meet.getMeetDate())) { // Group 2
+					meet.setNov3Figure(FigureManager.findById("349"));
+					meet.setNov4Figure(FigureManager.findById("321"));
+					meet.setInt3Figure(FigureManager.findById("140"));
+					meet.setInt4Figure(FigureManager.findById("420"));
+				}
+				if ("July 11, 2012".equals(meet.getMeetDate())) { // Group 1
+					meet.setNov3Figure(FigureManager.findById("301"));
+					meet.setNov4Figure(FigureManager.findById("361"));
+					meet.setInt3Figure(FigureManager.findById("311a"));
+					meet.setInt4Figure(FigureManager.findById("326"));
+				}
+				if ("July 21, 2012".equals(meet.getMeetDate())) { // Group 2
+					meet.setNov3Figure(FigureManager.findById("349"));
+					meet.setNov4Figure(FigureManager.findById("321"));
+					meet.setInt3Figure(FigureManager.findById("140"));
+					meet.setInt4Figure(FigureManager.findById("420"));
+				}
+
 				transaction.commit();
 			} catch (Exception e) {
 				logger.error("Error creating new meet.", e);
