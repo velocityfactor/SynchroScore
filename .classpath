@@ -31,6 +31,7 @@
 	<classpathentry kind="lib" path="lib/log4j-1.2.14.jar"/>
 	<classpathentry kind="lib" path="lib/opencsv-2.1.jar"/>
 	<classpathentry kind="lib" path="lib/swingx-2009_02_01.jar"/>
+	<classpathentry kind="lib" path="lib/iText-2.1.7.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
