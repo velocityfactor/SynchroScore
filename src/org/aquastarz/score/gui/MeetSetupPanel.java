@@ -22,6 +22,8 @@ package org.aquastarz.score.gui;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Vector;
 
@@ -142,6 +144,14 @@ public class MeetSetupPanel extends javax.swing.JPanel {
 
 	private void fillFigureCombo(JComboBox cb, List<Figure> figures) {
 		DefaultComboBoxModel cbm = new DefaultComboBoxModel();
+		Collections.sort(figures, new Comparator<Figure>() {
+
+			@Override
+			public int compare(Figure o1, Figure o2) {
+				return o1.getName().compareTo(o2.getName());
+			}
+
+		});
 		for (Figure f : figures) {
 			cbm.addElement(f);
 		}
