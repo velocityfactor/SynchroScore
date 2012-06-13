@@ -31,6 +31,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 
 import org.aquastarz.score.domain.Figure;
@@ -1065,6 +1066,23 @@ public class MeetSetupPanel extends javax.swing.JPanel {
 
 	private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_saveButtonActionPerformed
 		logger.info("Save meet start.");
+		List<Team> op = new ArrayList<Team>();
+		for (int i = 0; i < opponents.getModel().getSize(); i++) {
+			CheckListItem cli = (CheckListItem) opponents.getModel()
+					.getElementAt(i);
+			if (cli.isSelected())
+				op.add((Team) cli.getItem());
+		}
+		if (op.size() < 1 || op.contains(homeTeam.getSelectedItem())) {
+			JOptionPane
+					.showMessageDialog(
+							this,
+							"You must select an opposing team, and the home team cannot be selected as an opposing team.",
+							"Invalid opposing team selection",
+							JOptionPane.ERROR_MESSAGE);
+			logger.info("Invalid opponent selection, meet save canceled.");
+			return;
+		}
 
 		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
@@ -1073,13 +1091,6 @@ public class MeetSetupPanel extends javax.swing.JPanel {
 		meet.setMeetDate(meetDate.getText());
 		meet.setType(champsButton.isSelected() ? 'C' : 'R');
 		meet.setHomeTeam((Team) homeTeam.getSelectedItem());
-		List<Team> op = new ArrayList<Team>();
-		for (int i = 0; i < opponents.getModel().getSize(); i++) {
-			CheckListItem cli = (CheckListItem) opponents.getModel()
-					.getElementAt(i);
-			if (cli.isSelected())
-				op.add((Team) cli.getItem());
-		}
 		meet.setOpponents(op);
 		meet.setNov1Figure((Figure) noviceFigName1.getSelectedItem());
 		meet.setNov2Figure((Figure) noviceFigName2.getSelectedItem());
@@ -1094,6 +1105,7 @@ public class MeetSetupPanel extends javax.swing.JPanel {
 		meet.setEu2(eightAndUnder2.isSelected());
 		meet.setEu3(eightAndUnder3.isSelected());
 		meet.setEu4(eightAndUnder4.isSelected());
+
 		fireSavedEvent();
 		logger.info("Save meet complete.");
 
