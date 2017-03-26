@@ -293,8 +293,14 @@ public class MaintenanceFrame extends javax.swing.JFrame {
 		if (ret == JFileChooser.APPROVE_OPTION) {
 			setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			try {
+				boolean inTransaction = ScoreApp.getEntityManager()
+						.getTransaction().isActive();
+				if (inTransaction)
+					ScoreApp.getEntityManager().getTransaction().rollback();
 				SwimmerManager.importSwimmers(jfc.getSelectedFile(),
 						ScoreApp.getCurrentSeason());
+				if (inTransaction)
+					ScoreApp.getEntityManager().getTransaction().begin();
 				JOptionPane.showMessageDialog(this,
 						"Done.  Restart program to see changes.");
 			} catch (IOException e) {

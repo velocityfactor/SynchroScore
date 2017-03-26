@@ -1,100 +1,113 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- You may freely edit this file. See commented blocks below for -->
-<!-- some examples of how to customize the build. -->
-<!-- (If you delete it and reopen the project it will be recreated.) -->
-<!-- By default, only the Clean and Build commands use this build script. -->
-<!-- Commands such as Run, Debug, and Test only use this build script if -->
-<!-- the Compile on Save feature is turned off for the project. -->
-<!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
-<!-- in the project's Project Properties dialog box.-->
-<project name="SynchroScore" default="default" basedir=".">
-    <description>Builds, tests, and runs the project SynchroScore.</description>
-    <import file="nbproject/build-impl.xml"/>
-    <!--
-
-    There exist several targets which are by default empty and which can be
-    used for execution of your tasks. These targets are usually executed
-    before and after some main targets. They are:
-
-      -pre-init:                 called before initialization of project properties
-      -post-init:                called after initialization of project properties
-      -pre-compile:              called before javac compilation
-      -post-compile:             called after javac compilation
-      -pre-compile-single:       called before javac compilation of single file
-      -post-compile-single:      called after javac compilation of single file
-      -pre-compile-test:         called before javac compilation of JUnit tests
-      -post-compile-test:        called after javac compilation of JUnit tests
-      -pre-compile-test-single:  called before javac compilation of single JUnit test
-      -post-compile-test-single: called after javac compilation of single JUunit test
-      -pre-jar:                  called before JAR building
-      -post-jar:                 called after JAR building
-      -post-clean:               called after cleaning build products
-
-    (Targets beginning with '-' are not intended to be called on their own.)
-
-    Example of inserting an obfuscator after compilation could look like this:
-
-        <target name="-post-compile">
-            <obfuscate>
-                <fileset dir="${build.classes.dir}"/>
-            </obfuscate>
-        </target>
-
-    For list of available properties check the imported
-    nbproject/build-impl.xml file.
-
-
-    Another way to customize the build is by overriding existing main targets.
-    The targets of interest are:
-
-      -init-macrodef-javac:     defines macro for javac compilation
-      -init-macrodef-junit:     defines macro for junit execution
-      -init-macrodef-debug:     defines macro for class debugging
-      -init-macrodef-java:      defines macro for class execution
-      -do-jar-with-manifest:    JAR building (if you are using a manifest)
-      -do-jar-without-manifest: JAR building (if you are not using a manifest)
-      run:                      execution of project
-      -javadoc-build:           Javadoc generation
-      test-report:              JUnit report generation
-
-    An example of overriding the target for project execution could look like this:
-
-        <target name="run" depends="SynchroScore-impl.jar">
-            <exec dir="bin" executable="launcher.exe">
-                <arg file="${dist.jar}"/>
-            </exec>
-        </target>
-
-    Notice that the overridden target depends on the jar target and not only on
-    the compile target as the regular run target does. Again, for a list of available
-    properties which you can use, check the target you are overriding in the
-    nbproject/build-impl.xml file.
-
-    -->
-    <target name="-unjar-and-copy-lib-jars">
-        <unjar dest="${build.classes.dir}">
-            <fileset dir="lib">
-                <include name="**/*.jar"/>
-            </fileset>
-            <patternset>
-                <!--<exclude name="META-INF/**"/>-->
-                <!--<exclude name="/*"/>-->
-            </patternset>
-        </unjar>
-    </target>
-
-    <target depends="init,compile,-pre-pre-jar,-pre-jar,-unjar-and-copy-lib-jars" name="fat-jar">
-        <property location="${build.classes.dir}" name="build.classes.dir.resolved"/>
-        <jar destfile="${dist.jar}">
-            <fileset dir="${build.classes.dir}"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project SynchroScore">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <!--define folder properties-->
+    <property name="dir.buildfile" value="."/>
+    <property name="dir.workspace" value="${dir.buildfile}/.."/>
+    <property name="dir.jarfile" value="/users/shayne"/>
+    <target name="create_run_jar">
+        <jar destfile="${dir.jarfile}/SynchroScore.jar" filesetmanifest="mergewithoutmain">
             <manifest>
-                <attribute name="Main-Class" value="${main.class}"/>
+                <attribute name="Main-Class" value="org.aquastarz.score.ScoreApp"/>
+                <attribute name="Class-Path" value="."/>
             </manifest>
+            <fileset dir="${dir.buildfile}/target/classes"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/javax/transaction/jta/1.1/jta-1.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/apache/maven/plugins/maven-resources-plugin/2.4.3/maven-resources-plugin-2.4.3.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/apache/maven/maven-plugin-api/2.0.6/maven-plugin-api-2.0.6.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/apache/maven/maven-project/2.0.6/maven-project-2.0.6.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/apache/maven/maven-profile/2.0.6/maven-profile-2.0.6.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/apache/maven/maven-artifact-manager/2.0.6/maven-artifact-manager-2.0.6.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/apache/maven/maven-plugin-registry/2.0.6/maven-plugin-registry-2.0.6.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/apache/maven/maven-core/2.0.6/maven-core-2.0.6.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/apache/maven/wagon/wagon-file/1.0-beta-2/wagon-file-1.0-beta-2.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/apache/maven/maven-plugin-parameter-documenter/2.0.6/maven-plugin-parameter-documenter-2.0.6.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/apache/maven/wagon/wagon-http-lightweight/1.0-beta-2/wagon-http-lightweight-1.0-beta-2.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/apache/maven/wagon/wagon-http-shared/1.0-beta-2/wagon-http-shared-1.0-beta-2.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/jtidy/jtidy/4aug2000r7-dev/jtidy-4aug2000r7-dev.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/xml-apis/xml-apis/1.0.b2/xml-apis-1.0.b2.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/apache/maven/reporting/maven-reporting-api/2.0.6/maven-reporting-api-2.0.6.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/apache/maven/doxia/doxia-sink-api/1.0-alpha-7/doxia-sink-api-1.0-alpha-7.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/apache/maven/wagon/wagon-provider-api/1.0-beta-2/wagon-provider-api-1.0-beta-2.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/apache/maven/maven-repository-metadata/2.0.6/maven-repository-metadata-2.0.6.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/apache/maven/maven-error-diagnostics/2.0.6/maven-error-diagnostics-2.0.6.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/commons-cli/commons-cli/1.0/commons-cli-1.0.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/apache/maven/wagon/wagon-ssh-external/1.0-beta-2/wagon-ssh-external-1.0-beta-2.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/apache/maven/wagon/wagon-ssh-common/1.0-beta-2/wagon-ssh-common-1.0-beta-2.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/apache/maven/maven-plugin-descriptor/2.0.6/maven-plugin-descriptor-2.0.6.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/codehaus/plexus/plexus-interactivity-api/1.0-alpha-4/plexus-interactivity-api-1.0-alpha-4.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/apache/maven/wagon/wagon-ssh/1.0-beta-2/wagon-ssh-1.0-beta-2.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/com/jcraft/jsch/0.1.27/jsch-0.1.27.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/classworlds/classworlds/1.1/classworlds-1.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/apache/maven/maven-artifact/2.0.6/maven-artifact-2.0.6.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/apache/maven/maven-settings/2.0.6/maven-settings-2.0.6.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/apache/maven/maven-model/2.0.6/maven-model-2.0.6.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/apache/maven/maven-monitor/2.0.6/maven-monitor-2.0.6.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/codehaus/plexus/plexus-container-default/1.0-alpha-9-stable-1/plexus-container-default-1.0-alpha-9-stable-1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/codehaus/plexus/plexus-utils/2.0.5/plexus-utils-2.0.5.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/apache/maven/shared/maven-filtering/1.0-beta-4/maven-filtering-1.0-beta-4.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/sonatype/plexus/plexus-build-api/0.0.4/plexus-build-api-0.0.4.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/codehaus/plexus/plexus-interpolation/1.13/plexus-interpolation-1.13.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/net/sf/jasperreports/jasperreports/6.2.2/jasperreports-6.2.2.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/commons-beanutils/commons-beanutils/1.9.0/commons-beanutils-1.9.0.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/commons-collections/commons-collections/3.2.2/commons-collections-3.2.2.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/commons-digester/commons-digester/2.1/commons-digester-2.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/com/lowagie/itext/2.1.7.js5/itext-2.1.7.js5.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/bouncycastle/bcmail-jdk14/138/bcmail-jdk14-138.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/bouncycastle/bcprov-jdk14/138/bcprov-jdk14-138.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/bouncycastle/bctsp-jdk14/1.38/bctsp-jdk14-1.38.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/bouncycastle/bcprov-jdk14/1.38/bcprov-jdk14-1.38.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/bouncycastle/bcmail-jdk14/1.38/bcmail-jdk14-1.38.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/jfree/jcommon/1.0.23/jcommon-1.0.23.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/jfree/jfreechart/1.0.19/jfreechart-1.0.19.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/eclipse/jdt/core/compiler/ecj/4.3.1/ecj-4.3.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/codehaus/castor/castor-xml/1.3.3/castor-xml-1.3.3.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/codehaus/castor/castor-core/1.3.3/castor-core-1.3.3.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/commons-lang/commons-lang/2.6/commons-lang-2.6.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/javax/inject/javax.inject/1/javax.inject-1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/stax/stax/1.2.0/stax-1.2.0.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/stax/stax-api/1.0.1/stax-api-1.0.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/javax/xml/stream/stax-api/1.0-2/stax-api-1.0-2.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/springframework/spring-context/3.0.6.RELEASE/spring-context-3.0.6.RELEASE.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/springframework/spring-aop/3.0.6.RELEASE/spring-aop-3.0.6.RELEASE.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/aopalliance/aopalliance/1.0/aopalliance-1.0.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/springframework/spring-beans/3.0.6.RELEASE/spring-beans-3.0.6.RELEASE.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/springframework/spring-core/3.0.6.RELEASE/spring-core-3.0.6.RELEASE.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/springframework/spring-expression/3.0.6.RELEASE/spring-expression-3.0.6.RELEASE.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/springframework/spring-asm/3.0.6.RELEASE/spring-asm-3.0.6.RELEASE.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.1.4/jackson-core-2.1.4.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.1.4/jackson-databind-2.1.4.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.1.4/jackson-annotations-2.1.4.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/apache/lucene/lucene-core/4.5.1/lucene-core-4.5.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/apache/lucene/lucene-analyzers-common/4.5.1/lucene-analyzers-common-4.5.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/apache/lucene/lucene-queryparser/4.5.1/lucene-queryparser-4.5.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/apache/lucene/lucene-queries/4.5.1/lucene-queries-4.5.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/apache/lucene/lucene-sandbox/4.5.1/lucene-sandbox-4.5.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/jakarta-regexp/jakarta-regexp/1.4/jakarta-regexp-1.4.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/olap4j/olap4j/0.9.7.309-JS-3/olap4j-0.9.7.309-JS-3.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/com/google/zxing/core/2.3.0/core-2.3.0.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/com/ibm/icu/icu4j/57.1/icu4j-57.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/slf4j/slf4j-log4j12/1.7.5/slf4j-log4j12-1.7.5.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/slf4j/slf4j-api/1.7.5/slf4j-api-1.7.5.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/log4j/log4j/1.2.14/log4j-1.2.14.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/hsqldb/hsqldb/1.8.0.10/hsqldb-1.8.0.10.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/hibernate/hibernate/3.2.5.ga/hibernate-3.2.5.ga.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/net/sf/ehcache/ehcache/1.2.3/ehcache-1.2.3.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/asm/asm-attrs/1.5.3/asm-attrs-1.5.3.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/dom4j/dom4j/1.6.1/dom4j-1.6.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/antlr/antlr/2.7.6/antlr-2.7.6.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/cglib/cglib/2.1_3/cglib-2.1_3.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/asm/asm/1.5.3/asm-1.5.3.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/hibernate/hibernate-entitymanager/3.2.1.ga/hibernate-entitymanager-3.2.1.ga.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/hibernate/hibernate-annotations/3.2.1.ga/hibernate-annotations-3.2.1.ga.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/javax/persistence/persistence-api/1.0/persistence-api-1.0.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/jboss/javassist/3.3.ga/javassist-3.3.ga.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/jboss/jboss-archive-browsing/5.0.0alpha-200607201-119/jboss-archive-browsing-5.0.0alpha-200607201-119.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/jdesktop/beansbinding/1.2.1/beansbinding-1.2.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/org/netbeans/external/AbsoluteLayout/RELEASE731/AbsoluteLayout-RELEASE731.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/.m2/repository/net/sf/opencsv/opencsv/2.3/opencsv-2.3.jar"/>
         </jar>
-        <echo>To run this application from the command line without Ant, try:</echo>
-        <property location="${dist.jar}" name="dist.jar.resolved"/>
-        <echo>java -jar "${dist.jar.resolved}"</echo>
     </target>
-
-    <target depends="clean,fat-jar" name="clean-and-fat-jar"/>
 </project>

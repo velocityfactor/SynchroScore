@@ -32,6 +32,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
 
 import org.aquastarz.score.ScoreApp;
 import org.aquastarz.score.controller.ScoreController;
@@ -91,22 +93,32 @@ public class Bootstrap {
 		checkAndPersistLevel(entityManager, "I15-16", "Intermediate 15-16", 8);
 		checkAndPersistLevel(entityManager, "I17-18", "Intermediate 17-18", 9);
 
+		//Added for rev 3
+		checkAndPersistRoutineLevel(entityManager, "N10U",
+				"Novice 10 and Under", 1);
+		checkAndPersistRoutineLevel(entityManager, "N11",
+				"Novice 11 to 14", 2);
+		checkAndPersistRoutineLevel(entityManager, "N15",
+				"Novice 15 to 18", 3);
+		//end rev 3
+		
 		checkAndPersistRoutineLevel(entityManager, "N12U",
-				"Novice 12 and Under", 1);
+				"Novice 12 and Under", 4);
 		checkAndPersistRoutineLevel(entityManager, "N13O",
-				"Novice 13 and Over", 2);
+				"Novice 13 and Over", 5);
 		checkAndPersistRoutineLevel(entityManager, "I11", "Intermediate 11-14",
-				3);
+				6);
 		checkAndPersistRoutineLevel(entityManager, "I15", "Intermediate 15-18",
-				4);
+				7);
 		checkAndPersistRoutineLevel(entityManager, "I11T",
-				"Int. 11 and Over Team", 5);
+				"Int. 11 and Over Team", 8);
+		
 		checkAndPersistRoutineLevel(entityManager, "I11-14T",
-				"Int. 11-14 Team", 5); // Added for rev 2
+				"Int. 11-14 Team", 9); // Added for rev 2
 		checkAndPersistRoutineLevel(entityManager, "I15-18T",
-				"Int. 15-18 Team", 6);
+				"Int. 15-18 Team", 10);
 		checkAndPersistRoutineLevel(entityManager, "I11-18CT",
-				"Int. 11-18 Combo Team", 7);
+				"Combo Team", 11);
 
 		checkAndPersistTeam(entityManager, "AUB", "Auburn Mermaids");
 		checkAndPersistTeam(entityManager, "COR", "Cordova Cordettes");
@@ -144,13 +156,6 @@ public class Bootstrap {
 		// checkAndPersistFigure(entityManager, "401", new BigDecimal("2.0"),
 		// "Swordfish");
 
-		entityManager.getTransaction().commit();
-	}
-
-	public static void loadLateLeagueData() {
-		EntityManager entityManager = ScoreApp.getEntityManager();
-		entityManager.getTransaction().begin();
-
 		// New for 2012
 		checkAndPersistFigure(entityManager, "361", new BigDecimal("1.8"),
 				"Prawn");
@@ -176,6 +181,42 @@ public class Bootstrap {
 		entityManager.getTransaction().commit();
 	}
 
+	public static void loadLateLeagueData() {
+		EntityManager entityManager = ScoreApp.getEntityManager();
+
+		if (entityManager.find(RoutineLevel.class, "N10U") == null) {
+			EntityTransaction transaction = entityManager.getTransaction();
+	        transaction.begin();
+			//Added for rev 3
+			checkAndPersistRoutineLevel(entityManager, "N10U",
+					"Novice 10 and Under", 1);
+			checkAndPersistRoutineLevel(entityManager, "N11",
+					"Novice 11 to 14", 2);
+			checkAndPersistRoutineLevel(entityManager, "N15",
+					"Novice 15 to 18", 3);
+			//end rev 3
+			
+			checkAndPersistRoutineLevel(entityManager, "N12U",
+					"Novice 12 and Under", 4);
+			checkAndPersistRoutineLevel(entityManager, "N13O",
+					"Novice 13 and Over", 5);
+			checkAndPersistRoutineLevel(entityManager, "I11", "Intermediate 11-14",
+					6);
+			checkAndPersistRoutineLevel(entityManager, "I15", "Intermediate 15-18",
+					7);
+			checkAndPersistRoutineLevel(entityManager, "I11T",
+					"Int. 11 and Over Team", 8);
+			
+			checkAndPersistRoutineLevel(entityManager, "I11-14T",
+					"Int. 11-14 Team", 9); // Added for rev 2
+			checkAndPersistRoutineLevel(entityManager, "I15-18T",
+					"Int. 15-18 Team", 10);
+			checkAndPersistRoutineLevel(entityManager, "I11-18CT",
+					"Int. 11-18 Combo Team", 11);
+			transaction.commit();
+		}
+	}
+
 	public static void checkAndPersistLevel(EntityManager entityManager,
 			String key, String name, int sortOrder) {
 		if (entityManager.find(Level.class, key) == null) {
@@ -185,8 +226,14 @@ public class Bootstrap {
 
 	public static void checkAndPersistRoutineLevel(EntityManager entityManager,
 			String key, String name, int sortOrder) {
-		if (entityManager.find(RoutineLevel.class, key) == null) {
+		RoutineLevel rl=(RoutineLevel)entityManager.find(RoutineLevel.class, key);
+		if (rl == null) {
 			entityManager.persist(new RoutineLevel(key, name, sortOrder));
+		}
+		else {
+			rl.setName(name);
+			rl.setSortOrder(sortOrder);
+			entityManager.persist(rl);
 		}
 	}
 

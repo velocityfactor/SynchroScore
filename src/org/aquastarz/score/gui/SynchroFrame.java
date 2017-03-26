@@ -20,10 +20,12 @@
 package org.aquastarz.score.gui;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.math.BigDecimal;
 import java.net.URL;
@@ -42,12 +44,18 @@ import javax.persistence.Query;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import net.sf.jasperreports.engine.JRDataSource;
@@ -71,12 +79,13 @@ import org.aquastarz.score.gui.event.MeetSetupPanelListener;
 import org.aquastarz.score.gui.event.RoutinesPanelEventListener;
 import org.aquastarz.score.manager.MeetManager;
 import org.aquastarz.score.manager.SwimmerManager;
-import org.aquastarz.score.report.FiguresLabel;
+import org.aquastarz.score.report.Label;
 import org.aquastarz.score.report.NumMeets;
 import org.aquastarz.score.report.TeamPoints;
 
 public class SynchroFrame extends javax.swing.JFrame {
 
+	private static final long serialVersionUID = 1L;
 	private static org.apache.log4j.Logger logger = org.apache.log4j.Logger
 			.getLogger(SynchroFrame.class.getName());
 
@@ -120,6 +129,7 @@ public class SynchroFrame extends javax.swing.JFrame {
 		// Pressing period or decimal on the keypad moves to swimmer search
 		// when on figure score tab
 		Action swimmerSearchAction = new AbstractAction() {
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -235,7 +245,7 @@ public class SynchroFrame extends javax.swing.JFrame {
 			@Override
 			public void meetSetupSaved() {
 				if (meet.isValid()) {
-					if (controller.findMeet(meet.getSeason(), meet.getName()) == null) {
+					if (ScoreController.findMeet(meet.getSeason(), meet.getName()) == null) {
 						meet.clearPoints();
 						controller.saveMeet(meet);
 						updateStatus();
@@ -402,8 +412,7 @@ public class SynchroFrame extends javax.swing.JFrame {
 					jasperReport, params, data);
 			JasperViewer.viewReport(jasperPrint, false);
 		} catch (Exception ex) {
-			logger.error("Could not create the report.\n"
-					+ ex.getLocalizedMessage());
+			logger.error("Could not create the report.", ex);
 		}
 	}
 
@@ -483,24 +492,6 @@ public class SynchroFrame extends javax.swing.JFrame {
 		saveFigureScoreButton = new javax.swing.JButton();
 		clearFigureScoreButton = new javax.swing.JButton();
 		routinesPanel = new org.aquastarz.score.gui.RoutinesPanel();
-		reportPanel = new javax.swing.JPanel();
-		reportNoviceFigures = new javax.swing.JButton();
-		reportNovMeetSheet = new javax.swing.JButton();
-		reportNoviceStation = new javax.swing.JButton();
-		reportIntermediateFigures = new javax.swing.JButton();
-		reportIntMeetSheet = new javax.swing.JButton();
-		reportIntStation = new javax.swing.JButton();
-		reportTeamResults = new javax.swing.JButton();
-		reportNovFigureLabels = new javax.swing.JButton();
-		reportIntFigureLabels = new javax.swing.JButton();
-		reportNovRoutines = new javax.swing.JButton();
-		reportNovRoutineLabels = new javax.swing.JButton();
-		reportIntRoutines = new javax.swing.JButton();
-		reportIntRoutineLabels = new javax.swing.JButton();
-		reportAllRoutines = new javax.swing.JButton();
-		reportAllRoutineLabels = new javax.swing.JButton();
-		exportMeetDataButton = new javax.swing.JButton();
-		compareMeetButton = new javax.swing.JButton();
 		leaguePanel = new javax.swing.JPanel();
 		leaguePrintButton = new javax.swing.JButton();
 		swimmerScrollPane = new javax.swing.JScrollPane();
@@ -510,7 +501,7 @@ public class SynchroFrame extends javax.swing.JFrame {
 		leagueSortByName = new javax.swing.JRadioButton();
 		leagueSortByTeam = new javax.swing.JRadioButton();
 		jLabel7 = new javax.swing.JLabel();
-		leagueTeamCombo = new javax.swing.JComboBox();
+		leagueTeamCombo = new javax.swing.JComboBox<String>();
 		leagueSortByLevel = new javax.swing.JRadioButton();
 		numMeetsPrintButton = new javax.swing.JButton();
 		jToolBar1 = new javax.swing.JToolBar();
@@ -838,6 +829,26 @@ public class SynchroFrame extends javax.swing.JFrame {
 					}
 				});
 
+		getContentPane().add(tabPane, java.awt.BorderLayout.PAGE_START);
+		reportPanel = new javax.swing.JPanel();
+		reportNoviceFigures = new javax.swing.JButton();
+		reportNovMeetSheet = new javax.swing.JButton();
+		reportNoviceStation = new javax.swing.JButton();
+		reportIntermediateFigures = new javax.swing.JButton();
+		reportIntMeetSheet = new javax.swing.JButton();
+		reportIntStation = new javax.swing.JButton();
+		reportTeamResults = new javax.swing.JButton();
+		reportNovFigureLabels = new javax.swing.JButton();
+		reportIntFigureLabels = new javax.swing.JButton();
+		reportNovRoutines = new javax.swing.JButton();
+		reportNovRoutineLabels = new javax.swing.JButton();
+		reportIntRoutines = new javax.swing.JButton();
+		reportIntRoutineLabels = new javax.swing.JButton();
+		reportAllRoutines = new javax.swing.JButton();
+		reportAllRoutineLabels = new javax.swing.JButton();
+		exportMeetDataButton = new javax.swing.JButton();
+		compareMeetButton = new javax.swing.JButton();
+
 		reportNoviceFigures.setText("Nov. Figures");
 		reportNoviceFigures
 				.addActionListener(new java.awt.event.ActionListener() {
@@ -905,7 +916,15 @@ public class SynchroFrame extends javax.swing.JFrame {
 				.addActionListener(new java.awt.event.ActionListener() {
 					@Override
 					public void actionPerformed(java.awt.event.ActionEvent evt) {
-						reportNovFigureLabelsActionPerformed(evt);
+						if (chckbxRoundLabels.isSelected()) {
+							reportNovFigureLabelsActionPerformed(1, 3,
+									"FiguresRoundLabels");
+							reportNovFigureLabelsActionPerformed(4, 9999,
+									"FiguresLabels");
+						} else {
+							reportNovFigureLabelsActionPerformed(0, 9999,
+									"FiguresLabels");
+						}
 					}
 				});
 
@@ -914,7 +933,15 @@ public class SynchroFrame extends javax.swing.JFrame {
 				.addActionListener(new java.awt.event.ActionListener() {
 					@Override
 					public void actionPerformed(java.awt.event.ActionEvent evt) {
-						reportIntFigureLabelsActionPerformed(evt);
+						if (chckbxRoundLabels.isSelected()) {
+							reportIntFigureLabelsActionPerformed(1, 3,
+									"FiguresRoundLabels");
+							reportIntFigureLabelsActionPerformed(4, 9999,
+									"FiguresLabels");
+						} else {
+							reportIntFigureLabelsActionPerformed(0, 9999,
+									"FiguresLabels");
+						}
 					}
 				});
 
@@ -950,7 +977,7 @@ public class SynchroFrame extends javax.swing.JFrame {
 				.addActionListener(new java.awt.event.ActionListener() {
 					@Override
 					public void actionPerformed(java.awt.event.ActionEvent evt) {
-						reportIntRoutineLabelsActionPerformed(evt);
+						reportIntRoutineLabelsActionPerformed(0);
 					}
 				});
 
@@ -968,7 +995,16 @@ public class SynchroFrame extends javax.swing.JFrame {
 				.addActionListener(new java.awt.event.ActionListener() {
 					@Override
 					public void actionPerformed(java.awt.event.ActionEvent evt) {
-						reportAllRoutineLabelsActionPerformed(evt);
+						if (chckbxRoundLabels.isSelected()) {
+							reportRoutinesLabels(true, true, 0, true, 1, 3,
+									"FiguresRoundLabels");
+							reportRoutinesLabels(true, true, 0, false, 4, 999,
+									"FiguresLabels");
+						} else {
+							reportRoutinesLabels(true, true, 0, false, 0, 999,
+									"FiguresLabels");
+
+						}
 					}
 				});
 
@@ -990,179 +1026,202 @@ public class SynchroFrame extends javax.swing.JFrame {
 					}
 				});
 
+		JButton btnIntRLbl = new JButton("Int R Lbl Team,3,2");
+		btnIntRLbl.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				reportIntRoutineLabelsActionPerformed(1);
+			}
+		});
+
+		JButton btnIntRLbl_1 = new JButton("Int R Lbl Solo,Cmb");
+		btnIntRLbl_1.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				reportIntRoutineLabelsActionPerformed(2);
+			}
+		});
+
 		javax.swing.GroupLayout reportPanelLayout = new javax.swing.GroupLayout(
 				reportPanel);
-		reportPanel.setLayout(reportPanelLayout);
 		reportPanelLayout
 				.setHorizontalGroup(reportPanelLayout
-						.createParallelGroup(
-								javax.swing.GroupLayout.Alignment.LEADING)
+						.createParallelGroup(Alignment.LEADING)
 						.addGroup(
 								reportPanelLayout
 										.createSequentialGroup()
-										.addGap(44, 44, 44)
+										.addContainerGap()
 										.addGroup(
 												reportPanelLayout
 														.createParallelGroup(
-																javax.swing.GroupLayout.Alignment.LEADING)
-														.addComponent(
-																reportNovRoutineLabels)
-														.addComponent(
-																reportNovRoutines)
-														.addComponent(
-																reportNoviceStation)
-														.addComponent(
-																reportNovMeetSheet)
-														.addComponent(
-																reportNovFigureLabels)
-														.addComponent(
-																reportNoviceFigures))
-										.addPreferredGap(
-												javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-										.addGroup(
-												reportPanelLayout
-														.createParallelGroup(
-																javax.swing.GroupLayout.Alignment.LEADING)
+																Alignment.LEADING)
 														.addGroup(
 																reportPanelLayout
 																		.createSequentialGroup()
 																		.addComponent(
-																				reportIntRoutines)
-																		.addPreferredGap(
-																				javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-																		.addComponent(
-																				reportAllRoutines))
-														.addComponent(
-																reportIntStation)
-														.addComponent(
-																reportIntMeetSheet)
-														.addComponent(
-																reportIntFigureLabels)
-														.addGroup(
-																reportPanelLayout
-																		.createSequentialGroup()
+																				reportNoviceFigures)
+																		.addGap(18)
 																		.addComponent(
 																				reportIntermediateFigures)
-																		.addPreferredGap(
-																				javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+																		.addGap(18)
 																		.addComponent(
 																				reportTeamResults))
 														.addGroup(
 																reportPanelLayout
 																		.createSequentialGroup()
-																		.addComponent(
-																				reportIntRoutineLabels)
-																		.addPreferredGap(
-																				javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 																		.addGroup(
 																				reportPanelLayout
 																						.createParallelGroup(
-																								javax.swing.GroupLayout.Alignment.LEADING,
-																								false)
+																								Alignment.LEADING)
 																						.addComponent(
-																								reportAllRoutineLabels,
-																								javax.swing.GroupLayout.DEFAULT_SIZE,
-																								javax.swing.GroupLayout.DEFAULT_SIZE,
-																								Short.MAX_VALUE)
+																								reportNovFigureLabels)
 																						.addComponent(
-																								exportMeetDataButton,
-																								javax.swing.GroupLayout.DEFAULT_SIZE,
-																								javax.swing.GroupLayout.DEFAULT_SIZE,
-																								Short.MAX_VALUE)
+																								reportNovMeetSheet)
 																						.addComponent(
-																								compareMeetButton,
-																								javax.swing.GroupLayout.DEFAULT_SIZE,
-																								javax.swing.GroupLayout.DEFAULT_SIZE,
-																								Short.MAX_VALUE))))
-										.addContainerGap(308, Short.MAX_VALUE)));
-
-		reportPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL,
-				new java.awt.Component[] { reportAllRoutineLabels,
-						reportAllRoutines, reportIntFigureLabels,
-						reportIntMeetSheet, reportIntRoutineLabels,
-						reportIntRoutines, reportIntStation,
-						reportIntermediateFigures, reportTeamResults });
-
-		reportPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL,
-				new java.awt.Component[] { reportNovFigureLabels,
-						reportNovMeetSheet, reportNovRoutineLabels,
-						reportNovRoutines, reportNoviceFigures,
-						reportNoviceStation });
-
-		reportPanelLayout
-				.setVerticalGroup(reportPanelLayout
-						.createParallelGroup(
-								javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(
-								reportPanelLayout
-										.createSequentialGroup()
-										.addGap(5, 5, 5)
+																								reportNoviceStation)
+																						.addComponent(
+																								reportNovRoutines)
+																						.addComponent(
+																								chckbxRoundLabels)
+																						.addComponent(
+																								reportNovRoutineLabels))
+																		.addGap(18)
+																		.addGroup(
+																				reportPanelLayout
+																						.createParallelGroup(
+																								Alignment.LEADING)
+																						.addGroup(
+																								reportPanelLayout
+																										.createSequentialGroup()
+																										.addGroup(
+																												reportPanelLayout
+																														.createParallelGroup(
+																																Alignment.LEADING,
+																																false)
+																														.addComponent(
+																																reportIntRoutines,
+																																GroupLayout.DEFAULT_SIZE,
+																																GroupLayout.DEFAULT_SIZE,
+																																Short.MAX_VALUE)
+																														.addComponent(
+																																reportIntRoutineLabels,
+																																GroupLayout.DEFAULT_SIZE,
+																																GroupLayout.DEFAULT_SIZE,
+																																Short.MAX_VALUE)
+																														.addComponent(
+																																btnIntRLbl,
+																																GroupLayout.DEFAULT_SIZE,
+																																GroupLayout.DEFAULT_SIZE,
+																																Short.MAX_VALUE)
+																														.addComponent(
+																																btnIntRLbl_1,
+																																GroupLayout.DEFAULT_SIZE,
+																																GroupLayout.DEFAULT_SIZE,
+																																Short.MAX_VALUE))
+																										.addGap(18)
+																										.addGroup(
+																												reportPanelLayout
+																														.createParallelGroup(
+																																Alignment.LEADING)
+																														.addComponent(
+																																reportAllRoutineLabels,
+																																GroupLayout.DEFAULT_SIZE,
+																																123,
+																																Short.MAX_VALUE)
+																														.addComponent(
+																																reportAllRoutines)))
+																						.addComponent(
+																								reportIntMeetSheet)
+																						.addComponent(
+																								reportIntFigureLabels)
+																						.addComponent(
+																								reportIntStation))))
+										.addGap(18)
 										.addGroup(
 												reportPanelLayout
 														.createParallelGroup(
-																javax.swing.GroupLayout.Alignment.BASELINE)
+																Alignment.LEADING,
+																false)
+														.addComponent(
+																compareMeetButton,
+																GroupLayout.DEFAULT_SIZE,
+																GroupLayout.DEFAULT_SIZE,
+																Short.MAX_VALUE)
+														.addComponent(
+																exportMeetDataButton,
+																GroupLayout.DEFAULT_SIZE,
+																GroupLayout.DEFAULT_SIZE,
+																Short.MAX_VALUE))
+										.addGap(395)));
+		reportPanelLayout
+				.setVerticalGroup(reportPanelLayout
+						.createParallelGroup(Alignment.LEADING)
+						.addGroup(
+								reportPanelLayout
+										.createSequentialGroup()
+										.addGap(4)
+										.addGroup(
+												reportPanelLayout
+														.createParallelGroup(
+																Alignment.BASELINE)
 														.addComponent(
 																reportNoviceFigures)
 														.addComponent(
 																reportIntermediateFigures)
 														.addComponent(
-																reportTeamResults))
-										.addGap(5, 5, 5)
+																reportTeamResults)
+														.addComponent(
+																exportMeetDataButton))
+										.addPreferredGap(
+												ComponentPlacement.RELATED)
 										.addGroup(
 												reportPanelLayout
 														.createParallelGroup(
-																javax.swing.GroupLayout.Alignment.BASELINE)
+																Alignment.BASELINE)
 														.addComponent(
 																reportNovFigureLabels)
 														.addComponent(
-																reportIntFigureLabels))
+																reportIntFigureLabels)
+														.addComponent(
+																compareMeetButton))
 										.addPreferredGap(
-												javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+												ComponentPlacement.RELATED)
 										.addGroup(
 												reportPanelLayout
 														.createParallelGroup(
-																javax.swing.GroupLayout.Alignment.LEADING)
-														.addGroup(
-																reportPanelLayout
-																		.createSequentialGroup()
-																		.addGroup(
-																				reportPanelLayout
-																						.createParallelGroup(
-																								javax.swing.GroupLayout.Alignment.BASELINE)
-																						.addComponent(
-																								reportNovMeetSheet)
-																						.addComponent(
-																								reportIntMeetSheet))
-																		.addPreferredGap(
-																				javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-																		.addComponent(
-																				reportNoviceStation)
-																		.addPreferredGap(
-																				javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-																		.addGroup(
-																				reportPanelLayout
-																						.createParallelGroup(
-																								javax.swing.GroupLayout.Alignment.BASELINE)
-																						.addComponent(
-																								reportNovRoutines)
-																						.addComponent(
-																								reportIntRoutines)
-																						.addComponent(
-																								reportAllRoutines)))
-														.addGroup(
-																reportPanelLayout
-																		.createSequentialGroup()
-																		.addGap(29,
-																				29,
-																				29)
-																		.addComponent(
-																				reportIntStation)))
+																Alignment.BASELINE)
+														.addComponent(
+																reportNovMeetSheet)
+														.addComponent(
+																reportIntMeetSheet))
 										.addPreferredGap(
-												javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+												ComponentPlacement.RELATED)
 										.addGroup(
 												reportPanelLayout
 														.createParallelGroup(
-																javax.swing.GroupLayout.Alignment.BASELINE)
+																Alignment.BASELINE)
+														.addComponent(
+																reportNoviceStation)
+														.addComponent(
+																reportIntStation))
+										.addPreferredGap(
+												ComponentPlacement.RELATED)
+										.addGroup(
+												reportPanelLayout
+														.createParallelGroup(
+																Alignment.BASELINE)
+														.addComponent(
+																reportNovRoutines)
+														.addComponent(
+																reportIntRoutines)
+														.addComponent(
+																reportAllRoutines))
+										.addPreferredGap(
+												ComponentPlacement.RELATED)
+										.addGroup(
+												reportPanelLayout
+														.createParallelGroup(
+																Alignment.BASELINE)
 														.addComponent(
 																reportNovRoutineLabels)
 														.addComponent(
@@ -1170,12 +1229,29 @@ public class SynchroFrame extends javax.swing.JFrame {
 														.addComponent(
 																reportAllRoutineLabels))
 										.addPreferredGap(
-												javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-										.addComponent(exportMeetDataButton)
+												ComponentPlacement.RELATED)
+										.addGroup(
+												reportPanelLayout
+														.createParallelGroup(
+																Alignment.BASELINE)
+														.addComponent(
+																btnIntRLbl)
+														.addComponent(
+																chckbxRoundLabels))
 										.addPreferredGap(
-												javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-										.addComponent(compareMeetButton)
-										.addContainerGap(296, Short.MAX_VALUE)));
+												ComponentPlacement.RELATED)
+										.addComponent(btnIntRLbl_1)
+										.addContainerGap(326, Short.MAX_VALUE)));
+		reportPanelLayout.linkSize(SwingConstants.HORIZONTAL, new Component[] {
+				reportNoviceFigures, reportNovMeetSheet, reportNoviceStation,
+				reportNovFigureLabels, reportNovRoutines,
+				reportNovRoutineLabels });
+		reportPanelLayout.linkSize(SwingConstants.HORIZONTAL, new Component[] {
+				reportIntermediateFigures, reportIntMeetSheet,
+				reportIntStation, reportTeamResults, reportIntFigureLabels,
+				reportIntRoutines, reportIntRoutineLabels, reportAllRoutines,
+				reportAllRoutineLabels });
+		reportPanel.setLayout(reportPanelLayout);
 
 		tabPane.addTab("Reports", reportPanel);
 
@@ -1237,7 +1313,7 @@ public class SynchroFrame extends javax.swing.JFrame {
 		Query teamQuery = ScoreApp.getEntityManager().createNamedQuery(
 				"Team.findAllOrderByTeamId");
 		List<Team> teamList = teamQuery.getResultList();
-		DefaultComboBoxModel dcbm = new DefaultComboBoxModel();
+		DefaultComboBoxModel<String> dcbm = new DefaultComboBoxModel<String>();
 		dcbm.addElement("[All]");
 		for (Team team : teamList) {
 			dcbm.addElement(team.getTeamId());
@@ -1395,8 +1471,6 @@ public class SynchroFrame extends javax.swing.JFrame {
 
 		tabPane.addTab("League", leaguePanel);
 
-		getContentPane().add(tabPane, java.awt.BorderLayout.PAGE_START);
-
 		jToolBar1.setFloatable(false);
 		jToolBar1.setRollover(true);
 
@@ -1442,17 +1516,18 @@ public class SynchroFrame extends javax.swing.JFrame {
 		pack();
 	}// </editor-fold>//GEN-END:initComponents
 
-	private void reportIntRoutineLabelsActionPerformed(
-			java.awt.event.ActionEvent evt) {// GEN-FIRST:event_reportIntRoutingLabelsActionPerformed
-		Integer skipLabels = getSkipLabels();
-		if (skipLabels == null) {
-			return;
+	private void reportIntRoutineLabelsActionPerformed(int part) {
+		if (chckbxRoundLabels.isSelected()) {
+			reportRoutinesLabels(false, true, part, true, 1, 3,
+					"FiguresRoundLabels");
+			reportRoutinesLabels(false, true, part, false, 4, 999,
+					"FiguresLabels");
+		} else {
+			reportRoutinesLabels(false, true, part, false, 0, 999,
+					"FiguresLabels");
+
 		}
-		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-		RoutinesController.showRoutinesLabelsReport(meet, skipLabels, false,
-				true);
-		setCursor(Cursor.getDefaultCursor());
-	}// GEN-LAST:event_reportIntRoutingLabelsActionPerformed
+	}
 
 	private void tabPaneStateChanged(javax.swing.event.ChangeEvent evt) {// GEN-FIRST:event_tabPaneStateChanged
 		logger.info("Tab selected = "
@@ -1504,17 +1579,41 @@ public class SynchroFrame extends javax.swing.JFrame {
 		}
 	}// GEN-LAST:event_leaguePrintButtonActionPerformed
 
-	private void reportAllRoutineLabelsActionPerformed(
-			java.awt.event.ActionEvent evt) {// GEN-FIRST:event_reportAllRoutineLabelsActionPerformed
+	private void reportRoutinesLabels(boolean showNovice,
+			boolean showIntermediate, int part, boolean withNames, int min,
+			int max, String report) {
 		Integer skipLabels = getSkipLabels();
 		if (skipLabels == null) {
 			return;
 		}
 		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-		RoutinesController.showRoutinesLabelsReport(meet, skipLabels, true,
-				true);
+
+		ScoreController.calculateMeetResultsIfNeeded(meet);
+		try {
+			JasperReport jasperReport = (JasperReport) JRLoader
+					.loadObject(RoutinesController.class
+							.getResourceAsStream("/org/aquastarz/score/report/"
+									+ report + ".jasper"));
+			List<Label> labels = new LinkedList<Label>();
+			for (int i = 0; i < skipLabels; i++) {
+				labels.add(null);
+			}
+			labels.addAll(ScoreController.generateRoutineLabels(meet,
+					showNovice, showIntermediate, part, withNames, min, max));
+			JRDataSource data = new JRBeanCollectionDataSource(labels);
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("MeetDate", meet.getMeetDate());
+			params.put("MeetName", meet.getName());
+			JasperPrint jasperPrint = JasperFillManager.fillReport(
+					jasperReport, params, data);
+			JasperViewer.viewReport(jasperPrint, false);
+		} catch (Exception ex) {
+			logger.error("Could not create the report.\n"
+					+ ex.getLocalizedMessage());
+		}
+
 		setCursor(Cursor.getDefaultCursor());
-	}// GEN-LAST:event_reportAllRoutineLabelsActionPerformed
+	}
 
 	private void reportAllRoutinesActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_reportAllRoutinesActionPerformed
 		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -1530,14 +1629,14 @@ public class SynchroFrame extends javax.swing.JFrame {
 
 	private void reportNovRoutineLabelsActionPerformed(
 			java.awt.event.ActionEvent evt) {// GEN-FIRST:event_reportNovRoutineLabelsActionPerformed
-		Integer skipLabels = getSkipLabels();
-		if (skipLabels == null) {
-			return;
+		if (chckbxRoundLabels.isSelected()) {
+			reportRoutinesLabels(true, false, 0, true, 1, 3,
+					"FiguresRoundLabels");
+			reportRoutinesLabels(true, false, 0, false, 4, 999, "FiguresLabels");
+		} else {
+			reportRoutinesLabels(true, false, 0, false, 0, 999, "FiguresLabels");
+
 		}
-		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-		RoutinesController.showRoutinesLabelsReport(meet, skipLabels, true,
-				false);
-		setCursor(Cursor.getDefaultCursor());
 	}// GEN-LAST:event_reportNovRoutineLabelsActionPerformed
 
 	private void reportNovRoutinesActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_reportNovRoutinesActionPerformed
@@ -1546,8 +1645,8 @@ public class SynchroFrame extends javax.swing.JFrame {
 		setCursor(Cursor.getDefaultCursor());
 	}// GEN-LAST:event_reportNovRoutinesActionPerformed
 
-	private void reportIntFigureLabelsActionPerformed(
-			java.awt.event.ActionEvent evt) {// GEN-FIRST:event_reportIntFigureLabelsActionPerformed
+	private void reportIntFigureLabelsActionPerformed(int min, int max,
+			String report) {// GEN-FIRST:event_reportIntFigureLabelsActionPerformed
 		ScoreController.calculateMeetResultsIfNeeded(meet);
 
 		if (ScoreController.percentCompleteFigures(meet, false) < 100) {
@@ -1562,14 +1661,18 @@ public class SynchroFrame extends javax.swing.JFrame {
 		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 		try {
 			JasperReport jasperReport = (JasperReport) JRLoader
-					.loadObject(getClass().getResourceAsStream(
-							"/org/aquastarz/score/report/FiguresLabels.jasper"));
-			List<FiguresLabel> figuresLabels = new LinkedList<FiguresLabel>();
+					.loadObject(getClass()
+							.getResourceAsStream(
+									"/org/aquastarz/score/report/" + report
+											+ ".jasper"));
+			List<Label> figuresLabels = new LinkedList<Label>();
 			for (int i = 0; i < skipLabels; i++) {
 				figuresLabels.add(null);
 			}
-			figuresLabels.addAll(ScoreController.generateFiguresLabels(meet,
-					false));
+			for (Label fl : ScoreController.generateFiguresLabels(meet, false)) {
+				if (fl.getPlace() >= min && fl.getPlace() <= max)
+					figuresLabels.add(fl);
+			}
 			JRDataSource data = new JRBeanCollectionDataSource(figuresLabels);
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put("MeetDate", meet.getMeetDate());
@@ -1584,8 +1687,8 @@ public class SynchroFrame extends javax.swing.JFrame {
 		setCursor(Cursor.getDefaultCursor());
 	}// GEN-LAST:event_reportIntFigureLabelsActionPerformed
 
-	private void reportNovFigureLabelsActionPerformed(
-			java.awt.event.ActionEvent evt) {// GEN-FIRST:event_reportNovFigureLabelsActionPerformed
+	private void reportNovFigureLabelsActionPerformed(int min, int max,
+			String report) {// GEN-FIRST:event_reportNovFigureLabelsActionPerformed
 		ScoreController.calculateMeetResultsIfNeeded(meet);
 
 		if (ScoreController.percentCompleteFigures(meet, true) < 100) {
@@ -1600,14 +1703,18 @@ public class SynchroFrame extends javax.swing.JFrame {
 		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 		try {
 			JasperReport jasperReport = (JasperReport) JRLoader
-					.loadObject(getClass().getResourceAsStream(
-							"/org/aquastarz/score/report/FiguresLabels.jasper"));
-			List<FiguresLabel> figuresLabels = new LinkedList<FiguresLabel>();
+					.loadObject(getClass()
+							.getResourceAsStream(
+									"/org/aquastarz/score/report/" + report
+											+ ".jasper"));
+			List<Label> figuresLabels = new LinkedList<Label>();
 			for (int i = 0; i < skipLabels; i++) {
 				figuresLabels.add(null);
 			}
-			figuresLabels.addAll(ScoreController.generateFiguresLabels(meet,
-					true));
+			for (Label fl : ScoreController.generateFiguresLabels(meet, true)) {
+				if (fl.getPlace() >= min && fl.getPlace() <= max)
+					figuresLabels.add(fl);
+			}
 			JRDataSource data = new JRBeanCollectionDataSource(figuresLabels);
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put("MeetDate", meet.getMeetDate());
@@ -2112,7 +2219,7 @@ public class SynchroFrame extends javax.swing.JFrame {
 	private javax.swing.JRadioButton leagueSortByName;
 	private javax.swing.JRadioButton leagueSortByNumber;
 	private javax.swing.JRadioButton leagueSortByTeam;
-	private javax.swing.JComboBox leagueTeamCombo;
+	private javax.swing.JComboBox<String> leagueTeamCombo;
 	private org.aquastarz.score.gui.MeetSetupPanel meetSetup;
 	private javax.swing.JProgressBar novFiguresProgress;
 	private javax.swing.JButton numMeetsPrintButton;
@@ -2143,5 +2250,6 @@ public class SynchroFrame extends javax.swing.JFrame {
 	private javax.swing.JPanel swimmers;
 	private javax.swing.JTabbedPane tabPane;
 	private javax.swing.JTabbedPane teamTabs;
-	// End of variables declaration//GEN-END:variables
+	private final JCheckBox chckbxRoundLabels = new JCheckBox("Round Labels");;
+
 }

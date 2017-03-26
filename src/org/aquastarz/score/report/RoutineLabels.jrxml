@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Figures Labels" columnCount="3" printOrder="Horizontal" pageWidth="612" pageHeight="792" columnWidth="187" columnSpacing="11" leftMargin="14" rightMargin="14" topMargin="36" bottomMargin="36">
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2017-03-25T22:25:04 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Figures Labels" columnCount="3" printOrder="Horizontal" pageWidth="612" pageHeight="792" columnWidth="187" columnSpacing="11" leftMargin="14" rightMargin="14" topMargin="36" bottomMargin="36" uuid="a379d694-e4fd-465c-bde2-5fee0f43ecae">
 	<property name="ireport.zoom" value="3.0"/>
 	<property name="ireport.x" value="49"/>
 	<property name="ireport.y" value="95"/>
@@ -60,16 +62,16 @@
 	<detail>
 		<band height="72" splitType="Prevent">
 			<textField>
-				<reportElement x="6" y="41" width="191" height="14">
+				<reportElement x="6" y="41" width="191" height="14" uuid="7df0e5d6-a72a-42e3-889c-480e4d2bdafb">
 					<printWhenExpression><![CDATA[$F{name}!=null]]></printWhenExpression>
 				</reportElement>
 				<textElement>
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["NAME: "+$F{name}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["NAME: "+$F{name}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="6" y="5" width="191" height="14">
+				<reportElement x="6" y="5" width="191" height="14" uuid="8cf36b1e-2fd5-4da2-81c4-9fc565b23322">
 					<printWhenExpression><![CDATA[$F{name}!=null]]></printWhenExpression>
 				</reportElement>
 				<textElement>
@@ -78,49 +80,49 @@
 				<text><![CDATA[VFCAL SYNCHRONIZED SWIMMING]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="6" y="17" width="191" height="14">
+				<reportElement x="6" y="17" width="191" height="14" uuid="9a773394-ea18-4267-95aa-a69ab4ac3a43">
 					<printWhenExpression><![CDATA[$F{name}!=null]]></printWhenExpression>
 				</reportElement>
 				<textElement>
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["MEET: "+$P{MeetName}+" "+$P{MeetDate}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["MEET: "+$P{MeetName}+" "+$P{MeetDate}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="6" y="29" width="191" height="14">
+				<reportElement x="6" y="29" width="191" height="14" uuid="7a7c23e0-dc83-4fe7-ad47-7ae0a707f70f">
 					<printWhenExpression><![CDATA[$F{name}!=null]]></printWhenExpression>
 				</reportElement>
 				<textElement>
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["LEVEL: "+$F{level}.toString()+" "+$F{routineType}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["LEVEL: "+$F{level}.toString()+" "+$F{routineType}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="6" y="53" width="50" height="14">
+				<reportElement x="6" y="53" width="50" height="14" uuid="acea4744-2c41-4bea-9dae-ba2a79883416">
 					<printWhenExpression><![CDATA[$F{name}!=null]]></printWhenExpression>
 				</reportElement>
 				<textElement>
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["PLACE: "+$F{place}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["PLACE: "+$F{place}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="55" y="53" width="60" height="14">
+				<reportElement x="55" y="53" width="60" height="14" uuid="5a543e04-3f86-4c4e-b758-65b895f749ad">
 					<printWhenExpression><![CDATA[$F{name}!=null]]></printWhenExpression>
 				</reportElement>
 				<textElement>
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["TEAM: "+$F{team}.getTeamId()]]></textFieldExpression>
+				<textFieldExpression><![CDATA["TEAM: "+$F{team}.getTeamId()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="114" y="53" width="83" height="14">
+				<reportElement x="114" y="53" width="83" height="14" uuid="6154a836-0a75-4239-8282-3dd13414e5e1">
 					<printWhenExpression><![CDATA[$F{name}!=null]]></printWhenExpression>
 				</reportElement>
 				<textElement>
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["SCORE: "+$F{totalScore}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["SCORE: "+$F{totalScore}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

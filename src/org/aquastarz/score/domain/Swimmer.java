@@ -22,6 +22,7 @@ package org.aquastarz.score.domain;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -37,157 +38,165 @@ import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(uniqueConstraints={@UniqueConstraint(columnNames={"season","leagueNum"})})
-@NamedQueries({@NamedQuery(name = "Swimmer.findByTeamIdAndSeasonOrderByLeagueNum", query = "SELECT s FROM Swimmer s where s.team.teamId like :teamId and s.season like :season order by leagueNum"),
-    @NamedQuery(name = "Swimmer.findByLeagueNumAndSeason", query = "SELECT s FROM Swimmer s where s.leagueNum like :leagueNum and s.season = :season"),
-    @NamedQuery(name = "Swimmer.findByTeamIdAndSeasonOrderByName", query = "SELECT s FROM Swimmer s where s.team.teamId like :teamId and s.season like :season order by lastName,firstName"),
-    @NamedQuery(name = "Swimmer.findBySeasonOrderByTeamAndName", query = "SELECT s FROM Swimmer s where s.season like :season order by team,lastName,firstName"),
-    @NamedQuery(name = "Swimmer.findByTeamIdAndSeasonOrderByTeamAndName", query = "SELECT s FROM Swimmer s where s.team.teamId like :teamId and s.season like :season order by team,lastName,firstName"),
-    @NamedQuery(name = "Swimmer.findByTeamIdAndSeasonOrderByLevelAndName", query = "SELECT s FROM Swimmer s where s.team.teamId like :teamId and s.season like :season order by level.sortOrder,lastName,firstName"),
-    @NamedQuery(name = "Swimmer.findMaxLeagueIdBySeason", query = "SELECT max(s.leagueNum) FROM Swimmer s where s.season like :season")})
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "season",
+		"leagueNum" }) })
+@NamedQueries({
+		@NamedQuery(name = "Swimmer.findByTeamIdAndSeasonOrderByLeagueNum", query = "SELECT s FROM Swimmer s where s.team.teamId like :teamId and s.season = :season order by s.leagueNum"),
+		@NamedQuery(name = "Swimmer.findByLeagueNumAndSeason", query = "SELECT s FROM Swimmer s where s.leagueNum like :leagueNum and s.season = :season"),
+		@NamedQuery(name = "Swimmer.findByTeamIdAndSeasonOrderByName", query = "SELECT s FROM Swimmer s where s.team.teamId like :teamId and s.season = :season order by s.lastName,s.firstName"),
+		@NamedQuery(name = "Swimmer.findBySeasonOrderByTeamAndName", query = "SELECT s FROM Swimmer s where s.season = :season order by s.team,s.lastName,s.firstName"),
+		@NamedQuery(name = "Swimmer.findByTeamIdAndSeasonOrderByTeamAndName", query = "SELECT s FROM Swimmer s where s.team.teamId like :teamId and s.season = :season order by s.team,s.lastName,s.firstName"),
+		@NamedQuery(name = "Swimmer.findByTeamIdAndSeasonOrderByLevelAndName", query = "SELECT s FROM Swimmer s where s.team.teamId like :teamId and s.season = :season order by s.level.sortOrder,s.lastName,s.firstName"),
+		@NamedQuery(name = "Swimmer.findMaxLeagueIdBySeason", query = "SELECT max(s.leagueNum) FROM Swimmer s where s.season = :season") })
 public class Swimmer implements Serializable {
 
-    @Transient
-    private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
-    private static final long serialVersionUID = 1L;
+	@Transient
+	private final PropertyChangeSupport changeSupport = new PropertyChangeSupport(
+			this);
+	private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer swimmerId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer swimmerId;
 
-    @Basic(optional = false)
-    @Column(name = "leagueNum", nullable = false)
-    private Integer leagueNum;
+	@Basic(optional = false)
+	@Column(name = "leagueNum", nullable = false)
+	private Integer leagueNum;
 
-    @Basic(optional = false)
-    @Column(name = "firstName", nullable = false, length = 45)
-    private String firstName;
+	@Basic(optional = false)
+	@Column(name = "firstName", nullable = false, length = 45)
+	private String firstName;
 
-    @Basic(optional = false)
-    @Column(name = "lastName", nullable = false, length = 45)
-    private String lastName;
+	@Basic(optional = false)
+	@Column(name = "lastName", nullable = false, length = 45)
+	private String lastName;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "level", referencedColumnName = "levelId", nullable = false)
-    private Level level;
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "level", referencedColumnName = "levelId", nullable = false)
+	private Level level;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "team", referencedColumnName = "teamId", nullable = false)
-    private Team team;
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "team", referencedColumnName = "teamId", nullable = false)
+	private Team team;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "season")
-    private Season season;
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "season")
+	private Season season;
 
-    public Swimmer() {
-    }
+	public Swimmer() {
+	}
 
-    public Swimmer(Integer leagueNum, Season season) {
-        this.leagueNum = leagueNum;
-        this.season = season;
-    }
+	public Swimmer(Integer leagueNum, Season season) {
+		this.leagueNum = leagueNum;
+		this.season = season;
+	}
 
-    public Swimmer(Integer leagueNum, Season season, Team team, Level level, String firstName, String lastName) {
-        this.leagueNum = leagueNum;
-        this.season = season;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.level = level;
-        this.team = team;
-    }
+	public Swimmer(Integer leagueNum, Season season, Team team, Level level,
+			String firstName, String lastName) {
+		this.leagueNum = leagueNum;
+		this.season = season;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.level = level;
+		this.team = team;
+	}
 
-    public Integer getSwimmerId() {
-        return swimmerId;
-    }
+	public Integer getSwimmerId() {
+		return swimmerId;
+	}
 
-    public Integer getLeagueNum() {
-        return leagueNum;
-    }
+	public Integer getLeagueNum() {
+		return leagueNum;
+	}
 
-    public void setLeagueNum(Integer leagueNum) {
-        Integer oldLeagueNum = this.leagueNum;
-        this.leagueNum = leagueNum;
-        changeSupport.firePropertyChange("leagueNum", oldLeagueNum, leagueNum);
-    }
+	public void setLeagueNum(Integer leagueNum) {
+		Integer oldLeagueNum = this.leagueNum;
+		this.leagueNum = leagueNum;
+		changeSupport.firePropertyChange("leagueNum", oldLeagueNum, leagueNum);
+	}
 
-    public String getFirstName() {
-        return firstName;
-    }
+	public String getFirstName() {
+		return firstName;
+	}
 
-    public void setFirstName(String firstName) {
-        String oldFirstName = this.firstName;
-        this.firstName = firstName;
-        changeSupport.firePropertyChange("firstName", oldFirstName, firstName);
-    }
+	public void setFirstName(String firstName) {
+		String oldFirstName = this.firstName;
+		this.firstName = firstName;
+		changeSupport.firePropertyChange("firstName", oldFirstName, firstName);
+	}
 
-    public String getLastName() {
-        return lastName;
-    }
+	public String getLastName() {
+		return lastName;
+	}
 
-    public void setLastName(String lastName) {
-        String oldLastName = this.lastName;
-        this.lastName = lastName;
-        changeSupport.firePropertyChange("lastName", oldLastName, lastName);
-    }
+	public void setLastName(String lastName) {
+		String oldLastName = this.lastName;
+		this.lastName = lastName;
+		changeSupport.firePropertyChange("lastName", oldLastName, lastName);
+	}
 
-    public Level getLevel() {
-        return level;
-    }
+	public Level getLevel() {
+		return level;
+	}
 
-    public void setLevel(Level level) {
-        Level oldLevel = this.level;
-        this.level = level;
-        changeSupport.firePropertyChange("level", oldLevel, level);
-    }
+	public void setLevel(Level level) {
+		Level oldLevel = this.level;
+		this.level = level;
+		changeSupport.firePropertyChange("level", oldLevel, level);
+	}
 
-    public Team getTeam() {
-        return team;
-    }
+	public Team getTeam() {
+		return team;
+	}
 
-    public void setTeam(Team team) {
-        Team oldTeam = this.team;
-        this.team = team;
-        changeSupport.firePropertyChange("team", oldTeam, team);
-    }
+	public void setTeam(Team team) {
+		Team oldTeam = this.team;
+		this.team = team;
+		changeSupport.firePropertyChange("team", oldTeam, team);
+	}
 
-    public Season getSeason() {
-        return season;
-    }
+	public Season getSeason() {
+		return season;
+	}
 
-    public void setSeason(Season season) {
-        this.season = season;
-    }
+	public void setSeason(Season season) {
+		this.season = season;
+	}
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (swimmerId != null ? swimmerId.hashCode() : 0);
-        return hash;
-    }
+	@Override
+	public int hashCode() {
+		int hash = 0;
+		hash += (swimmerId != null ? swimmerId.hashCode() : 0);
+		return hash;
+	}
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Swimmer)) {
-            return false;
-        }
-        Swimmer other = (Swimmer) object;
-        if ((this.swimmerId == null && other.swimmerId != null) || (this.swimmerId != null && !this.swimmerId.equals(other.swimmerId))) {
-            return false;
-        }
-        return true;
-    }
+	@Override
+	public boolean equals(Object object) {
+		// TODO: Warning - this method won't work in the case the id fields are
+		// not set
+		if (!(object instanceof Swimmer)) {
+			return false;
+		}
+		Swimmer other = (Swimmer) object;
+		if ((this.swimmerId == null && other.swimmerId != null)
+				|| (this.swimmerId != null && !this.swimmerId
+						.equals(other.swimmerId))) {
+			return false;
+		}
+		return true;
+	}
 
-    @Override
-    public String toString() {
-        return "#" + leagueNum + " " + lastName + ", " + firstName + " (" + level.getLevelId() + ")";
-    }
+	@Override
+	public String toString() {
+		return "#" + leagueNum + " " + lastName + ", " + firstName + " ("
+				+ level.getLevelId() + ")";
+	}
 
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        changeSupport.addPropertyChangeListener(listener);
-    }
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		changeSupport.addPropertyChangeListener(listener);
+	}
 
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
-        changeSupport.removePropertyChangeListener(listener);
-    }
+	public void removePropertyChangeListener(PropertyChangeListener listener) {
+		changeSupport.removePropertyChangeListener(listener);
+	}
 }

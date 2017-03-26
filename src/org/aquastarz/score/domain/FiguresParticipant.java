@@ -25,7 +25,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Vector;
+
 import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -38,154 +40,167 @@ import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 @Entity
-@NamedQueries({@NamedQuery(name = "FiguresParticipant.findAll", query = "SELECT f FROM FiguresParticipant f"),
-    @NamedQuery(name = "FiguresParticipant.findByMeetAndFigureOrder", query = "SELECT f FROM FiguresParticipant f WHERE f.figureOrder = :figureOrder and f.meet = :meet"),
-    @NamedQuery(name = "FiguresParticipant.findByMeetAndSwimmer", query = "SELECT f FROM FiguresParticipant f WHERE f.meet = :meet and f.swimmer = :swimmer"),
-    @NamedQuery(name = "FiguresParticipant.countBySeasonAndSwimmerAndHasScoreAndRegularMeet", query = "SELECT count(f) FROM FiguresParticipant f WHERE f.meet.season = :season and f.swimmer = :swimmer and f.totalScore>0 and f.meet.type='R'"),
-    @NamedQuery(name = "FiguresParticipant.findByMeetAndLevelOrderByTotalScore", query = "SELECT f FROM FiguresParticipant f WHERE f.swimmer.level.id like :level and f.meet = :meet order by f.swimmer.level.sortOrder asc, f.totalScore desc")})
+@NamedQueries({
+		@NamedQuery(name = "FiguresParticipant.findAll", query = "SELECT f FROM FiguresParticipant f"),
+		@NamedQuery(name = "FiguresParticipant.findByMeetAndFigureOrder", query = "SELECT f FROM FiguresParticipant f WHERE f.figureOrder = :figureOrder and f.meet = :meet"),
+		@NamedQuery(name = "FiguresParticipant.findByMeetAndSwimmer", query = "SELECT f FROM FiguresParticipant f WHERE f.meet = :meet and f.swimmer = :swimmer"),
+		@NamedQuery(name = "FiguresParticipant.countBySeasonAndSwimmerAndHasScoreAndRegularMeet", query = "SELECT count(f) FROM FiguresParticipant f WHERE f.meet.season = :season and f.swimmer = :swimmer and f.totalScore>0 and f.meet.type like 'R'"),
+		@NamedQuery(name = "FiguresParticipant.findByMeetAndLevelOrderByTotalScore", query = "SELECT f FROM FiguresParticipant f WHERE f.swimmer.level.levelId like :level and f.meet = :meet order by f.swimmer.level.sortOrder asc, f.totalScore desc") })
 public class FiguresParticipant implements Serializable {
 
-    @Transient
-    private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
-    private static final long serialVersionUID = 1L;
+	@Transient
+	private final PropertyChangeSupport changeSupport = new PropertyChangeSupport(
+			this);
+	private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer figuresParticipantId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer figuresParticipantId;
 
-    @Basic(optional = true)
-    private String figureOrder;
+	@Basic(optional = true)
+	private String figureOrder;
 
-    @ManyToOne
-    @JoinColumn(name = "swimmerId")
-    private Swimmer swimmer;
+	@ManyToOne
+	@JoinColumn(name = "swimmerId")
+	private Swimmer swimmer;
 
-    @ManyToOne
-    @JoinColumn(name = "meetId")
-    private Meet meet;
+	@ManyToOne
+	@JoinColumn(name = "meetId")
+	private Meet meet;
 
-    @Basic(optional = true)
-    private BigDecimal totalScore;
+	@Basic(optional = true)
+	@Column(precision = 5, scale = 2)
+	private BigDecimal totalScore;
 
-    @Basic(optional = true)
-    private Integer place;
+	@Basic(optional = true)
+	private Integer place;
 
-    @Basic(optional = true)
-    private BigDecimal points;
+	@Basic(optional = true)
+	@Column(precision = 5, scale = 2)
+	private BigDecimal points;
 
-    @OneToMany(mappedBy = "figuresParticipant")
-    private Collection<FigureScore> figureScores = new Vector<FigureScore>();
+	@OneToMany(mappedBy = "figuresParticipant")
+	private Collection<FigureScore> figureScores = new Vector<FigureScore>();
 
-    public Collection<FigureScore> getFiguresScores() {
-        return figureScores;
-    }
+	public Collection<FigureScore> getFiguresScores() {
+		return figureScores;
+	}
 
-    public void setFiguresScores(Collection<FigureScore> figureScores) {
-        this.figureScores = figureScores;
-    }
+	public void setFiguresScores(Collection<FigureScore> figureScores) {
+		this.figureScores = figureScores;
+	}
 
-    public FiguresParticipant() {
-    }
+	public FiguresParticipant() {
+	}
 
-    public FiguresParticipant(Meet meet, Swimmer swimmer) {
-        this.meet = meet;
-        this.swimmer = swimmer;
-    }
+	public FiguresParticipant(Meet meet, Swimmer swimmer) {
+		this.meet = meet;
+		this.swimmer = swimmer;
+	}
 
-    public Integer getFiguresParticipantId() {
-        return figuresParticipantId;
-    }
+	public Integer getFiguresParticipantId() {
+		return figuresParticipantId;
+	}
 
-    public String getFigureOrder() {
-        return figureOrder;
-    }
+	public String getFigureOrder() {
+		return figureOrder;
+	}
 
-    public void setFigureOrder(String figureOrder) {
-        String oldFigureOrder = this.figureOrder;
-        this.figureOrder = figureOrder;
-        changeSupport.firePropertyChange("figureOrder", oldFigureOrder, figureOrder);
-    }
+	public void setFigureOrder(String figureOrder) {
+		String oldFigureOrder = this.figureOrder;
+		this.figureOrder = figureOrder;
+		changeSupport.firePropertyChange("figureOrder", oldFigureOrder,
+				figureOrder);
+	}
 
-    public BigDecimal getTotalScore() {
-        return totalScore;
-    }
+	public BigDecimal getTotalScore() {
+		return totalScore;
+	}
 
-    public void setTotalScore(BigDecimal totalScore) {
-        BigDecimal oldTotalScore = this.totalScore;
-        this.totalScore = totalScore;
-        changeSupport.firePropertyChange("totalScore", oldTotalScore, totalScore);
-    }
+	public void setTotalScore(BigDecimal totalScore) {
+		BigDecimal oldTotalScore = this.totalScore;
+		this.totalScore = totalScore;
+		changeSupport.firePropertyChange("totalScore", oldTotalScore,
+				totalScore);
+	}
 
-    public Integer getPlace() {
-        return place;
-    }
+	public Integer getPlace() {
+		return place;
+	}
 
-    public void setPlace(Integer place) {
-        Integer oldPlace = this.place;
-        this.place = place;
-        changeSupport.firePropertyChange("place", oldPlace, place);
-    }
+	public void setPlace(Integer place) {
+		Integer oldPlace = this.place;
+		this.place = place;
+		changeSupport.firePropertyChange("place", oldPlace, place);
+	}
 
-    public BigDecimal getPoints() {
-        return points;
-    }
+	public BigDecimal getPoints() {
+		return points;
+	}
 
-    public void setPoints(BigDecimal points) {
-        BigDecimal oldPoints = this.points;
-        this.points = points;
-        changeSupport.firePropertyChange("points", oldPoints, points);
-    }
+	public void setPoints(BigDecimal points) {
+		BigDecimal oldPoints = this.points;
+		this.points = points;
+		changeSupport.firePropertyChange("points", oldPoints, points);
+	}
 
-    public Swimmer getSwimmer() {
-        return swimmer;
-    }
+	public Swimmer getSwimmer() {
+		return swimmer;
+	}
 
-    public void setSwimmer(Swimmer swimmer) {
-        Swimmer oldSwimmer = this.swimmer;
-        this.swimmer = swimmer;
-        changeSupport.firePropertyChange("swimmer", oldSwimmer, swimmer);
-    }
+	public void setSwimmer(Swimmer swimmer) {
+		Swimmer oldSwimmer = this.swimmer;
+		this.swimmer = swimmer;
+		changeSupport.firePropertyChange("swimmer", oldSwimmer, swimmer);
+	}
 
-    public Meet getMeet() {
-        return meet;
-    }
+	public Meet getMeet() {
+		return meet;
+	}
 
-    public void setMeet(Meet meet) {
-        Meet oldMeet = this.meet;
-        this.meet = meet;
-        changeSupport.firePropertyChange("meet", oldMeet, meet);
-    }
+	public void setMeet(Meet meet) {
+		Meet oldMeet = this.meet;
+		this.meet = meet;
+		changeSupport.firePropertyChange("meet", oldMeet, meet);
+	}
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (figuresParticipantId != null ? figuresParticipantId.hashCode() : 0);
-        return hash;
-    }
+	@Override
+	public int hashCode() {
+		int hash = 0;
+		hash += (figuresParticipantId != null ? figuresParticipantId.hashCode()
+				: 0);
+		return hash;
+	}
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof FiguresParticipant)) {
-            return false;
-        }
-        FiguresParticipant other = (FiguresParticipant) object;
-        if ((this.figuresParticipantId == null && other.figuresParticipantId != null) || (this.figuresParticipantId != null && !this.figuresParticipantId.equals(other.figuresParticipantId))) {
-            return false;
-        }
-        return true;
-    }
+	@Override
+	public boolean equals(Object object) {
+		// TODO: Warning - this method won't work in the case the id fields are
+		// not set
+		if (!(object instanceof FiguresParticipant)) {
+			return false;
+		}
+		FiguresParticipant other = (FiguresParticipant) object;
+		if ((this.figuresParticipantId == null && other.figuresParticipantId != null)
+				|| (this.figuresParticipantId != null && !this.figuresParticipantId
+						.equals(other.figuresParticipantId))) {
+			return false;
+		}
+		return true;
+	}
 
-    @Override
-    public String toString() {
-        return "#" + figureOrder + (swimmer!=null?(" "+swimmer.getLastName()+", "+swimmer.getFirstName()):"");
-    }
+	@Override
+	public String toString() {
+		return "#"
+				+ figureOrder
+				+ (swimmer != null ? (" " + swimmer.getLastName() + ", " + swimmer
+						.getFirstName()) : "");
+	}
 
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        changeSupport.addPropertyChangeListener(listener);
-    }
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		changeSupport.addPropertyChangeListener(listener);
+	}
 
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
-        changeSupport.removePropertyChangeListener(listener);
-    }
+	public void removePropertyChangeListener(PropertyChangeListener listener) {
+		changeSupport.removePropertyChangeListener(listener);
+	}
 }
