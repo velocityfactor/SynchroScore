@@ -7,4 +7,5 @@ package org.aquastarz.score.gui.event;
 public interface FiguresParticipantSearchPanelListener {
     public void figuresParticipantSearchRequested(String figureOrder);
     public void figuresParticipantSet();
+    public void figuresParticipantEdit();
 }

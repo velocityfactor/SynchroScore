@@ -23,6 +23,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 import java.util.Collection;
+
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -36,87 +37,93 @@ import javax.persistence.Transient;
 
 @Entity
 @Table(name = "team")
-@NamedQueries({@NamedQuery(name = "Team.findAllOrderByTeamId", query = "SELECT t FROM Team t order by teamId"), @NamedQuery(name = "Team.findByTeamId", query = "SELECT t FROM Team t WHERE t.teamId = :teamId"), @NamedQuery(name = "Team.findByName", query = "SELECT t FROM Team t WHERE t.name = :name")})
+@NamedQueries({
+		@NamedQuery(name = "Team.findAllOrderByTeamId", query = "SELECT t FROM Team t order by t.teamId"),
+		@NamedQuery(name = "Team.findByTeamId", query = "SELECT t FROM Team t WHERE t.teamId = :teamId"),
+		@NamedQuery(name = "Team.findByName", query = "SELECT t FROM Team t WHERE t.name = :name") })
 public class Team implements Serializable {
-    @Transient
-    private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
-    private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @Column(name = "teamId", nullable = false, length = 3)
-    private String teamId;
-    @Basic(optional = false)
-    @Column(name = "name", nullable = false, length = 45)
-    private String name;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "team")
-    private Collection<Swimmer> swimmerCollection;
+	@Transient
+	private final PropertyChangeSupport changeSupport = new PropertyChangeSupport(
+			this);
+	private static final long serialVersionUID = 1L;
+	@Id
+	@Basic(optional = false)
+	@Column(name = "teamId", nullable = false, length = 3)
+	private String teamId;
+	@Basic(optional = false)
+	@Column(name = "name", nullable = false, length = 45)
+	private String name;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "team")
+	private Collection<Swimmer> swimmerCollection;
 
-    public Team() {
-    }
+	public Team() {
+	}
 
-    public Team(String teamId) {
-        this.teamId = teamId;
-    }
+	public Team(String teamId) {
+		this.teamId = teamId;
+	}
 
-    public Team(String teamId, String name) {
-        this.teamId = teamId;
-        this.name = name;
-    }
+	public Team(String teamId, String name) {
+		this.teamId = teamId;
+		this.name = name;
+	}
 
-    public String getTeamId() {
-        return teamId;
-    }
+	public String getTeamId() {
+		return teamId;
+	}
 
-    public void setTeamId(String teamId) {
-        this.teamId = teamId;
-    }
+	public void setTeamId(String teamId) {
+		this.teamId = teamId;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public Collection<Swimmer> getSwimmerCollection() {
-        return swimmerCollection;
-    }
+	public Collection<Swimmer> getSwimmerCollection() {
+		return swimmerCollection;
+	}
 
-    public void setSwimmerCollection(Collection<Swimmer> swimmerCollection) {
-        this.swimmerCollection = swimmerCollection;
-    }
+	public void setSwimmerCollection(Collection<Swimmer> swimmerCollection) {
+		this.swimmerCollection = swimmerCollection;
+	}
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (teamId != null ? teamId.hashCode() : 0);
-        return hash;
-    }
+	@Override
+	public int hashCode() {
+		int hash = 0;
+		hash += (teamId != null ? teamId.hashCode() : 0);
+		return hash;
+	}
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Team)) {
-            return false;
-        }
-        Team other = (Team) object;
-        if ((this.teamId == null && other.teamId != null) || (this.teamId != null && !this.teamId.equals(other.teamId))) {
-            return false;
-        }
-        return true;
-    }
+	@Override
+	public boolean equals(Object object) {
+		// TODO: Warning - this method won't work in the case the id fields are
+		// not set
+		if (!(object instanceof Team)) {
+			return false;
+		}
+		Team other = (Team) object;
+		if ((this.teamId == null && other.teamId != null)
+				|| (this.teamId != null && !this.teamId.equals(other.teamId))) {
+			return false;
+		}
+		return true;
+	}
 
-    @Override
-    public String toString() {
-        return name;
-    }
+	@Override
+	public String toString() {
+		return name;
+	}
 
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        changeSupport.addPropertyChangeListener(listener);
-    }
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		changeSupport.addPropertyChangeListener(listener);
+	}
 
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
-        changeSupport.removePropertyChangeListener(listener);
-    }
+	public void removePropertyChangeListener(PropertyChangeListener listener) {
+		changeSupport.removePropertyChangeListener(listener);
+	}
 }

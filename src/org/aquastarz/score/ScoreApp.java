@@ -26,6 +26,7 @@ import java.util.TreeMap;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.swing.JOptionPane;
 
 import org.aquastarz.score.config.Bootstrap;
 import org.aquastarz.score.controller.ScoreController;
@@ -43,14 +44,14 @@ public class ScoreApp {
 			+ productionFilename + "/Synchro;write_delay=false";
 	private static final String testUrl = "jdbc:hsqldb:mem:Synchro";
 	private static String dbUrl = null;
-	private static Map props = null;
+	private static Map<String, String> props = null;
 	private static EntityManager entityManager = null;
 
 	public static EntityManager getEntityManager() {
 		if (entityManager == null) {
 			if (dbUrl == null) { // test mode
 				dbUrl = testUrl;
-				Map initProps = new TreeMap();
+				Map<String, String> initProps = new TreeMap<String, String>();
 				initProps.put("hibernate.hbm2ddl.auto", "create-drop");
 				initProps.put("hibernate.connection.url", dbUrl);
 				entityManager = javax.persistence.Persistence
@@ -58,7 +59,7 @@ public class ScoreApp {
 						.createEntityManager();
 			} else {
 				if (props == null) {
-					props = new TreeMap();
+					props = new TreeMap<String, String>();
 					props.put("hibernate.hbm2ddl.auto", "update");
 					props.put("hibernate.connection.url", dbUrl);
 				}
@@ -143,7 +144,7 @@ public class ScoreApp {
 		if (!db.exists()) {
 			logger.info("No db file found, create...");
 			db.mkdir();
-			Map initProps = new TreeMap();
+			Map<String, String> initProps = new TreeMap<String, String>();
 			initProps.put("hibernate.hbm2ddl.auto", "create");
 			initProps.put("hibernate.connection.url", dbUrl);
 			EntityManager entityManager = javax.persistence.Persistence
@@ -156,6 +157,13 @@ public class ScoreApp {
 	public static void findCurrentSeason() {
 		Calendar cal = Calendar.getInstance();
 		int year = cal.get(Calendar.YEAR);
+
+		while (year < 2018) {
+			String ys = JOptionPane.showInputDialog(null,
+					"The year " + year + " is not valid. Enter the current year.");
+			year = Integer.parseInt(ys);
+
+		}
 
 		EntityManager entityManager = getEntityManager();
 		Query query = entityManager.createNamedQuery("Season.findByName");
@@ -177,6 +185,6 @@ public class ScoreApp {
 	}
 
 	public static String getVersion() {
-		return "1.09";
+		return "1.22";
 	}
 }

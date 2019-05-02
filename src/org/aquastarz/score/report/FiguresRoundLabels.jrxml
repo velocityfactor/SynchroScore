@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.5.1  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Figures Labels" columnCount="4" printOrder="Horizontal" pageWidth="612" pageHeight="792" columnWidth="116" columnSpacing="27" leftMargin="32" rightMargin="32" topMargin="36" bottomMargin="10" uuid="f6b8b0d4-f66f-43ec-b18d-ccd3ba8a96c3">
+	<property name="ireport.zoom" value="3.0"/>
+	<property name="ireport.x" value="26"/>
+	<property name="ireport.y" value="122"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<parameter name="MeetDate" class="java.lang.String"/>
+	<parameter name="MeetName" class="java.lang.String"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="levelName" class="java.lang.String"/>
+	<field name="place" class="java.lang.Integer"/>
+	<field name="team" class="java.lang.String"/>
+	<field name="score" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="121" splitType="Prevent">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<ellipse>
+				<reportElement x="0" y="0" width="120" height="120" uuid="f5d96658-c7df-4edc-b9f7-bcbcda726bc1">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[false]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Dotted"/>
+				</graphicElement>
+			</ellipse>
+			<staticText>
+				<reportElement x="0" y="19" width="120" height="16" uuid="eef6a4ad-5690-4c36-98fe-b5be42cb6f89">
+					<printWhenExpression><![CDATA[$F{name}!=null]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif" size="7" isBold="false" isItalic="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Synchronized Swimming]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="74" width="120" height="14" uuid="488f35f4-c6ba-4da8-bc0b-e6206518038b">
+					<printWhenExpression><![CDATA[$F{name}!=null]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{team}+" "+$F{levelName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="10" y="86" width="100" height="14" uuid="6d3ed8c8-8afc-4e2e-b345-de7ba6c23d50">
+					<printWhenExpression><![CDATA[$F{name}!=null]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["SCORE: "+$F{score}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="30" y="98" width="60" height="14" uuid="1dd01473-d055-4188-a599-e0b0437c6cf1">
+					<printWhenExpression><![CDATA[$F{name}!=null]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["PLACE: "+$F{place}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="40" width="120" height="32" uuid="3be42f90-231e-4c9a-9d28-61bcfba66154">
+					<printWhenExpression><![CDATA[$F{name}!=null]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="10" y="28" width="100" height="20" uuid="0272765c-7e4a-4c2b-85fc-2ffcac80580a">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[$F{name}!=null]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{MeetDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="7" y="8" width="106" height="16" uuid="26112d2e-3cc5-4847-8d28-270113feb550">
+					<printWhenExpression><![CDATA[$F{name}!=null]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif" size="8" isBold="false" isItalic="false"/>
+					<paragraph lineSpacing="Fixed"/>
+				</textElement>
+				<text><![CDATA[Championship]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -56,12 +56,13 @@ import org.aquastarz.score.domain.RoutineLevel;
 import org.aquastarz.score.domain.Season;
 import org.aquastarz.score.domain.Swimmer;
 import org.aquastarz.score.domain.Team;
+import org.aquastarz.score.gui.FiguresParticipantsTableModel;
 import org.aquastarz.score.gui.SynchroFrame;
 import org.aquastarz.score.manager.FigureManager;
 import org.aquastarz.score.manager.MeetManager;
 import org.aquastarz.score.manager.RoutineManager;
-import org.aquastarz.score.report.FiguresLabel;
 import org.aquastarz.score.report.FiguresMeetSheet;
+import org.aquastarz.score.report.Label;
 import org.aquastarz.score.report.StationResult;
 
 /**
@@ -95,47 +96,37 @@ public class ScoreController {
 				meet.setNov2Figure(FigureManager.findById("360"));
 				meet.setNov3Figure(null);
 				meet.setNov4Figure(null);
-				meet.setInt1Figure(FigureManager.findById("342"));
-				meet.setInt2Figure(FigureManager.findById("355d"));
+				meet.setInt1Figure(FigureManager.findById("308"));
+				meet.setInt2Figure(FigureManager.findById("115"));
 				meet.setInt3Figure(null);
 				meet.setInt4Figure(null);
 
-				// 2012 Schedule
-				if ("June 6, 2012".equals(meet.getMeetDate())) { // Group 3
+				// 2015 Schedule
+				if ("June 17, 2015".equals(meet.getMeetDate())
+						|| "June 19, 2015".equals(meet.getMeetDate())
+						|| "July 8, 2015".equals(meet.getMeetDate())) {
+					// Group 1
+					meet.setNov3Figure(FigureManager.findById("301"));
+					meet.setNov4Figure(FigureManager.findById("361"));
+					meet.setInt3Figure(FigureManager.findById("311a"));
+					meet.setInt4Figure(FigureManager.findById("326"));
+				}
+				if ("June 10, 2015".equals(meet.getMeetDate())
+						|| "July 1, 2015".equals(meet.getMeetDate())
+						|| meet.getMeetDate().startsWith("July 17")) {
+					// Group 2
+					meet.setNov3Figure(FigureManager.findById("349"));
+					meet.setNov4Figure(FigureManager.findById("321"));
+					meet.setInt3Figure(FigureManager.findById("140"));
+					meet.setInt4Figure(FigureManager.findById("420"));
+				}
+				if ("June 24, 2015".equals(meet.getMeetDate())
+						|| "June 26, 2015".equals(meet.getMeetDate())) {
+					// Group 3
 					meet.setNov3Figure(FigureManager.findById("315"));
 					meet.setNov4Figure(FigureManager.findById("344"));
 					meet.setInt3Figure(FigureManager.findById("240"));
 					meet.setInt4Figure(FigureManager.findById("346"));
-				}
-				if ("June 13, 2012".equals(meet.getMeetDate())) { // Group 2
-					meet.setNov3Figure(FigureManager.findById("349"));
-					meet.setNov4Figure(FigureManager.findById("321"));
-					meet.setInt3Figure(FigureManager.findById("140"));
-					meet.setInt4Figure(FigureManager.findById("420"));
-				}
-				if ("June 20, 2012".equals(meet.getMeetDate())) { // Group 1
-					meet.setNov3Figure(FigureManager.findById("301"));
-					meet.setNov4Figure(FigureManager.findById("361"));
-					meet.setInt3Figure(FigureManager.findById("311a"));
-					meet.setInt4Figure(FigureManager.findById("326"));
-				}
-				if ("June 27, 2012".equals(meet.getMeetDate())) { // Group 2
-					meet.setNov3Figure(FigureManager.findById("349"));
-					meet.setNov4Figure(FigureManager.findById("321"));
-					meet.setInt3Figure(FigureManager.findById("140"));
-					meet.setInt4Figure(FigureManager.findById("420"));
-				}
-				if ("July 11, 2012".equals(meet.getMeetDate())) { // Group 1
-					meet.setNov3Figure(FigureManager.findById("301"));
-					meet.setNov4Figure(FigureManager.findById("361"));
-					meet.setInt3Figure(FigureManager.findById("311a"));
-					meet.setInt4Figure(FigureManager.findById("326"));
-				}
-				if ("July 21, 2012".equals(meet.getMeetDate())) { // Group 2
-					meet.setNov3Figure(FigureManager.findById("349"));
-					meet.setNov4Figure(FigureManager.findById("321"));
-					meet.setInt3Figure(FigureManager.findById("140"));
-					meet.setInt4Figure(FigureManager.findById("420"));
 				}
 
 				transaction.commit();
@@ -285,7 +276,7 @@ public class ScoreController {
 				if (fp == null) { // Adding a new swimmer
 					fp = new FiguresParticipant(meet, s);
 					if (meet.getFiguresOrderGenerated()) {
-						String maxOrder = "";
+						String maxOrder = "0";
 						Integer newLevelOrder = fp.getSwimmer().getLevel()
 								.getSortOrder();
 						for (FiguresParticipant levelFp : meet
@@ -325,6 +316,11 @@ public class ScoreController {
 			for (FiguresParticipant fp : map.values()) {
 				entityManager.remove(fp);
 			}
+			meet.setFiguresParticipants(newList);
+			if (newList.isEmpty()) {
+				meet.setFiguresOrderGenerated(false);
+				entityManager.persist(meet);
+			}
 			transaction.commit();
 		} catch (Exception e) {
 			logger.error("Error updating figures swimmers.", e);
@@ -332,15 +328,20 @@ public class ScoreController {
 				transaction.rollback();
 			}
 		}
-		meet.setFiguresParticipants(newList);
+
 		mainFrame.updateFiguresStatus();
 	}
 
-	public boolean generateRandomFiguresOrder(Meet meet) {
+	public boolean generateRandomFiguresOrder(Meet meet,boolean useAge) {
 		Map<Double, FiguresParticipant> map = new TreeMap<Double, FiguresParticipant>();
 		for (FiguresParticipant fp : meet.getFiguresParticipants()) {
-			map.put(Math.random() + fp.getSwimmer().getLevel().getSortOrder(),
-					fp);
+			if(useAge) {
+				map.put(Math.random() + fp.getSwimmer().getLevel().getSortOrder(),
+						fp);
+			}
+			else {
+				map.put(Math.random()+(fp.getSwimmer().getLevel().isNovice()?1:2), fp);
+			}
 		}
 
 		// Calculate length to zero pad numbers (could be trickier, but this is
@@ -517,43 +518,75 @@ public class ScoreController {
 		return query.getResultList();
 	}
 
-	public static List<Routine> generateRoutineLabels(Meet meet,
-			boolean showNovice, boolean showIntermediate) {
+	public static List<Label> generateRoutineLabels(Meet meet,
+			boolean showNovice, boolean showIntermediate, int part,
+			boolean withNames, int min, int max) {
 		List<Routine> routines = generateRoutinesResults(meet, showNovice,
 				showIntermediate);
-		LinkedList<Routine> labels = new LinkedList<Routine>();
+		LinkedList<Label> labels = new LinkedList<Label>();
 		for (Routine routine : routines) {
-			String routineType = routine.getRoutineType();
-			if ("Duet".equals(routineType)) {
-				labels.add(routine);
-				labels.add(routine);
-			} else if ("Trio".equals(routineType)) {
-				labels.add(routine);
-				labels.add(routine);
-				labels.add(routine);
-			} else if ("Team".equals(routineType)) {
-				for (int i = 0; i < routine.getNumSwimmers(); i++) {
-					labels.add(routine);
+			if (part == 1
+					&& (routine.getLevel().getLevelId().equals("I11-18CT") || routine
+							.getRoutineType().equals("Solo")))
+				continue;
+			if (part == 2
+					&& (!routine.getLevel().getLevelId().equals("I11-18CT") && !routine
+							.getRoutineType().equals("Solo")))
+				continue;
+			if (routine.getPlace() < min || routine.getPlace() > max)
+				continue;
+			List<String> names = null;
+			if(withNames) {
+				names=RoutineManager.getNames(routine);
+			}
+			for (int i = 0; i < routine.getNumSwimmers(); i++) {
+				String swimmerName = "";
+				if(names!=null&& names.size()>i) {
+					swimmerName=names.get(i);
 				}
-			} else { // SOLO
-				labels.add(routine);
+				String level;
+				if (withNames) {
+					String levelId = routine.getLevel().getLevelId();
+					if (levelId.equals("I11-18CT")) {
+						level = "I11-18 Combo";
+					} else {
+						if (levelId.equals("I15"))
+							levelId = "I15-18";
+						if (levelId.equals("I11"))
+							levelId = "I11-14";
+						level = levelId + " " + routine.getRoutineType();
+					}
+				} else {
+					if (routine.getLevel().getName().endsWith("Team")) {
+						level = routine.getLevel().getName();
+					} else {
+						level = routine.getLevel().getName() + " "
+								+ routine.getRoutineType();
+					}
+				}
+				Label label = new Label(level, routine.getLevel()
+						.getSortOrder(),
+						(!withNames || swimmerName.isEmpty()) ? routine
+								.getName() : (swimmerName + " in " + routine
+								.getName()), routine.getPlace(), routine
+								.getTeam().getTeamId(), routine.getTotalScore());
+				labels.add(label);
 			}
 		}
 		return labels;
 	}
 
-	public static List<FiguresLabel> generateFiguresLabels(Meet meet,
-			boolean isNovice) {
-		List<FiguresLabel> results = new ArrayList<FiguresLabel>();
+	public static List<Label> generateFiguresLabels(Meet meet, boolean isNovice) {
+		List<Label> results = new ArrayList<Label>();
 
 		for (FiguresParticipant fp : meet.getFiguresParticipants()) {
 			if (isNovice(fp) == isNovice && figuresParticipantHasAllScores(fp)) {
-				FiguresLabel fl = new FiguresLabel(fp.getSwimmer().getLevel()
-						.getName(), fp.getSwimmer().getLevel().getSortOrder(),
-						fp.getSwimmer().getFirstName() + " "
-								+ fp.getSwimmer().getLastName(), fp.getPlace(),
-						fp.getSwimmer().getTeam().getTeamId(),
-						fp.getTotalScore());
+				Label fl = new Label(fp.getSwimmer().getLevel().getName(), fp
+						.getSwimmer().getLevel().getSortOrder(), fp
+						.getSwimmer().getFirstName()
+						+ " "
+						+ fp.getSwimmer().getLastName(), fp.getPlace(), fp
+						.getSwimmer().getTeam().getTeamId(), fp.getTotalScore());
 				results.add(fl);
 			}
 		}
@@ -904,7 +937,7 @@ public class ScoreController {
 				}
 			}
 		} else {
-			int c = countRoutines(meet, team);
+			int c = countRoutinesThatEarnPoints(meet, team);
 			if (c == 1) {
 				sum = new BigDecimal(5).setScale(2);
 			} else if (c > 1) {
@@ -914,10 +947,10 @@ public class ScoreController {
 		return sum;
 	}
 
-	private static int countRoutines(Meet meet, Team team) {
+	private static int countRoutinesThatEarnPoints(Meet meet, Team team) {
 		int count = 0;
 		for (Routine routine : meet.getRoutines()) {
-			if (routine.getTeam().equals(team)) {
+			if (routine.getTeam().equals(team) && routine.getEarnsPoints()) {
 				count++;
 			}
 		}
@@ -968,11 +1001,13 @@ public class ScoreController {
 		BigDecimal lastScore = BigDecimal.ZERO;
 		String lastRoutineType = null;
 		RoutineLevel lastRoutineLevel = null;
+		int tieCount = 1;
 		for (Routine routine : routines) {
 			if (lastRoutineType != null
 					&& (!lastRoutineLevel.equals(routine.getLevel()) || !lastRoutineType
 							.equals(routine.getRoutineType()))) {
 				place = 0;
+				tieCount = 1;
 				lastScore = BigDecimal.ZERO;
 			}
 			BigDecimal score = routine.getTotalScore();
@@ -980,8 +1015,11 @@ public class ScoreController {
 				score = BigDecimal.ZERO;
 			}
 			if (!score.equals(lastScore) || place == 0) {
-				place++;
+				place += tieCount;
+				tieCount = 1;
 			}
+			if (score.equals(lastScore))
+				tieCount++;
 			routine.setPlace(place);
 			em.persist(routine);
 			lastScore = score;
@@ -1118,5 +1156,52 @@ public class ScoreController {
 				component.setCursor(Cursor.getDefaultCursor());
 			}
 		}
+	}
+	
+	public List<String> generateBreaks(FiguresParticipantsTableModel fptm) {
+		ArrayList<String> breaks=new ArrayList<String>();
+		int startInt = -1;
+		for (int i = 0; i < fptm.getRowCount(); i++) {
+			String s = (String) fptm.getValueAt(i,
+					FiguresParticipantsTableModel.LEVEL_COL);
+			if (s.startsWith("I")) {
+				startInt = i;
+				break;
+			}
+		}
+		int numGroups = ((mainFrame.getMeet().getType() == 'R') ? 2 : 4);
+		if (startInt > 0) {
+			double groupSize = (double) startInt
+					/ (double) numGroups;
+			for (int i = 1; i < numGroups; i++) {
+				int breakAt = (int) Math.ceil(groupSize * i) - 1;
+				if (breakAt < startInt) {
+					breaks.add((String) fptm
+							.getValueAt(
+									breakAt,
+									FiguresParticipantsTableModel.FIGURES_ORDER_COL));
+				}
+			}
+			breaks.add((String) fptm
+					.getValueAt(
+							startInt - 1,
+							FiguresParticipantsTableModel.FIGURES_ORDER_COL));
+		}
+		if (startInt > -1) {
+			double groupSize = (double) (fptm.getRowCount() - startInt)
+					/ (double) numGroups;
+			for (int i = 1; i < numGroups; i++) {
+				int breakAt = (int) Math.ceil(groupSize * i)
+						+ startInt - 1;
+				if (breakAt < fptm.getRowCount()) {
+					breaks.add((String) fptm
+							.getValueAt(
+									breakAt,
+									FiguresParticipantsTableModel.FIGURES_ORDER_COL));
+				}
+			}
+		}
+		return breaks;
+
 	}
 }

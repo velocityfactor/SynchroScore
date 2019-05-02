@@ -31,7 +31,7 @@ public class FiguresParticipantSearchPanel extends javax.swing.JPanel {
     /** Creates new form SwimmerSearchPanel */
     public FiguresParticipantSearchPanel() {
         initComponents();
-        clear();
+        clear(true);
     }
 
     public void addFiguresParticipantSearchPanelListener(FiguresParticipantSearchPanelListener listener) {
@@ -58,8 +58,14 @@ public class FiguresParticipantSearchPanel extends javax.swing.JPanel {
         }
     }
 
-    public void clear() {
-        figureOrder.setText("");
+    private void fireFiguresParticipantEdit() {
+        for (FiguresParticipantSearchPanelListener listener : listeners) {
+            listener.figuresParticipantEdit();
+        }
+    }
+
+    public void clear(boolean clearFigureOrder) {
+        if(clearFigureOrder) figureOrder.setText("");
         leagueSwimmerNumber.setText("");
         swimmerName.setText("");
         swimmerLevel.setText("");
@@ -219,6 +225,10 @@ public class FiguresParticipantSearchPanel extends javax.swing.JPanel {
     private void figureOrderKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_figureOrderKeyPressed
         if (evt.getKeyChar() == 10 || evt.getKeyChar() == 9) {
             figureOrderEntered();
+        }
+        else {
+        	clear(false);
+        	fireFiguresParticipantEdit();
         }
     }//GEN-LAST:event_figureOrderKeyPressed
 

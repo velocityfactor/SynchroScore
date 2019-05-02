@@ -1,22 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-   SynchroScore
-   Copyright (C) 2009 Shayne Hughes
-
-   This program is free software: you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation, either version 3 of the License, or
-   (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see <http://www.gnu.org/licenses/>.
--->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Figures Results" pageWidth="612" pageHeight="792" columnWidth="576" leftMargin="18" rightMargin="18" topMargin="18" bottomMargin="18">
+<!-- Created with Jaspersoft Studio version last-->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Figures Results" pageWidth="612" pageHeight="792" columnWidth="576" leftMargin="18" rightMargin="18" topMargin="18" bottomMargin="18" uuid="902696be-0261-4eb6-bb7a-e9fa8a06e22c">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -43,70 +27,70 @@
 		<groupHeader>
 			<band height="41">
 				<textField>
-					<reportElement x="20" y="1" width="53" height="16"/>
+					<reportElement uuid="60787835-5e3e-4a85-8363-f37f5b2adff6" x="20" y="1" width="53" height="16"/>
 					<textElement>
 						<font size="12"/>
 					</textElement>
-					<textFieldExpression class="java.lang.String"><![CDATA[$F{figureId}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{figureId}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="2" y="20" width="150" height="20"/>
+					<reportElement uuid="2c7aaa53-e17a-490d-94ca-834e714333f2" x="2" y="20" width="150" height="20"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Last Name]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="377" y="20" width="40" height="20"/>
+					<reportElement uuid="61bb8c34-dc6f-4d8a-88f5-081a32aa2760" x="377" y="20" width="40" height="20"/>
 					<textElement textAlignment="Right">
 						<font size="12" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Score]]></text>
 				</staticText>
 				<line>
-					<reportElement x="0" y="39" width="572" height="1"/>
+					<reportElement uuid="fa013240-0c86-43e5-9a0f-dc5a349758ea" x="0" y="39" width="572" height="1"/>
 				</line>
 				<staticText>
-					<reportElement x="430" y="20" width="54" height="20"/>
+					<reportElement uuid="3c9bd4b9-0966-4cad-870a-05d5b8685f8c" x="430" y="20" width="54" height="20"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Level]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="155" y="20" width="150" height="20"/>
+					<reportElement uuid="d1ed43c5-16cf-4207-9d20-71f1b324aae9" x="155" y="20" width="150" height="20"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
 					<text><![CDATA[First Name]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="490" y="20" width="38" height="20"/>
+					<reportElement uuid="91a0bd33-dd42-428c-a496-6b176c3f2ae6" x="490" y="20" width="38" height="20"/>
 					<textElement>
 						<font size="12" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Team]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="315" y="20" width="51" height="20"/>
+					<reportElement uuid="29224ec4-45c6-4363-af0b-5ef3a5a32a2a" x="315" y="20" width="51" height="20"/>
 					<textElement textAlignment="Right">
 						<font size="12" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Order #]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="73" y="0" width="138" height="16"/>
+					<reportElement uuid="621b1a30-4de2-4cbd-9aad-c8e26aa28e92" x="73" y="0" width="138" height="16"/>
 					<textElement>
 						<font size="12"/>
 					</textElement>
-					<textFieldExpression class="java.lang.String"><![CDATA[$F{figureName}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{figureName}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="211" y="1" width="53" height="16"/>
+					<reportElement uuid="b449cc8a-3b02-497e-8468-21a2d169035a" x="211" y="1" width="53" height="16"/>
 					<textElement>
 						<font size="12"/>
 					</textElement>
-					<textFieldExpression class="java.lang.String"><![CDATA[$F{figureDd}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{figureDd}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupHeader>
@@ -117,28 +101,28 @@
 	<pageHeader>
 		<band height="47" splitType="Stretch">
 			<staticText>
-				<reportElement x="280" y="0" width="294" height="22"/>
+				<reportElement uuid="456dca87-b022-4bd8-a4a7-9bfd84174362" x="280" y="0" width="294" height="22"/>
 				<textElement textAlignment="Right">
 					<font size="16" isBold="true"/>
 				</textElement>
 				<text><![CDATA[VFCAL Synchronized Swimming]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="2" y="0" width="279" height="22"/>
+				<reportElement uuid="fe46bffe-53d3-401c-bf59-f38dee12829f" x="2" y="0" width="279" height="22"/>
 				<textElement>
 					<font size="14" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{MeetDate}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{MeetDate}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="23" width="279" height="21"/>
+				<reportElement uuid="ff886d81-ff3a-41b6-84b3-00ee2692c1c0" x="2" y="23" width="279" height="21"/>
 				<textElement>
 					<font size="14" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{MeetName}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{MeetName}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="281" y="23" width="294" height="22"/>
+				<reportElement uuid="b21b3b58-7a32-4166-9ef2-75a91fe97c19" x="281" y="23" width="294" height="22"/>
 				<textElement textAlignment="Right">
 					<font size="16" isBold="true"/>
 				</textElement>
@@ -149,60 +133,60 @@
 	<detail>
 		<band height="16" splitType="Stretch">
 			<textField>
-				<reportElement x="155" y="0" width="150" height="16"/>
+				<reportElement uuid="9d931bf0-474f-4f83-9196-bff4f7f6915c" x="155" y="0" width="150" height="16"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{firstName}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{firstName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="0" width="150" height="16"/>
+				<reportElement uuid="94a16a74-5cf7-43b0-82f2-841a327c3d90" x="2" y="0" width="150" height="16"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{lastName}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{lastName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement isPrintRepeatedValues="false" x="430" y="0" width="54" height="16"/>
+				<reportElement uuid="8438552b-7c95-4209-a27b-e03e38f748f3" isPrintRepeatedValues="false" x="430" y="0" width="54" height="16"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{level}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{level}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="490" y="0" width="38" height="16"/>
+				<reportElement uuid="a91d73e2-d684-4e15-bb86-7d04847286ed" x="490" y="0" width="38" height="16"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{team}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{team}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0.00;(###0.00)">
-				<reportElement x="377" y="0" width="40" height="16"/>
+				<reportElement uuid="f58ee9b2-459b-4ca4-82eb-340656468fcf" x="377" y="0" width="40" height="16"/>
 				<textElement textAlignment="Right">
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{score}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{score}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="315" y="0" width="51" height="16"/>
+				<reportElement uuid="9896dc87-54f0-47d8-ada9-25265b106713" x="315" y="0" width="51" height="16"/>
 				<textElement textAlignment="Right">
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{figureOrder}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{figureOrder}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
 	<pageFooter>
 		<band height="28" splitType="Stretch">
 			<textField>
-				<reportElement x="211" y="8" width="80" height="20"/>
+				<reportElement uuid="5529348e-51bb-4f96-b88f-8d43d03f77d6" x="211" y="8" width="80" height="20"/>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression class="java.lang.String"><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report">
-				<reportElement x="291" y="8" width="40" height="20"/>
+				<reportElement uuid="636b6e38-e8ac-4ec8-a7af-d2805f9c41a1" x="291" y="8" width="40" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageFooter>

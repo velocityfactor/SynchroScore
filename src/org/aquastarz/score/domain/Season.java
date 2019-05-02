@@ -20,6 +20,7 @@
 package org.aquastarz.score.domain;
 
 import java.io.Serializable;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,72 +31,79 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 @Entity
-@NamedQueries({@NamedQuery(name = "Season.findByName", query = "SELECT s FROM Season s where s.name like :name"),
-    @NamedQuery(name = "Season.findAllOrderByName", query = "SELECT s FROM Season s order by name")})
+@NamedQueries({
+		@NamedQuery(name = "Season.findByName", query = "SELECT s FROM Season s where s.name like :name"),
+		@NamedQuery(name = "Season.findAllOrderByName", query = "SELECT s FROM Season s order by s.name") })
 public class Season implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long seasonId;
+	private static final long serialVersionUID = 1L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long seasonId;
 
-    @Basic(optional = false)
-    @Column(name = "name", nullable = false, length = 30)
-    private String name;
+	@Basic(optional = false)
+	@Column(name = "name", nullable = false, length = 30)
+	private String name;
 
-    private transient Integer rulesRevision;
+	private transient Integer rulesRevision;
 
-    protected Season() {}
+	protected Season() {
+	}
 
-    public Season(String name) {
-        this.name = name;
-    }
-    
-    public String getName() {
-        return name;
-    }
+	public Season(String name) {
+		this.name = name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public int getRulesRevision() {
-        if(rulesRevision==null) {
-            rulesRevision=1;
-            if(name.compareTo("2011")>=0) rulesRevision=2;
-        }
-        return rulesRevision;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public Long getSeasonId() {
-        return seasonId;
-    }
+	public int getRulesRevision() {
+		if (rulesRevision == null) {
+			rulesRevision = 1;
+			if (name.compareTo("2011") >= 0)
+				rulesRevision = 2;
+			if (name.compareTo("2016") >= 0)
+				rulesRevision = 3;
+		}
+		return rulesRevision;
+	}
 
-    public void setSeasonId(Long seasonId) {
-        this.seasonId=seasonId;
-    }
+	public Long getSeasonId() {
+		return seasonId;
+	}
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (seasonId != null ? seasonId.hashCode() : 0);
-        return hash;
-    }
+	public void setSeasonId(Long seasonId) {
+		this.seasonId = seasonId;
+	}
 
-    @Override
-    public boolean equals(Object object) {
-        if (!(object instanceof Season)) {
-            return false;
-        }
-        Season other = (Season) object;
-        if ((this.seasonId == null && other.seasonId != null) || (this.seasonId != null && !this.seasonId.equals(other.seasonId))) {
-            return false;
-        }
-        return true;
-    }
+	@Override
+	public int hashCode() {
+		int hash = 0;
+		hash += (seasonId != null ? seasonId.hashCode() : 0);
+		return hash;
+	}
 
-    @Override
-    public String toString() {
-        return name;
-    }
+	@Override
+	public boolean equals(Object object) {
+		if (!(object instanceof Season)) {
+			return false;
+		}
+		Season other = (Season) object;
+		if ((this.seasonId == null && other.seasonId != null)
+				|| (this.seasonId != null && !this.seasonId
+						.equals(other.seasonId))) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return name;
+	}
 
 }

@@ -22,6 +22,7 @@ package org.aquastarz.score.domain;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,99 +34,105 @@ import javax.persistence.Transient;
 
 @Entity
 @Table(name = "level")
-@NamedQueries({@NamedQuery(name = "Level.findAllInOrder", query = "SELECT l FROM Level l ORDER BY sortOrder"), @NamedQuery(name = "Level.findByLevelId", query = "SELECT l FROM Level l WHERE l.levelId = :levelId"), @NamedQuery(name = "Level.findByName", query = "SELECT l FROM Level l WHERE l.name = :name")})
+@NamedQueries({
+		@NamedQuery(name = "Level.findAllInOrder", query = "SELECT l FROM Level l ORDER BY l.sortOrder"),
+		@NamedQuery(name = "Level.findByLevelId", query = "SELECT l FROM Level l WHERE l.levelId = :levelId"),
+		@NamedQuery(name = "Level.findByName", query = "SELECT l FROM Level l WHERE l.name = :name") })
 public class Level implements Serializable {
-    @Transient
-    private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
-    private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @Column(name = "levelId", nullable = false, length = 10)
-    private String levelId;
-    @Basic(optional = false)
-    @Column(name = "name", nullable = false, length = 45)
-    private String name;
-    @Basic(optional = false)
-    @Column(name = "sortOrder", nullable = false)
-    private Integer sortOrder;
+	@Transient
+	private final PropertyChangeSupport changeSupport = new PropertyChangeSupport(
+			this);
+	private static final long serialVersionUID = 1L;
+	@Id
+	@Basic(optional = false)
+	@Column(name = "levelId", nullable = false, length = 10)
+	private String levelId;
+	@Basic(optional = false)
+	@Column(name = "name", nullable = false, length = 45)
+	private String name;
+	@Basic(optional = false)
+	@Column(name = "sortOrder", nullable = false)
+	private Integer sortOrder;
 
-    public Level() {
-    }
+	public Level() {
+	}
 
-    public Level(String levelId) {
-        this.levelId = levelId;
-    }
+	public Level(String levelId) {
+		this.levelId = levelId;
+	}
 
-    public Level(String levelId, String name, Integer sortOrder) {
-        this.levelId = levelId;
-        this.name = name;
-        this.sortOrder = sortOrder;
-    }
+	public Level(String levelId, String name, Integer sortOrder) {
+		this.levelId = levelId;
+		this.name = name;
+		this.sortOrder = sortOrder;
+	}
 
-    public String getLevelId() {
-        return levelId;
-    }
+	public String getLevelId() {
+		return levelId;
+	}
 
-    public void setLevelId(String levelId) {
-        String oldLevelId = this.levelId;
-        this.levelId = levelId;
-        changeSupport.firePropertyChange("levelId", oldLevelId, levelId);
-    }
+	public void setLevelId(String levelId) {
+		String oldLevelId = this.levelId;
+		this.levelId = levelId;
+		changeSupport.firePropertyChange("levelId", oldLevelId, levelId);
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setName(String name) {
-        String oldName = this.name;
-        this.name = name;
-        changeSupport.firePropertyChange("name", oldName, name);
-    }
+	public void setName(String name) {
+		String oldName = this.name;
+		this.name = name;
+		changeSupport.firePropertyChange("name", oldName, name);
+	}
 
-    public Integer getSortOrder() {
-        return sortOrder;
-    }
+	public Integer getSortOrder() {
+		return sortOrder;
+	}
 
-    public void setSortOrder(Integer sortOrder) {
-        this.sortOrder = sortOrder;
-    }
+	public void setSortOrder(Integer sortOrder) {
+		this.sortOrder = sortOrder;
+	}
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (levelId != null ? levelId.hashCode() : 0);
-        return hash;
-    }
+	@Override
+	public int hashCode() {
+		int hash = 0;
+		hash += (levelId != null ? levelId.hashCode() : 0);
+		return hash;
+	}
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Level)) {
-            return false;
-        }
-        Level other = (Level) object;
-        if ((this.levelId == null && other.levelId != null) || (this.levelId != null && !this.levelId.equals(other.levelId))) {
-            return false;
-        }
-        return true;
-    }
+	@Override
+	public boolean equals(Object object) {
+		// TODO: Warning - this method won't work in the case the id fields are
+		// not set
+		if (!(object instanceof Level)) {
+			return false;
+		}
+		Level other = (Level) object;
+		if ((this.levelId == null && other.levelId != null)
+				|| (this.levelId != null && !this.levelId.equals(other.levelId))) {
+			return false;
+		}
+		return true;
+	}
 
-    @Override
-    public String toString() {
-        return levelId;
-    }
+	@Override
+	public String toString() {
+		return levelId;
+	}
 
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        changeSupport.addPropertyChangeListener(listener);
-    }
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		changeSupport.addPropertyChangeListener(listener);
+	}
 
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
-        changeSupport.removePropertyChangeListener(listener);
-    }
+	public void removePropertyChangeListener(PropertyChangeListener listener) {
+		changeSupport.removePropertyChangeListener(listener);
+	}
 
-    @Transient
-    public boolean isNovice() {
-        return levelId.startsWith("N");
-    }
+	@Transient
+	public boolean isNovice() {
+		return levelId.startsWith("N");
+	}
 
 }

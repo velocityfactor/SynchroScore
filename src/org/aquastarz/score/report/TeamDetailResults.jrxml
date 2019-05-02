@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version last-->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Figures Order" pageWidth="612" pageHeight="792" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1dbd8036-2d47-4d8f-91c1-f2ac8580929e">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="13"/>
+	<property name="ireport.y" value="0"/>
+	<import value="org.aquastarz.score.domain.Team"/>
+	<parameter name="MeetDate" class="java.lang.String"/>
+	<parameter name="MeetName" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="team" class="java.lang.String">
+		<fieldDescription><![CDATA[team]]></fieldDescription>
+	</field>
+	<field name="event" class="java.lang.String">
+		<fieldDescription><![CDATA[event]]></fieldDescription>
+	</field>
+	<field name="points" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[points]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="48" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="078de7cc-9910-4257-8f52-3d8f21a1bf7d" x="294" y="0" width="278" height="22"/>
+				<textElement textAlignment="Right">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VFCAL Synchronized Swimming]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="02c80bce-b919-400d-b0e7-ad45e199a3c4" x="3" y="1" width="279" height="22"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{MeetDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="5573ea94-2c1e-415f-b274-64a006e8da90" x="3" y="24" width="279" height="21"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{MeetName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="f6f3028c-4a35-4b7c-9074-7e03551e3fee" x="292" y="23" width="278" height="22"/>
+				<textElement textAlignment="Right">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Team Results]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="20" splitType="Stretch">
+			<line>
+				<reportElement uuid="a74e72aa-e3c1-4596-be79-b7dff33bae00" x="0" y="19" width="572" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="e10b02bd-0b80-4d8b-bf38-a3d5b7ef80a3" x="200" y="0" width="133" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Event]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3ee3efbc-6128-4fe4-ab9f-45072145c0a8" x="20" y="0" width="133" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Team]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1c77996c-df26-40d3-956d-6274ac79432d" x="450" y="0" width="58" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Points]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<textField>
+				<reportElement uuid="3656b17e-5ff7-4aa4-8b04-bfae75b24a0f" x="20" y="0" width="133" height="16"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{team}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="90472c0f-3433-4fb0-b79f-7bcb1c3b93f9" x="200" y="0" width="230" height="16"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{event}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="b49820ba-e84c-4ec5-96da-d636ee4d7c1e" x="450" y="0" width="58" height="16"/>
+				<textElement textAlignment="Right">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{points}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="28" splitType="Stretch">
+			<textField>
+				<reportElement uuid="1e23193b-6462-4a27-ab33-1cbf421296be" x="214" y="8" width="80" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="e2ce4d40-d7f8-4a48-a38b-a6a2c2f55dcd" x="294" y="8" width="40" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

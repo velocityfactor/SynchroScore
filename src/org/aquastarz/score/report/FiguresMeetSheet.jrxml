@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Figures Labels" columnCount="2" printOrder="Horizontal" pageWidth="612" pageHeight="792" columnWidth="279" columnSpacing="18" leftMargin="18" rightMargin="18" topMargin="25" bottomMargin="18">
+<!-- Created with Jaspersoft Studio version 6.2.2.final using JasperReports Library version 6.2.2  -->
+<!-- 2016-06-19T22:43:28 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Figures Labels" columnCount="2" printOrder="Horizontal" pageWidth="612" pageHeight="792" columnWidth="279" columnSpacing="18" leftMargin="18" rightMargin="18" topMargin="25" bottomMargin="18" uuid="8f620b21-ecbb-4736-bf59-5f1c3df70dd7">
 	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="227"/>
@@ -74,420 +76,419 @@
 	<detail>
 		<band height="246" splitType="Stretch">
 			<rectangle>
-				<reportElement x="0" y="0" width="278" height="228"/>
+				<reportElement x="0" y="0" width="278" height="228" uuid="5a2fdc6b-6a6b-498f-937c-08c2ff94a7ae"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="-5" y="0" width="288" height="18"/>
-				<textElement textAlignment="Center" verticalAlignment="Bottom">
-					<font size="11" isBold="true"/>
+				<reportElement x="0" y="0" width="278" height="18" uuid="785d6d6a-087d-459c-89fe-edc7a50ed4ab"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[SYNCHRONIZED SWIMMING FIGURE COMPETITION
-                ]]></text>
+				<text><![CDATA[SYNCHRONIZED SWIMMING FIGURE COMPETITION]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="4" y="19" width="195" height="17"/>
+				<reportElement x="4" y="19" width="195" height="17" uuid="6b45ce01-6a36-4824-a11f-eaf85fad075a"/>
 				<textElement>
-					<font size="11" isBold="true"/>
+					<font size="10" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{MeetName}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{MeetName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="216" y="192" width="42" height="17"/>
+				<reportElement x="216" y="192" width="42" height="17" uuid="c5b86c8f-f425-46b2-a690-889d7a7f368e"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="11" isBold="true"/>
+					<font size="10" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{place}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{place}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="199" y="37" width="75" height="17"/>
+				<reportElement x="199" y="37" width="75" height="17" uuid="646f4bfd-22ec-4c79-b4e8-70a8693b87fc"/>
 				<textElement textAlignment="Right" markup="html">
-					<font size="11"/>
+					<font size="10"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["Team: <b>"+$F{team}+"</b>"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Team: <b>"+$F{team}+"</b>"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="216" y="175" width="42" height="17"/>
+				<reportElement x="216" y="175" width="42" height="17" uuid="445c7aed-f731-4aa1-a189-6c33d6c70fff"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="11" isBold="true"/>
+					<font size="10" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{score}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{score}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="169" y="19" width="105" height="17"/>
+				<reportElement x="169" y="19" width="105" height="17" uuid="d02f44bd-f591-4184-b702-84895730648b"/>
 				<textElement textAlignment="Right">
-					<font size="11" isBold="true"/>
+					<font size="10" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{MeetDate}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{MeetDate}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="135" y="54" width="123" height="17"/>
+				<reportElement x="135" y="54" width="123" height="17" uuid="c68361db-d198-49b6-8ab0-65e36ea7a798"/>
 				<textElement>
-					<font size="11"/>
+					<font size="10"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["Order: "+$F{figuresOrder}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Order: "+$F{figuresOrder}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="4" y="54" width="131" height="17"/>
+				<reportElement x="4" y="54" width="131" height="17" uuid="c6aefcbf-ebb6-43e1-885f-af8c2f45bd57"/>
 				<textElement>
-					<font size="11"/>
+					<font size="10"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["League No.: "+$F{leagueNum}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["League No.: "+$F{leagueNum}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="4" y="71" width="195" height="17"/>
+				<reportElement x="4" y="71" width="195" height="17" uuid="e22ea35e-fbd0-46c2-a07b-a852d5642913"/>
 				<textElement markup="html">
-					<font size="11"/>
+					<font size="10"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["Age Group: <b>"+$F{levelName}+"</b>"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Age Group: <b>"+$F{levelName}+"</b>"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="4" y="105" width="86" height="17"/>
+				<reportElement x="4" y="105" width="86" height="17" uuid="78b50be6-7723-406e-aa69-6b4e119269b1"/>
 				<textElement verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{figure1}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{figure1}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="91" y="105" width="25" height="17"/>
+				<reportElement x="91" y="105" width="25" height="17" uuid="6bedefe1-ea7c-4c9d-9aa0-ce980dfffeaf"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="11"/>
+					<font size="10"/>
 				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j11}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{j11}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="116" y="105" width="25" height="17"/>
+				<reportElement x="116" y="105" width="25" height="17" uuid="2fa01f87-b13e-429e-aae9-47edf19ec4a3"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="11"/>
+					<font size="10"/>
 				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j21}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{j21}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="141" y="105" width="25" height="17"/>
+				<reportElement x="141" y="105" width="25" height="17" uuid="4fe07a62-4354-4133-971f-d04e2894f695"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="11"/>
+					<font size="10"/>
 				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j31}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{j31}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="166" y="105" width="25" height="17"/>
+				<reportElement x="166" y="105" width="25" height="17" uuid="ab6692ab-ce6a-4f7d-8f21-3ddd638aabb1"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="11"/>
+					<font size="10"/>
 				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j41}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{j41}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="191" y="105" width="25" height="17"/>
+				<reportElement x="191" y="105" width="25" height="17" uuid="b3ba318e-63a1-43ca-a6be-48835f3b83df"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="11"/>
+					<font size="10"/>
 				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j51}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{j51}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="216" y="105" width="33" height="17"/>
+				<reportElement x="216" y="105" width="33" height="17" uuid="483fb7eb-6381-46a7-ab0a-f6952e205ad5"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="11"/>
+					<font size="10"/>
 				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{score1}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{score1}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="249" y="105" width="25" height="17"/>
+				<reportElement x="249" y="105" width="25" height="17" uuid="45557f3f-485c-4234-82a2-a4478cc8874c"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="11"/>
+					<font size="10"/>
 				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{penalty1}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{penalty1}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="75" y="105" width="15" height="17"/>
+				<reportElement mode="Opaque" x="75" y="105" width="15" height="17" uuid="e144de59-bfb9-41ac-844b-6967de04e6c3"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="9" isItalic="false"/>
+					<font size="8" isItalic="false"/>
 				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{dd1}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{dd1}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="91" y="122" width="25" height="17"/>
+				<reportElement x="91" y="122" width="25" height="17" uuid="7dbd0d96-6653-4ade-aab5-24bf5f1808d4"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="11"/>
+					<font size="10"/>
 				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j12}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{j12}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="116" y="122" width="25" height="17"/>
+				<reportElement x="116" y="122" width="25" height="17" uuid="ca689ad7-98fa-4b9f-8a2e-f87569bfaf7d"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="11"/>
+					<font size="10"/>
 				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j22}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{j22}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="166" y="122" width="25" height="17"/>
+				<reportElement x="166" y="122" width="25" height="17" uuid="b598fcea-57ce-43a9-9da8-c27a4a2e616c"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="11"/>
+					<font size="10"/>
 				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j42}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{j42}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="191" y="122" width="25" height="17"/>
+				<reportElement x="191" y="122" width="25" height="17" uuid="349a6906-ee45-4715-bae5-e75ad6ea5a71"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="11"/>
+					<font size="10"/>
 				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j52}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{j52}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="141" y="122" width="25" height="17"/>
+				<reportElement x="141" y="122" width="25" height="17" uuid="db60b349-8e22-48a4-bbc3-af4b5507585d"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="11"/>
+					<font size="10"/>
 				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j32}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{j32}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="75" y="122" width="15" height="17"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="9" isItalic="false"/>
-				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{dd2}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="249" y="122" width="25" height="17"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="11"/>
-				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{penalty2}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="216" y="122" width="33" height="17"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="11"/>
-				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{score2}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="4" y="122" width="86" height="17"/>
+				<reportElement x="4" y="122" width="86" height="17" uuid="c053da3f-6864-4187-a152-fc14385912c5"/>
 				<textElement verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{figure2}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{figure2}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="91" y="139" width="25" height="17"/>
+				<reportElement mode="Opaque" x="75" y="122" width="15" height="17" uuid="b7a81834-0708-4f33-83d8-92e5af94bb6b"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="11"/>
+					<font size="8" isItalic="false"/>
 				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j13}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{dd2}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="141" y="139" width="25" height="17"/>
+				<reportElement x="249" y="122" width="25" height="17" uuid="31b45cf6-36f6-402f-91ae-e51e9edfc84c"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="11"/>
+					<font size="10"/>
 				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j33}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{penalty2}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="191" y="156" width="25" height="17"/>
+				<reportElement x="216" y="122" width="33" height="17" uuid="50396068-f028-4f48-9d3b-6e1947020573"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="11"/>
+					<font size="10"/>
 				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j54}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{score2}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="191" y="139" width="25" height="17"/>
+				<reportElement x="91" y="139" width="25" height="17" uuid="8d2267b6-d0da-41ed-8ee5-5e2266d82109"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="11"/>
+					<font size="10"/>
 				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j53}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{j13}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="216" y="156" width="33" height="17"/>
+				<reportElement x="141" y="139" width="25" height="17" uuid="94fa4575-97c5-4381-b234-29eb1d717296"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="11"/>
+					<font size="10"/>
 				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{score4}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{j33}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="91" y="156" width="25" height="17"/>
+				<reportElement x="191" y="156" width="25" height="17" uuid="bc9140b0-938b-4939-a567-e9a3e6c1d2bc"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="11"/>
+					<font size="10"/>
 				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j14}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{j54}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="4" y="139" width="86" height="17"/>
+				<reportElement x="191" y="139" width="25" height="17" uuid="88ea16d1-40d3-4a8b-948c-5e4924661c03"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{j53}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="216" y="156" width="33" height="17" uuid="ca44d444-3a60-4573-9579-92759390a20f"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{score4}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="91" y="156" width="25" height="17" uuid="d5aa61c9-5e04-4030-801e-81232c1be989"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{j14}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="4" y="139" width="86" height="17" uuid="1a3ef072-f5a9-4289-bc51-80f7045ca578"/>
 				<textElement verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{figure3}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{figure3}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="216" y="139" width="33" height="17"/>
+				<reportElement x="216" y="139" width="33" height="17" uuid="6b0795e3-2eeb-4719-b7b1-f5684dde168a"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="11"/>
+					<font size="10"/>
 				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{score3}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{score3}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="4" y="156" width="86" height="17"/>
+				<reportElement x="4" y="156" width="86" height="17" uuid="116140c9-169b-4131-9bc9-4809a4ac106b"/>
 				<textElement verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{figure4}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{figure4}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="116" y="139" width="25" height="17"/>
+				<reportElement x="116" y="139" width="25" height="17" uuid="386a90bc-ee57-445a-b79e-10413c2d6301"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="11"/>
+					<font size="10"/>
 				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j23}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{j23}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="166" y="139" width="25" height="17"/>
+				<reportElement x="166" y="139" width="25" height="17" uuid="3d137346-dd4b-458c-862f-534a8086286c"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="11"/>
+					<font size="10"/>
 				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j43}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{j43}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="75" y="156" width="15" height="17"/>
+				<reportElement mode="Opaque" x="75" y="156" width="15" height="17" uuid="b17f6c5c-59e9-4e19-a11b-44c395faeff9"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="9" isItalic="false"/>
+					<font size="8" isItalic="false"/>
 				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{dd4}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{dd4}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement x="249" y="156" width="25" height="17"/>
+				<reportElement x="249" y="156" width="25" height="17" uuid="affa07ae-8192-40d4-8da2-07811b3d929b"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="11"/>
+					<font size="10"/>
 				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{penalty4}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{penalty4}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="75" y="139" width="15" height="17"/>
+				<reportElement mode="Opaque" x="75" y="139" width="15" height="17" uuid="70b8d6c9-6d72-4ebe-b440-e7d181931ac9"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="9" isItalic="false"/>
+					<font size="8" isItalic="false"/>
 				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{dd3}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{dd3}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="249" y="139" width="25" height="17"/>
+				<reportElement x="249" y="139" width="25" height="17" uuid="cf5b320a-7b7d-4196-9c81-6706a6558b0e"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="11"/>
+					<font size="10"/>
 				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{penalty3}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{penalty3}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="116" y="156" width="25" height="17"/>
+				<reportElement x="116" y="156" width="25" height="17" uuid="cb37ad88-211f-4265-b981-b8f1b3841bcb"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="11"/>
+					<font size="10"/>
 				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j24}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{j24}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="166" y="156" width="25" height="17"/>
+				<reportElement x="166" y="156" width="25" height="17" uuid="359203c5-7198-4f4d-b54c-ca3e18efcc85"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="11"/>
+					<font size="10"/>
 				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j44}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{j44}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="141" y="156" width="25" height="17"/>
+				<reportElement x="141" y="156" width="25" height="17" uuid="bae71253-3b7d-4dee-aa2b-359f678f8738"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="11"/>
+					<font size="10"/>
 				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{j34}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{j34}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="75" y="88" width="15" height="17"/>
+				<reportElement x="75" y="88" width="15" height="17" uuid="eeb156ef-89a4-4857-a3ce-b9322082fe92"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom">
-					<font size="9" isItalic="true"/>
+					<font size="8" isItalic="true"/>
 				</textElement>
 				<text><![CDATA[DD
                 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="91" y="88" width="25" height="17"/>
+				<reportElement x="91" y="88" width="25" height="17" uuid="2cf5bfe2-6987-4ddd-926f-6a18a5407e3b"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom">
-					<font size="11"/>
+					<font size="10"/>
 				</textElement>
 				<text><![CDATA[J1
                 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="116" y="88" width="25" height="17"/>
+				<reportElement x="116" y="88" width="25" height="17" uuid="e19cfdee-68b6-45d1-8047-1d39cb0d7bc8"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom">
-					<font size="11"/>
+					<font size="10"/>
 				</textElement>
 				<text><![CDATA[J2
                 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="141" y="88" width="25" height="17"/>
+				<reportElement x="141" y="88" width="25" height="17" uuid="4c922d1f-4480-474f-9e03-8a3824c8a61d"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom">
-					<font size="11"/>
+					<font size="10"/>
 				</textElement>
 				<text><![CDATA[J3
                 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="166" y="88" width="25" height="17"/>
+				<reportElement x="166" y="88" width="25" height="17" uuid="b532549a-62a7-406c-997a-f4edeac8842f"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom">
-					<font size="11"/>
+					<font size="10"/>
 				</textElement>
 				<text><![CDATA[J4
                 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="191" y="88" width="25" height="17"/>
+				<reportElement x="191" y="88" width="25" height="17" uuid="89cd88ab-b29a-4dbe-9f7e-523fb5951575"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom">
-					<font size="11"/>
+					<font size="10"/>
 				</textElement>
 				<text><![CDATA[J5
                 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="216" y="88" width="33" height="17"/>
+				<reportElement x="216" y="88" width="33" height="17" uuid="341620c8-01c4-4f74-9a58-dee643a56af9"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom">
-					<font size="11"/>
+					<font size="10"/>
 				</textElement>
 				<text><![CDATA[Score
                 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="249" y="88" width="25" height="17"/>
+				<reportElement x="249" y="88" width="25" height="17" uuid="e40f4f66-2242-4df8-9bd8-0341a06e3150"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom">
-					<font size="11"/>
+					<font size="10"/>
 				</textElement>
 				<text><![CDATA[Pen.
                 ]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="216" y="209" width="42" height="17"/>
+				<reportElement x="216" y="209" width="42" height="17" uuid="937ef055-97b4-4901-a811-4fb3224ac47a"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="11" isBold="true"/>
+					<font size="10" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{points}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{points}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="4" y="37" width="208" height="17"/>
+				<reportElement x="4" y="37" width="208" height="17" uuid="6e25a0be-44e4-4e8e-a70d-5cd7173fea9a"/>
 				<textElement markup="html">
-					<font size="11"/>
+					<font size="10"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["Name: <b>"+$F{firstName}+" "+$F{lastName}+"</b>"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Name: <b>"+$F{firstName}+" "+$F{lastName}+"</b>"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="91" y="175" width="125" height="17"/>
+				<reportElement x="91" y="175" width="125" height="17" uuid="9fac4c9e-42c9-4d32-a9b8-500618ce84d5"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="11" isBold="true"/>
+					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Total Score:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="91" y="192" width="125" height="17"/>
+				<reportElement x="91" y="192" width="125" height="17" uuid="7d8d8656-2e26-4302-9cbc-50c211af0157"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="11" isBold="true"/>
+					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Place:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="91" y="209" width="125" height="17"/>
+				<reportElement x="91" y="209" width="125" height="17" uuid="1417306b-7768-4692-8663-de2aafc64d63"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="11" isBold="true"/>
+					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Team Points Earned:]]></text>
 			</staticText>

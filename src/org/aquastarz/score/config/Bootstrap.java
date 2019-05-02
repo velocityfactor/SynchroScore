@@ -32,6 +32,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
 
 import org.aquastarz.score.ScoreApp;
 import org.aquastarz.score.controller.ScoreController;
@@ -59,18 +61,26 @@ public class Bootstrap {
 			.getLogger(Bootstrap.class.getName());
 
 	public static void clearDB(EntityManager entityManager) {
+		try {
+			entityManager.getTransaction().rollback();
+		}
+		catch(Exception e) {
+			//nothing
+		}
+
 		entityManager.getTransaction().begin();
 
 		entityManager.createQuery("delete from FigureScore").executeUpdate();
 		entityManager.createQuery("delete from FiguresParticipant")
 				.executeUpdate();
 		entityManager.createQuery("delete from Swimmer").executeUpdate();
+		entityManager.createQuery("delete from Routine").executeUpdate();
+		entityManager.createNativeQuery("delete from Meet_team").executeUpdate();
 		entityManager.createQuery("delete from Meet").executeUpdate();
 		entityManager.createQuery("delete from Level").executeUpdate();
 		entityManager.createQuery("delete from Team").executeUpdate();
 		entityManager.createQuery("delete from Figure").executeUpdate();
 		entityManager.createQuery("delete from Season").executeUpdate();
-		entityManager.createQuery("delete from Routine").executeUpdate();
 		entityManager.createQuery("delete from RoutineLevel").executeUpdate();
 
 		entityManager.getTransaction().commit();
@@ -91,22 +101,32 @@ public class Bootstrap {
 		checkAndPersistLevel(entityManager, "I15-16", "Intermediate 15-16", 8);
 		checkAndPersistLevel(entityManager, "I17-18", "Intermediate 17-18", 9);
 
+		//Added for rev 3
+		checkAndPersistRoutineLevel(entityManager, "N10U",
+				"Novice 10 and Under", 1);
+		checkAndPersistRoutineLevel(entityManager, "N11",
+				"Novice 11 to 14", 2);
+		checkAndPersistRoutineLevel(entityManager, "N15",
+				"Novice 15 to 18", 3);
+		//end rev 3
+		
 		checkAndPersistRoutineLevel(entityManager, "N12U",
-				"Novice 12 and Under", 1);
+				"Novice 12 and Under", 4);
 		checkAndPersistRoutineLevel(entityManager, "N13O",
-				"Novice 13 and Over", 2);
+				"Novice 13 and Over", 5);
 		checkAndPersistRoutineLevel(entityManager, "I11", "Intermediate 11-14",
-				3);
+				6);
 		checkAndPersistRoutineLevel(entityManager, "I15", "Intermediate 15-18",
-				4);
+				7);
 		checkAndPersistRoutineLevel(entityManager, "I11T",
-				"Int. 11 and Over Team", 5);
+				"Int. 11 and Over Team", 8);
+		
 		checkAndPersistRoutineLevel(entityManager, "I11-14T",
-				"Int. 11-14 Team", 5); // Added for rev 2
+				"Int. 11-14 Team", 9); // Added for rev 2
 		checkAndPersistRoutineLevel(entityManager, "I15-18T",
-				"Int. 15-18 Team", 6);
+				"Int. 15-18 Team", 10);
 		checkAndPersistRoutineLevel(entityManager, "I11-18CT",
-				"Int. 11-18 Combo Team", 7);
+				"Combo Team", 11);
 
 		checkAndPersistTeam(entityManager, "AUB", "Auburn Mermaids");
 		checkAndPersistTeam(entityManager, "COR", "Cordova Cordettes");
@@ -115,65 +135,94 @@ public class Bootstrap {
 		checkAndPersistTeam(entityManager, "ROS", "Roseville Aquabunnies");
 		checkAndPersistTeam(entityManager, "SUN", "Sunrise Swans");
 
+		//Novice Comp
 		checkAndPersistFigure(entityManager, "101", new BigDecimal("1.6"),
 				"Ballet Leg, R/L");
 		checkAndPersistFigure(entityManager, "360", new BigDecimal("2.1"),
 				"Walkover, Front");
-		checkAndPersistFigure(entityManager, "349", new BigDecimal("1.8"),
+
+		//Novice Group 1
+		checkAndPersistFigure(entityManager, "349", new BigDecimal("1.9"),
 				"Tower");
-		checkAndPersistFigure(entityManager, "342", new BigDecimal("2.1"),
-				"Heron");
-		checkAndPersistFigure(entityManager, "240", new BigDecimal("2.2"),
-				"Albatross");
+		checkAndPersistFigure(entityManager, "321", new BigDecimal("2.0"),
+				"Somersub");
+		
+		//Novice Group 2
 		checkAndPersistFigure(entityManager, "301", new BigDecimal("2.0"),
 				"Barracuda");
+		checkAndPersistFigure(entityManager, "344", new BigDecimal("1.8"),
+				"Neptunus");
 
-		// Out for 2012
-		// checkAndPersistFigure(entityManager, "311", new BigDecimal("1.8"),
-		// "Kip");
-		// checkAndPersistFigure(entityManager, "316", new BigDecimal("2.4"),
-		// "Kip, Split, Walkout");
-		// checkAndPersistFigure(entityManager, "140d", new BigDecimal("2.5"),
-		// "Flamingo, Bent Knee, Spin 180");
-		// checkAndPersistFigure(entityManager, "345", new BigDecimal("2.2"),
-		// "Ariana");
-		// checkAndPersistFigure(entityManager, "350", new BigDecimal("2.2"),
-		// "Minerva");
-		// checkAndPersistFigure(entityManager, "150", new BigDecimal("3.1"),
-		// "Knight");
-		// checkAndPersistFigure(entityManager, "401", new BigDecimal("2.0"),
-		// "Swordfish");
+		//Novice Group 3
+		checkAndPersistFigure(entityManager, "315", new BigDecimal("1.6"),
+				"Kipnus");
+		checkAndPersistFigure(entityManager, "361", new BigDecimal("1.8"),
+				"Prawn Twirl");
+
+		//Int Comp
+		checkAndPersistFigure(entityManager, "308", new BigDecimal("2.8"),
+				"Barracuda Airborne Split");
+		checkAndPersistFigure(entityManager, "115", new BigDecimal("2.3"),
+				"Catalina");
+		
+		//Int Group 1
+		checkAndPersistFigure(entityManager, "140", new BigDecimal("2.4"),
+				"Flamingo, Bent knee");
+		checkAndPersistFigure(entityManager, "420", new BigDecimal("2.0"),
+				"Walkover, Back");
+		
+		//Int Group 2
+		checkAndPersistFigure(entityManager, "311a", new BigDecimal("2.2"),
+				"Kip Half Twist");
+		checkAndPersistFigure(entityManager, "326", new BigDecimal("2.5"),
+				"Angelfish");
+		
+		//Int Group 3
+		checkAndPersistFigure(entityManager, "240", new BigDecimal("2.2"),
+				"Albatross");
+		checkAndPersistFigure(entityManager, "346", new BigDecimal("2.0"),
+				"Side Fishtail Split");
+		
+		checkAndPersistFigure(entityManager, "342", new BigDecimal("2.1"),
+				"Heron");
 
 		entityManager.getTransaction().commit();
 	}
 
 	public static void loadLateLeagueData() {
 		EntityManager entityManager = ScoreApp.getEntityManager();
-		entityManager.getTransaction().begin();
 
-		// New for 2012
-		checkAndPersistFigure(entityManager, "361", new BigDecimal("1.8"),
-				"Prawn");
-		checkAndPersistFigure(entityManager, "321", new BigDecimal("2.0"),
-				"Somersub");
-		checkAndPersistFigure(entityManager, "315", new BigDecimal("1.8"),
-				"Kipnus");
-		checkAndPersistFigure(entityManager, "344", new BigDecimal("1.8"),
-				"Neptunus");
-		checkAndPersistFigure(entityManager, "355d", new BigDecimal("2.0"),
-				"Porpoise, Spinning 180");
-		checkAndPersistFigure(entityManager, "311a", new BigDecimal("2.2"),
-				"Kip Half Twist");
-		checkAndPersistFigure(entityManager, "326", new BigDecimal("2.5"),
-				"Angelfish");
-		checkAndPersistFigure(entityManager, "140", new BigDecimal("2.4"),
-				"Flamingo, Bent knee");
-		checkAndPersistFigure(entityManager, "420", new BigDecimal("2.0"),
-				"Walkover, Back");
-		checkAndPersistFigure(entityManager, "346", new BigDecimal("2.0"),
-				"Side Fishtail Split");
-
-		entityManager.getTransaction().commit();
+		if (entityManager.find(RoutineLevel.class, "N10U") == null) {
+			EntityTransaction transaction = entityManager.getTransaction();
+	        transaction.begin();
+			//Added for rev 3
+			checkAndPersistRoutineLevel(entityManager, "N10U",
+					"Novice 10 and Under", 1);
+			checkAndPersistRoutineLevel(entityManager, "N11",
+					"Novice 11 to 14", 2);
+			checkAndPersistRoutineLevel(entityManager, "N15",
+					"Novice 15 to 18", 3);
+			//end rev 3
+			
+			checkAndPersistRoutineLevel(entityManager, "N12U",
+					"Novice 12 and Under", 4);
+			checkAndPersistRoutineLevel(entityManager, "N13O",
+					"Novice 13 and Over", 5);
+			checkAndPersistRoutineLevel(entityManager, "I11", "Intermediate 11-14",
+					6);
+			checkAndPersistRoutineLevel(entityManager, "I15", "Intermediate 15-18",
+					7);
+			checkAndPersistRoutineLevel(entityManager, "I11T",
+					"Int. 11 and Over Team", 8);
+			
+			checkAndPersistRoutineLevel(entityManager, "I11-14T",
+					"Int. 11-14 Team", 9); // Added for rev 2
+			checkAndPersistRoutineLevel(entityManager, "I15-18T",
+					"Int. 15-18 Team", 10);
+			checkAndPersistRoutineLevel(entityManager, "I11-18CT",
+					"Int. 11-18 Combo Team", 11);
+			transaction.commit();
+		}
 	}
 
 	public static void checkAndPersistLevel(EntityManager entityManager,
@@ -185,8 +234,14 @@ public class Bootstrap {
 
 	public static void checkAndPersistRoutineLevel(EntityManager entityManager,
 			String key, String name, int sortOrder) {
-		if (entityManager.find(RoutineLevel.class, key) == null) {
+		RoutineLevel rl=(RoutineLevel)entityManager.find(RoutineLevel.class, key);
+		if (rl == null) {
 			entityManager.persist(new RoutineLevel(key, name, sortOrder));
+		}
+		else {
+			rl.setName(name);
+			rl.setSortOrder(sortOrder);
+			entityManager.persist(rl);
 		}
 	}
 
