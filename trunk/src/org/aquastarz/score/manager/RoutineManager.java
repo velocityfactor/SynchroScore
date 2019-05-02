@@ -57,6 +57,7 @@ public class RoutineManager {
 		routine.setLevel(RoutineLevelManager.findAll().get(0));
 		routine.setRoutineType("Solo");
 		routine.setTeam(meet.getHomeTeam());
+		routine.setEarnsPoints(true);
 		save(routine);
 		meet.getRoutines().add(routine);
 
@@ -80,25 +81,45 @@ public class RoutineManager {
 			// First sort Novice ahead of Intermediate
 			if (routine.getLevel().getLevelId().charAt(0) == 'N') {
 				weight += 100.0;
+				// Trio, Duet, Solo, Team order
+				if ("Trio".equals(routine.getRoutineType())) {
+					weight += 10.0;
+				} else if ("Duet".equals(routine.getRoutineType())) {
+					weight += 20.0;
+				} else if ("Solo".equals(routine.getRoutineType())) {
+					weight += 30.0;
+				} else if ("Team".equals(routine.getRoutineType())) {
+					weight += 40.0;
+				} else {
+					logger.error("Unknown routine type "
+							+ routine.getRoutineType());
+				}
 			} else {
 				weight += 200.0;
-			}
-
-			// Trio, Duet, Solo, Team order
-			if ("Trio".equals(routine.getRoutineType())) {
-				weight += 10.0;
-			} else if ("Duet".equals(routine.getRoutineType())) {
-				weight += 20.0;
-			} else if ("Solo".equals(routine.getRoutineType())) {
-				weight += 30.0;
-			} else if ("Team".equals(routine.getRoutineType())) {
-				weight += 40.0;
+				// Team, Trio, Duet, Solo, Combo order
+				if ("Trio".equals(routine.getRoutineType())) {
+					weight += 20.0;
+				} else if ("Duet".equals(routine.getRoutineType())) {
+					weight += 30.0;
+				} else if ("Solo".equals(routine.getRoutineType())) {
+					weight += 40.0;
+				} else if ("Team".equals(routine.getRoutineType())) {
+					if ("I11-18CT".equals(routine.getLevel().getLevelId())) {
+						weight += 50.0;
+					} else {
+						weight += 10.0;
+					}
+				} else {
+					logger.error("Unknown routine type "
+							+ routine.getRoutineType());
+				}
 			}
 
 			// Lastly sort youngest first
 			weight += routine.getLevel().getSortOrder();
 
 			map.put(weight, routine);
+
 		}
 		int order = 1;
 		EntityManager em = ScoreApp.getEntityManager();
@@ -335,9 +356,9 @@ public class RoutineManager {
 				&& routine.getNumSwimmers() > 4) {
 			bonus = (new BigDecimal("0.5")).multiply(new BigDecimal(routine
 					.getNumSwimmers() - 4));
-			// Bonus is limited to 2.0 points
-			if (BigDecimal.valueOf(2.0).compareTo(bonus) < 0) {
-				bonus = new BigDecimal("2.0");
+			// Bonus is limited to 3.0 points
+			if (BigDecimal.valueOf(3.0).compareTo(bonus) < 0) {
+				bonus = new BigDecimal("3.0");
 			}
 		}
 		return bonus;
@@ -352,6 +373,15 @@ public class RoutineManager {
 
 	public static BigDecimal calcChampsPlacePoints(int place,
 			String routineType, int tieCount) {
+		BigDecimal p = calcChampsPlacePoints(place, routineType);
+		for (int xp = tieCount; xp > 1; xp--) {
+			p = p.add(calcChampsPlacePoints(place + xp - 1, routineType));
+		}
+		return p.divide(new BigDecimal(tieCount), 2, RoundingMode.HALF_UP);
+	}
+
+	private static BigDecimal calcChampsPlacePoints(int place,
+			String routineType) {
 		BigDecimal points = BigDecimal.ZERO;
 		switch (place) {
 		case 1:
@@ -467,30 +497,22 @@ public class RoutineManager {
 			}
 			break;
 		}
-		return points.divide(new BigDecimal(tieCount), 2, RoundingMode.HALF_UP);
+		return points;
 	}
 
 	public static String getMisspelledNames(Routine routine) {
-		String s = (routine.getSwimmers1() != null ? routine.getSwimmers1()
-				+ "," : "")
-				+ (routine.getSwimmers2() != null ? routine.getSwimmers2() : "");
-		String[] names = s.split(",");
 		StringBuilder sb = new StringBuilder();
-		for (String name : names) {
-			name = name.trim();
-			if (!name.isEmpty()) {
-				int space = name.indexOf(" ");
-				if (space > 0) {
-					String correctName = SwimmerManager.findNameLikeName(
-							name.substring(0, space),
-							name.substring(space + 1),
-							ScoreApp.getCurrentSeason());
-					if (!name.equals(correctName)) {
-						if (sb.length() > 0) {
-							sb.append(", ");
-						}
-						sb.append(name);
+		for (String name : getNames(routine)) {
+			int space = name.indexOf(" ");
+			if (space > 0) {
+				String correctName = SwimmerManager.findNameLikeName(
+						name.substring(0, space), name.substring(space + 1),
+						ScoreApp.getCurrentSeason());
+				if (!name.equals(correctName)) {
+					if (sb.length() > 0) {
+						sb.append(", ");
 					}
+					sb.append(name);
 				}
 			}
 		}
@@ -515,5 +537,20 @@ public class RoutineManager {
 			sb.append("</p></html>");
 		}
 		return sb.toString();
+	}
+
+	public static List<String> getNames(Routine routine) {
+		ArrayList<String> nameList = new ArrayList<String>();
+		String s = (routine.getSwimmers1() != null ? routine.getSwimmers1()
+				+ "," : "")
+				+ (routine.getSwimmers2() != null ? routine.getSwimmers2() : "");
+		String[] names = s.split(",");
+		for (String name : names) {
+			name = name.trim();
+			if (!name.isEmpty()) {
+				nameList.add(name);
+			}
+		}
+		return nameList;
 	}
 }

@@ -40,9 +40,22 @@ public class RoutineLevelManager {
                         || "I11T".equals(rl.getLevelId())) {
                     routineLevels.add(rl);
                 }
-            } else { // Rules Rev 2+
+            } else if (ScoreApp.getCurrentSeason().getRulesRevision() < 3) { // Rules Rev 2
                 if ("N12U".equals(rl.getLevelId())
                         || "N13O".equals(rl.getLevelId())
+                        || "I11".equals(rl.getLevelId())
+                        || "I15".equals(rl.getLevelId())
+                        || "I11-14T".equals(rl.getLevelId())
+                        || "I15-18T".equals(rl.getLevelId())
+                        || "I11-18CT".equals(rl.getLevelId())) {
+                    routineLevels.add(rl);
+                }
+            } else { // Rules Rev 3+
+                if ("N12U".equals(rl.getLevelId())
+                        || "N13O".equals(rl.getLevelId())
+                        || "N10U".equals(rl.getLevelId())
+                        || "N11".equals(rl.getLevelId())
+                        || "N15".equals(rl.getLevelId())
                         || "I11".equals(rl.getLevelId())
                         || "I15".equals(rl.getLevelId())
                         || "I11-14T".equals(rl.getLevelId())

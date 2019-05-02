@@ -1,22 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-   SynchroScore
-   Copyright (C) 2009 Shayne Hughes
-
-   This program is free software: you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation, either version 3 of the License, or
-   (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see <http://www.gnu.org/licenses/>.
--->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Figures Order" pageWidth="612" pageHeight="792" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+<!-- Created with Jaspersoft Studio version 6.2.2.final using JasperReports Library version 6.2.2  -->
+<!-- 2016-06-07T17:43:42 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Figures Order" pageWidth="612" pageHeight="792" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="92604758-54b2-4c50-9008-91037b41ccb6">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="13"/>
 	<property name="ireport.y" value="0"/>
@@ -38,28 +23,28 @@
 	<title>
 		<band height="48" splitType="Stretch">
 			<staticText>
-				<reportElement x="294" y="0" width="278" height="22"/>
+				<reportElement x="282" y="0" width="290" height="22" uuid="30a1d241-9e8e-482a-8cef-938010b5cc13"/>
 				<textElement textAlignment="Right">
 					<font size="16" isBold="true"/>
 				</textElement>
 				<text><![CDATA[VFCAL Synchronized Swimming]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="3" y="1" width="279" height="22"/>
+				<reportElement x="3" y="1" width="279" height="22" uuid="a9a7b369-1e40-4314-91a6-e3c8ab112d6f"/>
 				<textElement>
 					<font size="14" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{MeetDate}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{MeetDate}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="3" y="24" width="279" height="21"/>
+				<reportElement x="3" y="24" width="279" height="21" uuid="9b3e6684-8038-4b23-838f-72796af158e9"/>
 				<textElement>
 					<font size="14" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{MeetName}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{MeetName}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="292" y="23" width="278" height="22"/>
+				<reportElement x="292" y="23" width="278" height="22" uuid="e682edfd-c478-4368-8764-9f78e2133471"/>
 				<textElement textAlignment="Right">
 					<font size="16" isBold="true"/>
 				</textElement>
@@ -70,17 +55,17 @@
 	<pageHeader>
 		<band height="20" splitType="Stretch">
 			<staticText>
-				<reportElement x="322" y="0" width="58" height="20"/>
+				<reportElement x="322" y="0" width="58" height="20" uuid="29f74cb0-d871-4496-b089-62bc44311c7c"/>
 				<textElement textAlignment="Right">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Points]]></text>
 			</staticText>
 			<line>
-				<reportElement x="0" y="19" width="572" height="1"/>
+				<reportElement x="0" y="19" width="572" height="1" uuid="694acccc-fd0f-435d-b301-a590a5a872c1"/>
 			</line>
 			<staticText>
-				<reportElement x="172" y="0" width="133" height="20"/>
+				<reportElement x="172" y="0" width="133" height="20" uuid="d11b82ce-601c-4007-91e6-d600186192cb"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
@@ -94,18 +79,18 @@
 	<detail>
 		<band height="16" splitType="Stretch">
 			<textField>
-				<reportElement x="322" y="0" width="58" height="16"/>
+				<reportElement x="322" y="0" width="58" height="16" uuid="5ee4db9b-d90d-4621-8095-47bf959f8e48"/>
 				<textElement textAlignment="Right">
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{points}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{points}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="172" y="0" width="133" height="16"/>
+				<reportElement x="172" y="0" width="133" height="16" uuid="224b4173-135d-46b2-8e72-0b1fc554f286"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{team}.getName()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{team}.getName()]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -115,14 +100,13 @@
 	<pageFooter>
 		<band height="28" splitType="Stretch">
 			<textField>
-				<reportElement x="214" y="8" width="80" height="20"/>
+				<reportElement x="214" y="8" width="80" height="20" uuid="3bc391ae-81e1-464a-ae12-14ebdca721db"/>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression class="java.lang.String"><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report">
-				<reportElement x="294" y="8" width="40" height="20"/>
-				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				<reportElement x="294" y="8" width="40" height="20" uuid="cec0b4ae-66d2-417b-b70e-984f0f6f5ffb"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageFooter>

@@ -1,0 +1,5 @@
+event,ageGroup,team,theme,routineNum,judgeNum,execution,synchronization,difficulty,choreography,music,presentation,meetName,meetDate,participants
+Solo,"Novice 13-18","Auburn","The Solo",1,1,50,10,40,50,20,30,"Test Meet","6/11/2013","Swimmer One"
+Duet,"Novice 13-18","Cordova","The Duet",2,1,40,20,40,60,20,20,"Test Meet","6/11/2013","Swimmer One, Swimmer Two"
+Trio,"Novice 13-18","Davis","The Trio",3,1,40,20,40,60,20,20,"Test Meet","6/11/2013","Swimmer One, Swimmer Two, Swimmer Three"
+Team,"Novice 13-18","Sunrise","The Team",4,1,40,30,30,60,20,20,"Test Meet","6/11/2013","Swimmer One, Swimmer Two, Swimmer Three, Swimmer Four, Swimmer Five, Swimmer Six, Swimmer Seven, Swimmer Eight Swimmer Nine, Swimmer Ten"

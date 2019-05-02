@@ -1,6 +1,7 @@
 package org.aquastarz.score;
 
 import javax.persistence.EntityManager;
+
 import org.apache.log4j.Level;
 
 import sun.misc.Signal;
@@ -13,13 +14,33 @@ public class AppSignalHandler extends Thread implements SignalHandler {
 	private SignalHandler oldHandler;
 
 	public static void installAll() {
-		install("SEGV");
-		install("ILL");
-		// install("FPE");
-		install("ABRT");
-		install("INT");
-		install("TERM");
+		try {
+			install("SEGV");
+		} catch (Exception e) {
+			//nothing
+		}
+		try {
+			install("ILL");
+		} catch (Exception e) {
+			//nothing
+		}
+		try {
+			install("ABRT");
+		} catch (Exception e) {
+			//nothing
+		}
+		try {
+			install("INT");
+		} catch (Exception e) {
+			//nothing
+		}
+		try {
+			install("TERM");
+		} catch (Exception e) {
+			//nothing
+		}
 		// install("BREAK");
+		// install("FPE");
 	}
 
 	// Static method to install the signal handler
@@ -31,6 +52,7 @@ public class AppSignalHandler extends Thread implements SignalHandler {
 	}
 
 	// Signal handler method
+	@Override
 	public void handle(Signal sig) {
 		logger.error("Signal handler received " + sig);
 		try {
@@ -52,14 +74,15 @@ public class AppSignalHandler extends Thread implements SignalHandler {
 		}
 	}
 
+	@Override
 	public void run() {
 		logger.setLevel(Level.INFO);
 		logger.info("Shutting down db.");
-		EntityManager em = ScoreApp.getEntityManager();
+		EntityManager em = ScoreApp.getNewEntityManager();
 		em.getTransaction().begin();
 		em.createNativeQuery("SHUTDOWN").executeUpdate();
 		em.getTransaction().commit();
 		em.close();
-    	logger.info("DB shutdown complete.");
+		logger.info("DB shutdown complete.");
 	}
 }
