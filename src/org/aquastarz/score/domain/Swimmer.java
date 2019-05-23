@@ -45,6 +45,7 @@ import javax.persistence.UniqueConstraint;
 		@NamedQuery(name = "Swimmer.findByLeagueNumAndSeason", query = "SELECT s FROM Swimmer s where s.leagueNum like :leagueNum and s.season = :season"),
 		@NamedQuery(name = "Swimmer.findByTeamIdAndSeasonOrderByName", query = "SELECT s FROM Swimmer s where s.team.teamId like :teamId and s.season = :season order by s.lastName,s.firstName"),
 		@NamedQuery(name = "Swimmer.findBySeasonOrderByTeamAndName", query = "SELECT s FROM Swimmer s where s.season = :season order by s.team,s.lastName,s.firstName"),
+		@NamedQuery(name = "Swimmer.findBySeasonOrderByLeagueNum", query = "SELECT s FROM Swimmer s where s.season = :season order by s.leagueNum"),
 		@NamedQuery(name = "Swimmer.findByTeamIdAndSeasonOrderByTeamAndName", query = "SELECT s FROM Swimmer s where s.team.teamId like :teamId and s.season = :season order by s.team,s.lastName,s.firstName"),
 		@NamedQuery(name = "Swimmer.findByTeamIdAndSeasonOrderByLevelAndName", query = "SELECT s FROM Swimmer s where s.team.teamId like :teamId and s.season = :season order by s.level.sortOrder,s.lastName,s.firstName"),
 		@NamedQuery(name = "Swimmer.findMaxLeagueIdBySeason", query = "SELECT max(s.leagueNum) FROM Swimmer s where s.season = :season") })

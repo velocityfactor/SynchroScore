@@ -101,6 +101,14 @@ public class SwimmerManager {
 		return swimmers;
 	}
 
+	public static List<Swimmer> getSwimmersOrderByLeagueNum(Season season) {
+		Query swimmerQuery = ScoreApp.getEntityManager().createNamedQuery(
+				"Swimmer.findBySeasonOrderByLeagueNum");
+		swimmerQuery.setParameter("season", season);
+		List<Swimmer> swimmers = swimmerQuery.getResultList();
+		return swimmers;
+	}
+
 	public static Integer getNextLeagueNumber() {
 		Query swimmerQuery = ScoreApp.getEntityManager().createNamedQuery(
 				"Swimmer.findMaxLeagueIdBySeason");

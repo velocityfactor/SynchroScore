@@ -14,7 +14,7 @@
   </appender> 
 
 	<appender name="file" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="File" value="${user.home}/SynchroScore/debug.log"/>
+		<param name="File" value="${user.home}/SynchroScore-debug.log"/>
 		<param name="DatePattern" value="yyyy-MM-dd"/>
     <layout class="org.apache.log4j.PatternLayout"> 
       <param name="ConversionPattern" value="%-5p %6.10r[%t]%x(%F:%L) - %m%n"/> 

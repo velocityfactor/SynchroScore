@@ -56,8 +56,6 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
         super(parent, modal);
 
         initComponents();
-        fillMeetCombo(ScoreController.getMeets(ScoreApp.getCurrentSeason()));
-        fillSeasonCombo(ScoreController.getSeasons());
     }
 
     /** This method is called from within the constructor to
@@ -264,6 +262,11 @@ public class MeetSelectionDialog extends javax.swing.JDialog {
      * @param args the command line arguments
      */
     public int showMeetSelectionDialog() {
+        fillMeetCombo(ScoreController.getMeets(ScoreApp.getCurrentSeason()));
+        fillSeasonCombo(ScoreController.getSeasons());
+
+    	maintenance=false;
+    	canceled=false;
         Dimension dim = getToolkit().getScreenSize();
         Rectangle abounds = getBounds();
         setLocation((dim.width - abounds.width) / 2,
