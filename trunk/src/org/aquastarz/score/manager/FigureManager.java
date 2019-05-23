@@ -20,6 +20,8 @@
 
 package org.aquastarz.score.manager;
 
+import java.util.List;
+
 import org.aquastarz.score.ScoreApp;
 import org.aquastarz.score.domain.Figure;
 
@@ -27,4 +29,12 @@ public class FigureManager {
     public static Figure findById(String figureId) {
         return ScoreApp.getEntityManager().find(Figure.class, figureId);
     }
+    
+	public static List<Figure> getFigures() {
+		javax.persistence.Query query = ScoreApp.getEntityManager()
+				.createQuery("SELECT f FROM Figure f order by f.figureId");
+		return query.getResultList();
+	}
+
+
 }

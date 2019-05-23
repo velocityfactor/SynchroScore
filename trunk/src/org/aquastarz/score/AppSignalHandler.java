@@ -77,12 +77,6 @@ public class AppSignalHandler extends Thread implements SignalHandler {
 	@Override
 	public void run() {
 		logger.setLevel(Level.INFO);
-		logger.info("Shutting down db.");
-		EntityManager em = ScoreApp.getNewEntityManager();
-		em.getTransaction().begin();
-		em.createNativeQuery("SHUTDOWN").executeUpdate();
-		em.getTransaction().commit();
-		em.close();
-		logger.info("DB shutdown complete.");
+		ScoreApp.shutdownDb();
 	}
 }
