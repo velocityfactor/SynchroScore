@@ -141,9 +141,7 @@ public class ScoreController {
 		logger.info("ScoreController starting for meetId=" + meet.getMeetId()
 				+ " \"" + meet.getName() + "\"");
 		mainFrame = new SynchroFrame(this, meet);
-		if(meet.getType()=='C') {
-			mainFrame.setRoundLabelsCheck();
-		}		
+		mainFrame.setRoundLabelsCheck(meet.isChamps());
 		mainFrame.setVisible(true);
 	}
 

@@ -62,6 +62,7 @@ import net.sf.jasperreports.view.JasperViewer;
 
 import org.aquastarz.score.ScoreApp;
 import org.aquastarz.score.controller.RoutinesController;
+import org.aquastarz.score.domain.Meet;
 import org.aquastarz.score.domain.Routine;
 import org.aquastarz.score.domain.RoutineLevel;
 import org.aquastarz.score.domain.Team;
@@ -71,11 +72,11 @@ import org.aquastarz.score.manager.SwimmerManager;
 import org.aquastarz.score.report.RoutineScoreSheet;
 import org.aquastarz.score.util.TwoDigitScore;
 import javax.swing.JCheckBox;
+import java.awt.event.KeyAdapter;
 
 public class RoutinesPanel extends javax.swing.JPanel {
 
-	private static org.apache.log4j.Logger logger = org.apache.log4j.Logger
-			.getLogger(RoutinesPanel.class.getName());
+	private static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(RoutinesPanel.class.getName());
 	private boolean modified = false;
 	private List<Routine> routines = null;
 	private Routine curRoutine = null;
@@ -96,19 +97,16 @@ public class RoutinesPanel extends javax.swing.JPanel {
 	// Event Handling
 	protected javax.swing.event.EventListenerList listenerList = new javax.swing.event.EventListenerList();
 
-	public void addRoutinesPanelEventListener(
-			RoutinesPanelEventListener listener) {
+	public void addRoutinesPanelEventListener(RoutinesPanelEventListener listener) {
 		listenerList.add(RoutinesPanelEventListener.class, listener);
 	}
 
-	public void removeRoutinesPanelEventListener(
-			RoutinesPanelEventListener listener) {
+	public void removeRoutinesPanelEventListener(RoutinesPanelEventListener listener) {
 		listenerList.remove(RoutinesPanelEventListener.class, listener);
 	}
 
 	void fireRoutineSaved() {
-		for (RoutinesPanelEventListener listener : listenerList
-				.getListeners(RoutinesPanelEventListener.class)) {
+		for (RoutinesPanelEventListener listener : listenerList.getListeners(RoutinesPanelEventListener.class)) {
 			listener.routineSaved();
 		}
 	}
@@ -118,14 +116,12 @@ public class RoutinesPanel extends javax.swing.JPanel {
 		vtsm.addVetoableChangeListener(new VetoableChangeListener() {
 
 			@Override
-			public void vetoableChange(PropertyChangeEvent evt)
-					throws PropertyVetoException {
+			public void vetoableChange(PropertyChangeEvent evt) throws PropertyVetoException {
 				if (modified && curRoutine != null) {
 
 					// Ignore "changes" to the current routine
 					if (((Integer) evt.getNewValue() >= 0)
-							&& routineList.getModel().getElementAt(
-									(Integer) evt.getNewValue()) == curRoutine) {
+							&& routineList.getModel().getElementAt((Integer) evt.getNewValue()) == curRoutine) {
 						return;
 					}
 
@@ -139,7 +135,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
 		return vtsm;
 	}
 
-	private void updateRoutinesList() {
+	public void updateRoutinesList() {
 		// Object o = routineList.getSelectedValue();
 		int oldIndex = routineList.getSelectedIndex();
 		int oldCount = routineList.getModel().getSize();
@@ -149,8 +145,10 @@ public class RoutinesPanel extends javax.swing.JPanel {
 		// }
 		routines = controller.getRoutinesList();
 		DefaultListModel dlm = new DefaultListModel();
+		Meet meet=null;
 		for (Routine routine : routines) {
 			dlm.addElement(routine);
+			meet=routine.getMeet();
 		}
 		routineList.setModel(dlm);
 		// if (selectedRoutine != null) {
@@ -158,6 +156,9 @@ public class RoutinesPanel extends javax.swing.JPanel {
 		// }
 		if (oldCount == routineList.getModel().getSize()) {
 			routineList.setSelectedIndex(oldIndex);
+		}
+		if(meet!=null) {
+			earnsPointsCheckBox.setVisible(!meet.isChamps());
 		}
 	}
 
@@ -235,11 +236,9 @@ public class RoutinesPanel extends javax.swing.JPanel {
 
 	// Returns false if the user cancels, otherwise true
 	private boolean offerSave() {
-		int confirm = JOptionPane
-				.showConfirmDialog(
-						this,
-						"This routine has been modified.  Do you want to save changes?",
-						"Save Changes?", JOptionPane.YES_NO_CANCEL_OPTION);
+		int confirm = JOptionPane.showConfirmDialog(this,
+				"This routine has been modified.  Do you want to save changes?", "Save Changes?",
+				JOptionPane.YES_NO_CANCEL_OPTION);
 		if (confirm == JOptionPane.YES_OPTION) {
 			save();
 			return true;
@@ -288,8 +287,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
 			routine.setNumSwimmers(numSwimmersValue);
 		} catch (Exception e) {
 			numSwimmers.selectAll();
-			JOptionPane.showMessageDialog(this, "Invalid #Swmrs Entry",
-					"Entry Error", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Invalid #Swmrs Entry", "Entry Error", JOptionPane.WARNING_MESSAGE);
 			return false;
 		}
 		try {
@@ -391,15 +389,14 @@ public class RoutinesPanel extends javax.swing.JPanel {
 			}
 			routine.setPenalty(score);
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(this, e.getMessage(), "Entry Error",
-					JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(this, e.getMessage(), "Entry Error", JOptionPane.WARNING_MESSAGE);
 			return false;
 		}
 		String spellingErrors = RoutineManager.getMisspelledNames(routine);
 		if (!spellingErrors.isEmpty()) {
-			JOptionPane.showMessageDialog(this, "Please check spelling of "
-					+ spellingErrors
-					+ ".  This is just a warning and does not prevent saving.",
+			JOptionPane.showMessageDialog(this,
+					"Please check spelling of " + spellingErrors
+							+ ".  This is just a warning and does not prevent saving.",
 					"Spell check", JOptionPane.WARNING_MESSAGE);
 		}
 		return true;
@@ -549,17 +546,20 @@ public class RoutinesPanel extends javax.swing.JPanel {
 		jLabel16 = new javax.swing.JLabel();
 		totalScore = new javax.swing.JTextField();
 		printButton = new javax.swing.JButton();
+		printButton.setToolTipText("Print the list of routines");
 		importButton = new javax.swing.JButton();
+		importButton.setToolTipText("Load CSV file of routines. Hold Shift and click to Export. Format is \"Team\", \"Level\", \"#Swmrs\", \"Type\", \"Swimmers1\", \"Swimmers2\"");
 		randomizeButton = new javax.swing.JButton();
+		randomizeButton.setToolTipText("Assign random order of figures, for Champs");
 		saveButton = new javax.swing.JButton();
 		numSwimmers = new javax.swing.JTextField();
 		jLabel17 = new javax.swing.JLabel();
 		jLabel18 = new javax.swing.JLabel();
 		spellCheckButton = new javax.swing.JButton();
+		spellCheckButton.setToolTipText("Check the swimmer names against the swimmer database.");
 
 		routineList.setModel(new javax.swing.AbstractListModel() {
-			String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4",
-					"Item 5" };
+			String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
 
 			@Override
 			public int getSize() {
@@ -571,14 +571,12 @@ public class RoutinesPanel extends javax.swing.JPanel {
 				return strings[i];
 			}
 		});
-		routineList
-				.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-					@Override
-					public void valueChanged(
-							javax.swing.event.ListSelectionEvent evt) {
-						routineListValueChanged(evt);
-					}
-				});
+		routineList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+			@Override
+			public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+				routineListValueChanged(evt);
+			}
+		});
 		jScrollPane1.setViewportView(routineList);
 
 		addButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -602,8 +600,8 @@ public class RoutinesPanel extends javax.swing.JPanel {
 		});
 
 		levelCombo.setFont(new java.awt.Font("Tahoma", 0, 14));
-		levelCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] {
-				"Item 1", "Item 2", "Item 3", "Item 4" }));
+		levelCombo.setModel(
+				new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 		levelCombo.addActionListener(new java.awt.event.ActionListener() {
 			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -618,8 +616,8 @@ public class RoutinesPanel extends javax.swing.JPanel {
 		jLabel2.setText("Type");
 
 		routineTypeCombo.setFont(new java.awt.Font("Tahoma", 0, 14));
-		routineTypeCombo.setModel(new javax.swing.DefaultComboBoxModel(
-				new String[] { "Solo", "Duet", "Trio", "Team" }));
+		routineTypeCombo
+				.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Solo", "Duet", "Trio", "Team" }));
 		routineTypeCombo.setMinimumSize(new java.awt.Dimension(59, 20));
 		routineTypeCombo.setPreferredSize(new java.awt.Dimension(63, 22));
 		routineTypeCombo.addActionListener(new java.awt.event.ActionListener() {
@@ -630,8 +628,8 @@ public class RoutinesPanel extends javax.swing.JPanel {
 		});
 
 		teamCombo.setFont(new java.awt.Font("Tahoma", 0, 14));
-		teamCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] {
-				"Item 1", "Item 2", "Item 3", "Item 4" }));
+		teamCombo.setModel(
+				new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 		teamCombo.addActionListener(new java.awt.event.ActionListener() {
 			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -902,13 +900,13 @@ public class RoutinesPanel extends javax.swing.JPanel {
 				"Hint: Type two letters of first name, two letters of last name, and press comma");
 
 		JButton btnPrintSheets = new JButton("Print Sheets");
+		btnPrintSheets.setToolTipText("Generate all judge and ref sheets");
 		btnPrintSheets.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 				try {
-					Collection<RoutineScoreSheet> allSheets = controller
-							.generateRoutineScoreSheets();
+					Collection<RoutineScoreSheet> allSheets = controller.generateRoutineScoreSheets();
 					Collection<RoutineScoreSheet> routineSoloScoreSheets = new ArrayList<RoutineScoreSheet>();
 					Collection<RoutineScoreSheet> routineDuetScoreSheets = new ArrayList<RoutineScoreSheet>();
 					Collection<RoutineScoreSheet> routineTrioScoreSheets = new ArrayList<RoutineScoreSheet>();
@@ -932,44 +930,28 @@ public class RoutinesPanel extends javax.swing.JPanel {
 							}
 						}
 					}
-					JasperReport jasperReport1 = (JasperReport) JRLoader
-							.loadObject(getClass()
-									.getResourceAsStream(
-											"/org/aquastarz/score/report/RoutineRefSheet.jasper"));
-					JRDataSource data1 = new JRBeanCollectionDataSource(
-							routineRefSheets);
-					JasperReport jasperReport2 = (JasperReport) JRLoader
-							.loadObject(getClass()
-									.getResourceAsStream(
-											"/org/aquastarz/score/report/RoutineScoreSheet.jasper"));
-					JRDataSource dataSolo = new JRBeanCollectionDataSource(
-							routineSoloScoreSheets);
-					JRDataSource dataDuet = new JRBeanCollectionDataSource(
-							routineDuetScoreSheets);
-					JRDataSource dataTrio = new JRBeanCollectionDataSource(
-							routineTrioScoreSheets);
-					JRDataSource dataTeam = new JRBeanCollectionDataSource(
-							routineTeamScoreSheets);
-					JRDataSource dataCombo = new JRBeanCollectionDataSource(
-							routineComboScoreSheets);
+					JasperReport jasperReport1 = (JasperReport) JRLoader.loadObject(
+							getClass().getResourceAsStream("/org/aquastarz/score/report/RoutineRefSheet.jasper"));
+					JRDataSource data1 = new JRBeanCollectionDataSource(routineRefSheets);
+					JasperReport jasperReport2 = (JasperReport) JRLoader.loadObject(
+							getClass().getResourceAsStream("/org/aquastarz/score/report/RoutineScoreSheet.jasper"));
+					JRDataSource dataSolo = new JRBeanCollectionDataSource(routineSoloScoreSheets);
+					JRDataSource dataDuet = new JRBeanCollectionDataSource(routineDuetScoreSheets);
+					JRDataSource dataTrio = new JRBeanCollectionDataSource(routineTrioScoreSheets);
+					JRDataSource dataTeam = new JRBeanCollectionDataSource(routineTeamScoreSheets);
+					JRDataSource dataCombo = new JRBeanCollectionDataSource(routineComboScoreSheets);
 					Map<String, Object> params = new HashMap<String, Object>();
-					JasperPrint jasperPrint1 = JasperFillManager.fillReport(
-							jasperReport1, params, data1);
+					JasperPrint jasperPrint1 = JasperFillManager.fillReport(jasperReport1, params, data1);
 					JasperViewer.viewReport(jasperPrint1, false);
-					JasperPrint jasperPrintSolo = JasperFillManager.fillReport(
-							jasperReport2, params, dataSolo);
+					JasperPrint jasperPrintSolo = JasperFillManager.fillReport(jasperReport2, params, dataSolo);
 					JasperViewer.viewReport(jasperPrintSolo, false);
-					JasperPrint jasperPrintDuet = JasperFillManager.fillReport(
-							jasperReport2, params, dataDuet);
+					JasperPrint jasperPrintDuet = JasperFillManager.fillReport(jasperReport2, params, dataDuet);
 					JasperViewer.viewReport(jasperPrintDuet, false);
-					JasperPrint jasperPrintTrio = JasperFillManager.fillReport(
-							jasperReport2, params, dataTrio);
+					JasperPrint jasperPrintTrio = JasperFillManager.fillReport(jasperReport2, params, dataTrio);
 					JasperViewer.viewReport(jasperPrintTrio, false);
-					JasperPrint jasperPrintTeam = JasperFillManager.fillReport(
-							jasperReport2, params, dataTeam);
+					JasperPrint jasperPrintTeam = JasperFillManager.fillReport(jasperReport2, params, dataTeam);
 					JasperViewer.viewReport(jasperPrintTeam, false);
-					JasperPrint jasperPrintCombo = JasperFillManager.fillReport(
-							jasperReport2, params, dataCombo);
+					JasperPrint jasperPrintCombo = JasperFillManager.fillReport(jasperReport2, params, dataCombo);
 					JasperViewer.viewReport(jasperPrintCombo, false);
 				} catch (Exception ex) {
 					logger.error("Could not create the report", ex);
@@ -978,202 +960,254 @@ public class RoutinesPanel extends javax.swing.JPanel {
 			}
 		});
 		btnPrintSheets.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		
+
 		earnsPointsCheckBox = new JCheckBox("Earns Team Points");
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
 		layout.setHorizontalGroup(
-			layout.createParallelGroup(Alignment.LEADING)
+				layout.createParallelGroup(Alignment.LEADING)
+						.addGroup(layout.createSequentialGroup().addContainerGap().addComponent(addButton)
+								.addPreferredGap(ComponentPlacement.RELATED).addComponent(deleteButton)
+								.addPreferredGap(ComponentPlacement.RELATED).addComponent(spellCheckButton)
+								.addPreferredGap(ComponentPlacement.RELATED).addComponent(randomizeButton)
+								.addPreferredGap(ComponentPlacement.RELATED).addComponent(printButton)
+								.addPreferredGap(ComponentPlacement.RELATED).addComponent(importButton)
+								.addPreferredGap(ComponentPlacement.RELATED).addComponent(btnPrintSheets)
+								.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE,
+										Short.MAX_VALUE)
+								.addComponent(saveButton).addContainerGap())
+						.addGroup(
+								layout.createSequentialGroup()
+										.addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 171,
+												GroupLayout.PREFERRED_SIZE)
+										.addGap(18)
+										.addGroup(layout
+												.createParallelGroup(Alignment.LEADING).addGroup(layout
+														.createSequentialGroup().addGroup(layout
+																.createParallelGroup(Alignment.LEADING).addComponent(
+																		jLabel1)
+																.addComponent(
+																		levelCombo, GroupLayout.PREFERRED_SIZE, 188,
+																		GroupLayout.PREFERRED_SIZE))
+														.addPreferredGap(ComponentPlacement.RELATED)
+														.addGroup(layout.createParallelGroup(Alignment.LEADING)
+																.addComponent(jLabel2).addComponent(routineTypeCombo,
+																		GroupLayout.PREFERRED_SIZE, 80,
+																		GroupLayout.PREFERRED_SIZE))
+														.addPreferredGap(ComponentPlacement.RELATED).addGroup(layout
+																.createParallelGroup(Alignment.LEADING, false)
+																.addComponent(numSwimmers).addComponent(jLabel17,
+																		GroupLayout.DEFAULT_SIZE,
+																		GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+														.addPreferredGap(ComponentPlacement.RELATED)
+														.addGroup(layout.createParallelGroup(Alignment.LEADING)
+																.addComponent(jLabel3).addComponent(teamCombo,
+																		GroupLayout.PREFERRED_SIZE, 181,
+																		GroupLayout.PREFERRED_SIZE)))
+												.addGroup(layout
+														.createSequentialGroup().addGap(10)
+														.addComponent(lblHintTypeTwo))
+												.addComponent(jLabel5).addComponent(jLabel4)
+												.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
+														.addGroup(layout.createSequentialGroup()
+																.addGroup(layout.createParallelGroup(Alignment.LEADING)
+																		.addComponent(jLabel6).addComponent(jLabel7))
+																.addGap(18).addGroup(layout
+																		.createParallelGroup(Alignment.CENTER)
+																		.addComponent(scoreTJ1,
+																				GroupLayout.PREFERRED_SIZE,
+																				GroupLayout.DEFAULT_SIZE,
+																				GroupLayout.PREFERRED_SIZE)
+																		.addComponent(jLabel8).addComponent(scoreAJ1,
+																				GroupLayout.PREFERRED_SIZE,
+																				GroupLayout.DEFAULT_SIZE,
+																				GroupLayout.PREFERRED_SIZE))
+																.addGap(21)
+																.addGroup(layout
+																		.createParallelGroup(Alignment.CENTER, false)
+																		.addComponent(scoreAJ2,
+																				GroupLayout.PREFERRED_SIZE,
+																				GroupLayout.DEFAULT_SIZE,
+																				GroupLayout.PREFERRED_SIZE)
+																		.addComponent(
+																				scoreTJ2, GroupLayout.PREFERRED_SIZE,
+																				GroupLayout.DEFAULT_SIZE,
+																				GroupLayout.PREFERRED_SIZE)
+																		.addComponent(jLabel9))
+																.addGap(21)
+																.addGroup(layout
+																		.createParallelGroup(Alignment.CENTER, false)
+																		.addComponent(scoreAJ3,
+																				GroupLayout.PREFERRED_SIZE,
+																				GroupLayout.DEFAULT_SIZE,
+																				GroupLayout.PREFERRED_SIZE)
+																		.addComponent(
+																				scoreTJ3, GroupLayout.PREFERRED_SIZE,
+																				GroupLayout.DEFAULT_SIZE,
+																				GroupLayout.PREFERRED_SIZE)
+																		.addComponent(jLabel10))
+																.addGap(21)
+																.addGroup(layout
+																		.createParallelGroup(Alignment.CENTER, false)
+																		.addComponent(scoreAJ4,
+																				GroupLayout.PREFERRED_SIZE,
+																				GroupLayout.DEFAULT_SIZE,
+																				GroupLayout.PREFERRED_SIZE)
+																		.addComponent(
+																				scoreTJ4, GroupLayout.PREFERRED_SIZE,
+																				GroupLayout.DEFAULT_SIZE,
+																				GroupLayout.PREFERRED_SIZE)
+																		.addComponent(jLabel11))
+																.addGap(21).addGroup(layout
+																		.createParallelGroup(Alignment.CENTER, false)
+																		.addComponent(scoreAJ5,
+																				GroupLayout.PREFERRED_SIZE,
+																				GroupLayout.DEFAULT_SIZE,
+																				GroupLayout.PREFERRED_SIZE)
+																		.addComponent(
+																				scoreTJ5, GroupLayout.PREFERRED_SIZE,
+																				GroupLayout.DEFAULT_SIZE,
+																				GroupLayout.PREFERRED_SIZE)
+																		.addComponent(jLabel12))
+																.addGap(21)
+																.addGroup(layout
+																		.createParallelGroup(Alignment.CENTER, false)
+																		.addComponent(scoreAJ6,
+																				GroupLayout.PREFERRED_SIZE,
+																				GroupLayout.DEFAULT_SIZE,
+																				GroupLayout.PREFERRED_SIZE)
+																		.addComponent(
+																				scoreTJ6, GroupLayout.PREFERRED_SIZE,
+																				GroupLayout.DEFAULT_SIZE,
+																				GroupLayout.PREFERRED_SIZE)
+																		.addComponent(jLabel13))
+																.addGap(21)
+																.addGroup(layout
+																		.createParallelGroup(Alignment.CENTER, false)
+																		.addComponent(scoreAJ7,
+																				GroupLayout.PREFERRED_SIZE,
+																				GroupLayout.DEFAULT_SIZE,
+																				GroupLayout.PREFERRED_SIZE)
+																		.addComponent(
+																				scoreTJ7, GroupLayout.PREFERRED_SIZE,
+																				GroupLayout.DEFAULT_SIZE,
+																				GroupLayout.PREFERRED_SIZE)
+																		.addComponent(jLabel14)))
+														.addComponent(names1).addComponent(names2).addComponent(title))
+												.addGroup(layout.createSequentialGroup().addGap(10).addGroup(layout
+														.createParallelGroup(Alignment.LEADING).addComponent(jLabel15)
+														.addGroup(layout.createSequentialGroup().addGap(57)
+																.addComponent(penalty, GroupLayout.PREFERRED_SIZE,
+																		GroupLayout.DEFAULT_SIZE,
+																		GroupLayout.PREFERRED_SIZE)))
+														.addPreferredGap(ComponentPlacement.RELATED)
+														.addComponent(jLabel18, GroupLayout.PREFERRED_SIZE, 106,
+																GroupLayout.PREFERRED_SIZE)
+														.addGap(18).addComponent(earnsPointsCheckBox)
+														.addPreferredGap(ComponentPlacement.RELATED, 127,
+																Short.MAX_VALUE)
+														.addComponent(jLabel16)
+														.addPreferredGap(ComponentPlacement.UNRELATED)
+														.addComponent(totalScore, GroupLayout.PREFERRED_SIZE, 82,
+																GroupLayout.PREFERRED_SIZE)
+														.addGap(112)))));
+		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(addButton)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(deleteButton)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(spellCheckButton)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(randomizeButton)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(printButton)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(importButton)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnPrintSheets)
-					.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addComponent(saveButton)
-					.addContainerGap())
-				.addGroup(layout.createSequentialGroup()
-					.addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 171, GroupLayout.PREFERRED_SIZE)
-					.addGap(18)
-					.addGroup(layout.createParallelGroup(Alignment.LEADING)
-						.addGroup(layout.createSequentialGroup()
-							.addGroup(layout.createParallelGroup(Alignment.LEADING)
-								.addComponent(jLabel1)
-								.addComponent(levelCombo, GroupLayout.PREFERRED_SIZE, 188, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(layout.createParallelGroup(Alignment.LEADING)
-								.addComponent(jLabel2)
-								.addComponent(routineTypeCombo, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
-								.addComponent(numSwimmers)
-								.addComponent(jLabel17, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(layout.createParallelGroup(Alignment.LEADING)
-								.addComponent(jLabel3)
-								.addComponent(teamCombo, GroupLayout.PREFERRED_SIZE, 181, GroupLayout.PREFERRED_SIZE)))
-						.addGroup(layout.createSequentialGroup()
-							.addGap(10)
-							.addComponent(lblHintTypeTwo))
-						.addComponent(jLabel5)
-						.addComponent(jLabel4)
-						.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
-							.addGroup(layout.createSequentialGroup()
-								.addGroup(layout.createParallelGroup(Alignment.LEADING)
-									.addComponent(jLabel6)
-									.addComponent(jLabel7))
-								.addGap(18)
-								.addGroup(layout.createParallelGroup(Alignment.CENTER)
-									.addComponent(scoreTJ1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(jLabel8)
-									.addComponent(scoreAJ1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addGap(21)
-								.addGroup(layout.createParallelGroup(Alignment.CENTER, false)
-									.addComponent(scoreAJ2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(scoreTJ2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(jLabel9))
-								.addGap(21)
-								.addGroup(layout.createParallelGroup(Alignment.CENTER, false)
-									.addComponent(scoreAJ3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(scoreTJ3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(jLabel10))
-								.addGap(21)
-								.addGroup(layout.createParallelGroup(Alignment.CENTER, false)
-									.addComponent(scoreAJ4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(scoreTJ4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(jLabel11))
-								.addGap(21)
-								.addGroup(layout.createParallelGroup(Alignment.CENTER, false)
-									.addComponent(scoreAJ5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(scoreTJ5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(jLabel12))
-								.addGap(21)
-								.addGroup(layout.createParallelGroup(Alignment.CENTER, false)
-									.addComponent(scoreAJ6, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(scoreTJ6, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(jLabel13))
-								.addGap(21)
-								.addGroup(layout.createParallelGroup(Alignment.CENTER, false)
-									.addComponent(scoreAJ7, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(scoreTJ7, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(jLabel14)))
-							.addComponent(names1)
-							.addComponent(names2)
-							.addComponent(title))
-						.addGroup(layout.createSequentialGroup()
-							.addGap(10)
-							.addGroup(layout.createParallelGroup(Alignment.LEADING)
-								.addComponent(jLabel15)
-								.addGroup(layout.createSequentialGroup()
-									.addGap(57)
-									.addComponent(penalty, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(jLabel18, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(earnsPointsCheckBox)
-							.addPreferredGap(ComponentPlacement.RELATED, 127, Short.MAX_VALUE)
-							.addComponent(jLabel16)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(totalScore, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE)
-							.addGap(112))))
-		);
-		layout.setVerticalGroup(
-			layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup()
-					.addGroup(layout.createParallelGroup(Alignment.LEADING)
-						.addGroup(layout.createSequentialGroup()
-							.addContainerGap()
-							.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(jLabel1)
-								.addComponent(jLabel2)
-								.addComponent(jLabel17)
-								.addComponent(jLabel3))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(levelCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(routineTypeCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(teamCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(numSwimmers, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(jLabel4)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(title, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(jLabel5)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(names1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(names2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(lblHintTypeTwo)
-							.addGap(15)
-							.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(jLabel8)
-								.addComponent(jLabel9)
-								.addComponent(jLabel10)
-								.addComponent(jLabel11)
-								.addComponent(jLabel12)
-								.addComponent(jLabel13)
-								.addComponent(jLabel14))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(jLabel6)
-								.addComponent(scoreTJ1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(scoreTJ2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(scoreTJ3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(scoreTJ4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(scoreTJ5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(scoreTJ6, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(scoreTJ7, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(jLabel7)
-								.addComponent(scoreAJ1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(scoreAJ2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(scoreAJ3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(scoreAJ4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(scoreAJ5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(scoreAJ6, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(scoreAJ7, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addGroup(layout.createParallelGroup(Alignment.LEADING)
-								.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-									.addComponent(totalScore, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(jLabel16))
-								.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
-									.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-										.addComponent(jLabel18, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(earnsPointsCheckBox))
-									.addComponent(penalty, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(jLabel15))))
-						.addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 348, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(layout.createParallelGroup(Alignment.LEADING)
-						.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-							.addComponent(deleteButton)
-							.addComponent(randomizeButton)
-							.addComponent(printButton)
-							.addComponent(importButton)
-							.addComponent(addButton)
-							.addComponent(spellCheckButton)
-							.addComponent(btnPrintSheets))
-						.addComponent(saveButton))
-					.addContainerGap())
-		);
-		layout.linkSize(SwingConstants.VERTICAL, new Component[] {levelCombo, routineTypeCombo, teamCombo});
-		layout.linkSize(SwingConstants.HORIZONTAL, new Component[] {addButton, deleteButton, printButton, importButton, randomizeButton, saveButton, spellCheckButton, btnPrintSheets});
-		layout.linkSize(SwingConstants.HORIZONTAL, new Component[] {scoreTJ1, scoreTJ2, scoreTJ3, scoreTJ4, scoreTJ5, scoreTJ6, scoreTJ7, scoreAJ7, scoreAJ2, scoreAJ3, scoreAJ1, scoreAJ4, scoreAJ6, scoreAJ5, jLabel8, jLabel9, jLabel10, jLabel11, jLabel12, jLabel13, jLabel14});
-		layout.linkSize(SwingConstants.HORIZONTAL, new Component[] {jLabel15, penalty});
+						.addGroup(layout.createParallelGroup(Alignment.LEADING)
+								.addGroup(layout.createSequentialGroup().addContainerGap()
+										.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(jLabel1)
+												.addComponent(jLabel2).addComponent(jLabel17).addComponent(jLabel3))
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+												.addComponent(levelCombo, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addComponent(routineTypeCombo, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addComponent(teamCombo, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addComponent(numSwimmers, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+										.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(jLabel4)
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(title, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED).addComponent(jLabel5)
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(names1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(names2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED).addComponent(lblHintTypeTwo)
+										.addGap(15)
+										.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(jLabel8)
+												.addComponent(jLabel9).addComponent(jLabel10).addComponent(jLabel11)
+												.addComponent(jLabel12).addComponent(jLabel13).addComponent(jLabel14))
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(jLabel6)
+												.addComponent(scoreTJ1, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addComponent(scoreTJ2, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addComponent(scoreTJ3, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addComponent(scoreTJ4, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addComponent(scoreTJ5, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addComponent(scoreTJ6, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addComponent(scoreTJ7, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+										.addPreferredGap(ComponentPlacement.UNRELATED)
+										.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(jLabel7)
+												.addComponent(scoreAJ1, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addComponent(scoreAJ2, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addComponent(scoreAJ3, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addComponent(scoreAJ4, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addComponent(scoreAJ5, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addComponent(scoreAJ6, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addComponent(scoreAJ7, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+										.addPreferredGap(ComponentPlacement.UNRELATED)
+										.addGroup(layout
+												.createParallelGroup(Alignment.LEADING)
+												.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+														.addComponent(totalScore, GroupLayout.PREFERRED_SIZE,
+																GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+														.addComponent(jLabel16))
+												.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
+														.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+																.addComponent(jLabel18, GroupLayout.DEFAULT_SIZE,
+																		GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+																.addComponent(earnsPointsCheckBox))
+														.addComponent(penalty, GroupLayout.PREFERRED_SIZE,
+																GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+														.addComponent(jLabel15))))
+								.addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 348,
+										GroupLayout.PREFERRED_SIZE))
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(layout.createParallelGroup(Alignment.LEADING)
+								.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(deleteButton)
+										.addComponent(randomizeButton).addComponent(printButton)
+										.addComponent(importButton).addComponent(addButton)
+										.addComponent(spellCheckButton).addComponent(btnPrintSheets))
+								.addComponent(saveButton))
+						.addContainerGap()));
+		layout.linkSize(SwingConstants.VERTICAL, new Component[] { levelCombo, routineTypeCombo, teamCombo });
+		layout.linkSize(SwingConstants.HORIZONTAL, new Component[] { addButton, deleteButton, printButton, importButton,
+				randomizeButton, saveButton, spellCheckButton, btnPrintSheets });
+		layout.linkSize(SwingConstants.HORIZONTAL,
+				new Component[] { scoreTJ1, scoreTJ2, scoreTJ3, scoreTJ4, scoreTJ5, scoreTJ6, scoreTJ7, scoreAJ7,
+						scoreAJ2, scoreAJ3, scoreAJ1, scoreAJ4, scoreAJ6, scoreAJ5, jLabel8, jLabel9, jLabel10,
+						jLabel11, jLabel12, jLabel13, jLabel14 });
+		layout.linkSize(SwingConstants.HORIZONTAL, new Component[] { jLabel15, penalty });
 		this.setLayout(layout);
 
 	}// </editor-fold>//GEN-END:initComponents
@@ -1193,14 +1227,12 @@ public class RoutinesPanel extends javax.swing.JPanel {
 	private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_deleteButtonActionPerformed
 		Object o = routineList.getSelectedValue();
 		if (o == null || !(o instanceof Routine)) {
-			JOptionPane.showMessageDialog(this,
-					"Please select a routine to delete.", "No Selection",
+			JOptionPane.showMessageDialog(this, "Please select a routine to delete.", "No Selection",
 					JOptionPane.WARNING_MESSAGE);
 		}
 		Routine routine = (Routine) o;
 		int confirm = JOptionPane.showConfirmDialog(this,
-				"Are you sure you want to delete the routine entitled \""
-						+ routine.getName() + "\"?", "Confirm Delete",
+				"Are you sure you want to delete the routine entitled \"" + routine.getName() + "\"?", "Confirm Delete",
 				JOptionPane.YES_NO_OPTION);
 		if (confirm == JOptionPane.YES_OPTION) {
 			controller.delete(routine);
@@ -1237,14 +1269,30 @@ public class RoutinesPanel extends javax.swing.JPanel {
 			cont = offerSave();
 		}
 		if (cont) {
-			JFileChooser jfc = new JFileChooser();
-			jfc.setDialogTitle("Open Meet data file");
-			jfc.setFileFilter(new FileNameExtensionFilter("csv file", "csv"));
-			int ret = jfc.showOpenDialog(this);
-			if (ret == JFileChooser.APPROVE_OPTION) {
-				setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-				controller.importRoutines(jfc.getSelectedFile());
-				setCursor(Cursor.getDefaultCursor());
+			if((evt.getModifiers()&ActionEvent.SHIFT_MASK)>0) {
+				//Export
+				JFileChooser jfc = new JFileChooser();
+				jfc.setDialogTitle("Save Routines data file");
+				jfc.setFileFilter(new FileNameExtensionFilter("csv file", "csv"));
+				int ret = jfc.showSaveDialog(this);
+				if (ret == JFileChooser.APPROVE_OPTION) {
+					setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+					controller.exportRoutines(jfc.getSelectedFile());
+					setCursor(Cursor.getDefaultCursor());
+				}
+			}
+			else {
+				//Import
+				JFileChooser jfc = new JFileChooser();
+				jfc.setDialogTitle("Open Routines data file");
+				jfc.setFileFilter(new FileNameExtensionFilter("csv file", "csv"));
+				int ret = jfc.showOpenDialog(this);
+				if (ret == JFileChooser.APPROVE_OPTION) {
+					setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+					controller.importRoutines(jfc.getSelectedFile());
+					setCursor(Cursor.getDefaultCursor());
+				}
+				updateRoutinesList();
 			}
 		}
 	}// GEN-LAST:event_importButtonActionPerformed
@@ -1305,8 +1353,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
 			scoreTJ3.requestFocusInWindow();
 			scoreTJ3.selectAll();
 		}
-		if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE
-				&& scoreTJ2.getText().length() == 0) {
+		if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreTJ2.getText().length() == 0) {
 			scoreTJ1.requestFocusInWindow();
 			scoreTJ1.selectAll();
 		}
@@ -1318,8 +1365,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
 			scoreTJ4.requestFocusInWindow();
 			scoreTJ4.selectAll();
 		}
-		if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE
-				&& scoreTJ3.getText().length() == 0) {
+		if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreTJ3.getText().length() == 0) {
 			scoreTJ2.requestFocusInWindow();
 			scoreTJ2.selectAll();
 		}
@@ -1331,8 +1377,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
 			scoreTJ5.requestFocusInWindow();
 			scoreTJ5.selectAll();
 		}
-		if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE
-				&& scoreTJ4.getText().length() == 0) {
+		if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreTJ4.getText().length() == 0) {
 			scoreTJ3.requestFocusInWindow();
 			scoreTJ3.selectAll();
 		}
@@ -1349,8 +1394,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
 				scoreAJ1.selectAll();
 			}
 		}
-		if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE
-				&& scoreTJ5.getText().length() == 0) {
+		if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreTJ5.getText().length() == 0) {
 			scoreTJ4.requestFocusInWindow();
 			scoreTJ4.selectAll();
 		}
@@ -1362,8 +1406,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
 			scoreTJ7.requestFocusInWindow();
 			scoreTJ7.selectAll();
 		}
-		if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE
-				&& scoreTJ6.getText().length() == 0) {
+		if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreTJ6.getText().length() == 0) {
 			scoreTJ5.requestFocusInWindow();
 			scoreTJ5.selectAll();
 		}
@@ -1375,8 +1418,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
 			scoreAJ1.requestFocusInWindow();
 			scoreAJ1.selectAll();
 		}
-		if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE
-				&& scoreTJ7.getText().length() == 0) {
+		if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreTJ7.getText().length() == 0) {
 			scoreTJ6.requestFocusInWindow();
 			scoreTJ6.selectAll();
 		}
@@ -1388,8 +1430,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
 			scoreAJ2.requestFocusInWindow();
 			scoreAJ2.selectAll();
 		}
-		if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE
-				&& scoreAJ1.getText().length() == 0) {
+		if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreAJ1.getText().length() == 0) {
 			if (scoreTJ7.isEnabled()) {
 				scoreTJ7.requestFocusInWindow();
 				scoreTJ7.selectAll();
@@ -1406,8 +1447,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
 			scoreAJ3.requestFocusInWindow();
 			scoreAJ3.selectAll();
 		}
-		if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE
-				&& scoreAJ2.getText().length() == 0) {
+		if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreAJ2.getText().length() == 0) {
 			scoreAJ1.requestFocusInWindow();
 			scoreAJ1.selectAll();
 		}
@@ -1419,8 +1459,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
 			scoreAJ4.requestFocusInWindow();
 			scoreAJ4.selectAll();
 		}
-		if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE
-				&& scoreAJ3.getText().length() == 0) {
+		if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreAJ3.getText().length() == 0) {
 			scoreAJ2.requestFocusInWindow();
 			scoreAJ2.selectAll();
 		}
@@ -1432,8 +1471,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
 			scoreAJ5.requestFocusInWindow();
 			scoreAJ5.selectAll();
 		}
-		if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE
-				&& scoreAJ4.getText().length() == 0) {
+		if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreAJ4.getText().length() == 0) {
 			scoreAJ3.requestFocusInWindow();
 			scoreAJ3.selectAll();
 		}
@@ -1450,8 +1488,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
 				penalty.selectAll();
 			}
 		}
-		if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE
-				&& scoreAJ5.getText().length() == 0) {
+		if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreAJ5.getText().length() == 0) {
 			scoreAJ4.requestFocusInWindow();
 			scoreAJ4.selectAll();
 		}
@@ -1463,8 +1500,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
 			scoreAJ7.requestFocusInWindow();
 			scoreAJ7.selectAll();
 		}
-		if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE
-				&& scoreAJ6.getText().length() == 0) {
+		if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreAJ6.getText().length() == 0) {
 			scoreAJ5.requestFocusInWindow();
 			scoreAJ5.selectAll();
 		}
@@ -1476,8 +1512,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
 			penalty.requestFocusInWindow();
 			penalty.selectAll();
 		}
-		if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE
-				&& scoreAJ7.getText().length() == 0) {
+		if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE && scoreAJ7.getText().length() == 0) {
 			scoreAJ6.requestFocusInWindow();
 			scoreAJ6.selectAll();
 		}
@@ -1498,8 +1533,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
 		}
 	}// GEN-LAST:event_handleFieldChange
 
-	private void routineListValueChanged(
-			javax.swing.event.ListSelectionEvent evt) {// GEN-FIRST:event_routineListValueChanged
+	private void routineListValueChanged(javax.swing.event.ListSelectionEvent evt) {// GEN-FIRST:event_routineListValueChanged
 		updateCombos();
 		Object o = routineList.getSelectedValue();
 		if (o != null && (o instanceof Routine)) {
@@ -1534,8 +1568,7 @@ public class RoutinesPanel extends javax.swing.JPanel {
 					if (halfLen * 2 == search.length()) {
 						String firstName = search.substring(0, halfLen);
 						String lastName = search.substring(halfLen);
-						result = SwimmerManager.findNameLikeName(firstName,
-								lastName, ScoreApp.getCurrentSeason());
+						result = SwimmerManager.findNameLikeName(firstName, lastName, ScoreApp.getCurrentSeason());
 						if (result == null) {
 							result = search;
 						}
@@ -1555,14 +1588,12 @@ public class RoutinesPanel extends javax.swing.JPanel {
 	}// GEN-LAST:event_swimmerSearch
 
 	private void spellCheckButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_spellCheckButtonActionPerformed
-		String spellingErrors = RoutineManager
-				.getMisspelledNamesHtmlMessage(controller.getRoutinesList());
+		String spellingErrors = RoutineManager.getMisspelledNamesHtmlMessage(controller.getRoutinesList());
 		if (!spellingErrors.isEmpty()) {
 			JScrollPane scrollPane = new JScrollPane(new JLabel(spellingErrors));
 			scrollPane.setPreferredSize(new Dimension(600, 100));
 			Object message = scrollPane;
-			JOptionPane.showMessageDialog(this, message, "Spell Check",
-					JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(this, message, "Spell Check", JOptionPane.WARNING_MESSAGE);
 		}
 	}// GEN-LAST:event_spellCheckButtonActionPerformed
 		// Variables declaration - do not modify

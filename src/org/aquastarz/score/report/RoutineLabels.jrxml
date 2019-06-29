@@ -1,50 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Figures Labels" columnCount="3" printOrder="Horizontal" pageWidth="612" pageHeight="792" columnWidth="187" columnSpacing="11" leftMargin="14" rightMargin="14" topMargin="36" bottomMargin="36">
+<!-- Created with Jaspersoft Studio version 6.9.0.final using JasperReports Library version 6.9.0-cb8f9004be492ccc537180b49c026951f4220bf3  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Figures Labels" columnCount="3" printOrder="Horizontal" pageWidth="612" pageHeight="792" columnWidth="187" columnSpacing="11" leftMargin="14" rightMargin="14" topMargin="36" bottomMargin="36" uuid="f6b8b0d4-f66f-43ec-b18d-ccd3ba8a96c3">
 	<property name="ireport.zoom" value="3.0"/>
-	<property name="ireport.x" value="49"/>
-	<property name="ireport.y" value="95"/>
-	<import value="org.aquastarz.score.domain.Routine"/>
+	<property name="ireport.x" value="26"/>
+	<property name="ireport.y" value="122"/>
 	<parameter name="MeetDate" class="java.lang.String"/>
 	<parameter name="MeetName" class="java.lang.String"/>
-	<queryString>
-		<![CDATA[]]>
-	</queryString>
-	<field name="level" class="org.aquastarz.score.domain.RoutineLevel">
-		<fieldDescription><![CDATA[level]]></fieldDescription>
-	</field>
-	<field name="name" class="java.lang.String">
-		<fieldDescription><![CDATA[name]]></fieldDescription>
-	</field>
-	<field name="penalty" class="java.math.BigDecimal">
-		<fieldDescription><![CDATA[penalty]]></fieldDescription>
-	</field>
-	<field name="place" class="java.lang.Integer">
-		<fieldDescription><![CDATA[place]]></fieldDescription>
-	</field>
-	<field name="points" class="java.math.BigDecimal">
-		<fieldDescription><![CDATA[points]]></fieldDescription>
-	</field>
-	<field name="routineType" class="java.lang.String">
-		<fieldDescription><![CDATA[routineType]]></fieldDescription>
-	</field>
-	<field name="swimmers1" class="java.lang.String">
-		<fieldDescription><![CDATA[swimmers1]]></fieldDescription>
-	</field>
-	<field name="swimmers2" class="java.lang.String">
-		<fieldDescription><![CDATA[swimmers2]]></fieldDescription>
-	</field>
-	<field name="team" class="org.aquastarz.score.domain.Team">
-		<fieldDescription><![CDATA[team]]></fieldDescription>
-	</field>
-	<field name="artScore" class="java.math.BigDecimal">
-		<fieldDescription><![CDATA[artScore]]></fieldDescription>
-	</field>
-	<field name="techScore" class="java.math.BigDecimal">
-		<fieldDescription><![CDATA[techScore]]></fieldDescription>
-	</field>
-	<field name="totalScore" class="java.math.BigDecimal">
-		<fieldDescription><![CDATA[totalScore]]></fieldDescription>
-	</field>
+	<field name="name" class="java.lang.String"/>
+	<field name="levelName" class="java.lang.String"/>
+	<field name="place" class="java.lang.Integer"/>
+	<field name="team" class="java.lang.String"/>
+	<field name="score" class="java.math.BigDecimal"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -60,67 +26,74 @@
 	<detail>
 		<band height="72" splitType="Prevent">
 			<textField>
-				<reportElement x="6" y="41" width="191" height="14">
+				<reportElement x="6" y="33" width="191" height="24" uuid="3be42f90-231e-4c9a-9d28-61bcfba66154">
 					<printWhenExpression><![CDATA[$F{name}!=null]]></printWhenExpression>
 				</reportElement>
-				<textElement>
-					<font size="9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["NAME: "+$F{name}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="6" y="5" width="191" height="14">
+				<reportElement x="6" y="3" width="191" height="10" uuid="eef6a4ad-5690-4c36-98fe-b5be42cb6f89">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<printWhenExpression><![CDATA[$F{name}!=null]]></printWhenExpression>
 				</reportElement>
 				<textElement>
-					<font size="10" isBold="true"/>
+					<font size="7" isBold="false"/>
 				</textElement>
 				<text><![CDATA[VFCAL SYNCHRONIZED SWIMMING]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="6" y="17" width="191" height="14">
+				<reportElement x="6" y="13" width="191" height="10" uuid="9c84038b-2704-4863-8a52-3efb6fda4657">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<printWhenExpression><![CDATA[$F{name}!=null]]></printWhenExpression>
 				</reportElement>
 				<textElement>
-					<font size="9"/>
+					<font size="7"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["MEET: "+$P{MeetName}+" "+$P{MeetDate}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["MEET: "+$P{MeetName}+" "+$P{MeetDate}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="6" y="29" width="191" height="14">
+				<reportElement x="6" y="23" width="191" height="10" uuid="488f35f4-c6ba-4da8-bc0b-e6206518038b">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<printWhenExpression><![CDATA[$F{name}!=null]]></printWhenExpression>
 				</reportElement>
 				<textElement>
-					<font size="9"/>
+					<font size="7"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["LEVEL: "+$F{level}.toString()+" "+$F{routineType}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["LEVEL: "+$F{levelName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="6" y="53" width="50" height="14">
+				<reportElement x="6" y="57" width="50" height="10" uuid="1dd01473-d055-4188-a599-e0b0437c6cf1">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<printWhenExpression><![CDATA[$F{name}!=null]]></printWhenExpression>
 				</reportElement>
 				<textElement>
-					<font size="9"/>
+					<font size="7"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["PLACE: "+$F{place}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["PLACE: "+$F{place}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="55" y="53" width="60" height="14">
+				<reportElement x="55" y="57" width="60" height="10" uuid="c7f30a96-a1b3-4651-8377-f56aa0b645bd">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<printWhenExpression><![CDATA[$F{name}!=null]]></printWhenExpression>
 				</reportElement>
 				<textElement>
-					<font size="9"/>
+					<font size="7"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["TEAM: "+$F{team}.getTeamId()]]></textFieldExpression>
+				<textFieldExpression><![CDATA["TEAM: "+$F{team}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="114" y="53" width="83" height="14">
+				<reportElement x="114" y="57" width="83" height="10" uuid="6d3ed8c8-8afc-4e2e-b345-de7ba6c23d50">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<printWhenExpression><![CDATA[$F{name}!=null]]></printWhenExpression>
 				</reportElement>
 				<textElement>
-					<font size="9"/>
+					<font size="7"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["SCORE: "+$F{totalScore}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["SCORE: "+$F{score}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

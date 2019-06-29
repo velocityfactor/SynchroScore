@@ -96,6 +96,10 @@ public class ScoreApp {
 		logger.info("SynchroScore version " + getVersion() + " Starting...");
 		Thread.setDefaultUncaughtExceptionHandler(new LoggingExceptionHandler());
 
+		// Configure fonts
+		System.setProperty("awt.useSystemAAFontSettings", "on");
+		System.setProperty("swing.aatext", "true");
+		
 		dbUrl = productionUrl;
 		initDB();
 		getEntityManager();
