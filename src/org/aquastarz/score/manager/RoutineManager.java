@@ -78,41 +78,31 @@ public class RoutineManager {
 		for (Routine routine : routines) {
 			double weight = Math.random();
 
-			// First sort Novice ahead of Intermediate
-			if (routine.getLevel().getLevelId().charAt(0) == 'N') {
+			// Trio, Duet, Team, Solo, Combo order
+			if ("Trio".equals(routine.getRoutineType())) {
 				weight += 100.0;
-				// Trio, Duet, Solo, Team order
-				if ("Trio".equals(routine.getRoutineType())) {
-					weight += 10.0;
-				} else if ("Duet".equals(routine.getRoutineType())) {
-					weight += 20.0;
-				} else if ("Solo".equals(routine.getRoutineType())) {
-					weight += 30.0;
-				} else if ("Team".equals(routine.getRoutineType())) {
-					weight += 40.0;
-				} else {
-					logger.error("Unknown routine type "
-							+ routine.getRoutineType());
-				}
-			} else {
+			} else if ("Duet".equals(routine.getRoutineType())) {
 				weight += 200.0;
-				// Team, Trio, Duet, Solo, Combo order
-				if ("Trio".equals(routine.getRoutineType())) {
-					weight += 20.0;
-				} else if ("Duet".equals(routine.getRoutineType())) {
-					weight += 30.0;
-				} else if ("Solo".equals(routine.getRoutineType())) {
-					weight += 40.0;
-				} else if ("Team".equals(routine.getRoutineType())) {
-					if ("I11-18CT".equals(routine.getLevel().getLevelId())) {
-						weight += 50.0;
-					} else {
-						weight += 10.0;
-					}
+			} else if ("Team".equals(routine.getRoutineType())) {
+				if ("I11-18CT".equals(routine.getLevel().getLevelId())) {
+					//Combo
+					weight += 500.0;
 				} else {
-					logger.error("Unknown routine type "
-							+ routine.getRoutineType());
+					//Team
+					weight += 300.0;
 				}
+			} else if ("Solo".equals(routine.getRoutineType())) {
+				weight += 400.0;
+			} else {
+				logger.error("Unknown routine type "
+						+ routine.getRoutineType());
+			}
+
+			//Novice, Intermediate within each type
+			if (routine.getLevel().getLevelId().charAt(0) == 'N') {
+				weight += 10.0;
+			} else {
+				weight += 20.0;
 			}
 
 			// Lastly sort youngest first
