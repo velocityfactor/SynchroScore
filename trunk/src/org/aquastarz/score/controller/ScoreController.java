@@ -137,9 +137,13 @@ public class ScoreController {
 				System.exit(-1);
 			}
 		}
+		
 		logger.info("ScoreController starting for meetId=" + meet.getMeetId()
 				+ " \"" + meet.getName() + "\"");
 		mainFrame = new SynchroFrame(this, meet);
+		if(meet.getType()=='C') {
+			mainFrame.setRoundLabelsCheck();
+		}		
 		mainFrame.setVisible(true);
 	}
 
@@ -525,14 +529,27 @@ public class ScoreController {
 				showIntermediate);
 		LinkedList<Label> labels = new LinkedList<Label>();
 		for (Routine routine : routines) {
+			
 			if (part == 1
-					&& (routine.getLevel().getLevelId().equals("I11-18CT") || routine
-							.getRoutineType().equals("Solo")))
+					&& !routine
+							.getRoutineType().equals("Trio"))
 				continue;
 			if (part == 2
-					&& (!routine.getLevel().getLevelId().equals("I11-18CT") && !routine
-							.getRoutineType().equals("Solo")))
+					&& !routine
+							.getRoutineType().equals("Duet"))
 				continue;
+			if (part == 3
+					&& ( !routine
+							.getRoutineType().equals("Team")||routine.getLevel().getLevelId().equals("I11-18CT")))
+				continue;
+			if (part == 4
+					&& !routine
+							.getRoutineType().equals("Solo"))
+				continue;
+			if (part == 5
+					&& !routine.getLevel().getLevelId().equals("I11-18CT"))
+				continue;
+			
 			if (routine.getPlace() < min || routine.getPlace() > max)
 				continue;
 			List<String> names = null;

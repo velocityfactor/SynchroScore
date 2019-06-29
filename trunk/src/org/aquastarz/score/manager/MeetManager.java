@@ -250,7 +250,7 @@ public class MeetManager {
 			if (fp != null) {
 				cell = row.createCell(0);
 				String fo = fp.getFigureOrder();
-				if (fo == null || fo.isBlank()) {
+				if (fo == null || fo.trim().isEmpty()) {
 					fo = "X";
 				}
 				cell.setCellValue(fo);

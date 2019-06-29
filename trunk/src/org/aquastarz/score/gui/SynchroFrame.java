@@ -150,6 +150,10 @@ public class SynchroFrame extends javax.swing.JFrame {
 				keyStroke, keyStrokeAndKey);
 		tabPane.getActionMap().put(keyStrokeAndKey, swimmerSearchAction);
 	}
+	
+	public void setRoundLabelsCheck() {
+		chckbxRoundLabels.setSelected(true);
+	}
 
 	private void setSetupStatus(Color color, int percent) {
 		setupProgress.setForeground(color);
@@ -854,12 +858,12 @@ public class SynchroFrame extends javax.swing.JFrame {
 		reportIntFigureLabels.setToolTipText("Print one copy.");
 		reportNovRoutines = new javax.swing.JButton();
 		reportNovRoutines.setToolTipText("Prints only novice routines (for Champs)");
-		reportNovRoutineLabels = new javax.swing.JButton();
-		reportNovRoutineLabels.setToolTipText("Prints only novice routine labels (for Champs)");
+		reportTrioRoutineLabels = new javax.swing.JButton();
+		reportTrioRoutineLabels.setToolTipText("Prints only trio routine labels (for Champs)");
 		reportIntRoutines = new javax.swing.JButton();
 		reportIntRoutines.setToolTipText("Prints only intermediate routines (for Champs)");
-		reportIntRoutineLabels = new javax.swing.JButton();
-		reportIntRoutineLabels.setToolTipText("Prints only intermediate routine labels (for Champs)");
+		reportDuetRoutineLabels = new javax.swing.JButton();
+		reportDuetRoutineLabels.setToolTipText("Prints only duet routine labels (for Champs)");
 		reportAllRoutines = new javax.swing.JButton();
 		reportAllRoutines.setFont(new Font("Tahoma", Font.BOLD, 11));
 		reportAllRoutines.setToolTipText("Print one copy for each team.");
@@ -978,12 +982,12 @@ public class SynchroFrame extends javax.swing.JFrame {
 					}
 				});
 
-		reportNovRoutineLabels.setText("Nov. Routine Labels");
-		reportNovRoutineLabels
+		reportTrioRoutineLabels.setText("Trio Routine Labels");
+		reportTrioRoutineLabels
 				.addActionListener(new java.awt.event.ActionListener() {
 					@Override
 					public void actionPerformed(java.awt.event.ActionEvent evt) {
-						reportNovRoutineLabelsActionPerformed(evt);
+						reportRoutineLabelsActionPerformed(1);
 					}
 				});
 
@@ -996,12 +1000,12 @@ public class SynchroFrame extends javax.swing.JFrame {
 					}
 				});
 
-		reportIntRoutineLabels.setText("Int. Routine Labels");
-		reportIntRoutineLabels
+		reportDuetRoutineLabels.setText("Duet Routine Labels");
+		reportDuetRoutineLabels
 				.addActionListener(new java.awt.event.ActionListener() {
 					@Override
 					public void actionPerformed(java.awt.event.ActionEvent evt) {
-						reportIntRoutineLabelsActionPerformed(0);
+						reportRoutineLabelsActionPerformed(2);
 					}
 				});
 
@@ -1022,10 +1026,10 @@ public class SynchroFrame extends javax.swing.JFrame {
 						if (chckbxRoundLabels.isSelected()) {
 							reportRoutinesLabels(true, true, 0, true, 1, 3,
 									"FiguresRoundLabels");
-							reportRoutinesLabels(true, true, 0, false, 4, 999,
+							reportRoutinesLabels(true, true, 0, true, 4, 999,
 									"FiguresLabels");
 						} else {
-							reportRoutinesLabels(true, true, 0, false, 0, 999,
+							reportRoutinesLabels(true, true, 0, true, 0, 999,
 									"FiguresLabels");
 
 						}
@@ -1050,134 +1054,129 @@ public class SynchroFrame extends javax.swing.JFrame {
 					}
 				});
 
-		JButton btnIntRLbl = new JButton("Int R Lbl Team,3,2");
-		btnIntRLbl.setToolTipText("Prints only intermediate Team, Duo, and Trio routine labels (for Champs)");
-		btnIntRLbl.addActionListener(new ActionListener() {
+		JButton reportTeamRoutineLabels = new JButton("Team Routine Labels");
+		reportTeamRoutineLabels.setToolTipText("Prints only team routine labels (for Champs)");
+		reportTeamRoutineLabels.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				reportIntRoutineLabelsActionPerformed(1);
+				reportRoutineLabelsActionPerformed(3);
 			}
 		});
 
-		JButton btnIntRLbl_1 = new JButton("Int R Lbl Solo,Cmb");
-		btnIntRLbl_1.setToolTipText("Prints only intermediate solo and combo routine labels (for Champs)");
-		btnIntRLbl_1.addActionListener(new ActionListener() {
+		JButton reportComboRoutineLabels = new JButton("Combo Routine Labels");
+		reportComboRoutineLabels.setToolTipText("Prints only combo routine labels (for Champs)");
+		reportComboRoutineLabels.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				reportIntRoutineLabelsActionPerformed(2);
+				reportRoutineLabelsActionPerformed(5);
 			}
 		});
 
 		JLabel lblButtonsInBold = new JLabel(
 				"Buttons in bold are reports needed for dual meets. Hover mouse over button for more info.");
+		
+		JButton reportSoloRoutineLabels = new JButton("Solo Routine Labels");
+		reportSoloRoutineLabels.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				reportRoutineLabelsActionPerformed(4);
+			}
+		});
+		reportSoloRoutineLabels.setToolTipText("Prints only solo routine labels (for Champs)");
 
 		javax.swing.GroupLayout reportPanelLayout = new javax.swing.GroupLayout(
 				reportPanel);
-		reportPanelLayout
-				.setHorizontalGroup(reportPanelLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(reportPanelLayout.createSequentialGroup().addContainerGap().addGroup(
-								reportPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(reportPanelLayout
-										.createSequentialGroup().addGroup(reportPanelLayout
-												.createParallelGroup(Alignment.LEADING).addGroup(reportPanelLayout
-														.createSequentialGroup().addComponent(reportNoviceFigures)
-														.addGap(18).addComponent(
-																reportIntermediateFigures)
-														.addGap(18).addComponent(reportTeamResults))
-												.addGroup(
-														reportPanelLayout.createSequentialGroup()
-																.addGroup(reportPanelLayout
-																		.createParallelGroup(Alignment.LEADING)
-																		.addComponent(reportNovFigureLabels)
-																		.addComponent(reportNovMeetSheet)
-																		.addComponent(reportNoviceStation)
-																		.addComponent(reportNovRoutines)
-																		.addComponent(chckbxRoundLabels)
-																		.addComponent(reportNovRoutineLabels))
-																.addGap(18)
-																.addGroup(reportPanelLayout
-																		.createParallelGroup(Alignment.LEADING)
-																		.addGroup(reportPanelLayout
-																				.createSequentialGroup()
-																				.addGroup(reportPanelLayout
-																						.createParallelGroup(
-																								Alignment.LEADING,
-																								false)
-																						.addComponent(
-																								reportIntRoutines,
-																								GroupLayout.DEFAULT_SIZE,
-																								GroupLayout.DEFAULT_SIZE,
-																								Short.MAX_VALUE)
-																						.addComponent(
-																								reportIntRoutineLabels,
-																								GroupLayout.DEFAULT_SIZE,
-																								GroupLayout.DEFAULT_SIZE,
-																								Short.MAX_VALUE)
-																						.addComponent(
-																								btnIntRLbl,
-																								GroupLayout.DEFAULT_SIZE,
-																								GroupLayout.DEFAULT_SIZE,
-																								Short.MAX_VALUE)
-																						.addComponent(
-																								btnIntRLbl_1,
-																								GroupLayout.DEFAULT_SIZE,
-																								GroupLayout.DEFAULT_SIZE,
-																								Short.MAX_VALUE))
-																				.addGap(18)
-																				.addGroup(reportPanelLayout
-																						.createParallelGroup(
-																								Alignment.LEADING)
-																						.addComponent(
-																								reportAllRoutineLabels,
-																								GroupLayout.PREFERRED_SIZE,
-																								123, Short.MAX_VALUE)
-																						.addComponent(
-																								reportAllRoutines)))
-																		.addComponent(reportIntMeetSheet)
-																		.addComponent(reportIntFigureLabels)
-																		.addComponent(reportIntStation))))
-										.addGap(18)
-										.addGroup(reportPanelLayout.createParallelGroup(Alignment.LEADING, false)
-												.addComponent(compareMeetButton, GroupLayout.DEFAULT_SIZE,
-														GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-												.addComponent(exportMeetDataButton, GroupLayout.DEFAULT_SIZE,
-														GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-										.addGap(395)).addGroup(
-												reportPanelLayout.createSequentialGroup().addComponent(lblButtonsInBold)
-														.addContainerGap(911, Short.MAX_VALUE)))));
-		reportPanelLayout.setVerticalGroup(reportPanelLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(reportPanelLayout.createSequentialGroup().addGap(4)
-						.addGroup(reportPanelLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(reportNoviceFigures).addComponent(reportIntermediateFigures)
-								.addComponent(reportTeamResults).addComponent(exportMeetDataButton))
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addGroup(reportPanelLayout
-								.createParallelGroup(Alignment.BASELINE).addComponent(reportNovFigureLabels)
-								.addComponent(reportIntFigureLabels).addComponent(compareMeetButton))
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addGroup(reportPanelLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(reportNovMeetSheet).addComponent(reportIntMeetSheet))
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addGroup(reportPanelLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(reportNoviceStation).addComponent(reportIntStation))
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addGroup(reportPanelLayout
-								.createParallelGroup(Alignment.BASELINE).addComponent(reportNovRoutines)
-								.addComponent(reportIntRoutines).addComponent(reportAllRoutines))
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addGroup(reportPanelLayout
-								.createParallelGroup(Alignment.BASELINE).addComponent(reportNovRoutineLabels)
-								.addComponent(reportIntRoutineLabels).addComponent(reportAllRoutineLabels))
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addGroup(reportPanelLayout.createParallelGroup(Alignment.BASELINE).addComponent(btnIntRLbl)
-								.addComponent(chckbxRoundLabels))
-						.addPreferredGap(ComponentPlacement.RELATED).addComponent(btnIntRLbl_1).addGap(32)
-						.addComponent(lblButtonsInBold).addContainerGap(282, Short.MAX_VALUE)));
-		reportPanelLayout.linkSize(SwingConstants.HORIZONTAL,
-				new Component[] { reportIntermediateFigures, reportIntMeetSheet, reportIntStation, reportTeamResults,
-						reportIntFigureLabels, reportIntRoutines, reportIntRoutineLabels, reportAllRoutines,
-						reportAllRoutineLabels });
-		reportPanelLayout.linkSize(SwingConstants.HORIZONTAL, new Component[] { reportNoviceFigures, reportNovMeetSheet,
-				reportNoviceStation, reportNovFigureLabels, reportNovRoutines, reportNovRoutineLabels });
+		reportPanelLayout.setHorizontalGroup(
+			reportPanelLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(reportPanelLayout.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(reportPanelLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(reportPanelLayout.createSequentialGroup()
+							.addGroup(reportPanelLayout.createParallelGroup(Alignment.LEADING)
+								.addGroup(reportPanelLayout.createSequentialGroup()
+									.addComponent(reportNoviceFigures)
+									.addGap(18)
+									.addComponent(reportIntermediateFigures)
+									.addGap(18)
+									.addComponent(reportTeamResults))
+								.addGroup(reportPanelLayout.createSequentialGroup()
+									.addGroup(reportPanelLayout.createParallelGroup(Alignment.LEADING, false)
+										.addComponent(reportNovFigureLabels, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+										.addComponent(reportNovMeetSheet, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+										.addComponent(reportNoviceStation, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+										.addComponent(reportNovRoutines, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+										.addComponent(reportTrioRoutineLabels, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+										.addComponent(chckbxRoundLabels)
+										.addComponent(reportSoloRoutineLabels, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+									.addGap(18)
+									.addGroup(reportPanelLayout.createParallelGroup(Alignment.LEADING)
+										.addGroup(reportPanelLayout.createSequentialGroup()
+											.addGroup(reportPanelLayout.createParallelGroup(Alignment.LEADING, false)
+												.addComponent(reportIntRoutines, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+												.addComponent(reportDuetRoutineLabels, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+												.addComponent(reportComboRoutineLabels, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+												.addComponent(reportTeamRoutineLabels, 0, 0, Short.MAX_VALUE))
+											.addGap(18)
+											.addGroup(reportPanelLayout.createParallelGroup(Alignment.LEADING)
+												.addComponent(reportAllRoutineLabels, GroupLayout.PREFERRED_SIZE, 129, Short.MAX_VALUE)
+												.addComponent(reportAllRoutines)))
+										.addComponent(reportIntMeetSheet)
+										.addComponent(reportIntFigureLabels)
+										.addComponent(reportIntStation))))
+							.addGap(18)
+							.addGroup(reportPanelLayout.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(compareMeetButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(exportMeetDataButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+							.addGap(395))
+						.addGroup(reportPanelLayout.createSequentialGroup()
+							.addComponent(lblButtonsInBold)
+							.addContainerGap(911, Short.MAX_VALUE))))
+		);
+		reportPanelLayout.setVerticalGroup(
+			reportPanelLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(reportPanelLayout.createSequentialGroup()
+					.addGap(4)
+					.addGroup(reportPanelLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(reportNoviceFigures)
+						.addComponent(reportIntermediateFigures)
+						.addComponent(reportTeamResults)
+						.addComponent(exportMeetDataButton))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(reportPanelLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(reportNovFigureLabels)
+						.addComponent(reportIntFigureLabels)
+						.addComponent(compareMeetButton))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(reportPanelLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(reportNovMeetSheet)
+						.addComponent(reportIntMeetSheet))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(reportPanelLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(reportNoviceStation)
+						.addComponent(reportIntStation))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(reportPanelLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(reportNovRoutines)
+						.addComponent(reportIntRoutines)
+						.addComponent(reportAllRoutines))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(reportPanelLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(reportTrioRoutineLabels)
+						.addComponent(reportDuetRoutineLabels)
+						.addComponent(reportAllRoutineLabels))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(reportPanelLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(reportTeamRoutineLabels)
+						.addComponent(reportSoloRoutineLabels))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(reportPanelLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(reportComboRoutineLabels)
+						.addComponent(chckbxRoundLabels))
+					.addGap(32)
+					.addComponent(lblButtonsInBold)
+					.addContainerGap(282, Short.MAX_VALUE))
+		);
+		reportPanelLayout.linkSize(SwingConstants.HORIZONTAL, new Component[] {reportNoviceFigures, reportNovMeetSheet, reportNoviceStation, reportNovFigureLabels, reportNovRoutines, reportTrioRoutineLabels, reportSoloRoutineLabels});
+		reportPanelLayout.linkSize(SwingConstants.HORIZONTAL, new Component[] {reportIntermediateFigures, reportIntMeetSheet, reportIntStation, reportTeamResults, reportIntFigureLabels, reportIntRoutines, reportDuetRoutineLabels, reportAllRoutines, reportAllRoutineLabels, reportTeamRoutineLabels, reportComboRoutineLabels});
 		reportPanel.setLayout(reportPanelLayout);
 
 		tabPane.addTab("Reports", reportPanel);
@@ -1443,16 +1442,15 @@ public class SynchroFrame extends javax.swing.JFrame {
 		pack();
 	}// </editor-fold>//GEN-END:initComponents
 
-	private void reportIntRoutineLabelsActionPerformed(int part) {
+	private void reportRoutineLabelsActionPerformed(int part) {
 		if (chckbxRoundLabels.isSelected()) {
-			reportRoutinesLabels(false, true, part, true, 1, 3,
+			reportRoutinesLabels(true, true, part, true, 1, 3,
 					"FiguresRoundLabels");
-			reportRoutinesLabels(false, true, part, false, 4, 999,
+			reportRoutinesLabels(true, true, part, true, 4, 999,
 					"FiguresLabels");
 		} else {
-			reportRoutinesLabels(false, true, part, false, 0, 999,
+			reportRoutinesLabels(true, true, part, true, 0, 999,
 					"FiguresLabels");
-
 		}
 	}
 
@@ -1553,18 +1551,6 @@ public class SynchroFrame extends javax.swing.JFrame {
 		RoutinesController.showRoutinesReport(meet, false, true);
 		setCursor(Cursor.getDefaultCursor());
 	}// GEN-LAST:event_reportIntRoutinesActionPerformed
-
-	private void reportNovRoutineLabelsActionPerformed(
-			java.awt.event.ActionEvent evt) {// GEN-FIRST:event_reportNovRoutineLabelsActionPerformed
-		if (chckbxRoundLabels.isSelected()) {
-			reportRoutinesLabels(true, false, 0, true, 1, 3,
-					"FiguresRoundLabels");
-			reportRoutinesLabels(true, false, 0, false, 4, 999, "FiguresLabels");
-		} else {
-			reportRoutinesLabels(true, false, 0, false, 0, 999, "FiguresLabels");
-
-		}
-	}// GEN-LAST:event_reportNovRoutineLabelsActionPerformed
 
 	private void reportNovRoutinesActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_reportNovRoutinesActionPerformed
 		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -2135,13 +2121,13 @@ public class SynchroFrame extends javax.swing.JFrame {
 	private javax.swing.JButton reportAllRoutines;
 	private javax.swing.JButton reportIntFigureLabels;
 	private javax.swing.JButton reportIntMeetSheet;
-	private javax.swing.JButton reportIntRoutineLabels;
+	private javax.swing.JButton reportDuetRoutineLabels;
 	private javax.swing.JButton reportIntRoutines;
 	private javax.swing.JButton reportIntStation;
 	private javax.swing.JButton reportIntermediateFigures;
 	private javax.swing.JButton reportNovFigureLabels;
 	private javax.swing.JButton reportNovMeetSheet;
-	private javax.swing.JButton reportNovRoutineLabels;
+	private javax.swing.JButton reportTrioRoutineLabels;
 	private javax.swing.JButton reportNovRoutines;
 	private javax.swing.JButton reportNoviceFigures;
 	private javax.swing.JButton reportNoviceStation;
