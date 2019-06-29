@@ -70,10 +70,10 @@ public class Routine implements Serializable {
 	@Column(name = "earnsPoints", nullable = false)
 	private boolean earnsPoints;
 	@Basic(optional = true)
-	@Column(nullable = true, length = 60)
+	@Column(nullable = true, length = 100)
 	private String swimmers1;
 	@Basic(optional = true)
-	@Column(nullable = true, length = 60)
+	@Column(nullable = true, length = 100)
 	private String swimmers2;
 	@Basic(optional = true)
 	@Column(name = "routineOrder", nullable = true)

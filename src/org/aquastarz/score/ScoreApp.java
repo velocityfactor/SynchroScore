@@ -197,6 +197,6 @@ public class ScoreApp {
 	}
 
 	public static String getVersion() {
-		return "1.30";
+		return "1.31";
 	}
 }
