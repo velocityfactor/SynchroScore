@@ -151,8 +151,8 @@ public class SynchroFrame extends javax.swing.JFrame {
 		tabPane.getActionMap().put(keyStrokeAndKey, swimmerSearchAction);
 	}
 	
-	public void setRoundLabelsCheck() {
-		chckbxRoundLabels.setSelected(true);
+	public void setRoundLabelsCheck(boolean checked) {
+		chckbxRoundLabels.setSelected(checked);
 	}
 
 	private void setSetupStatus(Color color, int percent) {
@@ -250,9 +250,14 @@ public class SynchroFrame extends javax.swing.JFrame {
 			@Override
 			public void meetSetupSaved() {
 				if (meet.isValid()) {
-					if (ScoreController.findMeet(meet.getSeason(), meet.getName()) == null) {
+					Meet dupMeet=ScoreController.findMeet(meet.getSeason(), meet.getName());
+					if (dupMeet==null || dupMeet.getMeetId().equals(meet.getMeetId())) {
 						meet.clearPoints();
 						controller.saveMeet(meet);
+						//Default the round labels on for Champs
+						setRoundLabelsCheck(meet.isChamps());
+						//Hide the Earns Team Points checkbox for Champs
+						routinesPanel.updateRoutinesList(); 
 						updateStatus();
 					} else {
 						JOptionPane
@@ -832,48 +837,56 @@ public class SynchroFrame extends javax.swing.JFrame {
 		getContentPane().add(tabPane, java.awt.BorderLayout.PAGE_START);
 		reportPanel = new javax.swing.JPanel();
 		reportNoviceFigures = new javax.swing.JButton();
-		reportNoviceFigures.setFont(new Font("Tahoma", Font.BOLD, 11));
+		reportNoviceFigures.setFont(new Font("Arial", Font.BOLD, 12));
 		reportNoviceFigures.setToolTipText("Print one copy for each team.");
 		reportNovMeetSheet = new javax.swing.JButton();
-		reportNovMeetSheet.setFont(new Font("Tahoma", Font.BOLD, 11));
+		reportNovMeetSheet.setFont(new Font("Arial", Font.BOLD, 12));
 		reportNovMeetSheet.setToolTipText("Print one copy, separate teams.");
 		reportNoviceStation = new javax.swing.JButton();
+		reportNoviceStation.setFont(new Font("Arial", Font.PLAIN, 12));
 		reportNoviceStation.setToolTipText("Shows scores on a per station basis. Rarely used.");
 		reportIntermediateFigures = new javax.swing.JButton();
-		reportIntermediateFigures.setFont(new Font("Tahoma", Font.BOLD, 11));
+		reportIntermediateFigures.setFont(new Font("Arial", Font.BOLD, 12));
 		reportIntermediateFigures.setToolTipText("Print one copy per team.");
 		reportIntMeetSheet = new javax.swing.JButton();
-		reportIntMeetSheet.setFont(new Font("Tahoma", Font.BOLD, 11));
+		reportIntMeetSheet.setFont(new Font("Arial", Font.BOLD, 12));
 		reportIntMeetSheet.setToolTipText("Print one copy, separate teams.");
 		reportIntStation = new javax.swing.JButton();
+		reportIntStation.setFont(new Font("Arial", Font.PLAIN, 12));
 		reportIntStation.setToolTipText("Shows scores on a per station basis. Rarely used.");
 		reportTeamResults = new javax.swing.JButton();
-		reportTeamResults.setFont(new Font("Tahoma", Font.BOLD, 11));
+		reportTeamResults.setFont(new Font("Arial", Font.BOLD, 12));
 		reportTeamResults.setToolTipText("Print one copy for each team, one for announcer.");
 		reportNovFigureLabels = new javax.swing.JButton();
-		reportNovFigureLabels.setFont(new Font("Tahoma", Font.BOLD, 11));
+		reportNovFigureLabels.setFont(new Font("Arial", Font.BOLD, 12));
 		reportNovFigureLabels.setToolTipText("Print one copy.");
 		reportIntFigureLabels = new javax.swing.JButton();
-		reportIntFigureLabels.setFont(new Font("Tahoma", Font.BOLD, 11));
+		reportIntFigureLabels.setFont(new Font("Arial", Font.BOLD, 12));
 		reportIntFigureLabels.setToolTipText("Print one copy.");
 		reportNovRoutines = new javax.swing.JButton();
+		reportNovRoutines.setFont(new Font("Arial", Font.PLAIN, 12));
 		reportNovRoutines.setToolTipText("Prints only novice routines (for Champs)");
 		reportTrioRoutineLabels = new javax.swing.JButton();
+		reportTrioRoutineLabels.setFont(new Font("Arial", Font.PLAIN, 12));
 		reportTrioRoutineLabels.setToolTipText("Prints only trio routine labels (for Champs)");
 		reportIntRoutines = new javax.swing.JButton();
+		reportIntRoutines.setFont(new Font("Arial", Font.PLAIN, 12));
 		reportIntRoutines.setToolTipText("Prints only intermediate routines (for Champs)");
 		reportDuetRoutineLabels = new javax.swing.JButton();
+		reportDuetRoutineLabels.setFont(new Font("Arial", Font.PLAIN, 12));
 		reportDuetRoutineLabels.setToolTipText("Prints only duet routine labels (for Champs)");
 		reportAllRoutines = new javax.swing.JButton();
-		reportAllRoutines.setFont(new Font("Tahoma", Font.BOLD, 11));
+		reportAllRoutines.setFont(new Font("Arial", Font.BOLD, 12));
 		reportAllRoutines.setToolTipText("Print one copy for each team.");
 		reportAllRoutineLabels = new javax.swing.JButton();
-		reportAllRoutineLabels.setFont(new Font("Tahoma", Font.BOLD, 11));
+		reportAllRoutineLabels.setFont(new Font("Arial", Font.BOLD, 12));
 		reportAllRoutineLabels.setToolTipText("Print one copy.");
 		exportMeetDataButton = new javax.swing.JButton();
+		exportMeetDataButton.setFont(new Font("Arial", Font.PLAIN, 12));
 		exportMeetDataButton
 				.setToolTipText("Writes meet data to a file as a backup or for comparting with another computer.");
 		compareMeetButton = new javax.swing.JButton();
+		compareMeetButton.setFont(new Font("Arial", Font.PLAIN, 12));
 		compareMeetButton.setToolTipText(
 				"Reads a meet export file and compares it with the current meet. Displays any discrepancies. (for Champs)");
 
@@ -1027,10 +1040,10 @@ public class SynchroFrame extends javax.swing.JFrame {
 							reportRoutinesLabels(true, true, 0, true, 1, 3,
 									"FiguresRoundLabels");
 							reportRoutinesLabels(true, true, 0, true, 4, 999,
-									"FiguresLabels");
+									"RoutineLabels");
 						} else {
 							reportRoutinesLabels(true, true, 0, true, 0, 999,
-									"FiguresLabels");
+									"RoutineLabels");
 
 						}
 					}
@@ -1055,6 +1068,7 @@ public class SynchroFrame extends javax.swing.JFrame {
 				});
 
 		JButton reportTeamRoutineLabels = new JButton("Team Routine Labels");
+		reportTeamRoutineLabels.setFont(new Font("Arial", Font.PLAIN, 12));
 		reportTeamRoutineLabels.setToolTipText("Prints only team routine labels (for Champs)");
 		reportTeamRoutineLabels.addActionListener(new ActionListener() {
 			@Override
@@ -1064,6 +1078,7 @@ public class SynchroFrame extends javax.swing.JFrame {
 		});
 
 		JButton reportComboRoutineLabels = new JButton("Combo Routine Labels");
+		reportComboRoutineLabels.setFont(new Font("Arial", Font.PLAIN, 12));
 		reportComboRoutineLabels.setToolTipText("Prints only combo routine labels (for Champs)");
 		reportComboRoutineLabels.addActionListener(new ActionListener() {
 			@Override
@@ -1076,6 +1091,7 @@ public class SynchroFrame extends javax.swing.JFrame {
 				"Buttons in bold are reports needed for dual meets. Hover mouse over button for more info.");
 		
 		JButton reportSoloRoutineLabels = new JButton("Solo Routine Labels");
+		reportSoloRoutineLabels.setFont(new Font("Arial", Font.PLAIN, 12));
 		reportSoloRoutineLabels.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				reportRoutineLabelsActionPerformed(4);
@@ -1447,10 +1463,10 @@ public class SynchroFrame extends javax.swing.JFrame {
 			reportRoutinesLabels(true, true, part, true, 1, 3,
 					"FiguresRoundLabels");
 			reportRoutinesLabels(true, true, part, true, 4, 999,
-					"FiguresLabels");
+					"RoutineLabels");
 		} else {
 			reportRoutinesLabels(true, true, part, true, 0, 999,
-					"FiguresLabels");
+					"RoutineLabels");
 		}
 	}
 

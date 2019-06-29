@@ -21,6 +21,7 @@ package org.aquastarz.score.controller;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -29,14 +30,6 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import javax.swing.JOptionPane;
-
-import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.util.JRLoader;
-import net.sf.jasperreports.view.JasperViewer;
 
 import org.aquastarz.score.domain.FiguresParticipant;
 import org.aquastarz.score.domain.Meet;
@@ -50,7 +43,16 @@ import org.aquastarz.score.manager.RoutineManager;
 import org.aquastarz.score.manager.TeamManager;
 import org.aquastarz.score.report.RoutineScoreSheet;
 
+import com.opencsv.CSVWriter;
+
 import au.com.bytecode.opencsv.CSVReader;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 public class RoutinesController {
 
@@ -88,22 +90,17 @@ public class RoutinesController {
 			RoutineManager.calculate(routine);
 			save(routine);
 		} else {
-			JOptionPane
-					.showMessageDialog(
-							panel,
-							"Routine must have a title and fully complete or fully blank score.",
-							"Entry Error", JOptionPane.OK_OPTION);
+			JOptionPane.showMessageDialog(panel, "Routine must have a title and fully complete or fully blank score.",
+					"Entry Error", JOptionPane.OK_OPTION);
 		}
 	}
 
 	public void randomize() {
 		boolean confirm = true;
 		if (meet.isRoutinesOrderGenerated()) {
-			int ret = JOptionPane.showOptionDialog(panel,
-					"Routines order already randomized.  Randomize again?",
-					"Confirm Randomize", JOptionPane.YES_NO_OPTION,
-					JOptionPane.QUESTION_MESSAGE, null, new String[] { "Yes",
-							"No" }, "No");
+			int ret = JOptionPane.showOptionDialog(panel, "Routines order already randomized.  Randomize again?",
+					"Confirm Randomize", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+					new String[] { "Yes", "No" }, "No");
 			if (ret != JOptionPane.YES_OPTION) {
 				confirm = false;
 			}
@@ -112,9 +109,9 @@ public class RoutinesController {
 			RoutineManager.randomize(meet);
 		}
 	}
-	
+
 	public boolean isChamps() {
-		return meet.getType()=='C';
+		return meet.getType() == 'C';
 	}
 
 	public void importRoutines(File file) {
@@ -122,22 +119,65 @@ public class RoutinesController {
 			CSVReader csv = new CSVReader(new FileReader(file));
 			List<String[]> rows = csv.readAll();
 			csv.close();
-			HashMap<String, FiguresParticipant> map = new HashMap<String, FiguresParticipant>();
+			StringBuffer sb = new StringBuffer();
+			int row = 0;
 			for (String[] sa : rows) {
-				Routine r = new Routine();
-				r.setMeet(meet);
-				r.setRoutineOrder(0);
-				r.setTeam(TeamManager.findById(sa[0]));
-				r.setLevel(RoutineLevelManager.find(sa[1]));
-				r.setNumSwimmers(Integer.parseInt(sa[2]));
-				r.setRoutineType(sa[3]);
-				r.setName(sa[4]);
-				r.setSwimmers1(sa[5]);
-				if (sa.length > 6 && sa[6] != null)
-					r.setSwimmers2(sa[6]);
-				meet.getRoutines().add(r);
-				RoutineManager.save(r);
+				row++;
+				if ("Team".equals(sa[0]))
+					continue;
+				if (TeamManager.findById(sa[0]) == null) {
+					sb.append("Invalid Team on line " + row + "\n");
+				}
+				if (RoutineLevelManager.find(sa[1]) == null) {
+					sb.append("Invalid Routine Level on line " + row + "\n");
+				}
+				if (!("Solo".equals(sa[3]) || "Duet".equals(sa[3]) || "Trio".equals(sa[3]) || "Team".equals(sa[3]))) {
+					sb.append("Invalid Routine Type on line " + row + "\n");
+				}
 			}
+			if (sb.length() == 0) {
+				for (String[] sa : rows) {
+					if ("Team".equals(sa[0]))
+						continue;
+					Routine r = new Routine();
+					r.setMeet(meet);
+					r.setRoutineOrder(0);
+					r.setTeam(TeamManager.findById(sa[0]));
+					r.setLevel(RoutineLevelManager.find(sa[1]));
+					r.setNumSwimmers(Integer.parseInt(sa[2]));
+					r.setRoutineType(sa[3]);
+					r.setName(sa[4]);
+					r.setSwimmers1(sa[5]);
+					if (sa.length > 6 && sa[6] != null)
+						r.setSwimmers2(sa[6]);
+					meet.getRoutines().add(r);
+					RoutineManager.calculate(r);
+					RoutineManager.save(r);
+				}
+				meet.setRoutinesChanged(true);
+			} else {
+				JOptionPane.showMessageDialog(null, "Error(s) reading file:\n"+sb.toString());
+			}
+		} catch (Exception e) {
+			logger.error("", e);
+			meet = null;
+		}
+	}
+
+	public void exportRoutines(File file) {
+		try {
+			FileWriter writer = new FileWriter(file);
+			CSVWriter csvWriter = new CSVWriter(writer, CSVWriter.DEFAULT_SEPARATOR, CSVWriter.DEFAULT_QUOTE_CHARACTER,
+					CSVWriter.DEFAULT_ESCAPE_CHARACTER, CSVWriter.DEFAULT_LINE_END);
+			String[] header = { "Team", "Level", "#Swmrs", "Type", "Swimmers1", "Swimmers2" };
+			csvWriter.writeNext(header);
+			for (Routine routine : meet.getRoutines()) {
+				csvWriter.writeNext(new String[] { routine.getTeam().getTeamId(), routine.getLevel().getLevelId(),
+						Integer.toString(routine.getNumSwimmers()), routine.getRoutineType(), routine.getName(),
+						routine.getSwimmers1(), routine.getSwimmers2() });
+			}
+			csvWriter.close();
+			writer.close();
 		} catch (Exception e) {
 			logger.error("", e);
 			meet = null;
@@ -162,41 +202,32 @@ public class RoutinesController {
 	private void showRoutinesOrderReport(Meet meet) {
 		try {
 			JasperReport jasperReport = (JasperReport) JRLoader
-					.loadObject(getClass()
-							.getResourceAsStream(
-									"/org/aquastarz/score/report/RoutinesOrder2.jasper"));
-			JRDataSource data = new JRBeanCollectionDataSource(
-					RoutineManager.findAll(meet));
+					.loadObject(getClass().getResourceAsStream("/org/aquastarz/score/report/RoutinesOrder2.jasper"));
+			JRDataSource data = new JRBeanCollectionDataSource(RoutineManager.findAll(meet));
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put("MeetDate", meet.getMeetDate());
 			params.put("MeetName", meet.getName());
-			JasperPrint jasperPrint = JasperFillManager.fillReport(
-					jasperReport, params, data);
+			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, data);
 			JasperViewer.viewReport(jasperPrint, false);
 		} catch (Exception ex) {
 			logger.error("Could not create the report.", ex);
 		}
 	}
 
-	public static void showRoutinesReport(Meet meet, boolean showNovice,
-			boolean showIntermediate) {
+	public static void showRoutinesReport(Meet meet, boolean showNovice, boolean showIntermediate) {
 		ScoreController.calculateMeetResultsIfNeeded(meet);
 		try {
-			JasperReport jasperReport = (JasperReport) JRLoader
-					.loadObject(RoutinesController.class
-							.getResourceAsStream("/org/aquastarz/score/report/Routines.jasper"));
+			JasperReport jasperReport = (JasperReport) JRLoader.loadObject(
+					RoutinesController.class.getResourceAsStream("/org/aquastarz/score/report/Routines.jasper"));
 			JRDataSource data = new JRBeanCollectionDataSource(
-					ScoreController.generateRoutinesResults(meet, showNovice,
-							showIntermediate));
+					ScoreController.generateRoutinesResults(meet, showNovice, showIntermediate));
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put("MeetDate", meet.getMeetDate());
 			params.put("MeetName", meet.getName());
-			JasperPrint jasperPrint = JasperFillManager.fillReport(
-					jasperReport, params, data);
+			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, data);
 			JasperViewer.viewReport(jasperPrint, false);
 		} catch (Exception ex) {
-			logger.error("Could not create the report.\n"
-					+ ex.getLocalizedMessage());
+			logger.error("Could not create the report.\n" + ex.getLocalizedMessage());
 		}
 	}
 
@@ -243,8 +274,7 @@ public class RoutinesController {
 
 			String key = "";
 			if ("Solo".equals(routine.getRoutineType())) {
-				key = String.format("1%03d%03d", routine.getRoutineOrder(),
-						rss.size());
+				key = String.format("1%03d%03d", routine.getRoutineOrder(), rss.size());
 				sheet.setExecution(50);
 				sheet.setSynchronization(10);
 				sheet.setDifficulty(40);
@@ -252,8 +282,7 @@ public class RoutinesController {
 				sheet.setMusic(20);
 				sheet.setPresentation(30);
 			} else if ("Duet".equals(routine.getRoutineType())) {
-				key = String.format("2%03d%03d", routine.getRoutineOrder(),
-						rss.size());
+				key = String.format("2%03d%03d", routine.getRoutineOrder(), rss.size());
 				sheet.setExecution(40);
 				sheet.setSynchronization(30);
 				sheet.setDifficulty(30);
@@ -261,8 +290,7 @@ public class RoutinesController {
 				sheet.setMusic(30);
 				sheet.setPresentation(20);
 			} else if ("Trio".equals(routine.getRoutineType())) {
-				key = String.format("3%03d%03d", routine.getRoutineOrder(),
-						rss.size());
+				key = String.format("3%03d%03d", routine.getRoutineOrder(), rss.size());
 				sheet.setExecution(40);
 				sheet.setSynchronization(30);
 				sheet.setDifficulty(30);
@@ -270,20 +298,19 @@ public class RoutinesController {
 				sheet.setMusic(30);
 				sheet.setPresentation(20);
 			} else if ("Team".equals(routine.getRoutineType())) {
-				key = String.format("4%03d%03d", routine.getRoutineOrder(),
-						rss.size());
+				key = String.format("4%03d%03d", routine.getRoutineOrder(), rss.size());
 				sheet.setExecution(40);
 				sheet.setSynchronization(30);
 				sheet.setDifficulty(30);
 				sheet.setChoreography(50);
 				sheet.setMusic(30);
 				sheet.setPresentation(20);
-				if(routine.getLevel().getLevelId().endsWith("CT")) sheet.setEvent("Combo");
+				if (routine.getLevel().getLevelId().endsWith("CT"))
+					sheet.setEvent("Combo");
 			}
 
 			rss.put(key + String.format("%02d", 0), sheet);
-			int numJudges = (meet.isChamps() && "Team".equals(routine
-					.getRoutineType())) ? 10 : 7;
+			int numJudges = (meet.isChamps() && "Team".equals(routine.getRoutineType())) ? 10 : 7;
 			for (int i = 1; i <= numJudges; i++) {
 				String js = null;
 				if (numJudges == 10) {
@@ -296,8 +323,7 @@ public class RoutinesController {
 				} else {
 					js = Integer.toString(i);
 				}
-				rss.put(key + String.format("%02d", i), new RoutineScoreSheet(
-						sheet, js));
+				rss.put(key + String.format("%02d", i), new RoutineScoreSheet(sheet, js));
 			}
 		}
 		return rss.values();
