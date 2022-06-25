@@ -1,10 +1,8 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>SynchroScore</groupId>
 	<artifactId>SynchroScore</artifactId>
-	<version>1.32.0-SNAPSHOT</version>
+	<version>1.32.0</version>
 	<packaging>jar</packaging>
 	<properties>
 		<main.class>org.aquastarz.score.ScoreApp</main.class>
@@ -12,7 +10,7 @@
 	</properties>
 	<scm>
 		<developerConnection>scm:git:git@gitlab.com:velocityfactor/SynchroScore.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>SynchroScore-1.32.0</tag>
 	</scm>
 	<repositories>
 		<repository>
@@ -20,6 +18,17 @@
 			<url>https://download.java.net/maven/2/</url>
 		</repository>
 		<repository>
+			<id>jcenter-bintray</id>
+			<name>Bintray JCenter Maven Repository</name>
+			<layout>default</layout>
+			<url>https://jcenter.bintray.com/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>		<repository>
 			<id>central</id>
 			<url>https://repo1.maven.org/maven2/</url>
 		</repository>
