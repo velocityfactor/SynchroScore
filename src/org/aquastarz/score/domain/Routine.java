@@ -74,7 +74,7 @@ public class Routine implements Serializable {
 	@Column(name = "earnsPoints", nullable = false)
 	private boolean earnsPoints;
 	@Basic(optional = true)
-	@Column(nullable = true, length = 100)
+	@Column(nullable = true, length = MAX_SWIMMERNAME_LEN)
 	private String swimmers1;
 	@Basic(optional = true)
 	@Column(nullable = true, length = MAX_SWIMMERNAME_LEN)
