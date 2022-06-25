@@ -44,6 +44,10 @@ import javax.persistence.Table;
 public class Routine implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+
+	public static final int MAX_ROUTINENAME_LEN=60;
+	public static final int MAX_SWIMMERNAME_LEN=100;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Basic(optional = false)
@@ -52,7 +56,7 @@ public class Routine implements Serializable {
 	@JoinColumn(name = "meet")
 	private Meet meet;
 	@Basic(optional = false)
-	@Column(name = "name", nullable = false, length = 60)
+	@Column(name = "name", nullable = false, length = MAX_ROUTINENAME_LEN)
 	private String name;
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "level", referencedColumnName = "routineLevelId", nullable = false)
@@ -73,7 +77,7 @@ public class Routine implements Serializable {
 	@Column(nullable = true, length = 100)
 	private String swimmers1;
 	@Basic(optional = true)
-	@Column(nullable = true, length = 100)
+	@Column(nullable = true, length = MAX_SWIMMERNAME_LEN)
 	private String swimmers2;
 	@Basic(optional = true)
 	@Column(name = "routineOrder", nullable = true)

@@ -653,7 +653,7 @@ public class MeetManager {
 					r.setTScore6("null".equals(sa[21]) ? null : new BigDecimal(sa[21]));
 					r.setTScore7("null".equals(sa[22]) ? null : new BigDecimal(sa[22]));
 					r.setPenalty("null".equals(sa[23]) ? null : new BigDecimal(sa[23]));
-					r.setEarnsPoints((sa.length < 25 || "null".equals(sa[24])) ? true : Boolean.getBoolean(sa[24]));
+					r.setEarnsPoints((sa.length < 25 || "null".equals(sa[24])) ? true : Boolean.parseBoolean(sa[24]));
 					meet.getRoutines().add(r);
 				}
 			}

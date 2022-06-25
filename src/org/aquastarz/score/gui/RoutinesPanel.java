@@ -270,9 +270,24 @@ public class RoutinesPanel extends javax.swing.JPanel {
 
 	private boolean updateRoutine(Routine routine) {
 		routine.setEarnsPoints(earnsPointsCheckBox.isSelected());
-		routine.setName(title.getText());
-		routine.setSwimmers1(names1.getText());
-		routine.setSwimmers2(names2.getText());
+		String name=title.getText();
+		if(name.length()>Routine.MAX_ROUTINENAME_LEN) {
+			name=name.substring(0, Routine.MAX_ROUTINENAME_LEN);
+			title.setText(name);
+		}
+		routine.setName(name);
+		String swimmers1=names1.getText();
+		if(swimmers1.length()>Routine.MAX_SWIMMERNAME_LEN) {
+			swimmers1=swimmers1.substring(0, Routine.MAX_SWIMMERNAME_LEN);
+			names1.setText(swimmers1);
+		}
+		routine.setSwimmers1(swimmers1);
+		String swimmers2=names2.getText();
+		if(swimmers2.length()>Routine.MAX_SWIMMERNAME_LEN) {
+			swimmers2=swimmers2.substring(0, Routine.MAX_SWIMMERNAME_LEN);
+			names2.setText(swimmers2);
+		}
+		routine.setSwimmers2(swimmers2);
 		routine.setLevel((RoutineLevel) levelCombo.getSelectedItem());
 		routine.setRoutineType((String) routineTypeCombo.getSelectedItem());
 		if ("Solo".equals(routineTypeCombo.getSelectedItem())) {
