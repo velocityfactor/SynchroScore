@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>SynchroScore</groupId>
 	<artifactId>SynchroScore</artifactId>
-	<version>1.32.0</version>
+	<version>1.32.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<properties>
 		<main.class>org.aquastarz.score.ScoreApp</main.class>
@@ -10,7 +10,7 @@
 	</properties>
 	<scm>
 		<developerConnection>scm:git:git@gitlab.com:velocityfactor/SynchroScore.git</developerConnection>
-		<tag>SynchroScore-1.32.0</tag>
+		<tag>HEAD</tag>
 	</scm>
 	<repositories>
 		<repository>
