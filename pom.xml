@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>SynchroScore</groupId>
 	<artifactId>SynchroScore</artifactId>
-	<version>1.32.1-SNAPSHOT</version>
+	<version>1.32.1</version>
 	<packaging>jar</packaging>
 	<properties>
 		<main.class>org.aquastarz.score.ScoreApp</main.class>
@@ -11,7 +11,7 @@
 	</properties>
 	<scm>
 		<developerConnection>scm:git:git@gitlab.com:velocityfactor/SynchroScore.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>SynchroScore-1.32.1</tag>
 	</scm>
 	<repositories>
 		<repository>
@@ -105,15 +105,15 @@
 							<headerType>gui</headerType>
 							<jar>target/SynchroScore-${project.version}-jar-with-dependencies.jar</jar>
 							<outfile>target/SynchroScore-${project.version}.exe</outfile>
-							<errTitle></errTitle>
-							<cmdLine></cmdLine>
+							<errTitle />
+							<cmdLine />
 							<chdir>.</chdir>
 							<priority>normal</priority>
 							<downloadUrl>http://java.com/download</downloadUrl>
-							<supportUrl></supportUrl>
+							<supportUrl />
 							<stayAlive>true</stayAlive>
 							<restartOnCrash>false</restartOnCrash>
-							<manifest></manifest>
+							<manifest />
 							<icon>synchro.ico</icon>
 							<classPath>
 								<mainClass>org.aquastarz.score.ScoreApp</mainClass>
@@ -127,7 +127,7 @@
 							<jre>
 								<bundledJreAsFallback>false</bundledJreAsFallback>
 								<minVersion>8.0</minVersion>
-								<maxVersion></maxVersion>
+								<maxVersion />
 								<jdkPreference>preferJre</jdkPreference>
 								<runtimeBits>64</runtimeBits>
 							</jre>
