@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>SynchroScore</groupId>
 	<artifactId>SynchroScore</artifactId>
-	<version>1.32.2-SNAPSHOT</version>
+	<version>1.32.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<properties>
 		<main.class>org.aquastarz.score.ScoreApp</main.class>
@@ -92,7 +92,6 @@
 			<plugin>
 				<groupId>com.akathist.maven.plugins.launch4j</groupId>
 				<artifactId>launch4j-maven-plugin</artifactId>
-				<version>2.1.2</version>
 				<executions>
 					<execution>
 						<id>l4j-gui</id>
@@ -105,15 +104,15 @@
 							<headerType>gui</headerType>
 							<jar>target/SynchroScore-${project.version}-jar-with-dependencies.jar</jar>
 							<outfile>target/SynchroScore-${project.version}.exe</outfile>
-							<errTitle />
-							<cmdLine />
+							<errTitle></errTitle>
+							<cmdLine></cmdLine>
 							<chdir>.</chdir>
 							<priority>normal</priority>
 							<downloadUrl>http://java.com/download</downloadUrl>
-							<supportUrl />
+							<supportUrl></supportUrl>
 							<stayAlive>true</stayAlive>
 							<restartOnCrash>false</restartOnCrash>
-							<manifest />
+							<manifest></manifest>
 							<icon>synchro.ico</icon>
 							<classPath>
 								<mainClass>org.aquastarz.score.ScoreApp</mainClass>
@@ -127,7 +126,7 @@
 							<jre>
 								<bundledJreAsFallback>false</bundledJreAsFallback>
 								<minVersion>8.0</minVersion>
-								<maxVersion />
+								<maxVersion></maxVersion>
 								<jdkPreference>preferJre</jdkPreference>
 								<runtimeBits>64</runtimeBits>
 							</jre>
