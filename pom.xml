@@ -10,7 +10,7 @@
 		<maven.javadoc.skip>true</maven.javadoc.skip>
 	</properties>
 	<scm>
-		<developerConnection>scm:git:git@gitlab.com:velocityfactor/SynchroScore.git</developerConnection>
+		<developerConnection>scm:git:git@github.com:velocityfactor/SynchroScore.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
 	<distributionManagement>
