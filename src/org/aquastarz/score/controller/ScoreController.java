@@ -923,14 +923,29 @@ public class ScoreController {
 				return o2.getValue().compareTo(o1.getValue());
 			}
 		});
+
 		int place = 0;
 		BigDecimal lastPoints = BigDecimal.ZERO;
+        Map<Integer, Integer> tieMap = new HashMap<Integer, Integer>();
 		for (Entry<Team, BigDecimal> entry : list) {
 			BigDecimal points = entry.getValue();
-			if (!points.equals(lastPoints) || place == 0) {
-				place++;
-			}
-			meetPlaceMap.put(entry.getKey(), place);
+			if (points.equals(lastPoints) && place > 0) {
+                // tie
+                meetPlaceMap.put(entry.getKey(), place);
+            } else {
+                int placeInc = 1;
+                if (tieMap.containsKey(place)) {
+                    placeInc = tieMap.get(place);
+                }
+                place += placeInc;
+                meetPlaceMap.put(entry.getKey(), place);
+            }
+            int tieCount = 0;
+            if (tieMap.containsKey(place)) {
+                tieCount = tieMap.get(place);
+            }
+            tieCount++;
+            tieMap.put(place, tieCount);
 			lastPoints = points;
 		}
 		meet.setPlaceMap(meetPlaceMap);
