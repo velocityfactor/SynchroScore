@@ -893,10 +893,11 @@ public class ScoreController {
 		for (FiguresParticipant fp : meet.getFiguresParticipants()) {
 			Team team = fp.getSwimmer().getTeam();
 			BigDecimal points = meetPointsMap.get(team);
-			try {
+			if (points == null) {
+				points = BigDecimal.ZERO;
+			}
+			if (fp.getPoints() != null) {
 				points = points.add(fp.getPoints());
-			} catch (Exception e) {
-				logger.error("", e);
 			}
 			meetPointsMap.put(team, points);
 		}
