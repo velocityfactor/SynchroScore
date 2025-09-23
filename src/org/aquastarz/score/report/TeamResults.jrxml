@@ -17,6 +17,7 @@
 	<field name="points" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[points]]></fieldDescription>
 	</field>
+	<field name="place" class="java.lang.Integer"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -71,6 +72,13 @@
 				</textElement>
 				<text><![CDATA[Team]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="100" y="0" width="60" height="20" uuid="a3a2a1a0-9b4f-4a5f-8e2b-0e4a7d3b1e7c"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Place]]></text>
+			</staticText>
 		</band>
 	</pageHeader>
 	<columnHeader>
@@ -91,6 +99,13 @@
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{team}.getName()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="0" width="60" height="16" uuid="f8e3e4a3-9e4a-4d3e-8b4b-0c9a8d7e6d5e"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{place}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

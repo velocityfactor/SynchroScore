@@ -26,10 +26,20 @@ public class TeamPoints {
 
     private Team team;
     private BigDecimal points;
+    private Integer place;
 
-    public TeamPoints(Team team, BigDecimal points) {
+    public TeamPoints(Team team, BigDecimal points, Integer place) {
         this.team = team;
         this.points = points;
+        this.place = place;
+    }
+
+    public Integer getPlace() {
+        return place;
+    }
+
+    public void setPlace(Integer place) {
+        this.place = place;
     }
 
     public BigDecimal getPoints() {

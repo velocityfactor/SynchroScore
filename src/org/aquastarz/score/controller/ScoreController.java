@@ -924,29 +924,19 @@ public class ScoreController {
 			}
 		});
 
-		int place = 0;
-		BigDecimal lastPoints = BigDecimal.ZERO;
-        Map<Integer, Integer> tieMap = new HashMap<Integer, Integer>();
-		for (Entry<Team, BigDecimal> entry : list) {
-			BigDecimal points = entry.getValue();
-			if (points.equals(lastPoints) && place > 0) {
-                // tie
-                meetPlaceMap.put(entry.getKey(), place);
-            } else {
-                int placeInc = 1;
-                if (tieMap.containsKey(place)) {
-                    placeInc = tieMap.get(place);
-                }
-                place += placeInc;
-                meetPlaceMap.put(entry.getKey(), place);
-            }
-            int tieCount = 0;
-            if (tieMap.containsKey(place)) {
-                tieCount = tieMap.get(place);
-            }
-            tieCount++;
-            tieMap.put(place, tieCount);
-			lastPoints = points;
+		int place = 1;
+		int i = 0;
+		while (i < list.size()) {
+			int j = i + 1;
+			while (j < list.size() && list.get(j).getValue().equals(list.get(i).getValue())) {
+				j++;
+			}
+			// Now, items from i to j-1 are tied.
+			for (int k = i; k < j; k++) {
+				meetPlaceMap.put(list.get(k).getKey(), place);
+			}
+			place += (j - i); // Increment place by the number of tied items
+			i = j; // Move to the next group
 		}
 		meet.setPlaceMap(meetPlaceMap);
 

@@ -1671,9 +1671,11 @@ public class SynchroFrame extends javax.swing.JFrame {
 		}
 
 		// Create a list of TeamPoints objects and sort it
+		Map<Team, Integer> places = meet.getPlaceMap();
 		List<TeamPoints> teamPointsList = new ArrayList<TeamPoints>();
 		for (Entry<Team, BigDecimal> pointsEntry : points.entrySet()) {
-			teamPointsList.add(new TeamPoints(pointsEntry.getKey(), pointsEntry.getValue()));
+			Team team = pointsEntry.getKey();
+			teamPointsList.add(new TeamPoints(team, pointsEntry.getValue(), places.get(team)));
 		}
 		Collections.sort(teamPointsList, new java.util.Comparator<TeamPoints>() {
 			@Override
