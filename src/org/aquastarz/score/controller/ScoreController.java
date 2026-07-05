@@ -893,10 +893,11 @@ public class ScoreController {
 		for (FiguresParticipant fp : meet.getFiguresParticipants()) {
 			Team team = fp.getSwimmer().getTeam();
 			BigDecimal points = meetPointsMap.get(team);
-			try {
+			if (points == null) {
+				points = BigDecimal.ZERO;
+			}
+			if (fp.getPoints() != null) {
 				points = points.add(fp.getPoints());
-			} catch (Exception e) {
-				logger.error("", e);
 			}
 			meetPointsMap.put(team, points);
 		}
@@ -922,15 +923,20 @@ public class ScoreController {
 				return o2.getValue().compareTo(o1.getValue());
 			}
 		});
-		int place = 0;
-		BigDecimal lastPoints = BigDecimal.ZERO;
-		for (Entry<Team, BigDecimal> entry : list) {
-			BigDecimal points = entry.getValue();
-			if (!points.equals(lastPoints) || place == 0) {
-				place++;
+
+		int place = 1;
+		int i = 0;
+		while (i < list.size()) {
+			int j = i + 1;
+			while (j < list.size() && list.get(j).getValue().equals(list.get(i).getValue())) {
+				j++;
 			}
-			meetPlaceMap.put(entry.getKey(), place);
-			lastPoints = points;
+			// Now, items from i to j-1 are tied.
+			for (int k = i; k < j; k++) {
+				meetPlaceMap.put(list.get(k).getKey(), place);
+			}
+			place += (j - i); // Increment place by the number of tied items
+			i = j; // Move to the next group
 		}
 		meet.setPlaceMap(meetPlaceMap);
 

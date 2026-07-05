@@ -31,6 +31,7 @@ import java.awt.event.KeyEvent;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -1670,21 +1671,28 @@ public class SynchroFrame extends javax.swing.JFrame {
 			}
 		}
 
-		// Sort by points
-		Map<BigDecimal, TeamPoints> pointsMap = new TreeMap<BigDecimal, TeamPoints>()
-				.descendingMap();
+		// Create a list of TeamPoints objects and sort it
+		Map<Team, Integer> places = meet.getPlaceMap();
+		List<TeamPoints> teamPointsList = new ArrayList<TeamPoints>();
 		for (Entry<Team, BigDecimal> pointsEntry : points.entrySet()) {
-			TeamPoints tp = new TeamPoints(pointsEntry.getKey(),
-					pointsEntry.getValue());
-			pointsMap.put(tp.getPoints(), tp);
+			Team team = pointsEntry.getKey();
+			teamPointsList.add(new TeamPoints(team, pointsEntry.getValue(), places.get(team)));
 		}
+		Collections.sort(teamPointsList, new java.util.Comparator<TeamPoints>() {
+			@Override
+			public int compare(TeamPoints o1, TeamPoints o2) {
+				BigDecimal p1 = o1.getPoints() == null ? BigDecimal.ZERO : o1.getPoints();
+				BigDecimal p2 = o2.getPoints() == null ? BigDecimal.ZERO : o2.getPoints();
+				return p2.compareTo(p1); // descending order
+			}
+		});
 
 		try {
 			JasperReport jasperReport = (JasperReport) JRLoader
 					.loadObject(getClass().getResourceAsStream(
 							"/org/aquastarz/score/report/TeamResults.jasper"));
 			JRDataSource data = new JRBeanCollectionDataSource(
-					pointsMap.values());
+					teamPointsList);
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put("MeetDate", meet.getMeetDate());
 			params.put("MeetName", meet.getName());
