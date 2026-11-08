@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>SynchroScore</groupId>
 	<artifactId>SynchroScore</artifactId>
-	<version>1.33.0</version>
+	<version>1.34.1</version>
 	<packaging>jar</packaging>
 	<properties>
 		<main.class>org.aquastarz.score.ScoreApp</main.class>
@@ -164,12 +164,23 @@
 								<timeoutErr>true</timeoutErr>
 							</splash>
 							<jre>
-								<bundledJreAsFallback>false</bundledJreAsFallback>
-								<minVersion>8.0</minVersion>
+								<path>jre;%JAVA_HOME%;%PATH%</path>
+								<minVersion>1.8.0</minVersion>
 								<maxVersion>99.0</maxVersion>
-								<jdkPreference>preferJre</jdkPreference>
-								<runtimeBits>64</runtimeBits>
+								<requiresJdk>false</requiresJdk>
+								<requires64Bit>true</requires64Bit>
 							</jre>
+							<versionInfo>
+								<fileVersion>${project.version}.0</fileVersion>
+								<txtFileVersion>${project.version}</txtFileVersion>
+								<productVersion>${project.version}.0</productVersion>
+								<txtProductVersion>${project.version}</txtProductVersion>
+								<fileDescription>Synchronized Swimming Scoring Application</fileDescription>
+								<copyright>(C) Shayne Hughes</copyright>
+								<productName>SynchroScore</productName>
+								<internalName>SynchroScore</internalName>
+								<originalFilename>SynchroScore-${project.version}.exe</originalFilename>
+							</versionInfo>
 						</configuration>
 					</execution>
 				</executions>

@@ -1,0 +1,40 @@
+Season workbook level configuration
+
+Load the complete season workbook through Maintenance > Load Season File...
+Keep the existing Teams, Figures, and Swimmers sheets as well as both level sheets.
+The first row of each level sheet is a header. Column A is the level ID;
+column B is the display name. Data-row order defines the sort order.
+Loading a season file asks for confirmation, then replaces ALL existing data,
+including meets, scores, swimmers, teams, figures, levels, and previous seasons.
+Export meet data you want to keep before confirming. Cancel leaves data unchanged.
+The file is validated first; a failed import rolls back the replacement.
+Only the IDs listed in the new workbook remain after a successful load.
+
+Suggested novice rows for Figures Levels (youngest first):
+ID       Name
+N7       Novice 7 and Under
+N8-9     Novice 8-9
+N10-11   Novice 10-11
+N12-13   Novice 12-13
+N14-18   Novice 14-18
+
+Suggested novice rows for Routines Levels (youngest first):
+ID       Name
+N10U     Novice 10 and Under
+N11-13   Novice 11-13
+N14O     Novice 14 and Over
+
+Include the intermediate and Combo levels your meet uses after these rows.
+All configured routine levels are available for Solo, Duet, Trio, and Team.
+Use N-prefixed IDs for novice levels and I-prefixed IDs for intermediate levels.
+The app does not infer or enforce swimmer ages from the ID.
+
+Names should contain the division and age description only, without Solo,
+Duet, Trio, Team, or Combo. Award labels append the routine category to the
+configured name, with the same wording whether or not swimmer names are printed.
+The existing I11-18CT level is labeled as Combo instead of Team; configure
+its name as a division/age description such as Intermediate 11-18.
+Update existing names that already include a routine category before printing.
+
+All novice levels use the meet's four novice figures. All intermediate levels
+use its four intermediate figures. Four scores are required at every level.

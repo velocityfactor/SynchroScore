@@ -22,19 +22,13 @@ package org.aquastarz.score.config;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.function.BooleanSupplier;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.DataFormatter;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.aquastarz.score.ScoreApp;
@@ -43,11 +37,8 @@ import org.aquastarz.score.domain.FigureScore;
 import org.aquastarz.score.domain.FiguresParticipant;
 import org.aquastarz.score.domain.Level;
 import org.aquastarz.score.domain.RoutineLevel;
-import org.aquastarz.score.domain.Swimmer;
+import org.aquastarz.score.domain.Season;
 import org.aquastarz.score.domain.Team;
-import org.aquastarz.score.manager.LevelManager;
-import org.aquastarz.score.manager.SwimmerManager;
-import org.aquastarz.score.manager.TeamManager;
 
 public class Bootstrap {
 
@@ -69,158 +60,47 @@ public class Bootstrap {
 			}
 
 		});
-		jfc.showOpenDialog(null);
+		if (jfc.showOpenDialog(null) != JFileChooser.APPROVE_OPTION) return;
 		File file = jfc.getSelectedFile();
-		if (file == null)
-			return;
-
-		Workbook workbook;
+		if (file == null) return;
 		try {
-			workbook = WorkbookFactory.create(file);
+			boolean loaded = loadLeagueData(file, () -> JOptionPane.showOptionDialog(null,
+					"Loading \"" + file.getName() + "\" will permanently replace ALL existing data.\n"
+					+ "All meets, scores, swimmers, teams, figures, levels, and previous seasons will be removed.\n"
+					+ "Only the data in this season file will remain.\n\n"
+					+ "Export any meet data you want to keep before continuing.\n"
+					+ "Do you want to replace all data and load this file?",
+					"Replace All Data", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,
+					null, new Object[] {"Cancel", "Replace All Data"}, "Cancel") == 1);
+			if (loaded) JOptionPane.showMessageDialog(null, "Season file loaded. Previous data has been replaced.");
 		} catch (Exception e) {
-			logger.error("Opening file " + file.getAbsolutePath(), e);
-			JOptionPane.showMessageDialog(null, "Error opening file.");
-			return;
-		}
-
-		EntityManager entityManager = ScoreApp.getEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		transaction.begin();
-		StringBuffer sb = new StringBuffer();
-
-		Sheet sheet = workbook.getSheet("Teams");
-		if (sheet == null) {
-			logger.error("Missing Teams sheet");
-			sb.append("Error reading file, missing Teams sheet.\n");
-		} else {
-			Iterator<Row> it = sheet.rowIterator();
-			while (it.hasNext()) {
-				Row row = it.next();
-				if(row.getRowNum()==0) continue;
-				checkAndPersistTeam(entityManager, getStringFromCell(row.getCell(0)),
-						getStringFromCell(row.getCell(1)));
-			}
-		}
-		sheet = workbook.getSheet("Figures");
-		if (sheet == null) {
-			logger.error("Missing Figures sheet");
-			sb.append("Error reading file, missing Figures sheet.\n");
-		} else {
-			Iterator<Row> it = sheet.rowIterator();
-			while (it.hasNext()) {
-				Row row = it.next();
-				if(row.getRowNum()==0) continue;
-				checkAndPersistFigure(entityManager, getStringFromCell(row.getCell(0)),
-						new BigDecimal(getStringFromCell(row.getCell(1))), getStringFromCell(row.getCell(2)));
-			}
-		}
-
-		sheet = workbook.getSheet("Figures Levels");
-		if (sheet == null) {
-			logger.error("Missing Figures Levels sheet");
-			JOptionPane.showMessageDialog(null, "Error reading file, missing Figures Levels sheet.\n");
-		} else {
-			int sortOrder = 1;
-			Iterator<Row> it = sheet.rowIterator();
-			while (it.hasNext()) {
-				Row row = it.next();
-				if(row.getRowNum()==0) continue;
-				checkAndPersistLevel(entityManager, getStringFromCell(row.getCell(0)),
-						getStringFromCell(row.getCell(1)), sortOrder++);
-			}
-		}
-
-		sheet = workbook.getSheet("Routines Levels");
-		if (sheet == null) {
-			logger.error("Missing Routines Levels sheet");
-			JOptionPane.showMessageDialog(null, "Error reading file, missing Routines Levels sheet.\n");
-		} else {
-			int sortOrder = 1;
-			Iterator<Row> it = sheet.rowIterator();
-			while (it.hasNext()) {
-				Row row = it.next();
-				if(row.getRowNum()==0) continue;
-				checkAndPersistRoutineLevel(entityManager, getStringFromCell(row.getCell(0)),
-						getStringFromCell(row.getCell(1)), sortOrder++);
-			}
-		}
-
-		sheet = workbook.getSheet("Swimmers");
-		if (sheet == null) {
-			logger.error("Missing Swimmers sheet");
-			sb.append( "Error reading file, missing Swimmers sheet.\n");
-		}
-
-		ArrayList<Swimmer> swimmers = new ArrayList<Swimmer>();
-		Iterator<Row> it = sheet.rowIterator();
-		while (it.hasNext()) {
-			Row row = it.next();
-			if(row.getRowNum()==0) continue;
-			Integer leagueNum = null;
-			try {
-				String s=getStringFromCell(row.getCell(0));
-				leagueNum = Integer.parseInt(getStringFromCell(row.getCell(0)));
-			} catch (Exception e) {
-				sb.append("Invalid league number on line ").append(row.getRowNum()).append("\n");
-			}
-			Swimmer swimmer = SwimmerManager.findByLeagueNum(leagueNum, ScoreApp.getCurrentSeason());
-			if (swimmer == null) {
-				swimmer = new Swimmer();
-			}
-			swimmer.setLeagueNum(leagueNum);
-			swimmer.setFirstName(getStringFromCell(row.getCell(1)));
-			swimmer.setLastName(getStringFromCell(row.getCell(2)));
-			Level level = LevelManager.findById(getStringFromCell(row.getCell(3)));
-			if (level == null) {
-				sb.append("Invalid level on line ").append(row.getRowNum()).append("\n");
-			}
-			swimmer.setLevel(level);
-			Team team = TeamManager.findById(getStringFromCell(row.getCell(4)));
-			if (team == null) {
-				sb.append("Invalid team on line ").append(row.getRowNum()).append("\n");
-			}
-			swimmer.setTeam(team);
-			swimmer.setSeason(ScoreApp.getCurrentSeason());
-			swimmers.add(swimmer);
-		}
-		
-		try {
-			workbook.close();
-		} catch (IOException e) {
-			logger.error("Closing excel file",e);
-		}
-		
-		if (sb.length() == 0) {
-			try {
-				for (Swimmer swimmer : swimmers) {
-					entityManager.persist(swimmer);
-				}
-				transaction.commit();
-			} catch (Exception e) {
-				logger.error("",e);
-				sb.append(
-						"There was an error loading the file. Restart and try again. If this continues, you may need to clear the database and try again.\n");
-			}
-		} 
-		
-		if(sb.length()==0) {
-			JOptionPane.showMessageDialog(null, "File loaded successfully.");
-		}
-		else {
-			JOptionPane.showMessageDialog(null, "File not loaded: "+sb.toString());
-			transaction.rollback();
+			logger.error("Loading season file " + file.getAbsolutePath(), e);
+			JOptionPane.showMessageDialog(null,
+					"File not loaded. Existing data has been kept.\n" + e.getMessage(),
+					"Season File Not Loaded", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
-	private static String getStringFromCell(Cell cell) {
-		if (cell == null)
-			return "";
-		DataFormatter formatter = new DataFormatter();
-		return formatter.formatCellValue(cell);	}
+	/** Reads and closes the file before asking for confirmation or changing stored data. */
+	public static boolean loadLeagueData(File file, BooleanSupplier confirmReplacement) throws IOException {
+		SeasonFileImporter importer;
+		try (Workbook workbook = WorkbookFactory.create(file)) {
+			importer = SeasonFileImporter.read(workbook);
+		}
+		if (!confirmReplacement.getAsBoolean()) return false;
+		Season season = importer.replaceAllData(ScoreApp.getEntityManager(), ScoreApp.getCurrentSeason().getName());
+		ScoreApp.setCurrentSeason(season);
+		return true;
+	}
 
 	public static void checkAndPersistLevel(EntityManager entityManager, String key, String name, int sortOrder) {
-		if (entityManager.find(Level.class, key) == null) {
+		Level level = entityManager.find(Level.class, key);
+		if (level == null) {
 			entityManager.persist(new Level(key, name, sortOrder));
+		} else {
+			level.setName(name);
+			level.setSortOrder(sortOrder);
+			entityManager.persist(level);
 		}
 	}
 

@@ -19,7 +19,6 @@
 // </editor-fold>
 package org.aquastarz.score.manager;
 
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Query;
 import org.aquastarz.score.ScoreApp;
@@ -29,43 +28,7 @@ public class RoutineLevelManager {
 
     public static List<RoutineLevel> findAll() {
         Query query = ScoreApp.getEntityManager().createNamedQuery("RoutineLevel.findAllInOrder");
-        List<RoutineLevel> allRoutineLevels = query.getResultList();
-        ArrayList<RoutineLevel> routineLevels = new ArrayList<RoutineLevel>();
-        for (RoutineLevel rl : allRoutineLevels) {
-            if (ScoreApp.getCurrentSeason().getRulesRevision() < 2) {
-                if ("N12U".equals(rl.getLevelId())
-                        || "N13O".equals(rl.getLevelId())
-                        || "I11".equals(rl.getLevelId())
-                        || "I15".equals(rl.getLevelId())
-                        || "I11T".equals(rl.getLevelId())) {
-                    routineLevels.add(rl);
-                }
-            } else if (ScoreApp.getCurrentSeason().getRulesRevision() < 3) { // Rules Rev 2
-                if ("N12U".equals(rl.getLevelId())
-                        || "N13O".equals(rl.getLevelId())
-                        || "I11".equals(rl.getLevelId())
-                        || "I15".equals(rl.getLevelId())
-                        || "I11-14T".equals(rl.getLevelId())
-                        || "I15-18T".equals(rl.getLevelId())
-                        || "I11-18CT".equals(rl.getLevelId())) {
-                    routineLevels.add(rl);
-                }
-            } else { // Rules Rev 3+
-                if ("N12U".equals(rl.getLevelId())
-                        || "N13O".equals(rl.getLevelId())
-                        || "N10U".equals(rl.getLevelId())
-                        || "N11".equals(rl.getLevelId())
-                        || "N15".equals(rl.getLevelId())
-                        || "I11".equals(rl.getLevelId())
-                        || "I15".equals(rl.getLevelId())
-                        || "I11-14T".equals(rl.getLevelId())
-                        || "I15-18T".equals(rl.getLevelId())
-                        || "I11-18CT".equals(rl.getLevelId())) {
-                    routineLevels.add(rl);
-                }
-            }
-        }
-        return routineLevels;
+        return query.getResultList();
     }
 
     public static RoutineLevel find(String id) {

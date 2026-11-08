@@ -132,20 +132,12 @@ public class MeetSetupPanel extends javax.swing.JPanel {
 		intFigName3.setSelectedItem(meet.getInt3Figure());
 		intFigName4.setSelectedItem(meet.getInt4Figure());
 
-		if (meet.getSeason().getRulesRevision() < 2) {
-			// Check 8 and under boxes
-			eightAndUnder1.setSelected(meet.isEu1());
-			eightAndUnder2.setSelected(meet.isEu2());
-			eightAndUnder3.setSelected(meet.isEu3());
-			eightAndUnder4.setSelected(meet.isEu4());
-		} else {
-			// Hide 8 and under boxes
-			n8ULabel.setVisible(false);
-			eightAndUnder1.setVisible(false);
-			eightAndUnder2.setVisible(false);
-			eightAndUnder3.setVisible(false);
-			eightAndUnder4.setVisible(false);
-		}
+		// All levels swim four figures; the legacy selection controls are unused.
+		n8ULabel.setVisible(false);
+		eightAndUnder1.setVisible(false);
+		eightAndUnder2.setVisible(false);
+		eightAndUnder3.setVisible(false);
+		eightAndUnder4.setVisible(false);
 
 		homeTeam.setSelectedItem(meet.getHomeTeam());
 
@@ -742,11 +734,6 @@ public class MeetSetupPanel extends javax.swing.JPanel {
 		meet.setInt2Figure((Figure) intFigName2.getSelectedItem());
 		meet.setInt3Figure((Figure) intFigName3.getSelectedItem());
 		meet.setInt4Figure((Figure) intFigName4.getSelectedItem());
-
-		meet.setEu1(eightAndUnder1.isSelected());
-		meet.setEu2(eightAndUnder2.isSelected());
-		meet.setEu3(eightAndUnder3.isSelected());
-		meet.setEu4(eightAndUnder4.isSelected());
 
 		fireSavedEvent();
 		logger.info("Save meet complete.");

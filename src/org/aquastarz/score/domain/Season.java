@@ -44,8 +44,6 @@ public class Season implements Serializable {
 	@Column(name = "name", nullable = false, length = 30)
 	private String name;
 
-	private transient Integer rulesRevision;
-
 	protected Season() {
 	}
 
@@ -59,17 +57,6 @@ public class Season implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public int getRulesRevision() {
-		if (rulesRevision == null) {
-			rulesRevision = 1;
-			if (name.compareTo("2011") >= 0)
-				rulesRevision = 2;
-			if (name.compareTo("2016") >= 0)
-				rulesRevision = 3;
-		}
-		return rulesRevision;
 	}
 
 	public Long getSeasonId() {

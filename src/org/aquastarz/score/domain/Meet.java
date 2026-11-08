@@ -75,7 +75,7 @@ public class Meet implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "homeTeam")
 	private Team homeTeam;
-	private boolean eu1; /* Obsolete as of rules revision 2 - N8U swim all four */
+	private boolean eu1; /* Legacy import/export fields; no longer affect figure selection. */
 
 	private boolean eu2;
 	private boolean eu3;
@@ -453,27 +453,6 @@ public class Meet implements Serializable {
 		if (int4Figure == null) {
 			valid = false;
 		}
-		int euCount = 0;
-		if (eu1) {
-			euCount++;
-		}
-		if (eu2) {
-			euCount++;
-		}
-		if (eu3) {
-			euCount++;
-		}
-		if (eu4) {
-			euCount++;
-		}
-		if (season.getRulesRevision() < 2) {
-			if (type == 'R' && euCount != 2) {
-				valid = false;
-			}
-			if (type == 'C' && euCount != 4) {
-				valid = false;
-			}
-		}
 		return valid;
 	}
 
@@ -485,33 +464,10 @@ public class Meet implements Serializable {
 		List<Figure> figures = new ArrayList<Figure>();
 		String level = swimmer.getLevel().getLevelId();
 		if (level.startsWith("N")) {
-			if (getSeason().getRulesRevision() < 2 && "N8".equals(level)) {
-				if (eu1) {
-					figures.add(nov1Figure);
-				} else {
-					figures.add(null);
-				}
-				if (eu2) {
-					figures.add(nov2Figure);
-				} else {
-					figures.add(null);
-				}
-				if (eu3) {
-					figures.add(nov3Figure);
-				} else {
-					figures.add(null);
-				}
-				if (eu4) {
-					figures.add(nov4Figure);
-				} else {
-					figures.add(null);
-				}
-			} else {
-				figures.add(nov1Figure);
-				figures.add(nov2Figure);
-				figures.add(nov3Figure);
-				figures.add(nov4Figure);
-			}
+			figures.add(nov1Figure);
+			figures.add(nov2Figure);
+			figures.add(nov3Figure);
+			figures.add(nov4Figure);
 		} else {
 			figures.add(int1Figure);
 			figures.add(int2Figure);

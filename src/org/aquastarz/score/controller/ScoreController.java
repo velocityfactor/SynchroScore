@@ -159,7 +159,7 @@ public class ScoreController {
 
 	public static List<Level> getLevels() {
 		javax.persistence.Query query = ScoreApp.getEntityManager()
-				.createQuery("SELECT l FROM Level l order by l.levelId");
+				.createQuery("SELECT l FROM Level l order by l.sortOrder");
 		return query.getResultList();
 	}
 
@@ -559,26 +559,9 @@ public class ScoreController {
 				if(names!=null&& names.size()>i) {
 					swimmerName=names.get(i);
 				}
-				String level;
-				if (withNames) {
-					String levelId = routine.getLevel().getLevelId();
-					if (levelId.equals("I11-18CT")) {
-						level = "I11-18 Combo";
-					} else {
-						if (levelId.equals("I15"))
-							levelId = "I15-18";
-						if (levelId.equals("I11"))
-							levelId = "I11-14";
-						level = levelId + " " + routine.getRoutineType();
-					}
-				} else {
-					if (routine.getLevel().getName().endsWith("Team")) {
-						level = routine.getLevel().getName();
-					} else {
-						level = routine.getLevel().getName() + " "
-								+ routine.getRoutineType();
-					}
-				}
+				String category = "I11-18CT".equals(routine.getLevel().getLevelId())
+						? "Combo" : routine.getRoutineType();
+				String level = routine.getLevel().getName() + " " + category;
 				Label label = new Label(level, routine.getLevel()
 						.getSortOrder(),
 						(!withNames || swimmerName.isEmpty()) ? routine
@@ -639,18 +622,7 @@ public class ScoreController {
 	}
 
 	public static int numberOfFigures(FiguresParticipant fp) {
-		if (fp.getMeet().getSeason().getRulesRevision() < 2) {
-			// Before 2011
-			if (fp.getMeet().getType() != 'C'
-					&& "N8".equals(fp.getSwimmer().getLevel().getLevelId())) {
-				return 2; // Novice 8 & Under have two figures
-			} else {
-				return 4; // All others have four figures
-
-			}
-		} else {
-			return 4;
-		}
+		return 4;
 	}
 
 	public static int percentCompleteFigures(Meet meet, boolean countNovice) {
@@ -751,19 +723,7 @@ public class ScoreController {
 	}
 
 	public static boolean figuresParticipantHasAllScores(FiguresParticipant fp) {
-		boolean result = true;
-		if (fp.getMeet().getSeason().getRulesRevision() < 2) {
-			// Regular meets N8U have 2 scores, otherwise 4
-			if (fp.getMeet().getType() == 'R'
-					&& "N8U".equals(fp.getSwimmer().getLevel().getLevelId())) {
-				result = fp.getFiguresScores().size() == 2;
-			} else {
-				result = fp.getFiguresScores().size() == 4;
-
-			}
-		} else {
-			result = fp.getFiguresScores().size() == 4;
-		}
+		boolean result = fp.getFiguresScores().size() == 4;
 		BigDecimal ts = fp.getTotalScore();
 		if (ts == null || BigDecimal.ZERO.compareTo(ts) >= 0) {
 			result = false;
